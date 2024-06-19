@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <meta charset="utf-8">
+    <title>MK217 FlightControl</title>
+
+    <!-- Ours -->
+    <link rel="stylesheet" href="../static/HAIInterface/css/styling.css">
+    <script src="/static/HAIInterface/JS/checklists.js"></script>
+
+    <!--based on where we are in flight show the nearest/fastest helipad, nearest helipad with hospital facility, AI chooses. 
+    Even if the human chooses evaluate the cognitive state to evaluate if their decision should be trusted --Carmen-->
+    <body>        
+        <div id="topbar" class="topbar" style="justify-content: center">
+            <div class="system-title">
+                MK217 Flight<b>Control</b>
+            </div>
+        </div>
+
+        <div id="center" class="center">
+            <div class="main-content-container">
+                <div id="title" class="general-title">Experimenter Control Panel</div>
+                <div class="control-container">
+                    <div class="subcontent-container">
+                        <b>SYSTEM VARIABLES</b>
+                        <br>
+                        <div class="control-var"><div class="control-var-title">User ID</div><div class="control-var-value" id="user-id"></div></div>
+                        <div class="control-var"><div class="control-var-title">Sequence</div><div class="control-var-value" id="sequence"></div></div>
+                        <div class="control-var"><div class="control-var-title">Study Stage</div><div class="control-var-value" id="study-stage"></div></div>
+                        <div class="control-var"><div class="control-var-title">Decision State</div><div class="control-var-value" id="decision-state"></div></div>
+                        <div class="control-var"><div class="control-var-title">Departure Index</div><div class="control-var-value" id="departure-index"></div></div>
+                        <div class="control-var"><div class="control-var-title">Destination Index</div><div class="control-var-value" id="destination-index"></div></div>
+                        <div class="control-var"><div class="control-var-title">Vitals State</div><div class="control-var-value" id="vitals-state"></div></div>
+                        <div class="control-var"><div class="control-var-title">Airspace State</div><div class="control-var-value" id="airspace-state"></div></div>
+                        <div class="control-var"><div class="control-var-title">Latitude</div><div class="control-var-value" id="latitude"></div></div>
+                        <div class="control-var"><div class="control-var-title">Longitude</div><div class="control-var-value" id="longitude"></div></div>
+                        <div class="control-var"><div class="control-var-title">Compass</div><div class="control-var-value" id="compass"></div></div>
+                        <div class="control-var"><div class="control-var-title">Flight Start Time</div><div class="control-var-value" id="flight-start-time"></div></div>
+                        <div class="control-var"><div class="control-var-title">↪Flight Time Elapsed</div><div class="control-var-value" id="flight-time-elapsed"></div></div>
+                        <div class="control-var"><div class="control-var-title">Reset User Display</div><div class="control-var-value" id="reset-user-display"></div></div>
+                        <div class="control-var"><div class="control-var-title">Reset Vitals Display</div><div class="control-var-value" id="reset-vitals-display"></div></div>
+
+
+                    </div>
+                    <div class="subcontent-container" style="flex-grow:0">
+                        <div id="trigger-emergency" class="control-button">Trigger Emergency</div>
+                        <div id="reset-vars"  class="control-button">Reset Variables</div>
+                        <div id="set-stage" class="control-button">Set Study Stage</div>
+                        <div id="set-user-id" class="control-button">Set User ID</div>
+                        <div id="change-sequence" class="control-button">Change Sequence</div>
+                        <div id="give-pre-trial" class="control-button">Pre-Trial</div>
+                        <div id="give-post-trial" class="control-button">Post-Trial</div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </body>
+
+    <script>
+        var userId = "none"
+        var sequence='1234'
+        var studyStage = -1
+        var decisionState = 0
+        var vitalsState = 0
+        var airspaceState = 0
+        var destinationIndex = -1
+        var departureIndex = -1
+        var latitude = 33.5797250
+        var longitude = -84.3882250
+        var compass = 0
+        var altitude=1000
+        var changeAltitude=0
+    
+
+        // initialize the map
+	    var planeMarker, map, mapSelection
+        var setDestination = false;
+        
+        var helipads = JSON.parse('{{ helipads | tojson | safe }}')
+        let helipadsLoaded = false  // flag automatically set to true (so helipads only load once, after we know where the origin and current destination are)
+
+        document.getElementById("reset-vars").onclick = async () => {
+            await fetch("/reset")
+        }
+
+        document.getElementById("trigger-emergency").onclick = async () => {
+            await fetch("/var?airspace-state=1")
+            //await fetch("/var?dest-changed=" + false)  //so as to force them to choose a destination
+        }
+
+        document.getElementById("set-stage").onclick = async () => {
+            let studyStage = 0
+            while (studyStage == 0) {
+                studyStage = prompt('Enter Study Stage (1, 2, 3, 4)')
+                studyStage = [1, 2, 3, 4].includes(parseInt(studyStage)) ? studyStage : 0
+            }
+            await fetch("/var?study-stage=" + studyStage)
+        }
+
+        document.getElementById("set-user-id").onclick = async () => {
+            let userId = prompt('Enter User ID')
+            await fetch("/var?user-id=" + userId)
+
+            //prompting change sequence so as to set the user id and sequence together
+            if (userId != null) {
+                let sequence = prompt('Enter scenario sequence (1234 or 1324)')
+                document.getElementById("sequence").innerHTML=sequence    
+                await fetch("/var?sequence=" + sequence)
+            }       
+        }
+        
+        //if want to change sequence seperately
+        document.getElementById("change-sequence").onclick = async () => {
+            let sequence = prompt('Enter scenario sequence (1234 or 1324)')
+            document.getElementById("sequence").innerHTML=sequence    
+            await fetch("/var?sequence=" + sequence)     
+        }
+
+        document.getElementById("give-pre-trial").onclick = async () => {
+            await fetch("/var?pre-trial=" + 1)
+        }
+
+        document.getElementById("give-post-trial").onclick = async () => {
+            await fetch("/var?post-trial=" + 1)
+        }
+
+        setInterval(async () => {
+            let vars = await fetch("/var").then((resp) => {return resp.json()})
+            for (let key in vars) {
+                // only change if the var maps to a div (prevents element not found errors)
+                if (document.getElementById(key)) {
+                    document.getElementById(key).innerHTML = vars[key]
+                }
+            }
+
+            if (vars["flight-start-time"] != 0) {
+                document.getElementById("flight-time-elapsed").innerHTML = parseInt((new Date()).getTime() / 1000 - parseFloat(vars["flight-start-time"]))
+            }
+        }, 500)
+
+    </script>
+
+</html>     

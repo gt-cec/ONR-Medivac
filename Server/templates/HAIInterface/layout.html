@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <meta charset="utf-8">
+    <title>MK217 FlightAssist</title>
+
+	<!-- Leaflet CSS and JS -->
+	<link rel="stylesheet" href="/static/HAIInterface/leaflet/leaflet.css"/>
+	<script src="/static/HAIInterface/leaflet/leaflet.js"></script>
+	<script src="/static/HAIInterface/leaflet/leaflet.rotatedMarker.min.js"></script>
+	<script src="/static/HAIInterface/leaflet/leaflet-providers.js"></script>
+    <script src="/static/HAIInterface/leaflet/Leaflet.Marker.SlideTo.js"></script>
+	
+    <!-- Ours -->
+    <link rel="stylesheet" href="../static/HAIInterface/css/styling.css">
+    <script src="/static/HAIInterface/JS/checklists.js"></script>
+    <script src="/static/HAIInterface/JS/map.js"></script>
+    <script src="/static/HAIInterface/JS/log.js"></script>
+    <script src="/static/HAIInterface/JS/emergency.js"></script>
+    <script src="/static/HAIInterface/JS/assistant.js"></script>
+
+    {% block imports %}
+    {% endblock %}
+    
+    <style>
+        {% block styling %}
+        {% endblock %}        
+    </style>
+
+    <!--based on where we are in flight show the nearest/fastest helipad, nearest helipad with hospital facility, AI chooses. 
+    Even if the human chooses evaluate the cognitive state to evaluate if their decision should be trusted --Carmen-->
+    <body>        
+        <div id="topbar" class="topbar">
+            <div class="sidenav" onclick="hideMap()">
+                <div class="sidenav-item-container">
+                    <div id="preflight-sidebar" class="sidenav-item" style="border-left: 0;"><img src="../static/HAIInterface/img/PreFlight.png" width="60" height="60"><div>Preflight</div></div>
+                    <div id="takeoff-sidebar" class="sidenav-item"><img src="../static/HAIInterface/img/TakeOff.png" width="60" height="60"><div>Takeoff</div></div>
+                    <div id="cruise-sidebar" class="sidenav-item"><img src="../static/HAIInterface/img/CR.png" width="60" height="60"><div>Cruise</div></div>
+                    <div id="approach-sidebar" class="sidenav-item"><img src="../static/HAIInterface/img/Approaching.png" width="60" height="60"><div>Approach</div></div>
+                    <div id="landing-sidebar" class="sidenav-item" style="border-right: 0; border-radius:0 0 28px 0"><img src="../static/HAIInterface/img/Landing.png" width="60" height="60"><div>Land</div></div>
+                </div>
+            </div>
+
+            <div class="system-title">
+                MK217 Flight<b>Assist</b>
+            </div>
+
+            <div class="topnav">
+                <div class="topnav-item" id='map' name='map' style="border-radius: 0px 0px 0px 30px;" onclick="showMap()">Map</div>
+                <div class="topnav-item" id='help' name='help' >Help</div>
+            </div>
+        </div>
+        
+       <!-- Voice Assistant -->
+       <div class="assistant-overlay">
+        <div class="user-text-box" id="userTextBox" style="display: none;" >User Text Will Appear Here</div>
+      </div>
+     
+      <div class="voice-assistant" id="assistant" style="display: none;" ></div>
+     
+        <div id="center" class="center">
+            {% block content %}
+        
+            {% endblock %}
+        </div>    
+    
+        <div id="map-container" class="map-container" style="position:absolute">
+            <!-- flightmap -->
+            <div id="flightmap" class="flightmap"></div>
+            <!-- central flash information -->
+            <div id="flightmap-instruction" class="flightmap-instruction"><div>DOUBLE CLICK A HELIPAD TO SET THE DESTINATION</div></div>
+            <!-- scroll instruction -->
+            <div id="flightmap-scroll-instruction" class="map-scroll-instruction"><div>ZOOM USING<br>TWO FINGERS</div></div>
+            <!-- Time to destination-->
+            <div  id="dest-time" class="time"></div>
+            <!-- bottom information bar -->
+            <div id="bottom-nav" class="bottom-nav" onclick="hideMap()">
+                <img id="bottom-nav-indicator" class="bottom-nav-indicator">
+                <div class="bottom-nav-info-container">
+                    <div class="bottom-nav-info">
+                        <img class="bottom-nav-icon" src="../static/HAIInterface/img/helipad-icon.png">&ensp;
+                        <div id="bottom-nav-name" style="font-weight: bold"></div>
+                    </div>
+                    <div class="bottom-nav-info">
+                        <img class="bottom-nav-icon" src="../static/HAIInterface/img/location-icon.png">&ensp;
+                        <div id="bottom-nav-address"></div>
+                    </div>
+                    <div class="bottom-nav-info">
+                        <img class="bottom-nav-icon" src="../static/HAIInterface/img/institution-icon.png">&ensp;
+                        <div id="bottom-nav-type"></div>
+                        <div style="flex-grow: 1;"></div>
+                        <div id="bottom-nav-nearest-heliport" class="bottom-nav-current-destination" style="background-color: seagreen">
+                            NEAREST
+                        </div>
+                        <div id="bottom-nav-current-destination" class="bottom-nav-current-destination">
+                            DESTINATION
+                        </div>
+                        <div id="bottom-nav-departure-heliport" class="bottom-nav-current-destination" style="background-color: lightcoral">
+                            ORIGIN
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id= "vitals" style="display:none;" class="main-content-container vitals-popup">
+            <div class="general-title" style="background-color: palegoldenrod;">Vitals Logging</div>
+            <div class="subcontent-container">
+                <div></div>
+                <div class="index-text" style="font-size: 25pt;">Please log patient vitals now</div>
+                <div class="index-text" style="font-size: 20pt;">Hit acknowledge AFTER you have submitted the vitals</div>&ensp;
+                <div id="vitals-acknowledge-button" class="button">ACKNOWLEDGE</div>
+            </div>
+        </div>
+
+        <div id="emergency" style="display:none; justify-content: space-between;"class="main-content-container vitals-popup">
+            <img id='img_icon' src="../static/HAIInterface/img/alert.gif" width="150" height="150">
+            <div class="index-text emergency-text" id="blink" style="color: red; background-color: rgb(223, 154, 94);">UNFAVORABLE WEATHER CONDITIONS</div><br>
+            <div class="index-text emergency-text" style="color: white;">MUST LAND IMMEDIATELY</div>
+            <div></div>
+            <div class="index-text emergency-text" style="color: whitesmoke;">Continue to select an emergency location</div>
+            <div></div>
+            <div id="emergency-acknowledge-button" class="button">CONTINUE</div>
+        </div>
+
+        <!-- Radio Comms  -->
+        <div id="radiopanel"   style="display:none; justify-content: space-between;" class="radiopanel">
+            <button class="radiopanel-closebtn" onclick="closePanel()">&times;</button>
+                <h2>Radio Communication</h2>
+                <label for="callsign">Callsign:</label>
+                <input type="text" id="callsign" placeholder="Enter Callsign">
+                <br><br>
+                <div class="radio-group">
+                    <label for="radio-select">Select Radio:</label>
+                    <label>
+                        <input type="radio" name="radio-select" value="Nav1">
+                        NAV1
+                    </label>
+                    <label>
+                        <input type="radio" name="radio-select" value="Nav2">
+                        NAV2
+                    </label>
+                    <label>
+                        <input type="radio" name="radio-select" value="Comm1">
+                        COMM1
+                    </label>
+                    <label>
+                        <input type="radio" name="radio-select" value="Comm2">
+                        COMM2
+                    </label>
+                </div>
+                <label for="frequency-input">Frequency:</label>
+                <input type="number"  id="frequency-input" step="0.01" placeholder="123.45", value="123.45">
+                  <br><br>
+
+        </div>
+     
+        <button class="openbtn" onclick="openPanel()">&#9776; Radio</button> 
+
+        <!-- Pressure Warning  -->
+        <div class="pressure-warning-overlay" id="pressureWarningalertOverlay">
+            <div class="pressure-warning-alert-box" id="pressureWarningalertBox">
+              <div class="engine-failure" id="warningText">Low Pressure Warning!</div>
+              <div class="pressure-warning-sign"></div>
+              <button class="alert-button" id="pressureWarningmoreInfoButton" onclick="showInfo()">Click for more info</button>
+              <div id="pressureWarningalertExplanation" style="display: none;">
+                <p>Report the value shown by the secondary hydraulic pressure sensor:</p>
+                <div id="resultMessage"></div>
+                <div class="input-box">
+                  <input type="text" id="pressureValue" class="input-field" placeholder="Enter pressure value">
+                </div>
+                <button class="submit-button" onclick="submitPressureValue()">Submit</button>
+              </div>
+              <div id="finalMessage" style="display: none;"></div>
+              <button class="ok-button" id="okButton" style="display: none;" onclick="closePressureAlert()">OK</button>
+            </div>
+          </div>
+
+       
+       <!-- Engine Failure Emergency    -->  
+       <div class="alertbody">
+        <div class="alertoverlay" id="alertOverlay">
+           <div class="alert-box" id="alertBox">
+             <img src="../static/HAIInterface/img/siren.gif" class="siren-gif" alt="Siren">
+             <div class="engine-failure" id="engineFailureText"> Engine Failure!</div>
+             <div class="warning-sign"></div>
+             <button class="alert-button" id="moreInfoButton" onclick="showMoreInfo()">Click for more info</button>
+             <!-- <button class="close-button" id="closeButton" onclick="closeAlert()">X</button> -->
+             <div id="alertExplanation" style="display: none;">
+                 <ul style="list-style-type:circle; padding: 15px; text-align: justify; ">
+                    <li >An engine failure has been detected. </li>
+                    <li>Follow the emergency procedures immediately.</li>
+                    <li>Click the button below and select an alternate helipad for emergency landing. </li>
+                    <li>Seek ground support if needed.</li>
+                 </ul>
+            </div>
+            <button class="submit-button" style="display: none;" id="CDButton">Change Destination</button>
+          </div>
+        </div>        
+       <!--  <audio id="sirenSound" loop>
+           <source src="../static/HAIInterface/img/siren.mp3" type="audio/mpeg">
+        </audio> -->
+       </div>
+        
+            
+
+
+       <!-- Fuel Tank Emergency    -->
+       <div class="alertbody">
+         <div class="alertoverlay" id="fuelAlertOverlay">
+            <div class="alert-box" id="fuelAlertBox">
+              <img src="../static/HAIInterface/img/siren.gif" class="siren-gif" alt="Siren"> 
+              <div class="engine-failure" id="emptyTankText"> Fuel Tank Empty</div>
+              <div class="warning-sign"></div>
+              <button class="alert-button" id="fuelInfoButton" onclick="showFuelInfo()">Click for more info</button>
+              <div id="fuelAlertExplanation" style="display: none;">
+                <ul style="list-style-type:circle; padding: 15px; text-align: justify; ">
+                    <li>Fuel gauge might be malfunctioning </li>
+                    <li>Indicates empty, but 95% confident we have fuel</li>
+                    <li> Safe to continue with secondary fuel tank available </li>
+                    <li> Following planned route unless receive any requests or updates</li>
+                    <li>Option to Change destination is available</li>
+                    <li>Seek ground support if needed</li> 
+                </ul>
+               </div>
+               <button class="ok-button" id="okButtonFuel" style="display: none;">OK</button>
+            </div>
+           
+         </div>        
+        <!--  <audio id="sirenSound" loop>
+            <source src="../static/HAIInterface/img/siren.mp3" type="audio/mpeg">
+         </audio> -->
+        </div>
+            
+    </body>
+
+    <script>
+        var userId = "none"
+        var studyStage = -1
+        var decisionState = 0
+        var vitalsState = 0
+        var airspaceState = 0
+        var destinationIndex = -1
+        var departureIndex = -1
+        var latitude = 33.7992717
+        var longitude = -84.3855556
+        var compass = 0
+        var resetUserDisplay = 0
+        var satisfied = false
+        var destChanged = false
+        var timeToDestination=10.0
+        var selectedmarker="none"
+        
+
+        // this var isn't update by the server, but can be changed on various pages
+        let emergencyState = 0
+        let targetIndex = -1
+        let EngineFailure = false
+        let PressureWarning = false
+        let EmptyTank = false
+
+        // initialize the map
+	    var planeMarker, map, mapSelection
+        var setDestination = false;
+	    initMap()
+
+        initEmergency()
+        TimeToDestination() 
+        initAssistant()
+
+        
+        var helipads = JSON.parse('{{ helipads | tojson | safe }}')
+        let helipadsLoaded = false  // flag automatically set to true (so helipads only load once, after we know where the origin and current destination are)
+        let currentFrequency = 123.45;
+
+        /* Set the width of the radio-panel to show it */
+        function openPanel() {
+            console.log('clicked')
+            document.getElementById("radiopanel").style.display="inline-grid";
+        }
+
+        /* Set the width of the sidebar to 0 to hide it */
+        function closePanel() {
+            document.getElementById("radiopanel").style.display = "none"
+        }
+
+       
+       // changeFrequency(step)
+
+        document.getElementById('frequency-input').addEventListener('change', function() {
+            currentFrequency = parseFloat(this.value);
+            changeFrequency();
+        });
+
+
+        function changeFrequency(step) {
+            currentFrequency += step;
+            document.getElementById('frequency-input').value = currentFrequency.toFixed(2);
+            //updateFrequencyDisplay();
+        }
+
+        function transmit() {
+            const callsign = document.getElementById('callsign').value;
+            const radio = document.querySelector('input[name="radio-select"]:checked');
+            if (radio) {
+                alert(`${callsign} transmitting on ${radio.value} ${currentFrequency.toFixed(2)} MHz`);
+            } else {
+                alert('Please select a radio channel');
+            }
+        }
+
+        function receive() {
+            const callsign = document.getElementById('callsign').value;
+            const radio = document.querySelector('input[name="radio-select"]:checked');
+            if (radio) {
+                alert(`${callsign} receiving on ${radio.value} ${currentFrequency.toFixed(2)} MHz`);
+            } else {
+                alert('Please select a radio channel');
+            }
+        }
+
+        //updateFrequencyDisplay();
+       
+
+        {% block script %}
+        {% endblock %}
+    </script>
+
+</html>     

@@ -1,0 +1,575 @@
+Transcription: root - INFO - Starting
+Transcription: root - INFO - Initializing audio recording (creating pyAudio input stream, sample rate: 16000 buffer size: 512
+Transcription: root - DEBUG - Porcupine wake word detection engine initialized successfully
+Transcription: root - INFO - Initializing WebRTC voice with Sensitivity 3
+Transcription: root - DEBUG - WebRTC VAD voice activity detection engine initialized successfully
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg6
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg6 extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 108, in _find_versionsed_ffmpeg_extension
+    _load_lib(lib)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 94, in _load_lib
+    torch.ops.load_library(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torch/_ops.py", line 933, in load_library
+    ctypes.CDLL(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/ctypes/__init__.py", line 376, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: dlopen(/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg6.so, 0x0006): Library not loaded: '@rpath/libavutil.58.dylib'
+  Referenced from: '/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg6.so'
+  Reason: tried: '/Users/sanyadoda/anaconda3/lib/python3.11/lib-dynload/../../libavutil.58.dylib' (no such file), '/Users/sanyadoda/anaconda3/bin/../lib/libavutil.58.dylib' (no such file), '/usr/local/lib/libavutil.58.dylib' (no such file), '/usr/lib/libavutil.58.dylib' (no such file)
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg5
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg5 extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 108, in _find_versionsed_ffmpeg_extension
+    _load_lib(lib)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 94, in _load_lib
+    torch.ops.load_library(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torch/_ops.py", line 933, in load_library
+    ctypes.CDLL(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/ctypes/__init__.py", line 376, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: dlopen(/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg5.so, 0x0006): Library not loaded: '@rpath/libavutil.57.dylib'
+  Referenced from: '/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg5.so'
+  Reason: tried: '/Users/sanyadoda/anaconda3/lib/python3.11/lib-dynload/../../libavutil.57.dylib' (no such file), '/Users/sanyadoda/anaconda3/bin/../lib/libavutil.57.dylib' (no such file), '/usr/local/lib/libavutil.57.dylib' (no such file), '/usr/lib/libavutil.57.dylib' (no such file)
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg4
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg4 extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 108, in _find_versionsed_ffmpeg_extension
+    _load_lib(lib)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 94, in _load_lib
+    torch.ops.load_library(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torch/_ops.py", line 933, in load_library
+    ctypes.CDLL(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/ctypes/__init__.py", line 376, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: dlopen(/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg4.so, 0x0006): Library not loaded: '@rpath/libavutil.56.dylib'
+  Referenced from: '/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg4.so'
+  Reason: tried: '/Users/sanyadoda/anaconda3/lib/python3.11/lib-dynload/../../libavutil.56.dylib' (no such file), '/Users/sanyadoda/anaconda3/bin/../lib/libavutil.56.dylib' (no such file), '/usr/local/lib/libavutil.56.dylib' (no such file), '/usr/lib/libavutil.56.dylib' (no such file)
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 106, in _find_versionsed_ffmpeg_extension
+    raise RuntimeError(f"FFmpeg{version} extension is not available.")
+RuntimeError: FFmpeg extension is not available.
+Transcription: root - DEBUG - Silero VAD voice activity detection engine initialized successfully
+Transcription: root - DEBUG - Starting recording worker
+Transcription: root - DEBUG - Starting realtime worker
+Transcription: root - DEBUG - Waiting for main transcription model to start
+Transcription: root - DEBUG - Main transcription model ready
+Transcription: root - DEBUG - RealtimeSTT initialization completed successfully
+Transcription: root - INFO - voice activity detected
+Transcription: root - INFO - recording started
+Transcription: root - INFO - voice deactivity detected
+Transcription: root - INFO - recording stopped
+Transcription: root - INFO - Starting
+Transcription: root - INFO - Initializing audio recording (creating pyAudio input stream, sample rate: 16000 buffer size: 512
+Transcription: root - DEBUG - Porcupine wake word detection engine initialized successfully
+Transcription: root - INFO - Initializing WebRTC voice with Sensitivity 3
+Transcription: root - DEBUG - WebRTC VAD voice activity detection engine initialized successfully
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg6
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg6 extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 108, in _find_versionsed_ffmpeg_extension
+    _load_lib(lib)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 94, in _load_lib
+    torch.ops.load_library(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torch/_ops.py", line 933, in load_library
+    ctypes.CDLL(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/ctypes/__init__.py", line 376, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: dlopen(/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg6.so, 0x0006): Library not loaded: '@rpath/libavutil.58.dylib'
+  Referenced from: '/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg6.so'
+  Reason: tried: '/Users/sanyadoda/anaconda3/lib/python3.11/lib-dynload/../../libavutil.58.dylib' (no such file), '/Users/sanyadoda/anaconda3/bin/../lib/libavutil.58.dylib' (no such file), '/usr/local/lib/libavutil.58.dylib' (no such file), '/usr/lib/libavutil.58.dylib' (no such file)
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg5
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg5 extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 108, in _find_versionsed_ffmpeg_extension
+    _load_lib(lib)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 94, in _load_lib
+    torch.ops.load_library(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torch/_ops.py", line 933, in load_library
+    ctypes.CDLL(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/ctypes/__init__.py", line 376, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: dlopen(/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg5.so, 0x0006): Library not loaded: '@rpath/libavutil.57.dylib'
+  Referenced from: '/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg5.so'
+  Reason: tried: '/Users/sanyadoda/anaconda3/lib/python3.11/lib-dynload/../../libavutil.57.dylib' (no such file), '/Users/sanyadoda/anaconda3/bin/../lib/libavutil.57.dylib' (no such file), '/usr/local/lib/libavutil.57.dylib' (no such file), '/usr/lib/libavutil.57.dylib' (no such file)
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg4
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg4 extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 108, in _find_versionsed_ffmpeg_extension
+    _load_lib(lib)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 94, in _load_lib
+    torch.ops.load_library(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torch/_ops.py", line 933, in load_library
+    ctypes.CDLL(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/ctypes/__init__.py", line 376, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: dlopen(/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg4.so, 0x0006): Library not loaded: '@rpath/libavutil.56.dylib'
+  Referenced from: '/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg4.so'
+  Reason: tried: '/Users/sanyadoda/anaconda3/lib/python3.11/lib-dynload/../../libavutil.56.dylib' (no such file), '/Users/sanyadoda/anaconda3/bin/../lib/libavutil.56.dylib' (no such file), '/usr/local/lib/libavutil.56.dylib' (no such file), '/usr/lib/libavutil.56.dylib' (no such file)
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 106, in _find_versionsed_ffmpeg_extension
+    raise RuntimeError(f"FFmpeg{version} extension is not available.")
+RuntimeError: FFmpeg extension is not available.
+Transcription: root - DEBUG - Silero VAD voice activity detection engine initialized successfully
+Transcription: root - DEBUG - Starting recording worker
+Transcription: root - DEBUG - Starting realtime worker
+Transcription: root - DEBUG - Waiting for main transcription model to start
+Transcription: root - DEBUG - Main transcription model ready
+Transcription: root - DEBUG - RealtimeSTT initialization completed successfully
+Transcription: root - INFO - voice activity detected
+Transcription: root - INFO - recording started
+Transcription: root - INFO - voice deactivity detected
+Transcription: root - INFO - recording stopped
+Transcription: root - INFO - Starting
+Transcription: root - INFO - Initializing audio recording (creating pyAudio input stream, sample rate: 16000 buffer size: 512
+Transcription: root - DEBUG - Porcupine wake word detection engine initialized successfully
+Transcription: root - INFO - Initializing WebRTC voice with Sensitivity 3
+Transcription: root - DEBUG - WebRTC VAD voice activity detection engine initialized successfully
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg6
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg6 extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 108, in _find_versionsed_ffmpeg_extension
+    _load_lib(lib)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 94, in _load_lib
+    torch.ops.load_library(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torch/_ops.py", line 933, in load_library
+    ctypes.CDLL(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/ctypes/__init__.py", line 376, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: dlopen(/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg6.so, 0x0006): Library not loaded: '@rpath/libavutil.58.dylib'
+  Referenced from: '/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg6.so'
+  Reason: tried: '/Users/sanyadoda/anaconda3/lib/python3.11/lib-dynload/../../libavutil.58.dylib' (no such file), '/Users/sanyadoda/anaconda3/bin/../lib/libavutil.58.dylib' (no such file), '/usr/local/lib/libavutil.58.dylib' (no such file), '/usr/lib/libavutil.58.dylib' (no such file)
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg5
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg5 extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 108, in _find_versionsed_ffmpeg_extension
+    _load_lib(lib)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 94, in _load_lib
+    torch.ops.load_library(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torch/_ops.py", line 933, in load_library
+    ctypes.CDLL(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/ctypes/__init__.py", line 376, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: dlopen(/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg5.so, 0x0006): Library not loaded: '@rpath/libavutil.57.dylib'
+  Referenced from: '/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg5.so'
+  Reason: tried: '/Users/sanyadoda/anaconda3/lib/python3.11/lib-dynload/../../libavutil.57.dylib' (no such file), '/Users/sanyadoda/anaconda3/bin/../lib/libavutil.57.dylib' (no such file), '/usr/local/lib/libavutil.57.dylib' (no such file), '/usr/lib/libavutil.57.dylib' (no such file)
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg4
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg4 extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 108, in _find_versionsed_ffmpeg_extension
+    _load_lib(lib)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 94, in _load_lib
+    torch.ops.load_library(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torch/_ops.py", line 933, in load_library
+    ctypes.CDLL(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/ctypes/__init__.py", line 376, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: dlopen(/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg4.so, 0x0006): Library not loaded: '@rpath/libavutil.56.dylib'
+  Referenced from: '/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg4.so'
+  Reason: tried: '/Users/sanyadoda/anaconda3/lib/python3.11/lib-dynload/../../libavutil.56.dylib' (no such file), '/Users/sanyadoda/anaconda3/bin/../lib/libavutil.56.dylib' (no such file), '/usr/local/lib/libavutil.56.dylib' (no such file), '/usr/lib/libavutil.56.dylib' (no such file)
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 106, in _find_versionsed_ffmpeg_extension
+    raise RuntimeError(f"FFmpeg{version} extension is not available.")
+RuntimeError: FFmpeg extension is not available.
+Transcription: root - DEBUG - Silero VAD voice activity detection engine initialized successfully
+Transcription: root - DEBUG - Starting recording worker
+Transcription: root - DEBUG - Starting realtime worker
+Transcription: root - DEBUG - Waiting for main transcription model to start
+Transcription: root - DEBUG - Main transcription model ready
+Transcription: root - DEBUG - RealtimeSTT initialization completed successfully
+Transcription: root - INFO - voice activity detected
+Transcription: root - INFO - recording started
+Transcription: root - INFO - voice deactivity detected
+Transcription: root - INFO - recording stopped
+Transcription: root - INFO - voice activity detected
+Transcription: root - INFO - recording started
+Transcription: root - INFO - voice deactivity detected
+Transcription: root - INFO - recording stopped
+Transcription: root - INFO - Starting
+Transcription: root - INFO - Initializing audio recording (creating pyAudio input stream, sample rate: 16000 buffer size: 512
+Transcription: root - DEBUG - Porcupine wake word detection engine initialized successfully
+Transcription: root - INFO - Initializing WebRTC voice with Sensitivity 3
+Transcription: root - DEBUG - WebRTC VAD voice activity detection engine initialized successfully
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg6
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg6 extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 108, in _find_versionsed_ffmpeg_extension
+    _load_lib(lib)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 94, in _load_lib
+    torch.ops.load_library(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torch/_ops.py", line 933, in load_library
+    ctypes.CDLL(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/ctypes/__init__.py", line 376, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: dlopen(/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg6.so, 0x0006): Library not loaded: '@rpath/libavutil.58.dylib'
+  Referenced from: '/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg6.so'
+  Reason: tried: '/Users/sanyadoda/anaconda3/lib/python3.11/lib-dynload/../../libavutil.58.dylib' (no such file), '/Users/sanyadoda/anaconda3/bin/../lib/libavutil.58.dylib' (no such file), '/usr/local/lib/libavutil.58.dylib' (no such file), '/usr/lib/libavutil.58.dylib' (no such file)
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg5
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg5 extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 108, in _find_versionsed_ffmpeg_extension
+    _load_lib(lib)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 94, in _load_lib
+    torch.ops.load_library(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torch/_ops.py", line 933, in load_library
+    ctypes.CDLL(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/ctypes/__init__.py", line 376, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: dlopen(/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg5.so, 0x0006): Library not loaded: '@rpath/libavutil.57.dylib'
+  Referenced from: '/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg5.so'
+  Reason: tried: '/Users/sanyadoda/anaconda3/lib/python3.11/lib-dynload/../../libavutil.57.dylib' (no such file), '/Users/sanyadoda/anaconda3/bin/../lib/libavutil.57.dylib' (no such file), '/usr/local/lib/libavutil.57.dylib' (no such file), '/usr/lib/libavutil.57.dylib' (no such file)
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg4
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg4 extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 108, in _find_versionsed_ffmpeg_extension
+    _load_lib(lib)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 94, in _load_lib
+    torch.ops.load_library(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torch/_ops.py", line 933, in load_library
+    ctypes.CDLL(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/ctypes/__init__.py", line 376, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: dlopen(/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg4.so, 0x0006): Library not loaded: '@rpath/libavutil.56.dylib'
+  Referenced from: '/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg4.so'
+  Reason: tried: '/Users/sanyadoda/anaconda3/lib/python3.11/lib-dynload/../../libavutil.56.dylib' (no such file), '/Users/sanyadoda/anaconda3/bin/../lib/libavutil.56.dylib' (no such file), '/usr/local/lib/libavutil.56.dylib' (no such file), '/usr/lib/libavutil.56.dylib' (no such file)
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 106, in _find_versionsed_ffmpeg_extension
+    raise RuntimeError(f"FFmpeg{version} extension is not available.")
+RuntimeError: FFmpeg extension is not available.
+Transcription: root - DEBUG - Silero VAD voice activity detection engine initialized successfully
+Transcription: root - DEBUG - Starting recording worker
+Transcription: root - DEBUG - Starting realtime worker
+Transcription: root - DEBUG - Waiting for main transcription model to start
+Transcription: root - DEBUG - Main transcription model ready
+Transcription: root - DEBUG - RealtimeSTT initialization completed successfully
+Transcription: root - INFO - voice activity detected
+Transcription: root - INFO - recording started
+Transcription: root - INFO - voice deactivity detected
+Transcription: root - INFO - recording stopped
+Transcription: root - INFO - Starting
+Transcription: root - INFO - Initializing audio recording (creating pyAudio input stream, sample rate: 16000 buffer size: 512
+Transcription: root - DEBUG - Porcupine wake word detection engine initialized successfully
+Transcription: root - INFO - Initializing WebRTC voice with Sensitivity 3
+Transcription: root - DEBUG - WebRTC VAD voice activity detection engine initialized successfully
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg6
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg6 extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 108, in _find_versionsed_ffmpeg_extension
+    _load_lib(lib)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 94, in _load_lib
+    torch.ops.load_library(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torch/_ops.py", line 933, in load_library
+    ctypes.CDLL(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/ctypes/__init__.py", line 376, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: dlopen(/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg6.so, 0x0006): Library not loaded: '@rpath/libavutil.58.dylib'
+  Referenced from: '/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg6.so'
+  Reason: tried: '/Users/sanyadoda/anaconda3/lib/python3.11/lib-dynload/../../libavutil.58.dylib' (no such file), '/Users/sanyadoda/anaconda3/bin/../lib/libavutil.58.dylib' (no such file), '/usr/local/lib/libavutil.58.dylib' (no such file), '/usr/lib/libavutil.58.dylib' (no such file)
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg5
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg5 extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 108, in _find_versionsed_ffmpeg_extension
+    _load_lib(lib)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 94, in _load_lib
+    torch.ops.load_library(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torch/_ops.py", line 933, in load_library
+    ctypes.CDLL(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/ctypes/__init__.py", line 376, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: dlopen(/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg5.so, 0x0006): Library not loaded: '@rpath/libavutil.57.dylib'
+  Referenced from: '/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg5.so'
+  Reason: tried: '/Users/sanyadoda/anaconda3/lib/python3.11/lib-dynload/../../libavutil.57.dylib' (no such file), '/Users/sanyadoda/anaconda3/bin/../lib/libavutil.57.dylib' (no such file), '/usr/local/lib/libavutil.57.dylib' (no such file), '/usr/lib/libavutil.57.dylib' (no such file)
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg4
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg4 extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 108, in _find_versionsed_ffmpeg_extension
+    _load_lib(lib)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 94, in _load_lib
+    torch.ops.load_library(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torch/_ops.py", line 933, in load_library
+    ctypes.CDLL(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/ctypes/__init__.py", line 376, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: dlopen(/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg4.so, 0x0006): Library not loaded: '@rpath/libavutil.56.dylib'
+  Referenced from: '/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg4.so'
+  Reason: tried: '/Users/sanyadoda/anaconda3/lib/python3.11/lib-dynload/../../libavutil.56.dylib' (no such file), '/Users/sanyadoda/anaconda3/bin/../lib/libavutil.56.dylib' (no such file), '/usr/local/lib/libavutil.56.dylib' (no such file), '/usr/lib/libavutil.56.dylib' (no such file)
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 106, in _find_versionsed_ffmpeg_extension
+    raise RuntimeError(f"FFmpeg{version} extension is not available.")
+RuntimeError: FFmpeg extension is not available.
+Transcription: root - DEBUG - Silero VAD voice activity detection engine initialized successfully
+Transcription: root - DEBUG - Starting recording worker
+Transcription: root - DEBUG - Starting realtime worker
+Transcription: root - DEBUG - Waiting for main transcription model to start
+Transcription: root - DEBUG - Main transcription model ready
+Transcription: root - DEBUG - RealtimeSTT initialization completed successfully
+Transcription: root - INFO - voice activity detected
+Transcription: root - INFO - recording started
+Transcription: root - INFO - voice deactivity detected
+Transcription: root - INFO - recording stopped
+Transcription: urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8080
+Transcription: root - INFO - Starting
+Transcription: root - INFO - Initializing audio recording (creating pyAudio input stream, sample rate: 16000 buffer size: 512
+Transcription: root - DEBUG - Porcupine wake word detection engine initialized successfully
+Transcription: root - INFO - Initializing WebRTC voice with Sensitivity 3
+Transcription: root - DEBUG - WebRTC VAD voice activity detection engine initialized successfully
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg6
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg6 extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 108, in _find_versionsed_ffmpeg_extension
+    _load_lib(lib)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 94, in _load_lib
+    torch.ops.load_library(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torch/_ops.py", line 933, in load_library
+    ctypes.CDLL(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/ctypes/__init__.py", line 376, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: dlopen(/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg6.so, 0x0006): Library not loaded: '@rpath/libavutil.58.dylib'
+  Referenced from: '/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg6.so'
+  Reason: tried: '/Users/sanyadoda/anaconda3/lib/python3.11/lib-dynload/../../libavutil.58.dylib' (no such file), '/Users/sanyadoda/anaconda3/bin/../lib/libavutil.58.dylib' (no such file), '/usr/local/lib/libavutil.58.dylib' (no such file), '/usr/lib/libavutil.58.dylib' (no such file)
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg5
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg5 extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 108, in _find_versionsed_ffmpeg_extension
+    _load_lib(lib)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 94, in _load_lib
+    torch.ops.load_library(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torch/_ops.py", line 933, in load_library
+    ctypes.CDLL(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/ctypes/__init__.py", line 376, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: dlopen(/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg5.so, 0x0006): Library not loaded: '@rpath/libavutil.57.dylib'
+  Referenced from: '/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg5.so'
+  Reason: tried: '/Users/sanyadoda/anaconda3/lib/python3.11/lib-dynload/../../libavutil.57.dylib' (no such file), '/Users/sanyadoda/anaconda3/bin/../lib/libavutil.57.dylib' (no such file), '/usr/local/lib/libavutil.57.dylib' (no such file), '/usr/lib/libavutil.57.dylib' (no such file)
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg4
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg4 extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 108, in _find_versionsed_ffmpeg_extension
+    _load_lib(lib)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 94, in _load_lib
+    torch.ops.load_library(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torch/_ops.py", line 933, in load_library
+    ctypes.CDLL(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/ctypes/__init__.py", line 376, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: dlopen(/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg4.so, 0x0006): Library not loaded: '@rpath/libavutil.56.dylib'
+  Referenced from: '/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg4.so'
+  Reason: tried: '/Users/sanyadoda/anaconda3/lib/python3.11/lib-dynload/../../libavutil.56.dylib' (no such file), '/Users/sanyadoda/anaconda3/bin/../lib/libavutil.56.dylib' (no such file), '/usr/local/lib/libavutil.56.dylib' (no such file), '/usr/lib/libavutil.56.dylib' (no such file)
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 106, in _find_versionsed_ffmpeg_extension
+    raise RuntimeError(f"FFmpeg{version} extension is not available.")
+RuntimeError: FFmpeg extension is not available.
+Transcription: root - DEBUG - Silero VAD voice activity detection engine initialized successfully
+Transcription: root - DEBUG - Starting recording worker
+Transcription: root - DEBUG - Starting realtime worker
+Transcription: root - DEBUG - Waiting for main transcription model to start
+Transcription: root - DEBUG - Main transcription model ready
+Transcription: root - DEBUG - RealtimeSTT initialization completed successfully
+Transcription: root - INFO - voice activity detected
+Transcription: root - INFO - recording started
+Transcription: root - INFO - voice deactivity detected
+Transcription: root - INFO - recording stopped
+Transcription: urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8080
+Transcription: root - INFO - Starting
+Transcription: root - INFO - Initializing audio recording (creating pyAudio input stream, sample rate: 16000 buffer size: 512
+Transcription: root - DEBUG - Porcupine wake word detection engine initialized successfully
+Transcription: root - INFO - Initializing WebRTC voice with Sensitivity 3
+Transcription: root - DEBUG - WebRTC VAD voice activity detection engine initialized successfully
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg6
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg6 extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 108, in _find_versionsed_ffmpeg_extension
+    _load_lib(lib)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 94, in _load_lib
+    torch.ops.load_library(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torch/_ops.py", line 933, in load_library
+    ctypes.CDLL(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/ctypes/__init__.py", line 376, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: dlopen(/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg6.so, 0x0006): Library not loaded: '@rpath/libavutil.58.dylib'
+  Referenced from: '/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg6.so'
+  Reason: tried: '/Users/sanyadoda/anaconda3/lib/python3.11/lib-dynload/../../libavutil.58.dylib' (no such file), '/Users/sanyadoda/anaconda3/bin/../lib/libavutil.58.dylib' (no such file), '/usr/local/lib/libavutil.58.dylib' (no such file), '/usr/lib/libavutil.58.dylib' (no such file)
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg5
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg5 extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 108, in _find_versionsed_ffmpeg_extension
+    _load_lib(lib)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 94, in _load_lib
+    torch.ops.load_library(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torch/_ops.py", line 933, in load_library
+    ctypes.CDLL(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/ctypes/__init__.py", line 376, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: dlopen(/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg5.so, 0x0006): Library not loaded: '@rpath/libavutil.57.dylib'
+  Referenced from: '/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg5.so'
+  Reason: tried: '/Users/sanyadoda/anaconda3/lib/python3.11/lib-dynload/../../libavutil.57.dylib' (no such file), '/Users/sanyadoda/anaconda3/bin/../lib/libavutil.57.dylib' (no such file), '/usr/local/lib/libavutil.57.dylib' (no such file), '/usr/lib/libavutil.57.dylib' (no such file)
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg4
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg4 extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 108, in _find_versionsed_ffmpeg_extension
+    _load_lib(lib)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 94, in _load_lib
+    torch.ops.load_library(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torch/_ops.py", line 933, in load_library
+    ctypes.CDLL(path)
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/ctypes/__init__.py", line 376, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: dlopen(/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg4.so, 0x0006): Library not loaded: '@rpath/libavutil.56.dylib'
+  Referenced from: '/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/lib/libtorio_ffmpeg4.so'
+  Reason: tried: '/Users/sanyadoda/anaconda3/lib/python3.11/lib-dynload/../../libavutil.56.dylib' (no such file), '/Users/sanyadoda/anaconda3/bin/../lib/libavutil.56.dylib' (no such file), '/usr/local/lib/libavutil.56.dylib' (no such file), '/usr/lib/libavutil.56.dylib' (no such file)
+Transcription: torio._extension.utils - DEBUG - Loading FFmpeg
+Transcription: torio._extension.utils - DEBUG - Failed to load FFmpeg extension.
+Traceback (most recent call last):
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 116, in _find_ffmpeg_extension
+    ext = _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sanyadoda/anaconda3/lib/python3.11/site-packages/torio/_extension/utils.py", line 106, in _find_versionsed_ffmpeg_extension
+    raise RuntimeError(f"FFmpeg{version} extension is not available.")
+RuntimeError: FFmpeg extension is not available.
+Transcription: root - DEBUG - Silero VAD voice activity detection engine initialized successfully
+Transcription: root - DEBUG - Starting recording worker
+Transcription: root - DEBUG - Starting realtime worker
+Transcription: root - DEBUG - Waiting for main transcription model to start
+Transcription: root - DEBUG - Main transcription model ready
+Transcription: root - DEBUG - RealtimeSTT initialization completed successfully
+Transcription: root - INFO - voice activity detected
+Transcription: root - INFO - recording started
+Transcription: root - INFO - voice deactivity detected
+Transcription: root - INFO - recording stopped
+Transcription: root - INFO - Starting
+Transcription: root - INFO - Starting
+Transcription: root - INFO - Initializing audio recording (creating pyAudio input stream, sample rate: 16000 buffer size: 512
+Transcription: root - INFO - Initializing audio recording (creating pyAudio input stream, sample rate: 16000 buffer size: 512
+Transcription: root - DEBUG - Porcupine wake word detection engine initialized successfully
+Transcription: root - DEBUG - Porcupine wake word detection engine initialized successfully
+Transcription: root - INFO - Initializing WebRTC voice with Sensitivity 3
+Transcription: root - INFO - Initializing WebRTC voice with Sensitivity 3
+Transcription: root - DEBUG - WebRTC VAD voice activity detection engine initialized successfully
+Transcription: root - DEBUG - WebRTC VAD voice activity detection engine initialized successfully
+Transcription: root - DEBUG - Silero VAD voice activity detection engine initialized successfully
+Transcription: root - DEBUG - Silero VAD voice activity detection engine initialized successfully
+Transcription: root - DEBUG - Starting recording worker
+Transcription: root - DEBUG - Starting recording worker
+Transcription: root - DEBUG - Starting realtime worker
+Transcription: root - DEBUG - Starting realtime worker
+Transcription: root - DEBUG - Waiting for main transcription model to start
+Transcription: root - DEBUG - Waiting for main transcription model to start
+Transcription: root - DEBUG - Main transcription model ready
+Transcription: root - DEBUG - Main transcription model ready
+Transcription: root - DEBUG - RealtimeSTT initialization completed successfully
+Transcription: root - DEBUG - RealtimeSTT initialization completed successfully
+Transcription: root - INFO - Starting

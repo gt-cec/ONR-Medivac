@@ -1,0 +1,75 @@
+{% extends "HAIInterface/layout.html" %}
+
+<body>
+{% block content %}
+<audio id="myAudio">
+    <source src="../static/HAIInterface/img/audio.mp3" type="audio/mpeg">
+</audio>
+<style>
+ .input-container {
+  display: flex;
+  align-items: center; /* Center align the items vertically */
+}
+
+/* Style for the input box */
+input[type="number"] {
+  flex: 1; 
+  padding: 10px; 
+  margin-left: 10px; 
+  font-size: 16px; 
+  background-color:  rgb(236, 168, 245);
+  border: 1px solid #ccc; 
+  border-radius: 4px;
+  box-sizing: border-box; 
+}
+</style>
+
+<audio id="bell">
+    <source src="../static/HAIInterface/img/bell.mp3" type="audio/mpeg">
+</audio>
+
+<div id="main" class="main-content-container">
+    <div id ='title' class="general-title">Altitude</div>
+    <div class="subcontent-container" style="flex-grow: 1; justify-content: space-evenly;">
+        <div class="general-text" id="current-altitude" >Current Altitude:</div>
+        <div class="input-container">
+            <label for=" altChange:" class="general-text">Change altitute to:</label>
+            <input type="number" id="altChange" name="altChange" value="10000"><br><br>
+        </div>
+        <!-- <input class="button" type="submit" value="Change"> -->
+        <div class="button" id="change-button" >Change</div>
+    </div>
+</div>
+
+
+{% endblock %}
+</body>
+
+<script>
+{% block script %}
+    var HelpId=4;
+    document.getElementById('help').onclick = () => { log({"page": "Change altitude", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
+   // Get current altitude. 
+    //document.getElementById('current-altitude').innerHTML=current_altitude
+    document.getElementById('help').href='/hai-interface/help?num='+HelpId
+    document.getElementById('map').href = '/hai-interface/map'
+    document.getElementById('cruise-sidebar').style.backgroundColor = "pink"
+
+
+    // Change altitude when "change" button clicked
+    document.getElementById("change-button").onclick = () => {
+        console.log('Clicked')
+        console.log(document.getElementById("altChange").value)
+        log({"page": "change-altitude", "action": "altitude changed by participant"})
+        alert("Altitude successfully changed to:"+ document.getElementById("altChange").value )
+        /* setInterval(() => {
+            alertt("Pressure successfully changed to:"+ document.getElementById("altChange").value )
+         }, 50000) */
+        window.location.href ='/hai-interface/inflight?Changed_altitude=' +  document.getElementById("altChange").value;
+    } 
+
+    
+   
+
+{% endblock %}
+</script>

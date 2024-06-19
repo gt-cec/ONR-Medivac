@@ -1,0 +1,60 @@
+{% extends "HAIInterface/layout.html" %}
+
+<body>
+{% block content %}
+    <div class="main-content-container">
+        <div class="general-title">Prepare for Landing</div>
+        <div class="subcontent-container">
+            <div></div>
+            <div class="index-text">Entry and descent status:</div>
+            <div id="countdown" style="font-size: 40px;"><h2>Descending</h2></div>
+            <div class="button" onclick="abort()" style="background-color: red;">ABORT</div>
+        </div>
+    </div>
+{% endblock %}
+</body>
+<script>
+    function blink_text() {
+        $('.blink').fadeOut(500);
+        $('.blink').fadeIn(500);
+    }
+    setInterval(blink_text, 1000);
+</script>
+<script>
+{% block script %}
+    log({"page": "landing-countdown", "action": "opened page"});
+    var HelpId=8
+    document.getElementById('help').href='/hai-interface/help?num='+HelpId
+    
+    var timeLeft = 5;
+    var blink_speed = 0.5; 
+    var downloadTimer = setInterval(function(){
+        if(timeLeft < 0){
+            log({"page": "landing-countdown", "action": "countdown complete"});
+            clearInterval(downloadTimer);
+            window.location= "/hai-interface/landed";
+        } else {
+            log({"page": "landing-countdown", "action": "countdown changed", "value": timeLeft});
+            function blinker()
+            {
+                if(document.getElementById("countdown"))
+                {
+                    var d = document.getElementById("countdown") ;
+                    d.style.color= (d.style.color=='blue'?'white':'blue');
+                    setTimeout('blinker()', 90);
+                }
+            }
+        }
+    timeLeft -= 1;
+    }, 1000);
+
+    function abort() {
+        log({"page": "landing-countdown", "action": "abort button pressed"});
+        alert("Aborting Mission!");
+    }
+
+    document.getElementById('landing-sidebar').style.backgroundColor="pink";
+    document.getElementById('help').onclick = () => { log({"page": "landing coutdown", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
+
+{% endblock %}
+</script>

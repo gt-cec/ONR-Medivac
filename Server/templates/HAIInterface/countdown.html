@@ -1,0 +1,66 @@
+{% extends "HAIInterface/layout.html" %}  
+
+<body>
+{% block content %}
+    <div class="main-content-container">
+        <div id="container" style="display:none;">
+            <img class="fit" src="../../static/HAIInterface/img/takeoff.gif" repeat: no-repeat; attachment: fixed;>
+        </div>
+        <div class="general-title">Engine Starting</div>
+        <div class="subcontent-container" style="flex-grow: 1;">
+            <div class="spacing"></div>
+            <div class="index-text">Taking off in:</div>
+            <div id="countdown" style="font-size: 120pt;"></div>
+            <input type="button" onclick="abort()" value="ABORT" class="button" style="background-color: #D42912;">
+        </div>        
+    </div>
+{% endblock %}
+</body>
+
+<script>
+{% block script %}
+    log({"page": "countdown", "action": "opened page"})
+
+    //Reseting the time to be 0 at takeoff
+    var currentDateTime = new Date();
+    var TimeSeconds= currentDateTime.getTime() / 1000;
+    fetch("/var?flight-start-time=" + TimeSeconds)
+    //debuging
+    // let response = await fetch("/var");
+    // let message = await response.text();
+    // message = JSON.parse(message);
+    // console.log("time", message["curr-time"]);
+    const urlParams = new URLSearchParams(window.location.search)
+    targetIndex = urlParams.get("target-index")
+    
+    var HelpId=3
+    document.getElementById('help').href='/hai-interface/help?num='+HelpId
+    
+    var timeLeft = 5
+    document.getElementById("countdown").innerHTML = timeLeft
+
+    var downloadTimer = setInterval(async () => {
+        timeLeft -= 1;
+        if (timeLeft < 0) {
+            log({"page": "countdown", "action": "countdown complete"})
+            if (targetIndex) {
+                await fetch("/var?destination-index=" + targetIndex)
+            }
+            window.location.href = "/hai-interface/inflight"
+        }
+        else {
+            document.getElementById("countdown").innerHTML = timeLeft
+            log({"page": "countdown", "action": "countdown now " + timeLeft})
+        }
+    }, 1000);
+
+    function abort() {
+        log({"page": "checklist", "action": "abort button pressed"})
+        alert("Aborting Mission!");
+    }
+    
+    document.getElementById('takeoff-sidebar').style.backgroundColor = "pink";
+    document.getElementById('help').onclick = () => { log({"page": "countdown", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
+
+{% endblock %}
+</script>

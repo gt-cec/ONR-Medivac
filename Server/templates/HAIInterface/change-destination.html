@@ -1,0 +1,138 @@
+{% extends "HAIInterface/layout.html" %}
+
+<!-- NOTE: the <style>, <html>, and <script> tags are here solely so the text editor will use the correct syntax highlighting, the tag has no actual effect on the layout (what's inside the { block script } does) -->
+
+<style>
+{% block styling %}
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 200px;
+        box-shadow: 0px 4px 10px 
+            0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+    .dropdown-content a {
+        color: black;
+        padding: 10px 12px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #f1f1f1
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown:hover {
+        background-color: #aca5a5;
+    }
+{% endblock %}  
+</style>  
+
+<html>
+{% block content %}
+    <div class="main-content-container">
+        <div id="title" class="general-title"></div>
+        <div class="subcontent-container" style="flex-grow: 1; justify-content: space-between;">
+            <div id="prompt" class="general-text" style="font-size: 30pt"></div>    
+            <div></div>
+            <div id="destination-box" class="bottom-nav fadein" style="border-radius: 30px 30px 30px 30px" onclick="showMap()">
+                <img id="destination-box-indicator" class="bottom-nav-indicator">
+                <div class="bottom-nav-info-container">
+                    <div class="bottom-nav-info">
+                        <img class="bottom-nav-icon" src="../static/HAIInterface/img/helipad-icon.png">&ensp;
+                        <div id="destination-box-name" style="font-weight: bold"></div>
+                    </div>
+                    <div class="bottom-nav-info">
+                        <img class="bottom-nav-icon" src="../static/HAIInterface/img/location-icon.png">&ensp;
+                        <div id="destination-box-address"></div>
+                    </div>
+                    <div class="bottom-nav-info">
+                        <img class="bottom-nav-icon" src="../static/HAIInterface/img/institution-icon.png">&ensp;
+                        <div id="destination-box-type"></div>
+                        <div style="flex-grow: 1;"></div>
+                        <div id="destination-box-nearest-heliport" class="bottom-nav-current-destination" style="background-color: seagreen">
+                            NEAREST
+                        </div>
+                        <div id="destination-box-current-destination" class="bottom-nav-current-destination">
+                            DESTINATION
+                        </div>
+                        <div id="destination-box-departure-heliport" class="bottom-nav-current-destination" style="background-color: lightcoral">
+                            ORIGIN
+                        </div>
+                    </div>
+                </div>
+            </div>            
+            <div class="general-text" style="text-align: left">
+                <br><img src="../../static/HAIInterface/img/orange-helipad-icon.png" style="height: 25px"/>&ensp;The current destination.
+                <br><img src="../../static/HAIInterface/img/red-hospital-icon.png" style="height: 25px"/>&ensp;Helipads with hospital facilities.
+                <br><img src="../../static/HAIInterface/img/blue-helipad-icon.png" style="height: 25px"/>&ensp;Commercial helipads.
+                <br><div id="suggestion" style="display:none;">
+                    <img src="../../static/HAIInterface/img/green-helipad-icon.png" style="height: 25px;"/>&ensp;
+                    <div>The helipad recommended by the AI Pilot.</div>
+                   </div>
+            </div>
+            <div></div>
+            <div id="submit-button" class="button" style="background-color: white; color: black">
+                SUBMIT
+            </div>
+        </div>
+    </div> 
+{% endblock %}
+</html>
+
+<script>
+{% block script %}
+    
+    
+    var HelpId=5
+    setDestination = true
+    var selectedHelipadId = 0
+    const urlParams = new URLSearchParams(window.location.search)
+
+    let inflight = urlParams.get("inflight") == "1"
+    let emergency = urlParams.get("emergency") == "1"
+
+    if(emergency){
+        log({"page": "emergency-landing", "action": "opened page"})
+    }
+    else{
+        log({"page": "change-destination", "action": "opened page"})
+    }
+
+    document.getElementById('help').href='/hai-interface/help?num='+HelpId
+    document.getElementById('map').href = '/hai-interface/map'
+
+    // set the submit button
+    document.getElementById("submit-button").onclick = () => {
+        log({"page": "change-destination", "action": "submit button pressed"})
+        window.location.href = '/hai-interface/location?inflight=' + urlParams.get("inflight") + '&dest=' + targetIndex
+        //Reseting the time to be 0 at takeoff
+        var currentDateTime = new Date();
+        var TimeSeconds=currentDateTime.getTime() / 1000;
+        fetch("/var?curr-time=" + TimeSeconds)
+        fetch("/var?dest-changed=" + true)  //destination has been changed
+    }
+
+    // set the content
+    document.getElementById("title").innerHTML = emergency ? "Emergency Landing" : "Change Destination"
+    document.getElementById("prompt").innerHTML = emergency ? "Select an emergency landing location using the map." : "Select a destination using the map."
+    document.getElementById("suggestion").style.display = emergency ? "flex": "none" 
+
+    // select the Cruise element
+    document.getElementById('cruise-sidebar').style.backgroundColor="pink";
+    document.getElementById('help').onclick = () => { log({"page": "change-destination", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
+
+    {% endblock %}
+</script>

@@ -1,0 +1,103 @@
+{% extends "HAIInterface/layout.html" %}
+
+<body>
+{% block content %}
+    <div class="main-content-container">
+        <div class="general-title">Confirm Destination</div>
+        <div class="subcontent-container">
+            <div class="spacing"></div>
+            <div class="index-text">Please confirm the aircraft's destination:</div>
+            <div id="destination-box" class="bottom-nav fadein" style="border-radius: 30px 30px 30px 30px">
+                <img id="destination-box-indicator" class="bottom-nav-indicator">
+                <div class="bottom-nav-info-container">
+                    <div class="bottom-nav-info">
+                        <img class="bottom-nav-icon" src="../static/HAIInterface/img/helipad-icon.png">&ensp;
+                        <div id="destination-box-name" style="font-weight: bold"></div>
+                    </div>
+                    <div class="bottom-nav-info">
+                        <img class="bottom-nav-icon" src="../static/HAIInterface/img/location-icon.png">&ensp;
+                        <div id="destination-box-address"></div>
+                    </div>
+                    <div class="bottom-nav-info">
+                        <img class="bottom-nav-icon" src="../static/HAIInterface/img/institution-icon.png">&ensp;
+                        <div id="destination-box-type"></div>
+                        <div style="flex-grow: 1;"></div>
+                        <div id="destination-box-nearest-heliport" class="bottom-nav-current-destination" style="background-color: seagreen;">
+                            NEAREST
+                        </div>
+                        <div id="destination-box-current-destination" class="bottom-nav-current-destination">
+                            DESTINATION
+                        </div>
+                        <div id="destination-box-departure-heliport" class="bottom-nav-current-destination" style="background-color: lightcoral">
+                            ORIGIN
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="spacing"></div>
+            <div class="button-container">
+                <div id="confirm-button" class="button">CONFIRM</div>&ensp;&ensp;
+                <div id="cancel-button" class="button" style="background-color: #d42912">CANCEL</div>
+            </div>
+         </div>
+    </div> 
+{% endblock %}
+</body>
+
+<script>
+{% block script %}
+console.log("Here IN LOCATION");    
+log({"page": "location", "action": "opened page"});
+    var HelpId=1
+    const urlParams = new URLSearchParams(window.location.search)
+    let inflight = urlParams.get("inflight") == 1 ? 1 : 0
+
+    document.getElementById( (inflight ? 'cruise' : 'preflight') + '-sidebar').style.backgroundColor = "pink"
+    console.log("7657656453654Here IN LOCATION");
+
+
+    // get the location
+    fetch("/var").then(resp => resp.json()).then(data => {
+        targetIndex = urlParams.get("dest") == "-1" ? data["departure-index"] : urlParams.get("dest") == "-2" ? 6 : urlParams.get("dest")
+        document.getElementById("destination-box-indicator").setAttribute("src", "../static/HAIInterface/img/" + (helipads[targetIndex].hasHospital ? "hospital-icon.png" : "commercial-icon.png"))
+        document.getElementById("destination-box-name").innerHTML = helipads[targetIndex].name
+        document.getElementById("destination-box-address").innerHTML = helipads[targetIndex].location
+        document.getElementById("destination-box-type").innerHTML = helipads[targetIndex].hasHospital ? "Hospital" : "Commercial"
+        // show the "DESTINATION" if applicable
+        if (targetIndex == destinationIndex) {
+            document.getElementById("destination-box-current-destination").style.display = "flex"
+        }
+        else {
+            document.getElementById("destination-box-current-destination").style.display = "none"
+        }
+
+        // show the "DEPARTURE HELIPORT" if applicable
+        if (targetIndex == departureIndex) {
+            document.getElementById("destination-box-departure-heliport").style.display = "flex"
+        }
+        else {
+            document.getElementById("destination-box-departure-heliport").style.display = "none"
+        }
+    })
+ 
+    document.getElementById("confirm-button").onclick = async () => {
+        log({"page": "location", "action": "confirm button pressed"})
+        if (inflight == 0) {
+            window.location.href = "/hai-interface/checklist?inflight=" + inflight + "&target-index=" + targetIndex
+        }          
+        else if (inflight == 1) {
+            await fetch("/var?destination-index=" + targetIndex)
+            window.location.href = '/hai-interface/inflight'
+        }
+    }
+
+    document.getElementById("cancel-button").onclick = () => { log({"page": "location", "action": "cancel button pressed"}); history.back() }
+    document.getElementById('help').onclick = () => { log({"page": "location", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
+    
+    var bodyRect = document.body.getBoundingClientRect()
+    let rect =  document.getElementById("confirm-button").getBoundingClientRect();
+    console.log(rect.top, rect.right, rect.bottom, rect.left);
+    let can_rect =  document.getElementById("cancel-button").getBoundingClientRect();
+    console.log(can_rect.top, can_rect.right, rect.bottom, rect.left);
+{% endblock %}
+</script>

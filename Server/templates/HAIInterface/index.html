@@ -1,0 +1,38 @@
+{% extends "HAIInterface/layout.html" %}
+<style>
+    #assistant {
+        display: none;
+        width: 100px;
+        height: 100px;
+        background-color: blue;
+        border-radius: 50%;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+</style>
+
+<body>
+{% block content %}
+    <div class="main-content-container">
+        <div class="general-title">Welcome Aboard!</div>
+        <div class="subcontent-container">
+            <div class="index-text">This aircraft is equipped with the MK217 AI pilot.<br><br>Use this interface to interact with the AI.</div>
+            <div class="index-text">Press START to continue.</div>    
+        </div>
+        <div class="button" onclick="log({'page': 'index', 'action': 'confirm button pressed'}); window.location.href = '/hai-interface/location?dest=-2'">START</div>
+    </div>
+   
+{% endblock %} 
+</body>
+
+<script>
+{% block script %}
+    log({"page": "index", "action": "opened page"})
+    document.getElementById('preflight-sidebar').style.backgroundColor = "pink";
+    document.getElementById('map').href = '/hai-interface/map'
+
+   
+{% endblock %}
+</script>

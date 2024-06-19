@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <meta charset="utf-8">
+    <title>HAI Interface</title>
+
+    <link rel="stylesheet" href="../static/HAIInterface/css/styling.css">
+
+    <style>
+        h1 {
+            text-align: center;
+            color: white;
+        }
+      
+
+        body {
+            background-color: black;
+        }
+    </style>
+
+    <body>
+        <div class="center">
+            <img id='img_icon' src="../static/HAIInterface/img/speaker_off.png" width="50" height="50">
+            <h1 id="blink">Unfavorable Weather Conditions</h1><br>
+            <h1 id="blink">Need to land immidetialely</h1>
+            <h1>Please click on continue to select an emegency location</h1>
+        </div>
+
+        <script type="text/javascript">
+            var blink =
+                document.getElementById('blink');
+
+            setInterval(function () {
+                blink.style.opacity =
+                    (blink.style.opacity == 0 ? 1 : 0);
+            }, 1000);
+        </script>
+    </body>
+
+</html>

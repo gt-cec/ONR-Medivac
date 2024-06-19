@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>HAI Vitals Logger Pro</title>
+        <link rel="stylesheet" href="../../static/VitalsTask/styles.css"/>
+        <script src="../../static/VitalsTask/vitals.js"></script>    
+    </head>
+    <body>
+        <div id= "vitals" class="main-content-container vitals-popup">
+            <div class="subcontent-container">
+                <div class="index-text" style="font-size: 35pt;">Please take the Post-trial Survey</div>
+            </div>
+        </div>
+    </body>
+    <script>  
+    let myWindow;
+    var survey=false
+    setInterval(async function get_variables() {
+        let response = await fetch("/var");
+        let message = await response.text();
+        message = JSON.parse(message);
+        if (message["decision-state"]==1 && survey==false)
+        {
+            setTimeout(() =>{}, 10000)
+            if (message["study-stage"]==1){
+                myWindow = window.open("https://gatech.co1.qualtrics.com/jfe/form/SV_1X46KmbmbpAQymG", "_blank")
+                survey=true
+            }
+            else if (message["study-stage"]==2){
+                myWindow = window.open("https://gatech.co1.qualtrics.com/jfe/form/SV_cT5g6kbmgu7tNEa", "_blank")
+                survey=true
+            }
+            else if (message["study-stage"]==3){
+                //window.location.href='https://gatech.co1.qualtrics.com/jfe/form/SV_9mBRVhT01Fvh1f8'
+                myWindow = window.open("https://gatech.co1.qualtrics.com/jfe/form/SV_8B5yHDUG27XGbpc", "_blank")
+                survey=true
+            }
+            else if (message["study-stage"]==4){
+                myWindow = window.open("https://gatech.co1.qualtrics.com/jfe/form/SV_0BAZi77zmQzsViS", "_blank")
+                survey=true
+            }  
+             //making the decision state 0 after 30 seconds
+             //setTimeout(() =>{await fetch("/var?decision-state=0")}, 30000)   
+
+        }
+        console.log(message["reset-vitals-display"])
+        // if resetting the vitals display, change page
+        if (message["reset-vitals-display"] == "1") {
+            console.log('reset')
+            await fetch("/var?reset-vitals-display=0")
+            window.open('/vitals',"_parent");
+            myWindow.close();
+        }
+
+        
+    }, 5000);
+    
+    </script>
+</html>
+
+

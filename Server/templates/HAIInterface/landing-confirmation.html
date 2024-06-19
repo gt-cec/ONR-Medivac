@@ -1,0 +1,147 @@
+{% extends "HAIInterface/layout.html" %}
+
+<body>
+{% block content %}
+    <div class="main-content-container">
+        <div class="general-title">Approaching Destination</div>
+        <div id="helipad-confirm-container" class="subcontent-container">
+            <div style="display:flex; flex-direction:column; align-items: center;">
+                <div class="index-text">Have received confirmation to land on <b><span id="helipad-text" style="color: mediumvioletred">Helipad 1 </span></b><img src="../static/HAIInterface/img/helipad1.png" width="45" height="45" style="margin-top: 0.25em;"></div>
+                <div class="spacing"></div>
+                <div id="checklist-point"></div>
+            </div>
+            <div id="helipad-confirm-button-container" class="button-container" style="display:flex; width:70%">
+                <div class="button" id="safe-to-land-button" onclick="">SAFE TO LAND</div>
+                &ensp;&ensp;&ensp;
+                <div class="button" id="different-helipad-button" style="background-color: #d359b6;"onclick="showHelipadSelect()">DIFFERENT HELIPAD</a></div>
+            </div>
+        </div>  
+        <div id="helipad-select-container" class="subcontent-container" style="display: none">
+            <div></div>
+            <div class="index-text" class="answer_list">Select a helipad for landing</div>
+            <div class="button-container" style="width: 90%">
+                &emsp;&emsp;&emsp;
+                <div class="button" style="background-color: #e19128;" onclick="showHelipadConfirm(1)"><img src="../static/HAIInterface/img/helipad1.png" width="60" height="60"><div>HELIPAD 1</div></div>
+                &emsp;&emsp;&emsp;
+                <div class="button" style="background-color: #c244db;" onclick="showHelipadConfirm(2)"><img src="../static/HAIInterface/img/helipad2.png" width="60" height="60"><div>HELIPAD 2</div></div>
+                &emsp;&emsp;&emsp;
+                <!-- <div class="button" style="background-color: #31a7c7 ;" onclick="showHelipadConfirm(3)"><img src="../static/HAIInterface/img/helipad3.png" width="60" height="60"><div>HELIPAD 3</div></div> -->
+            </div>
+        </div>
+        <div id="helipad-ready-container" class="subcontent-container" style="display: none;">
+            <div></div>
+            <div class="index-text">Are you ready to land?</div>
+            <div class="button-container">
+                <div class="button" id="confirm-land-button">CONFIRM</div>&ensp;&ensp;&ensp;
+                <div class="button" onclick="showHelipadConfirm()" style="background-color: #d42912;">CANCEL</div>    
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+</body>
+
+<script>
+    {% block script %}
+    log({"page": "landing-confirmation", "action": "opened page"});
+    var HelpId=7
+
+    var helipad = 1
+    let allChecks = false
+
+    function getColor(pad) {
+        return pad == 1 ? "#e19128" : pad == 2 ? "#c244db" : pad == 3 ? "#31a7c7" : "black"
+    }
+
+    document.getElementById("confirm-land-button").onclick = async () => { 
+        await fetch("/var?decision-state=1")
+        log({"page": "landing-confirmation", "action": "gave landing confirmation"});
+        window.location.href = '/hai-interface/landing-countdown'
+    }
+
+    document.getElementById('help').href='/hai-interface/help?num='+HelpId
+    document.getElementById('map').href = '/hai-interface/map'
+
+    let checklistQuestions = ["Aircraft is visually stable", "Helipad is clear"]
+    let checklist_checked = []
+
+    generateChecklist(checklistQuestions)
+
+    function disableSafeToLand() {
+        // disable the safe to land button onclick
+        document.getElementById("safe-to-land-button").onclick = () => {}
+        // create out safe to land button
+        document.getElementById("safe-to-land-button").style.boxShadow = "none"
+        document.getElementById("safe-to-land-button").style.backgroundColor = "#8a8a8a"
+    }
+    disableSafeToLand()
+    
+    function checkbox_toggle(item) {
+        let idx = Number(item.id)
+        if (checklist_checked[idx]) {
+            log({"page": "landing-confirmation", "action": "checkbox toggle", "item": idx, "value": "OFF"});
+            checklist_checked[idx] = false
+            item.getElementsByTagName("img")[0].src = "../../static/HAIInterface/img/unchecked.png"
+        }
+        else {
+            log({"page": "landing-confirmation", "action": "checkbox toggle", "item": idx, "value": "ON"});
+            checklist_checked[idx] = true
+            item.getElementsByTagName("img")[0].src = "../../static/HAIInterface/img/checked.png"
+        }  
+        
+        if (!checklist_checked.includes(false)) {
+            allChecks = true
+            // set the safe to land button onclick
+            document.getElementById("safe-to-land-button").onclick = () => {
+                log({"page": "landing-confirmation", "action": "confirmed safe to land"});
+                showHelipadReady()
+            }
+            // return defaults
+            document.getElementById("safe-to-land-button").style.boxShadow = ""
+            document.getElementById("safe-to-land-button").style.backgroundColor = ""
+        }
+        else {
+            allChecks = false
+            disableSafeToLand()
+        }
+    }
+    
+    showHelipadConfirm(helipad)
+        
+    function showHelipadConfirm(pad) {
+        log({"page": "landing-confirmation", "action": "showing helipad confirm", "value": pad});
+        //if the pad value is undefined meaning pressed cancel
+        helipad = pad
+        document.getElementById('helipad-confirm-container').style.display = "flex";
+        document.getElementById('helipad-select-container').style.display = "none";
+        document.getElementById('helipad-ready-container').style.display = "none";
+
+        // set the helipad color
+        document.getElementById("helipad-text").style.color = getColor(helipad)
+        document.getElementById("helipad-text").innerHTML = "Helipad " + helipad
+    }
+
+    function showHelipadSelect() {
+        log({"page": "landing-confirmation", "action": " choose different helipad option, showing helipad select"});
+        document.getElementById('helipad-confirm-container').style.display = "none";
+        document.getElementById('helipad-select-container').style.display = "flex";
+        document.getElementById('helipad-ready-container').style.display = "none";
+    }
+
+    function showHelipadReady() {
+        log({"page": "landing-confirmation", "action": "showing helipad ready"});
+        document.getElementById('helipad-confirm-container').style.display = "none";
+        document.getElementById('helipad-select-container').style.display = "none";
+        document.getElementById('helipad-ready-container').style.display = "flex";
+    }
+
+    function abort() {
+        log({"page": "landing-confirmation", "action": "abort button pressed"});
+        alert("Aborting Mission!");
+    }
+
+    document.getElementById('approach-sidebar').style.backgroundColor="pink";
+    document.getElementById('help').onclick = () => { log({"page": "landing Confirmation", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
+
+    {% endblock %}
+    </script>

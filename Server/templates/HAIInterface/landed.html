@@ -1,0 +1,22 @@
+{% extends "HAIInterface/layout.html" %}
+
+<body>
+{% block content %}
+    <div class="main-content-container">
+        <div class="general-title">Landed!</div>
+        <div class="subcontent-container" style="justify-content: center;">
+            <div class="index-text"> It is now safe to unbuckle and deplane.</div>
+        </div>
+    </div>    
+{% endblock %}
+</body>
+
+<script>
+{% block script %}
+    log({"page": "landed", "action": "opened page"});
+    var HelpId=9
+    document.getElementById('help').onclick = () => { log({"page": "landed", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
+    document.getElementById('map').href = '/hai-interface/map'
+    document.getElementById('landing-sidebar').style.backgroundColor = "pink";
+{% endblock %}
+</script>

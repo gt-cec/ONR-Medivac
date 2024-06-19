@@ -1,0 +1,83 @@
+{% extends "HAIInterface/layout.html" %}
+
+<body>
+{% block content %}
+    <div class="center">  
+        <div id="main" class="main-content-container">
+            <div id ='title' class="general-title">Instructions
+                <div style = "position:absolute; left:1080px;">
+                    <div style="height: 7vh"></div>
+                    <button id="icon" onclick="speaker_toggle()"><img id='img_icon' src="../static/HAIInterface/img/speaker_off.png" width="50" height="50" ></button>
+                    </div>
+                    <div style = "position:absolute; right:1080px;">
+                    <div style="height: 5vh"></div>
+                    <button style="font-size: 23px;" onclick="history.back()">⬅ Back</button>
+                    </div> 
+            </div>
+            <div class="subcontent-container" style="flex-grow: 1; justify-content: space-evenly;">  
+                
+            <div style="height: 5vh"></div>
+            <div class="help-text"id="desp" ></div>
+            <div style="height: 4vh"></div>
+        
+            <div class="spacing"></div>
+            <div class="button-container">
+                <div style="height: 25vh"></div>
+                 <div class="button" id="sound1" style="background-color: #de2222" onclick=help_audio()>Need Further Assistance</a></div>&ensp;&ensp;
+               </div>
+            </div>
+        </div>   
+       
+    </div>    
+</div>
+{% endblock %}
+</body>
+
+<script>
+{% block script %}
+    log({"page": "help", "action": "opened page"})
+
+     var data=JSON.parse('{{ data | tojson | safe}}')
+     var header  =data.desp
+     let speaker_on = false
+
+    
+    var a = header .split(".")
+    console.log(a)
+    a.pop();
+    var toAppend = "";
+    for (let i = 0; i < a.length; i++) { 
+        toAppend += '•'+a[i] + ".<br><br>"
+        console.log(toAppend)
+    }
+    
+    document.getElementById("desp").innerHTML=toAppend
+
+
+    function speaker_toggle()
+     {
+        console.log("pressed")
+        if (speaker_on) {
+            log({"page": "help", "action": "help speaker pressed"})
+            speaker_on = false
+            document.getElementById("img_icon").src = "../../static/HAIInterface/img/speaker_off.png"
+        }
+        else {
+            speaker_on = true
+            document.getElementById("img_icon").src = "../../static/HAIInterface/img/speaker.png"
+        }  
+    }
+
+    const audio = new Audio("https://www.fesliyanstudios.com/play-mp3/387");
+    const buttons = document.getElementById(sound1);
+
+    function help_audio()
+    {
+        const audio = new Audio("https://www.fesliyanstudios.com/play-mp3/387");
+        audio.play();
+        log({"page": "help", "action": " Asking for further assistance"})
+    }
+     
+
+{% endblock %}
+</script>

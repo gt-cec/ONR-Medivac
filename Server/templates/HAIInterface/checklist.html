@@ -1,0 +1,96 @@
+{% extends "HAIInterface/layout.html" %}
+
+<body>
+{% block content %}
+    <div class="main-content-container">
+        <div id="title" class="general-title">Takeoff Checklist</div>
+        <div class="subcontent-container" style="flex-grow: 1; justify-content: space-between;">
+            <div id="checklist-point" class="fadein"></div>
+
+            <div class="button-container">
+                <div class="button" id="confirm-button">CONFIRM</div>&ensp;&ensp;&ensp;
+                <div class="button" onclick="abort()" style="background-color: #d42912;">ABORT</div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+</body>
+
+<script>
+{% block script %}
+    var HelpId=2
+
+    disableConfirmButton()
+
+    const urlParams = new URLSearchParams(window.location.search)
+    let inflight = urlParams.get("inflight") == "1"
+    targetIndex = urlParams.get("target-index")
+
+    log({"page": "checklist", "action": "opened page", "inflight": inflight})
+
+    document.getElementById("title").innerHTML = inflight ? "Inflight Checklist" : "Takeoff Checklist"
+
+    document.getElementById('help').href='/hai-interface/help?num='+HelpId
+    document.getElementById('map').href = '/hai-interface/map'
+    
+    let checklist_questions = inflight ?
+        ["Patient is secured.", "Equipment is secured.", "Medical personnel are secured."]    
+        : ["Patient vitals indicate fit to fly.", "Passengers are secured.", "Ready for takeoff."]
+
+    let checklist_checked = []
+
+    generateChecklist(checklist_questions)
+    
+    function checkbox_toggle(item) {
+        let idx = Number(item.id)
+        if (checklist_checked[idx]) {
+            checklist_checked[idx] = false
+            item.getElementsByTagName("img")[0].src = "../../static/HAIInterface/img/unchecked.png"
+            log({"page": "checklist", "action": "toggled checkbox", "inflight": inflight, "item": idx, "value": "ON"})
+        }
+        else {
+            checklist_checked[idx] = true
+            item.getElementsByTagName("img")[0].src = "../../static/HAIInterface/img/checked.png"
+            log({"page": "checklist", "action": "toggled checkbox", "inflight": inflight, "item": idx, "value": "OFF"})
+        }  
+        
+        // show confirm button (or not)
+        if (!checklist_checked.includes(false)) {
+            enableConfirmButton()
+        }
+        else {
+            disableConfirmButton()
+        }
+    }   
+    
+    function abort() {
+        log({"page": "checklist", "action": "abort button pressed"})
+        alert("Aborting Mission!");
+    }
+
+    document.getElementById( (inflight ? 'cruise' : 'takeoff') + '-sidebar').style.backgroundColor="pink";
+    document.getElementById('help').onclick = () => { log({"page": "checklist", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
+
+    function enableConfirmButton() {
+        document.getElementById('confirm-button').style.backgroundColor = "#12d429"
+        document.getElementById("confirm-button").onclick = async () => {
+            log({"page": "checklist", "action": "confirm button clicked", "inflight": inflight})
+            window.location.href =  inflight ? "/hai-interface/landing-confirmation" : "/hai-interface/countdown?target-index=" + targetIndex
+        }
+        document.getElementById("confirm-button").style.boxShadow = ""
+        log({"page": "checklist", "action": "showing confirm button", "inflight": inflight})
+    }
+
+    function disableConfirmButton() {
+        document.getElementById('confirm-button').style.backgroundColor = "#8a8a8a"
+        document.getElementById("confirm-button").onclick = () => {}
+        document.getElementById("confirm-button").style.boxShadow = "none"
+    }
+    let map_rect =  document.getElementById("map").getBoundingClientRect();
+    console.log(map_rect.top, map_rect.right, map_rect.bottom, map_rect.left);
+
+    let help_rect =  document.getElementById("help").getBoundingClientRect();
+    console.log(help_rect.top, help_rect.right, help_rect.bottom, map_rect.left);
+
+{% endblock %}
+</script>

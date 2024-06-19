@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Control Interface</title>
+    <style>
+    body {
+        background-color: #1a1a1a;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        }
+
+    .gauge-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        }
+
+    .gauge {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background-color: #333;
+        position: relative;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+       }
+
+    .gauge-label {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        }
+
+    .gauge-value {
+        font-size: 24px;
+       }
+
+    .gauge-bar {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform-origin: 0% 50%;
+        width: 100px;
+        height: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        }
+
+    .gauge-bar.green {
+        background-color: #4caf50;
+        }
+
+    .gauge-bar.yellow {
+        background-color: #ffc107;
+        }
+
+    .gauge-bar.red {
+        background-color: #f44336;
+        }
+
+    </style>
+    </head>
+    <body>
+        <div class="gauge-container">
+            <div class="gauge">
+                <div class="gauge-label">
+                    Fuel
+                    <div class="gauge-value">75%</div>
+                </div>
+                <div class="gauge-bar green" style="transform: rotate(-135deg);"></div>
+            </div>
+            <div class="gauge">
+                <div class="gauge-label">
+                    Hydraulic Pressure
+                    <div class="gauge-value">90%</div>
+                </div>
+                <div class="gauge-bar yellow" style="transform: rotate(-45deg);"></div>
+            </div>
+            <div class="gauge">
+                <div class="gauge-label">
+                    Altitude
+                    <div class="gauge-value">5000 ft</div>
+                </div>
+                <div class="gauge-bar red" style="transform: rotate(90deg);"></div>
+            </div>
+        </div>
+    </body>
+</html>
+
+
+
+    
+
+
+
