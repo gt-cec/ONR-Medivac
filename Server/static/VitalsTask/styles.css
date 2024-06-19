@@ -1,0 +1,159 @@
+/* fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
+* {
+    user-select: none;
+}
+
+div, button {
+    display: flex;
+    font-family: 'Roboto', sans-serif;
+}
+
+html {
+    display: block;
+}
+
+body {
+    display: flex;
+    color: black;
+    background-color: peachpuff;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+/* visual frame */
+div.main-pane {
+    width: 95%;
+    height: 90%;
+    justify-content: center;
+    flex-direction: row;
+    border: 2px solid lightgrey;
+    border-radius: 7px;
+}
+
+/* vertical container */
+div.vertical-container {
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* title pane */
+div.title-pane {
+    justify-content: center;
+    font-size: 4.5vh;
+    background-color: #b9deff;
+    border-radius: 5px 5px 0px 0px;
+}
+
+/* horizontal container */
+div.horizontal-container {
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+}
+
+/* menu pane */
+div.menu-pane {
+    flex: 1; 
+    flex-direction: column;
+    justify-content: center;
+    background-color: #fff5ec;
+    border: 4px solid #b9deff;
+    border-radius: 0px 0px 0px 5px;
+}
+
+/* action pane */
+div.action-pane {
+    flex: 1.5;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #ecedff;
+    border: 4px solid #b9deff;
+    border-radius: 0px 0px 5px 0px;
+}
+
+/* action text */
+div.action-text {
+    justify-content: center;
+    align-items: center;
+    font-size: 4.5vh;
+    margin: 0 15% 0 15%;
+    border-bottom: 10px solid;
+    border-radius: 5px;
+}
+
+/* menu buttons */
+button {
+    display: block;
+    margin: 2vh 3vh 2vh 3vh;
+    height: 7vh;
+    font-size: 3vh;
+    border-radius: 10px;
+}
+
+button.action-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    padding: 0;
+}
+
+button.menu {
+    background-color: #b9bbff;
+}
+
+button.submit {
+    background-color: blanchedalmond;
+}
+
+div.button-loading-bar {
+    height: .5vh;
+    background-color: #0062b9;
+    width: 0%;
+    border-radius: 5px;
+}
+
+div.button-text {
+    margin: 0vh 3vh 0vh 3vh;
+    padding-bottom: .8vh;
+}
+
+div.keypad-container {
+    justify-content: center;
+    align-items: center;
+    margin-top: 3vh;
+    width: 80%;
+    flex-direction: column
+}
+
+div.keypad {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+button.keypad-key {
+    width: 14vh;
+    height: 14vh;
+    background-color: #c9b9ff;
+    margin: .5vh;
+    justify-content: center;
+    align-items: center;
+    border-radius: 7px;
+    font-size: 50pt;
+    font-weight: bolder;
+}
+
+div.keypad-value {
+    text-align: center;
+    font-size: 50pt;
+    font-weight: bolder;
+}
