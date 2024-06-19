@@ -1,0 +1,10 @@
+{
+  "package-name": "cecflightsim-ga11w-atlanta",
+  "items": [
+    {
+      "type": "Airport",
+      "content": "GA11",
+      "revision": 1
+    }
+  ]
+}

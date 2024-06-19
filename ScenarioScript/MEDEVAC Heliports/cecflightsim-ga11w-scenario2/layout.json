@@ -1,0 +1,19 @@
+{
+  "content": [
+    {
+      "path": "ContentInfo/cecflightsim-ga11w-atlanta/ContentHistory.json",
+      "size": 150,
+      "date": 133217519047179968
+    },
+    {
+      "path": "ContentInfo/cecflightsim-ga11w-atlanta/Thumbnail.jpg",
+      "size": 35560,
+      "date": 132900385460000000
+    },
+    {
+      "path": "scenery/test/GA11.bgl",
+      "size": 1013,
+      "date": 133217519047020398
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "package-name": "cecflightsim-2ga6w-piedmont-atlanta",
+  "items": [
+    {
+      "type": "Airport",
+      "content": "2GA6W",
+      "revision": 1
+    }
+  ]
+}

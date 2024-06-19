@@ -1,0 +1,19 @@
+{
+  "content": [
+    {
+      "path": "ContentInfo/cecflightsim-7ga0-st-marys/ContentHistory.json",
+      "size": 150,
+      "date": 133208568984057131
+    },
+    {
+      "path": "ContentInfo/cecflightsim-7ga0-st-marys/Thumbnail.jpg",
+      "size": 35560,
+      "date": 132900385460000000
+    },
+    {
+      "path": "Scenery/airport-7ga0-st-marys/scenery/7GA0.bgl",
+      "size": 581,
+      "date": 133208568983987309
+    }
+  ]
+}

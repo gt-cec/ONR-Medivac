@@ -1,0 +1,19 @@
+{
+  "content": [
+    {
+      "path": "ContentInfo/cecflightsim-7ga8-emory-university/ContentHistory.json",
+      "size": 158,
+      "date": 133210291721530854
+    },
+    {
+      "path": "ContentInfo/cecflightsim-7ga8-emory-university/Thumbnail.jpg",
+      "size": 35560,
+      "date": 132900385460000000
+    },
+    {
+      "path": "Scenery/airport-7ga8-emory-university/scenery/7GA8.bgl",
+      "size": 411,
+      "date": 133210291721461040
+    }
+  ]
+}

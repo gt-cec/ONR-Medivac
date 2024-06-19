@@ -1,0 +1,10 @@
+{
+  "package-name": "cecflightsim-7ga1-wsb-tv",
+  "items": [
+    {
+      "type": "Airport",
+      "content": "7GA1",
+      "revision": 1
+    }
+  ]
+}

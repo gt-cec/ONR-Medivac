@@ -1,0 +1,10 @@
+{
+  "package-name": "cecflightsim-7ga0-st-marys",
+  "items": [
+    {
+      "type": "Airport",
+      "content": "7GA0",
+      "revision": 1
+    }
+  ]
+}
