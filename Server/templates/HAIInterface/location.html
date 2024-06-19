@@ -58,7 +58,7 @@ log({"page": "location", "action": "opened page"});
 
     // get the location
     fetch("/var").then(resp => resp.json()).then(data => {
-        targetIndex = urlParams.get("dest") == "-1" ? data["departure-index"] : urlParams.get("dest") == "-2" ? 6 : urlParams.get("dest")
+        targetIndex = urlParams.get("dest") == "-1" ? data["departure-index"] : urlParams.get("dest") == "-2" ? 15 : urlParams.get("dest")
         document.getElementById("destination-box-indicator").setAttribute("src", "../static/HAIInterface/img/" + (helipads[targetIndex].hasHospital ? "hospital-icon.png" : "commercial-icon.png"))
         document.getElementById("destination-box-name").innerHTML = helipads[targetIndex].name
         document.getElementById("destination-box-address").innerHTML = helipads[targetIndex].location
@@ -82,11 +82,11 @@ log({"page": "location", "action": "opened page"});
  
     document.getElementById("confirm-button").onclick = async () => {
         log({"page": "location", "action": "confirm button pressed"})
+        await fetch("/var?destination-index=" + targetIndex)
         if (inflight == 0) {
             window.location.href = "/hai-interface/checklist?inflight=" + inflight + "&target-index=" + targetIndex
         }          
         else if (inflight == 1) {
-            await fetch("/var?destination-index=" + targetIndex)
             window.location.href = '/hai-interface/inflight'
         }
     }

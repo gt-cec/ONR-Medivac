@@ -58,7 +58,6 @@ def main(event):
 
             # Send audio input(user text) to Flask server
             #subprocess.run(["python", "/Users/sanyadoda/ONR-HAI/Server/server.py", user_text])
-            sender.send((user_text))
             requests.post('http://127.0.0.1:8080/ws', json={'type': "user_text", 'text': user_text})
 
             print("Looking")

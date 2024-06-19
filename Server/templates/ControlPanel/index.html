@@ -31,6 +31,9 @@
                         <div class="control-var"><div class="control-var-title">Departure Index</div><div class="control-var-value" id="departure-index"></div></div>
                         <div class="control-var"><div class="control-var-title">Destination Index</div><div class="control-var-value" id="destination-index"></div></div>
                         <div class="control-var"><div class="control-var-title">Vitals State</div><div class="control-var-value" id="vitals-state"></div></div>
+                        <div class="control-var"><div class="control-var-title">Pressure Warning State</div><div class="control-var-value" id="pressure-warning"></div></div>
+                        <div class="control-var"><div class="control-var-title">Empty Tank State</div><div class="control-var-value" id="empty-tank"></div></div>
+                        <div class="control-var"><div class="control-var-title">Engine Failure State</div><div class="control-var-value" id="enginefailure"></div></div>
                         <div class="control-var"><div class="control-var-title">Airspace State</div><div class="control-var-value" id="airspace-state"></div></div>
                         <div class="control-var"><div class="control-var-title">Latitude</div><div class="control-var-value" id="latitude"></div></div>
                         <div class="control-var"><div class="control-var-title">Longitude</div><div class="control-var-value" id="longitude"></div></div>
@@ -44,6 +47,9 @@
                     </div>
                     <div class="subcontent-container" style="flex-grow:0">
                         <div id="trigger-emergency" class="control-button">Trigger Emergency</div>
+                        <div id="trigger-pressure-warning" class="control-button">Trigger Pressure Warning</div>
+                        <div id="trigger-engine-failure" class="control-button">Trigger Engine Failure</div>
+                        <div id="trigger-empty-tank" class="control-button">Trigger Empty Tank</div>
                         <div id="reset-vars"  class="control-button">Reset Variables</div>
                         <div id="set-stage" class="control-button">Set Study Stage</div>
                         <div id="set-user-id" class="control-button">Set User ID</div>
@@ -69,7 +75,10 @@
         var longitude = -84.3882250
         var compass = 0
         var altitude=1000
-        var changeAltitude=0
+        var changeAltitude = 0
+        var PressureWarning = 0
+        var EmptyTank = 0
+        var EngineFailure = 0
     
 
         // initialize the map
@@ -85,6 +94,21 @@
 
         document.getElementById("trigger-emergency").onclick = async () => {
             await fetch("/var?airspace-state=1")
+            //await fetch("/var?dest-changed=" + false)  //so as to force them to choose a destination
+        }
+
+        document.getElementById("trigger-pressure-warning").onclick = async () => {
+            await fetch("/var?pressure-warning=1")
+            //await fetch("/var?dest-changed=" + false)  //so as to force them to choose a destination
+        }
+
+        document.getElementById("trigger-engine-failure").onclick = async () => {
+            await fetch("/var?engine-failure=1")
+            //await fetch("/var?dest-changed=" + false)  //so as to force them to choose a destination
+        }
+
+        document.getElementById("trigger-empty-tank").onclick = async () => {
+            await fetch("/var?empty-tank=1")
             //await fetch("/var?dest-changed=" + false)  //so as to force them to choose a destination
         }
 

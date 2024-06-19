@@ -161,6 +161,9 @@ async function getSimulatorData() {
             decisionState = data["decision-state"]
             vitalsState = data["vitals-state"]
             airspaceState = data["airspace-state"]
+            PressureWarning=data["pressure-warning"]
+            EngineFailure=data["engine-failure"]
+            EmptyTank=data["empty-tank"]
             satisfied = data["satisfied"]
             destChanged = data["dest-changed"]
             flightStartTime = data["flight-start-time"]
@@ -169,7 +172,7 @@ async function getSimulatorData() {
             timeToDestination=data["time-to-destination"]
             changeAltitude = data["change-altitude"]
 
-            if ((urlParams.get("emergency") == "1") && (studyStage == '3' || studyStage == '4')) {
+            if (typeof(urlParams) !== 'undefined' && (urlParams.get("emergency") == "1") && (studyStage == '3' || studyStage == '4')) {
                 //making FTY Heliport the nearest in emergency
                 helipads[20].nearest=true
             }
@@ -323,6 +326,7 @@ function setAsDestination(helipadIndex) {
 
 // function for filling the destination information
 function fillDestinationBox(helipadIndex) {
+    console.log(helipadIndex)
     // make sure helipad index is defined
     if (typeof helipadIndex === "undefined") {
         return

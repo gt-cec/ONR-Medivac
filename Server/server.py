@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, make_response
-#from SimConnect import *
+from SimConnect import *
 import logging
 import datetime
 import threading
@@ -9,21 +9,17 @@ import time
 import asyncio
 import re
 import webbrowser
-import voice_assistant
-from flask_sockets import Sockets
-from gevent import pywsgi
+#from flask_sockets import Sockets
+#from gevent import pywsgi
 #from geventwebsocket.handler import WebSocketHandler
-from flask_socketio import SocketIO, emit
 import third_test
 import radio_comms
-import speech_recognition as sr
-import numpy as np
 import wave
 from  VoiceInterface import AudioToText
 import os
 import sys
-from multiprocessing import Process
-from multiprocessing import Pipe
+#from multiprocessing import Process
+#from multiprocessing import Pipe
 
 
 
@@ -49,9 +45,9 @@ post_trial=0
 time_to_destination=10
 current_altitude=None
 change_altitude=None
-pressure_warning=False
-engine_failure=False
-empty_tank=False
+pressure_warning=0
+engine_failure=0
+empty_tank=0
 
 
 position = {
@@ -63,7 +59,7 @@ position = {
 
 app = Flask(__name__)
 #websocket
-socketio = SocketIO(app)
+
 #sockets = Sockets(app)
 
 
@@ -357,12 +353,13 @@ data = {
         "longitude": "-84.3855556",
     },
     "15": {
+        #landing for all except scenario 4
         "name": "Northside Hospital Heliport",
         "id": "GA55",
         "location": "1000 JOHNSON FERRY RD NE ATLANTA, GA 30342",
         "hasHospital": True,
         "nearest": False,
-        "nominal": False,
+        "nominal": True,
         "nominal_departure": False,
         "image1": "../static/HAIInterface/img/Mary1.png",
         "image2": "../static/HAIInterface/img/Emory.png",
@@ -497,7 +494,7 @@ def matlab_destination_update():
 
 # Keywords and corresponding routes
 keywords_routes = {
-    "help": "http://127.0.0.1:8080/hai-interface/help",
+    #"help": "http://127.0.0.1:8080/hai-interface/help",
     "altitude": "http://127.0.0.1:8080/hai-interface/change-altitude",
     "height": "http://127.0.0.1:8080/hai-interface/change-altitude",
     "destination": "http://127.0.0.1:8080/hai-interface/change-destination",
@@ -676,9 +673,9 @@ def reset_params():
     pre_trial=0  #give pre-trial survey
     post_trial=0 #give post-trial survey
     change_altitude=None
-    engine_failure=False
-    pressure_warning=False
-    empty_tank=False
+    engine_failure=0
+    pressure_warning=0
+    empty_tank=0
 
     return "Reset all system parameters!"
 
@@ -832,6 +829,7 @@ def vitals(subroute=None):
 # HAI Interface
 @app.route("/hai-interface/")
 def hai_interface_index():
+    print("helipads", data)
     return render_template("HAIInterface/index.html", helipads=data)
 
 

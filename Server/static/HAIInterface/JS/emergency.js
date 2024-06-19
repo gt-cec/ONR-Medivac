@@ -66,8 +66,8 @@ function initEmergency() {
 
         //declaring emergency
         if ((studyStage == '3') || (studyStage == '4')) {
-            if (dist <= 500 || (Math.abs(time_diff - 161) <= 2.3) || (airspaceState==1))  {
-                if((satisfied==false)|| (airspaceState==1)){
+            if (dist <= 500 || (Math.abs(time_diff - 161) <= 2.3) || (EmptyTank==1) || (EngineFailure==1))  {
+                if((satisfied==false)|| (EngineFailure==1) || (EmptyTank==1)){
                     console.log("EMERGENCY LOCATION REACHED")
                     satisfied=true
                     //destinationIndex=-1
@@ -75,8 +75,8 @@ function initEmergency() {
                     await fetch("/var?satisfied=" + satisfied)
                     console.log('emergency occured')
                     if (studyStage == '3') {
-                        PressureWarning=1
-                        await fetch("/var?pressure-warning=" + PressureWarning)
+                        EmptyTank=1
+                        await fetch("/var?empt-tank=" + EmptyTank)
                     }
                     if (studyStage == '4') {
                         // Engine failure scenario
@@ -96,7 +96,7 @@ function initEmergency() {
                   warning_satisfied=true
                   await fetch("/var?warning-satisfied=" + warning_satisfied)
                   console.log('showing pressure warning')
-                  PressureWarning=1
+                  PressureWarning=0
                   await fetch("/var?pressure-warning=" + PressureWarning)
                   }
               }
@@ -115,8 +115,12 @@ function initEmergency() {
         if (studyStage == '3' || studyStage == '4') {
             //making FTY Heliport the nearest in emergency
             helipads[20].nearest=true
+
+            //destination for higher workload scenario-southside hospital
+            TargetIndex=11
+
             //checking when the destination index has changed
-            if (TargetIndex != 6) {
+            if (TargetIndex != 16) {
                 TargetIndex = destinationIndex
                 console.log(TargetIndex)
                 target_lat = helipads[TargetIndex].latitude
@@ -235,6 +239,7 @@ function TimeToDestination() {
 // Pressure Warning
 // Function to activate the pressure warning alert
 function activateWarningAlert() {
+  console.log("PressureWarning activated")
   log({"page": "Inflight", "action": "Pressure Warning alert activated"}); 
     document.body.classList.add('dull-background');
     const pWoverlay = document.getElementById('pressureWarningalertOverlay');
@@ -322,7 +327,7 @@ function activateEngineAlert() {
     // document.getElementById('sirenSound').currentTime = 0;
     document.getElementById("CDButton").onclick = async () => { closeAlert(); 
     log({"page": "Inflight", "action": "change destination button pressed"}); 
-    EngineFailure=false
+    EngineFailure=0
     console.log(EngineFailure); 
     setTimeout(() => {
     window.location.href = '/hai-interface/change-destination?inflight=' + 1;}, 1000); // delay in milliseconds for console
@@ -340,7 +345,7 @@ function activateEngineAlert() {
     overlay.addEventListener('transitionend', () => {
       overlay.style.visibility = 'hidden';
       document.body.classList.remove('dull-background');
-      EngineFailure=false
+      EngineFailure=0
     }, { once: true});  
   }
 
@@ -369,7 +374,7 @@ function activateFuelAlert() {
     //document.getElementById('sirenSound').currentTime = 0;
     document.getElementById("okButtonFuel").onclick = async () => { closeFuelAlert(); 
       log({"page": "Inflight", "action": "Ok button on Fuel tank emergency pressed"}); 
-      EmptyTank=false
+      EmptyTank=0
       console.log(EmptyTank); 
       //updating the server
       await fetch("/var?empty-tank=" + EmptyTank)
@@ -384,7 +389,7 @@ function activateFuelAlert() {
     fAoverlay.addEventListener('transitionend', () => {
       fAoverlay.style.visibility = 'hidden';
       document.body.classList.remove('dull-background');
-      EmptyTank=false
+      EmptyTank=0
     }, { once: true});  
   }
 
@@ -394,9 +399,9 @@ function activateFuelAlert() {
 
  // Activate the emergency alert for demo purposes
 
- //EngineFailure=true
+ //EngineFailure=1
  //window.onload = activateEngineAlert;
 
  //window.onload = activateWarningAlert;
- //EmptyTank=true
+ //EmptyTank=1
  //window.onload =activateFuelAlert;
