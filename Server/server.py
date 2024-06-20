@@ -697,6 +697,10 @@ def reset_params():
 def show_control():
     return render_template("ControlPanel/index.html", helipads=data)
 
+@app.route("/voicecontrol", methods=["GET"])   
+def voice_control():
+    return render_template("ControlPanel/voiceControl.html")
+
 
 def clean(s):
     return re.sub(r'[^A-Za-z0-9]+', '', s)
