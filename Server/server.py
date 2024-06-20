@@ -48,6 +48,11 @@ change_altitude=None
 pressure_warning=0
 engine_failure=0
 empty_tank=0
+emergency_page=0
+rd_page=0
+ca_page=0
+cd_page=0
+map_page=0
 
 
 position = {
@@ -655,7 +660,7 @@ def log():
 
 @app.route("/reset", methods=["GET"])
 def reset_params():
-    global study_participant_id, sequence, study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, flight_start_time, reset_user_display, reset_vitals_display, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure, pressure_warning, empty_tank
+    global study_participant_id, sequence, study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, flight_start_time, reset_user_display, reset_vitals_display, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure, pressure_warning, empty_tank, emergency_page,rd_page,ca_page,cd_page,map_page
     study_participant_id = 0
     sequence=0
     study_stage = 1
@@ -676,6 +681,12 @@ def reset_params():
     engine_failure=0
     pressure_warning=0
     empty_tank=0
+    emergency_page=0
+    rd_page=0
+    ca_page=0
+    cd_page=0
+    map_page=0
+    
 
     return "Reset all system parameters!"
 
@@ -695,7 +706,7 @@ def clean(s):
 
 @app.route("/var", methods=["GET"])
 def get_var():
-    global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure,pressure_warning,empty_tank
+    global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure,pressure_warning,empty_tank,emergency_page,rd_page,ca_page,cd_page,map_page
     if request.args.get("user-id"):
         study_participant_id = clean(request.args.get("user-id"))
         # Remove all handlers associated with the root logger object, from (https://stackoverflow.com/questions/12158048)
@@ -759,6 +770,17 @@ def get_var():
         post_trial = request.args.get("post-trial")
     if request.args.get("change-altitude"):  #change altitude
         change_altitude = request.args.get("change-altitude")
+    if request.args.get("emergency-page"):
+        emergency_page =  clean(request.args.get("emergency-page"))
+    if request.args.get("cd-page"):
+        cd_page =  clean(request.args.get("cd-page"))
+    if request.args.get("ca-page"):
+        ca_page =  clean(request.args.get("ca-page"))
+    if request.args.get("rd-page"):
+        rd_page =  clean(request.args.get("rd-page"))
+    if request.args.get("map-page"):
+        map_page =  clean(request.args.get("map-page"))
+   
    
     
         
@@ -783,6 +805,11 @@ def get_var():
                    "engine-failure": engine_failure,
                    "pressure-warning": pressure_warning,
                    "empty-tank": empty_tank,
+                   "emergency-page":emergency_page,
+                   "cd-page":cd_page,
+                   "ca-page":ca_page,
+                   "rd-page":rd_page,
+                   "map-page":map_page
 
                    }
 
