@@ -203,7 +203,7 @@ async function getSimulatorData() {
             EngineFailure=data["engine-failure"]
             console.log('EngineFailure received')
             emergencyPage=data["emergency-page"]// emergency page
-            console.log('emergencyPagereceived')
+            console.log('emergencyPage received')
             CDPage=data["cd-page"] //change destination page
             CAPage=data["ca-page"] // change altitude page
             RDPage=data["rd-page"] // return to departure page
