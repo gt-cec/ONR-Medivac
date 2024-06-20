@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <meta charset="utf-8">
+    <title>MK217 Voice Control</title>
+
+    <!-- Ours -->
+    <link rel="stylesheet" href="../static/HAIInterface/css/styling.css">
+    <script src="/static/HAIInterface/JS/checklists.js"></script>
+
+    <!--based on where we are in flight show the nearest/fastest helipad, nearest helipad with hospital facility, AI chooses. 
+    Even if the human chooses evaluate the cognitive state to evaluate if their decision should be trusted --Carmen-->
+    <body>        
+        <div id="topbar" class="topbar" style="justify-content: center">
+            <div class="system-title">
+                MK217 Voicet<b>Control</b>
+            </div>
+        </div>
+
+        <div id="center" class="center">
+            <div class="main-content-container">
+                <div id="title" class="general-title">Experimenter Voice Panel</div>
+                <div class="control-container">
+                    <div class="subcontent-container">
+                        <b>Radio Control</b>
+                        <div id="regular-updates" class="control-button">Regular Updates</div>
+                        <div id="preflight"  class="control-button">Preflight Response</div>
+                        <div id="administer" class="control-button">Administer Medication Response</div>
+                        <div id="continue" class="control-button">Continue Response</div>
+                    </div>
+
+                    <div class="subcontent-container" style="flex-grow:0">
+                        <b>Jarvis Control</b>
+                        <div id="activate-jarvis" class="control-button">Activate Jarvis</div>
+                        <div id="deactivate-jarvis"  class="control-button">Deactivate Jarvis</div>
+                        <div id="EMpage" class="control-button">Emergency Page</div>
+                        <div id="CDpage" class="control-button">Change Destination Page</div>
+                        <div id="CApage" class="control-button">Change Altitude Page</div>
+                        <div id="RDpage" class="control-button">Return to Departure Page</div>
+                        <div id="mappage" class="control-button">Open Map</div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </body>
+
+    <script>
+   
+        document.getElementById("activate-jarvis").onclick = async () => {
+            await fetch("/ws", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+                },
+                body: JSON.stringify({ type: "activate_assistant"}), 
+            });
+        }
+
+        document.getElementById("deactivate-jarvis").onclick = async () => {
+            await fetch("/ws", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+                },
+                body: JSON.stringify({ type: "deactivate_assistant"}), 
+            });
+        }
+
+       /*  document.getElementById("Empage").onclick = () => { fetch( '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1) }
+        document.getElementById("CApage").onclick = () => { window.location.href = '/hai-interface/change-destination?inflight=' + 1 }
+        document.getElementById("CApage").onclick = () => { window.location.href = '/hai-interface/change-altitude?Changed_altitude='+ 10000 }
+        document.getElementById('mappage').href = '/hai-interface/map' */
+
+
+        document.getElementById("EMpage").onclick = async () => {
+            await fetch("/var?emergency-page=1")
+        }
+
+        document.getElementById("CApage").onclick = async () => {
+            await fetch("/var?ca-page=1")
+        }
+
+        document.getElementById("CDpage").onclick = async () => {
+            await fetch("/var?cd-page=1")
+        }
+
+        document.getElementById("RDpage").onclick = async () => {
+            await fetch("/var?rd-page=1")
+        }
+        
+        document.getElementById("mappage").onclick = async () => {
+            await fetch("/var?map-page=1")
+        }
+
+        setInterval(async () => {
+            let vars = await fetch("/var").then((resp) => {return resp.json()})
+            for (let key in vars) {
+                // only change if the var maps to a div (prevents element not found errors)
+                if (document.getElementById(key)) {
+                    document.getElementById(key).innerHTML = vars[key]
+                }
+            }
+        }, 500)
+
+    </script>
+
+</html>     
