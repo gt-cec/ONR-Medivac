@@ -7,6 +7,35 @@ window.setInterval(async () => {
         window.location.href = "/hai-interface"
     }
 
+    
+    // if requesting emergency page
+    if (emergencyPage == "1") {
+        await fetch("/var?emergency-page=0")
+        window.location.href = '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1
+    }
+
+    // if requesting change destination page
+    if (CDPage == "1") {
+        await fetch("/var?cd-page=0")
+        window.location.href = '/hai-interface/change-destination?inflight=' + 1
+    }
+
+    // if requesting change altitude page
+    if (CAPage == "1") {
+        await fetch("/var?ca-page=0")
+        window.location.href = '/hai-interface/change-altitude?Changed_altitude='+ 10000 
+    }
+    // if requesting return to departure page
+    if (RDPage == "1") {
+        await fetch("/var?rd-page=0")
+        window.location.href = '/hai-interface/location?inflight=' + 1 + '&dest=' + 21
+    }
+    // if requesting to open map
+    if (mapPage == "1") {
+        await fetch("/var?map-page=0")
+        window.location.href = showMap()
+    }
+
     updateMap()
     //time to destination 
     document.getElementById("dest-time").innerHTML="Time to Destination: " +timeToDestination +" mins"
@@ -171,11 +200,25 @@ async function getSimulatorData() {
             resetVitalsDisplay = data["reset-vitals-display"]
             timeToDestination=data["time-to-destination"]
             changeAltitude = data["change-altitude"]
+            EngineFailure=data["engine-failure"]
+            console.log('EngineFailure received')
+            emergencyPage=data["emergency-page"]// emergency page
+            console.log('emergencyPagereceived')
+            CDPage=data["cd-page"] //change destination page
+            CAPage=data["ca-page"] // change altitude page
+            RDPage=data["rd-page"] // return to departure page
+            mapPage=data["map-page"] //open map
 
             if (typeof(urlParams) !== 'undefined' && (urlParams.get("emergency") == "1") && (studyStage == '3' || studyStage == '4')) {
                 //making FTY Heliport the nearest in emergency
                 helipads[20].nearest=true
             }
+
+            if ((EngineFailure==1 || EmptyTank ==1) && (studyStage == '3' || studyStage == '4')) {
+                //making FTY Heliport the nearest in emergency
+                helipads[20].nearest=true
+            }
+            
             // show the helipads
             if (!helipadsLoaded) {
                 helipadsLoaded = true
