@@ -611,6 +611,14 @@ def ws():
     if received_request["type"] == "user_text":
         user_text_audio=received_request["text"]
 
+    if received_request["type"] == "activate_assistant":
+        event.set()
+        
+    if received_request["type"] == "deactivate_assistant":
+        if (event.is_set()):
+            event.clear()
+
+
     response = {
         "assistantIsActive": event.is_set(),
         "userText": user_text_audio,
@@ -875,7 +883,6 @@ def hai_interface(subroute=None):
     elif subroute == "countdown":
         resp = make_response(render_template("HAIInterface/countdown.html", helipads=data))
     elif subroute == "takeoff":
-        radio.start()  # starting radio thread
         resp = make_response(render_template("HAIInterface/takeoff_gif.html", helipads=data))
     elif subroute == "inflight":
         status_report_event.set()
@@ -894,7 +901,7 @@ def hai_interface(subroute=None):
         num = request.args.get("num")
         resp = make_response(render_template("HAIInterface/help.html", helipads=data, data=HelpData[num]))
     elif subroute == "change-altitude":
-        resp = make_response(render_template("HAIInterface/change-altitude.html", helipads=data, current_altitude=1100)) # current_altitude= position["altitude"]
+        resp = make_response(render_template("HAIInterface/change-altitude.html", helipads=data, current_altitude=1500)) # current_altitude= position["altitude"]
     else:
         resp = make_response("Route in HAI Interface not found!")
 
@@ -932,6 +939,7 @@ if __name__ == "__main__":
 
     #radio comms thread
     radio = threading.Thread(target=radio_comms.main, args={status_report_event,emergency_event,emergency_response_event})
+    radio.start()  # starting radio thread
    
 
     # Run the Flask server
