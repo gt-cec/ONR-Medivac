@@ -908,7 +908,7 @@ def hai_interface(subroute=None):
     return resp
 
 def start_flask_app():
-    app.run(host="0.0.0.0", port=8080)
+    app.run(host="0.0.0.0", port=8080, threaded=True)
 
 # Defining the function to run voice assistant in a separate thread
 """ def run_voice():
