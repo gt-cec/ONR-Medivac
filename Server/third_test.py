@@ -82,7 +82,7 @@ def main(event):
             user_text=recorder.text().strip()
             print(user_text)
             user_audio=dict(text=user_text)
-            requests.post('http://127.0.0.1:8080/ws', data=user_audio)
+            #requests.post('http://127.0.0.1:8080/ws', data=user_audio)
             
             print("Done. Now we should exit. Bye!")
 

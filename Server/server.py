@@ -174,6 +174,7 @@ data = {
         "longitude": "-83.4070611",
     },
     "1": {
+        #landing for all except scenario 4
         "name": "Grady Memorial Hospital",
         "id": "1GE8",
         "location": "80 JESSE HILL JR DR. ATLANTA, GA 30303",
@@ -244,7 +245,7 @@ data = {
         "location": "1001 JOHNSON FERRY RD NE, ATLANTA, GA 30342",
         "hasHospital": True,
         "nearest": False,
-        "nominal": True,
+        "nominal": False,
         "nominal_departure": False,
         "image1": "../static/HAIInterface/img/Mary1.png",
         "image2": "../static/HAIInterface/img/Emory.png",
@@ -358,13 +359,13 @@ data = {
         "longitude": "-84.3855556",
     },
     "15": {
-        #landing for all except scenario 4
+        
         "name": "Northside Hospital Heliport",
         "id": "GA55",
         "location": "1000 JOHNSON FERRY RD NE ATLANTA, GA 30342",
         "hasHospital": True,
         "nearest": False,
-        "nominal": True,
+        "nominal": False,
         "nominal_departure": False,
         "image1": "../static/HAIInterface/img/Mary1.png",
         "image2": "../static/HAIInterface/img/Emory.png",
@@ -416,7 +417,7 @@ data = {
         "location": "303 Parkway Dr NE, Atlanta, GA 30312",
         "hasHospital": True,
         "nearest": False,
-        "nominal": False,
+        "nominal": True,
         "nominal_departure": False,
         "image1": "../static/HAIInterface/img/Mary1.png",
         "image2": "../static/HAIInterface/img/Emory.png",
@@ -440,14 +441,17 @@ data = {
     },
 
     "21": {
+    #other scenarios- Emory University?
     # Departure for high workload scenario 
+    # 25GA Miller Farm, Dougsville  to old forth
+    #https://www.google.com/maps/dir/Miller+Farm+Airport-25GA,+Leann+Dr,+Douglasville,+GA/Fulton+County+Airport+-+Brown+Field+(FTY),+Aviation+Circle+Northwest,+Atlanta,+GA/Old+Fourth+Ward,+Atlanta,+GA/@33.718646,-84.6019543,30007m/data=!3m3!1e3!4b1!5s0x88f5038ebeea134f:0x78787416707158e5!4m20!4m19!1m5!1m1!1s0x88f4df6cae05f855:0xfce85469926264b5!2m2!1d-84.6629511!2d33.6598811!1m5!1m1!1s0x88f51bfd379c09f7:0xdebb7dfce7c9c439!2m2!1d-84.5216729!2d33.7771801!1m5!1m1!1s0x88f50408dbf17f1f:0x60ccf34413430e69!2m2!1d-84.3719735!2d33.7639588!3e0?entry=ttu
     "name": "HCA Parkway Medical Center Heliport ",
     "id": "6GA3",
-    "location": "3977 Aviation Cir NW, Atlanta, GA 30336",
+    "location": "999 Crestmark Blvd, Lithia Springs, GA 301223",
     "hasHospital": False,
     "nearest": False, 
     "nominal": False,
-    "nominal_departure": True, 
+    "nominal_departure": False, 
     "image1": "../static/HAIInterface/img/Mary1.png",
     "image2": "../static/HAIInterface/img/Emory.png",
     "latitude": "33.7780556",
@@ -588,6 +592,8 @@ lock = threading.Lock()
 #for voice assistant
 event = threading.Event()
 event.clear() #not set
+last_time_set=None
+
 
 #for radio comms
 status_report_event = threading.Event()  #to be set when user says or should assumes gives answer?
@@ -648,7 +654,12 @@ def speak():
 def ws():
     global user_text_audio
     print("ws method ", request.method)
-       
+
+    if event.is_set():
+        last_time_set=time.time()
+    else:
+        last_time_set= None
+
     print("request received: ", request.get_json())
     received_request= request.get_json()
     
@@ -662,6 +673,10 @@ def ws():
         if (event.is_set()):
             event.clear()
 
+    if event.is_set() and last_time_set is not None: #Deactivate Jarvis, if it has been activated for for more than 30s
+        current_time=time.time()
+        if current_time-last_time_set >10:
+            event.clear()  
 
     response = {
         "assistantIsActive": event.is_set(),

@@ -330,7 +330,7 @@ function activateEngineAlert() {
     EngineFailure=0
     console.log(EngineFailure); 
     setTimeout(() => {
-    window.location.href = '/hai-interface/change-destination?inflight=' + 1;}, 1000); // delay in milliseconds for console
+    window.location.href = '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 }, 1000); // delay in milliseconds for console
     //updating the server
     await fetch("/var?engine-failure=" + EngineFailure)
     }

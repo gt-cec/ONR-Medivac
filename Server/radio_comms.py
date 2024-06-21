@@ -32,8 +32,8 @@ def pre_takeoff(takeoff_event):
       takeoff_event.clear()
 
 # Function to simulate in-flight status checks
-def inflight_status_check(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event):
-   while not administer_event.is_set():
+def inflight_status_check(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event):
+   while not emergency_event.is_set():
        time.sleep(10)  # Regular interval for status checks
        with status_lock:  
            if not emergency_event.is_set():  # when no emergency 
@@ -44,7 +44,7 @@ def inflight_status_check(status_report_event,emergency_event,administer_event,r
                    speak("Control Tower: Awaiting your status report.")
 
 # Function to provide medicine administeration guidance
-def administer(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event):
+def administer(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event):
    with status_lock:  
        speak("Control Tower: What are patient's current vitals?")
        if response_event.wait(30):  # Wait for user to respond --> transmit button radio
@@ -78,7 +78,7 @@ def emergency_guidance(status_report_event,emergency_event,administer_event,resp
    while not emergency_event.is_set():
        time.sleep(1)
    if(administer_event.is_set()):
-      administer(status_report_event,administer_event,response_event)
+      administer(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event)
    if(tank_event.is_set()):
       continueGrady()
    if(engine_event.is_set()):
@@ -87,7 +87,7 @@ def emergency_guidance(status_report_event,emergency_event,administer_event,resp
 # Function to respond to user's input
 def user_input_activation(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event):
    time.sleep(35) 
-   administer_event.set(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event)
+   administer_event.set(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event)
 
 
 def main(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event):
@@ -101,7 +101,7 @@ def main(status_report_event,emergency_event,administer_event,response_event,tak
    threading.Thread(target=emergency_guidance, args={status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event}, daemon=True).start()
 
    # user input- when transmit through radio
-   user_input_activation(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event)
+   #user_input_activation(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event)
 
 # Global events and locks
 """ status_report_event = threading.Event()  #to be set when user says or should assume?
