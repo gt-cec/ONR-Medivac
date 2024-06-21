@@ -335,6 +335,15 @@ function showHelipads(helipads) {
                 }
         })
     })
+
+    marker.on('dblclick', function() {
+        if (studyStage == 4 && index == 11) { // Southside Hospital for sceanario 4
+            fillDestinationBox();
+        } else {
+            marker.bindPopup("Cannot fly to this location in given conditions").openPopup();
+        }
+    })
+
         marker.addTo(map)
         if (setDestination) {
             console.log('set destination')
@@ -516,9 +525,23 @@ function initMap() {
         if (!setDestination || typeof mapSelection === "undefined") {
             return
         }
-        targetIndex = mapSelection
-        selectItem(mapSelection) // reload the bottom bar for the selected item
+        targetIndex = mapSelection // setting the selected helipad as target
+        log({ page: "map", action: "changing helipad", value: mapSelection })
+        if (studyStage == 4){
+            targetIndex = 11 //landing for scenario 4
+            if(mapSelection==11) {
+                selectItem(mapSelection) // reload the bottom bar for the selected item
+            } else{
+                alert('Cannot fly to this location in given conditions')
+            }
+        }
+        else {
+            targetIndex = 15 //landing for all scenarios except 4
+            alert('Destination location can not be changed. Exit map')
         //showHelipads(helipads)
+        }
        
     })
+
+        
 }

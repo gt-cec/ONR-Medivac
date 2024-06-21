@@ -12,7 +12,7 @@ from multiprocessing import Pipe
 
  # Keywords and corresponding routes
 keywords_routes = {
-    "help": "http://127.0.0.1:8080/hai-interface/help",
+    #"help": "http://127.0.0.1:8080/hai-interface/help",
     "altitude": "http://127.0.0.1:8080/hai-interface/change-altitude",
     "height": "http://127.0.0.1:8080/hai-interface/change-altitude",
     "destination": "http://127.0.0.1:8080/hai-interface/change-destination",
@@ -20,7 +20,7 @@ keywords_routes = {
      # add more keywords and routes 
 }  
 
-#engine_lock = threading.Lock()
+engine_lock = threading.Lock()
 
 def main(event):
     while True:
@@ -30,7 +30,7 @@ def main(event):
             # mark the event as  set
             event.set()
             # Send to Flask server
-            requests.post('http://127.0.0.1:8080/ws', json={'type': "activate_assistant"})
+            #requests.post('http://127.0.0.1:8080/ws', json={'type': "activate_assistant"})
             
 
         def recording_finished():
@@ -38,16 +38,18 @@ def main(event):
             # mark the event as not set
             event.clear()
             # Send to Flask server
-            requests.post('http://127.0.0.1:8080/ws', json={'type': "deactivate_assistant"}) 
+            #requests.post('http://127.0.0.1:8080/ws', json={'type': "deactivate_assistant"}) 
 
         
         def speak(txt):
             #with engine_lock:
-                engine = pyttsx3.init()
+            engine = pyttsx3.init()
+            with engine_lock:  # lock to ensure only one thread speaks at a time
                 engine.say(txt)
-                engine.runAndWait()
-                engine.stop()
-                print('Engine stopped')
+                if engine._inLoop:
+                    engine.endLoop()
+                else:
+                    engine.runAndWait()
 
         # WebSocket server address
         WS_SERVER_ADDRESS = "ws://127.0.0.1:8080"
@@ -69,7 +71,7 @@ def main(event):
                     webbrowser.open(route)
                     break  # Exit loop after finding the first matching keyword
                 else:
-                    print("Sorry, didn't find" + user_text)
+                    print("Sorry, didn't find " + user_text)
             
 
 

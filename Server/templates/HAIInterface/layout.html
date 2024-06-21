@@ -128,7 +128,7 @@
             <button class="radiopanel-closebtn" onclick="closePanel()">&times;</button>
                 <h2>Radio Communication</h2>
                 <label for="callsign">Callsign:</label>
-                <input type="text" id="callsign" placeholder="Enter Callsign">
+                <input type="text" id="callsign" placeholder="NASXGS">
                 <br><br>
                 <div class="radio-group">
                     <label for="radio-select">Select Radio:</label>
@@ -150,8 +150,13 @@
                     </label>
                 </div>
                 <label for="frequency-input">Frequency:</label>
-                <input type="number"  id="frequency-input" step="0.01" placeholder="123.45", value="123.45">
-                  <br><br>
+                <input type="number"  id="frequency-input" step="0.01" placeholder="120.45", min="118.00" max="121.95">
+                <br><br>
+
+            <div class="controls">
+                <button onclick="transmit()">Transmit</button>
+            </div>
+
 
         </div>
      
@@ -191,7 +196,8 @@
                     <li >An engine failure has been detected. </li>
                     <li>Follow the emergency procedures immediately.</li>
                     <li>Click the button below and select an alternate helipad for emergency landing. </li>
-                    <li>Seek ground support if needed.</li>
+                    <li> I suggest landing at the nearest helipad (marked in green on map) which is FTY</li>
+                    <li>Seek ground support if needed</li>
                  </ul>
             </div>
             <button class="submit-button" style="display: none;" id="CDButton">Change Destination</button>
@@ -240,7 +246,7 @@
         var decisionState = 0
         var vitalsState = 0
         var airspaceState = 0
-        var destinationIndex = -1
+        var destinationIndex = -1 //to be made 16
         var departureIndex = -1
         var latitude = 33.5797250
         var longitude = -84.3882250
@@ -250,6 +256,11 @@
         var destChanged = false
         var timeToDestination=10.0
         var selectedmarker="none"
+        var emergencyPage=0
+        var CAPage=0
+        var CDPage=0
+        var RDPage=0
+        var mapPage=0
         
 
         // this var isn't update by the server, but can be changed on various pages
@@ -275,12 +286,14 @@
 
         /* Set the width of the radio-panel to show it */
         function openPanel() {
+            log({"action": "radio panel opened"})
             console.log('clicked')
             document.getElementById("radiopanel").style.display="inline-grid";
         }
 
         /* Set the width of the sidebar to 0 to hide it */
         function closePanel() {
+            log({"action": "radio panel closed"})
             document.getElementById("radiopanel").style.display = "none"
         }
 
@@ -289,34 +302,41 @@
 
         document.getElementById('frequency-input').addEventListener('change', function() {
             currentFrequency = parseFloat(this.value);
-            changeFrequency();
+            log({"action": "frequency input set to"+ currentFrequency })
         });
 
 
         function changeFrequency(step) {
             currentFrequency += step;
             document.getElementById('frequency-input').value = currentFrequency.toFixed(2);
+            
             //updateFrequencyDisplay();
         }
 
         function transmit() {
             const callsign = document.getElementById('callsign').value;
-            const radio = document.querySelector('input[name="radio-select"]:checked');
-            if (radio) {
-                alert(`${callsign} transmitting on ${radio.value} ${currentFrequency.toFixed(2)} MHz`);
-            } else {
-                alert('Please select a radio channel');
-            }
-        }
+            log({"action": "transmit button pressed"})
+            log({"action": "callsign set to: ${callsign}"})
 
-        function receive() {
-            const callsign = document.getElementById('callsign').value;
-            const radio = document.querySelector('input[name="radio-select"]:checked');
-            if (radio) {
-                alert(`${callsign} receiving on ${radio.value} ${currentFrequency.toFixed(2)} MHz`);
-            } else {
-                alert('Please select a radio channel');
+            if(callsign!="NASXGS"){
+                alert('Enter correct callsign')
             }
+            else{
+                const Frequency = document.getElementById('frequency-input').value
+                if(!Frequency){
+                    alert("Set Frequency")
+                }
+                else{
+                const radio = document.querySelector('input[name="radio-select"]:checked');
+                if (radio) {
+                    log({"action": "radio set to:+ ${radio.value} "})
+                    alert(`${callsign} transmitting on ${radio.value} ${currentFrequency.toFixed(2)} MHz`);
+                } 
+                else {
+                    alert('Select a radio channel');
+                }
+                }
+          }
         }
 
         //updateFrequencyDisplay();

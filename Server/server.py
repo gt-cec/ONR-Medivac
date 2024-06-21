@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, make_response
-from SimConnect import *
+#from SimConnect import *
 import logging
 import datetime
 import threading
@@ -29,9 +29,9 @@ import sys
 # system state variables
 study_participant_id = 0
 sequence=0
-study_stage = '1'  # 1= nominal 2=helipad blocked 3=weather 4=vitals
+study_stage = '1'  # 1= nominal 2=change altitude 3= empty fuel 4=pressure warninhg+ engine failure
 destination_index = None  # will be overwritten, just giving a default value
-departure_index = 19  # will be overwritten, just giving a default value
+departure_index = 15 # will be overwritten, just giving a default value
 decision_state = 0  # 0=wait, 1=land
 vitals_state = 0  # 0=normal, 1=emergency
 airspace_emergency_state = 0  # 0=normal, 1=emergency
@@ -450,8 +450,8 @@ data = {
     "nominal_departure": True, 
     "image1": "../static/HAIInterface/img/Mary1.png",
     "image2": "../static/HAIInterface/img/Emory.png",
-    "latitude": "33.5797250",
-    "longitude": "-84.3882250",
+    "latitude": "33.7780556",
+    "longitude": "-84.6113889",
     	
     }
 }
@@ -590,12 +590,56 @@ event = threading.Event()
 event.clear() #not set
 
 #for radio comms
-status_report_event = threading.Event()  #to be set when user says or should assume?
+status_report_event = threading.Event()  #to be set when user says or should assumes gives answer?
 status_report_event.clear()
-emergency_event = threading.Event()
-emergency_event.clear()
-emergency_response_event = threading.Event() #to be set when user responds with vitals
-emergency_response_event.clear
+administer_event = threading.Event()
+administer_event.clear()
+response_event = threading.Event() #to be set when user responds with vitals
+response_event.clear()
+takeoff_event= threading.Event() #to be set when ready for takeoff
+takeoff_event.clear()
+tank_event = threading.Event() #to be set when user responds with vitals
+tank_event.clear()
+engine_event = threading.Event() #to be set when engine failure 
+engine_event.clear()
+emergency_event= threading.Event() #to be set when any of the emergency occurs
+emergency_event.set()
+
+@app.route('/speak', methods=['POST'])
+def speak():
+    print("request received: ", request.get_json())
+    received_request= request.get_json()
+
+    if received_request["type"] == "takeoff":
+        if not takeoff_event.is_set():
+            takeoff_event.set()
+     
+    if received_request["type"] == "updates":
+        if not status_report_event.is_set():
+           status_report_event.set()
+
+    if received_request["type"] == "continue":
+        if not tank_event.is_set():
+            tank_event.set()
+        
+    if received_request["type"] == "southside":
+        if not engine_event.is_set():
+            engine_event.set().set()
+    
+    if received_request["type"] == "administer":
+        if not administer_event.is_set():
+            administer_event.clear()
+
+    if received_request["type"] == "reset":  # clear all events
+        status_report_event.clear()
+        takeoff_event.clear()
+        response_event.clear()
+        administer_event.clear()
+        engine_event.clear()
+        tank_event.clear()
+        emergency_event.clear()
+        
+
 
 
 
@@ -673,7 +717,7 @@ def reset_params():
     sequence=0
     study_stage = 1
     destination_index = None # will be overwritten, just giving a default value
-    departure_index = 19  # will be overwritten, just giving a default value
+    departure_index = 15  # will be overwritten, just giving a default value
     decision_state = 0  # 0=normal, 1=wait
     vitals_state = 0  # 0=normal, 1=emergency
     airspace_emergency_state = 0  # 0=normal, 1=emergency
@@ -879,6 +923,8 @@ def hai_interface(subroute=None):
     elif subroute == "location":
         resp = make_response(render_template("HAIInterface/location.html", helipads=data, data=HelpData))
     elif subroute == "checklist":
+        radio.start()  # starting radio thread
+        takeoff_event.set()
         resp = make_response(render_template("HAIInterface/checklist.html", helipads=data))
     elif subroute == "countdown":
         resp = make_response(render_template("HAIInterface/countdown.html", helipads=data))
@@ -938,8 +984,8 @@ if __name__ == "__main__":
     va.start()
 
     #radio comms thread
-    radio = threading.Thread(target=radio_comms.main, args={status_report_event,emergency_event,emergency_response_event})
-    radio.start()  # starting radio thread
+    radio = threading.Thread(target=radio_comms.main, args={status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event})
+    
    
 
     # Run the Flask server

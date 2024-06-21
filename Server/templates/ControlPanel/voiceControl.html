@@ -8,8 +8,6 @@
     <link rel="stylesheet" href="../static/HAIInterface/css/styling.css">
     <script src="/static/HAIInterface/JS/checklists.js"></script>
 
-    <!--based on where we are in flight show the nearest/fastest helipad, nearest helipad with hospital facility, AI chooses. 
-    Even if the human chooses evaluate the cognitive state to evaluate if their decision should be trusted --Carmen-->
     <body>        
         <div id="topbar" class="topbar" style="justify-content: center">
             <div class="system-title">
@@ -25,8 +23,9 @@
                         <b>Radio Control</b>
                         <div id="regular-updates" class="control-button">Regular Updates</div>
                         <div id="preflight"  class="control-button">Preflight Response</div>
-                        <div id="administer" class="control-button">Administer Medication Response</div>
+                        <div id="administer" class="control-button">Administer Medication Response</div> 
                         <div id="continue" class="control-button">Continue Response</div>
+                        <div id="southside" class="control-button">land Southside Response</div>
                     </div>
 
                     <div class="subcontent-container" style="flex-grow:0">
@@ -91,6 +90,57 @@
         document.getElementById("mappage").onclick = async () => {
             await fetch("/var?map-page=1")
         }
+
+        document.getElementById('regular-updates').onclick = async () => {
+            await fetch("/speak", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+                },
+                body: JSON.stringify({ type: "updates"}), 
+            });
+        }
+     
+        document.getElementById('preflight').onclick = async () => {
+            await fetch("/speak", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+                },
+                body: JSON.stringify({ type: "preflight"}), 
+            });
+        }
+        document.getElementById('administer').onclick = async () => {
+            await fetch("/speak", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+                },
+                body: JSON.stringify({ type: "administer"}), 
+            });
+        }
+        document.getElementById('continue').onclick = async () => {
+            await fetch("/speak", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+                },
+                body: JSON.stringify({ type: "continue"}), 
+            });
+        }
+        document.getElementById('southside').onclick = async () => {
+            await fetch("/speak", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+                },
+                body: JSON.stringify({ type: "southside"}), 
+            });
+        }
+
+
+
+
 
         setInterval(async () => {
             let vars = await fetch("/var").then((resp) => {return resp.json()})

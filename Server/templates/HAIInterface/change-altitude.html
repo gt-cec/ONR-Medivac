@@ -31,10 +31,10 @@ input[type="number"] {
 <div id="main" class="main-content-container">
     <div id ='title' class="general-title">Altitude</div>
     <div class="subcontent-container" style="flex-grow: 1; justify-content: space-evenly;">
-        <div class="general-text" id="current-altitude" >Current Altitude:</div>
+        <!-- <div class="general-text" id="current-altitude" >Current Altitude:</div> -->
         <div class="input-container">
             <label for=" altChange:" class="general-text">Change altitute to:</label>
-            <input type="number" id="altChange" name="altChange" value="10000"><br><br>
+            <input type="number" id="altChange" name="altChange" value="1500"><br><br>
         </div>
         <!-- <input class="button" type="submit" value="Change"> -->
         <div class="button" id="change-button" >Change</div>
@@ -60,7 +60,7 @@ input[type="number"] {
     document.getElementById("change-button").onclick = () => {
         console.log('Clicked')
         console.log(document.getElementById("altChange").value)
-        log({"page": "change-altitude", "action": "altitude changed by participant"})
+        log({"page": "change-altitude", "action": "altitude changed by participant" + document.getElementById("altChange").value })
         alert("Altitude successfully changed to:"+ document.getElementById("altChange").value )
         /* setInterval(() => {
             alertt("Pressure successfully changed to:"+ document.getElementById("altChange").value )
