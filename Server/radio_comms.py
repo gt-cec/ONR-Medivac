@@ -9,17 +9,32 @@ speech_lock = threading.Lock()
 
 def speak(text):
    with speech_lock:  # lock to ensure only one thread speaks at a time
-       engine.say(text)
-       engine.runAndWait()
+       if engine._inLoop:
+         engine.endLoop() #end loop is running
+       else:
+         engine.startLoop(False)
+         engine.say(text)
+         engine.iterate() # Wait until speech is complete
+         engine.endLoop()# Stop the event loop
+
+      #   engine.say(text)
+      #   engine.runAndWait()
 
 # Function to mimic initial communication before takeoff
-def pre_takeoff():
-   speak("Control Tower: Flight and weather conditions look good. Ready for takeoff.")
+def pre_takeoff(takeoff_event):
+   if(takeoff_event.is_set()):
+      speak("Control Tower: Callsign NASXGS, radio COMM1 ")
+      takeoff_event.wait(2)  # Wait for 2 seconds
+      speak("Control Tower: Flight and weather conditions look good. Ready for takeoff.")
+      takeoff_event.wait(2) 
+      speak('Set the Callsign NASXGS and Radio to COMM1')
+      takeoff_event.wait(5) 
+      takeoff_event.clear()
 
 # Function to simulate in-flight status checks
-def inflight_status_check():
-   while not emergency_event.is_set():
-       time.sleep(10)  # Regular interval for status checks- Move to JS?
+def inflight_status_check(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event):
+   while not administer_event.is_set():
+       time.sleep(10)  # Regular interval for status checks
        with status_lock:  
            if not emergency_event.is_set():  # when no emergency 
                speak("Control Tower: Please report your flight status, patient status, and ETA.")
@@ -28,51 +43,72 @@ def inflight_status_check():
                else: 
                    speak("Control Tower: Awaiting your status report.")
 
-# Function to provide emergency guidance
-def administer():
+# Function to provide medicine administeration guidance
+def administer(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event):
    with status_lock:  
        speak("Control Tower: What are patient's current vitals?")
-       if emergency_response_event.wait(30):  # Wait for user to respond
-                   emergency_response_event.clear()
+       if response_event.wait(30):  # Wait for user to respond --> transmit button radio
+                   response_event.clear()
        else:
          speak("Control Tower: Awaiting patient's current status.")
          
        speak("Control Tower: Follow these steps:")
-       speak("Control Tower: 1. Ensure the safety of all passengers.")
-       speak("Control Tower: 2. Report the nature of the emergency.")
-       speak("Control Tower: 3. Follow emergency landing protocols if necessary.")
+       speak("1. Verify patient's identity and medication orders")
+       speak("2. Prepare the medication and IV equipment")
+       speak("3. Administer the dexamethasone via IV push")
+       speak("4. Monitor patient's vital signs and response to the medication")
+       speak("5. Inform the pilot to change the altitude to 1000 feet")
 
-# Function to handle emergencies- administering medication, fuel tank?
-def emergency_guidance():
+def continueGrady():
+   with status_lock:  
+      speak("Control Tower: Continue flying to Grady Hospital")
+
+def flySouthside():
+   with status_lock:  
+      speak("Control Tower: Reroute to Southside Medical Center")
+
+   
+
+# Function to handle emergencies- administering medication, empty fuel tank, engine failure
+def emergency_guidance(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event):
+   
+   if((administer_event.is_set() or tank_event.is_set() or engine_event.is_set()) and (not emergency_event.is_set())):
+      emergency_event.set() # setting emergency event when other emergency happens
+   
    while not emergency_event.is_set():
        time.sleep(1)
-   administer()
+   if(administer_event.is_set()):
+      administer(status_report_event,administer_event,response_event)
+   if(tank_event.is_set()):
+      continueGrady()
+   if(engine_event.is_set()):
+      flySouthside()
 
 # Function to respond to user's input
-def user_input_activation():
+def user_input_activation(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event):
    time.sleep(35) 
-   emergency_event.set()
+   administer_event.set(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event)
 
 
-def main():
+def main(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event):
    # Start pre-takeoff communication
-   pre_takeoff()
+   pre_takeoff(takeoff_event)
 
    #running as thread at all times but engine speaks only when event set
 
    # Start threads for in-flight status checks and emergency guidance
-   threading.Thread(target=inflight_status_check, daemon=True).start()
-   threading.Thread(target=emergency_guidance, daemon=True).start()
+   threading.Thread(target=inflight_status_check,args={status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event}, daemon=True).start()
+   threading.Thread(target=emergency_guidance, args={status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event}, daemon=True).start()
 
-   # user input
-   user_input_activation()
+   # user input- when transmit through radio
+   user_input_activation(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event)
 
 # Global events and locks
 """ status_report_event = threading.Event()  #to be set when user says or should assume?
-emergency_event = threading.Event()
-emergency_response_event = threading.Event() #to be set when user responds with vitals"""
+administer_event = threading.Event()
+response_event = threading.Event() #to be set when user responds with vitals"""
 status_lock = threading.Lock()   
 
 
 if __name__ == "__main__":
-   main(status_report_event,emergency_event,emergency_response_event)
+   main(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event)
