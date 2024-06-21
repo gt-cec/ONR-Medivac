@@ -21,12 +21,17 @@ function initEmergency() {
           "longitude": "-84.544871",
       }, 
      */
-        warning_lat = 33.776778 // new emergency location
-        warning_long = -84.605523
-        emergency_lat = 33.772017 // new emergency location
-        emergency_long = -84.544871
-        nominal_lat = 33.9098500
-        nominal_long = -84.3557639
+        warning_lat = 33.741060// new warning location 
+        warning_long = -84.566249
+        emergency_lat = 33.766148 // new emergency location
+        emergency_long = -84.527984
+        nominal_lat =33.7919194 //  Emory University Hospital: ,
+        nominal_long = -84.3225861
+        // Emergency Location for engine failure 33.766148, -84.527984
+        // Pressure Warning location before engine failure 33.741060, -84.566249
+        //https://www.google.com/maps/dir/Miller+Farm+Airport-25GA,+Leann+Dr,+Douglasville,+GA/33.741060,+-84.566249/33.766148,+-84.527984/Fulton+County+Airport+-+Brown+Field+(FTY),+Aviation+Circle+Northwest,+Atlanta,+GA/Old+Fourth+Ward,+Atlanta,+GA/@33.718646,-84.6019543,30007m/data=!3m3!1e3!4b1!5s0x88f5038ebeea134f:0x78787416707158e5!4m28!4m27!1m5!1m1!1s0x88f4df6cae05f855:0xfce85469926264b5!2m2!1d-84.6629511!2d33.6598811!1m3!2m2!1d-84.566249!2d33.74106!1m3!2m2!1d-84.527984!2d33.766148!1m5!1m1!1s0x88f51bfd379c09f7:0xdebb7dfce7c9c439!2m2!1d-84.5216729!2d33.7771801!1m5!1m1!1s0x88f50408dbf17f1f:0x60ccf34413430e69!2m2!1d-84.3719735!2d33.7639588!3e0?entry=ttu
+
+
 
         //Calculating the distance between the current aircraft position and destination
         const R = 6371e3 // metres

@@ -201,12 +201,13 @@ data = {
         "longitude": "-84.4358333",
     },
     "3": {
+        #Landing for all scenarios except 4
         "name": "Emory University Hospital Heliport",
         "id": "7GA8",
         "location": "1364 CLIFTON ROAD NEATLANTA, GA 30322",
         "hasHospital": True,
         "nearest": False,
-        "nominal": False,
+        "nominal": True,
         "nominal_departure": False,
         "image1": "../static/HAIInterface/img/Mary1.png",
         "image2": "../static/HAIInterface/img/Emory.png",
@@ -306,7 +307,6 @@ data = {
 
     },
     "11": {
-        # Landing helipad for high workload scenario
         "name": "Southside Medical",
         "id": "GA85",
         "location": "1 MARTIN LUTHER KING DRIVE ATLANTA, GA 30334",
@@ -412,12 +412,13 @@ data = {
         "longitude": "-84.3796944",  
     },
     "19": {
+        # Landing helipad for high workload scenario
         "name": "Old Fourth Ward Children's Heliport ",
         "id": "GA4W",
         "location": "303 Parkway Dr NE, Atlanta, GA 30312",
         "hasHospital": True,
         "nearest": False,
-        "nominal": True,
+        "nominal":False,
         "nominal_departure": False,
         "image1": "../static/HAIInterface/img/Mary1.png",
         "image2": "../static/HAIInterface/img/Emory.png",
@@ -440,7 +441,23 @@ data = {
     "longitude": "-84.5213660",
     },
 
+    
     "21": {
+    # Departure Location
+    "name": "Miller Farm, Airport ",
+    "id": "25GA",
+    "location": "5300 Leann Dr, Douglasville, GA 30135",
+    "hasHospital": False,
+    "nearest": False, #to be set as true for higher workload scenario
+    "nominal": False,
+    "nominal_departure": True,
+    "image1": "../static/HAIInterface/img/Mary1.png",
+    "image2": "../static/HAIInterface/img/Emory.png",
+    "latitude": "33.6595539", 
+    "longitude": "-84.6629889",
+    },
+
+    "22": {
     #other scenarios- Emory University?
     # Departure for high workload scenario 
     # 25GA Miller Farm, Dougsville  to old forth
@@ -455,8 +472,7 @@ data = {
     "image1": "../static/HAIInterface/img/Mary1.png",
     "image2": "../static/HAIInterface/img/Emory.png",
     "latitude": "33.7780556",
-    "longitude": "-84.6113889",
-    	
+    "longitude": "-84.6113889",	
     }
 }
 
