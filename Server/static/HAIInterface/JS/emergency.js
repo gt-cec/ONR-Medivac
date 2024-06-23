@@ -1,5 +1,6 @@
 function initEmergency() {
     let TargetIndex = 100
+    
     // set the blink interval
     var blink = document.getElementById('blink')
     setInterval(() => {
@@ -13,7 +14,8 @@ function initEmergency() {
             return
         }
 
-        time_diff = (new Date()).getTime() / 1000 - flightStartTime
+        time_diff = (new Date()).getTime() / 1000 - flightStartTime  //flightStartTime starts when countdown begins (countdown page) 
+        console.log(time_diff)
 
        /*  "21": {
           # Engine Failure and Fuel tank emergency trigger location
@@ -21,9 +23,9 @@ function initEmergency() {
           "longitude": "-84.544871",
       }, 
      */
-        warning_lat = 33.741060// new warning location 
-        warning_long = -84.566249
-        emergency_lat = 33.766148 // new emergency location
+        warning_lat = 33.691383       // new warning location : 33.691383, -84.612864
+        warning_long = -84.612864 
+        emergency_lat = 33.766148     // new emergency location: 33.741798, -84.562125
         emergency_long = -84.527984
         nominal_lat =33.7919194 //  Emory University Hospital: ,
         nominal_long = -84.3225861
@@ -41,15 +43,31 @@ function initEmergency() {
         lat1 = nominal_lat
 
        //emergency location distance wrt to the current position of aircraft
-        if (studyStage == '3' || studyStage == '4') {
-            lat_diff = (emergency_lat - latitude) * Math.PI / 180  //radians
-            long_diff = (emergency_long - longitude) * Math.PI / 180 //radians
-            lat1 = emergency_lat
-        }
+        lat_diff = (emergency_lat - latitude) * Math.PI / 180  //radians
+        long_diff = (emergency_long - longitude) * Math.PI / 180 //radians
+        lat1 = emergency_lat
+
+        //Time to destination
+        dest_lat = helipads[destinationIndex].latitude
+        dest_long = helipads[destinationIndex].longitude
+        lat_diff = (dest_lat - latitude) * Math.PI / 180  //radians
+        long_diff = (dest_long - longitude) * Math.PI / 180 //radians
+        lat1 = dest_lat
+
+        //calculating the distance between the current aircraft position and the destination
+        a = Math.sin(lat_diff / 2) * Math.sin(lat_diff / 2) +
+            Math.cos(lat1) * Math.cos(latitude) *
+            Math.sin(long_diff / 2) * Math.sin(long_diff / 2)
+        c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+        dist_to_dest = R * c // metres
+        timeToDestination=(dist_to_dest/2784).toFixed(2);
+        await fetch("/var?time-to-destination=" + timeToDestination)
+  
+
         if (studyStage == '4') {
           warning_lat_diff = (warning_lat - latitude) * Math.PI / 180  //radians
           warning_long_diff = (warning_long - longitude) * Math.PI / 180 //radians
-          Warning_lat1 = warning_lat
+          warning_lat1 = warning_lat
           warning_a = Math.sin(warning_lat_diff / 2) * Math.sin(warning_lat_diff / 2) +
             Math.cos(warning_lat1 * Math.PI / 180) * Math.cos(latitude * Math.PI / 180) *
             Math.sin(warning_long_diff / 2) * Math.sin(warning_long_diff / 2)
@@ -59,8 +77,6 @@ function initEmergency() {
       }
 
 
-      
-
         a = Math.sin(lat_diff / 2) * Math.sin(lat_diff / 2) +
             Math.cos(lat1 * Math.PI / 180) * Math.cos(latitude * Math.PI / 180) *
             Math.sin(long_diff / 2) * Math.sin(long_diff / 2)
@@ -69,24 +85,32 @@ function initEmergency() {
         dist = R * c // metres
         console.log('dist ', dist)
 
+
+
         //declaring emergency
-        if ((studyStage == '3') || (studyStage == '4')) {
-            if (dist <= 500 || (Math.abs(time_diff - 161) <= 2.3) || (EmptyTank==1) || (EngineFailure==1))  {
+        if ((studyStage == '2') || (studyStage == '3') || (studyStage == '4')) {
+            if (dist <= 500 || (Math.abs(time_diff - 300) <= 2.3) || (EmptyTank==1) || (EngineFailure==1))  {
+                console.log('Entered here')
                 if((satisfied==false)|| (EngineFailure==1) || (EmptyTank==1)){
                     console.log("EMERGENCY LOCATION REACHED")
                     satisfied=true
-                    //destinationIndex=-1
-                    //await fetch("/var?destination-index=" + destinationIndex)
                     await fetch("/var?satisfied=" + satisfied)
                     console.log('emergency occured')
+
+                    if (studyStage == '2') {
+                      vitalsState = 1
+                      await fetch("/var?vitals-state=" + vitalsState)
+                  }
                     if (studyStage == '3') {
                         EmptyTank=1
-                        await fetch("/var?empt-tank=" + EmptyTank)
+                        await fetch("/var?empty-tank=" + EmptyTank)
                     }
                     if (studyStage == '4') {
-                        // Engine failure scenario
+                        // Engine failure scenario and vitals
                         EngineFailure = 1;
                         await fetch("/var?engine-failure=" + EngineFailure)
+                        vitalsState = 1
+                        await fetch("/var?vitals-state=" + vitalsState)
                     }
                 }
             }
@@ -95,37 +119,40 @@ function initEmergency() {
 
         //Pressure Warning
         if (studyStage == '4') {
-          if (warning_dist <= 500 || (Math.abs(time_diff - 100) <= 1.3) || (PressureWarning==1))  {
+          console.log("checking")
+          if (warning_dist <= 300 || (Math.abs(time_diff - 180) <= 2.3) || (PressureWarning==1))  {
+              console.log("here")
               if((warning_satisfied==false)|| (PressureWarning==1)){
                   console.log("WARNING LOCATION REACHED")
                   warning_satisfied=true
+                  PressureWarning=1
                   await fetch("/var?warning-satisfied=" + warning_satisfied)
                   console.log('showing pressure warning')
-                  PressureWarning=0
                   await fetch("/var?pressure-warning=" + PressureWarning)
                   }
               }
           }
 
         // nominal condition landing
-        if (dist <= 250 || timeToDestination<= 0.08) {
+        if (dist <= 300 || timeToDestination<= 0.08) {
             console.log('dist', dist)
             console.log('time', timeToDestination)
-            if (((studyStage == '1') || (studyStage == '2'))) {
+            if (((studyStage == '1') || (studyStage == '2') || (studyStage == '3'))) {
                 window.location.href = "/hai-interface/checklist?inflight=" + 1 + "&target-index=" + targetIndex
             }
         }
 
-        // Landing for study stage 3 and 4
-        if (studyStage == '3' || studyStage == '4') {
+        // Landing for study stage 4
+        if (studyStage == '4') {
             //making FTY Heliport the nearest in emergency
             helipads[20].nearest=true
 
-            //destination for higher workload scenario-southside hospital
-            TargetIndex=11
+            //destination for higher workload scenario-Old Forth
+            destinationIndex=19
 
             //checking when the destination index has changed
-            if (TargetIndex != 16) {
+            if (TargetIndex != 3) {
+              log({"page": "emergency", "action": "trying to change destination to"+ TargetIndex })
                 TargetIndex = destinationIndex
                 console.log(TargetIndex)
                 target_lat = helipads[TargetIndex].latitude
@@ -186,13 +213,11 @@ function initEmergency() {
         console.log(destChanged)
         
         if(satisfied ==true && destChanged==false && studyStage == '4'){
-            console.log('Engine Failure alert again')
-            // Engine failure alert showed but destination hasn't been changed yet so emergency notification will come up again 
+            console.log('Engine Failure  dest not set')
+            log({"page": "emergency", "action": "Engine Failure- destination not changed"})
+            // Engine failure alert showed but destination hasn't been changed yet then flying to Old forth
             setTimeout(async ()  => {
-                emergencyState=1
-                //Engine failure emergency
-                EngineFailure = 1;
-                await fetch("/var?engine-failure=" + EngineFailure)
+              destChanged==True 
               }, 5000);
         }
 
@@ -218,7 +243,7 @@ function TimeToDestination() {
 
         //Calculating the distance between the current aircraft position and destination
         const R = 6371e3 // metres
-
+        
         TargetIndex = destinationIndex
         target_lat = helipads[TargetIndex].latitude
         target_long = helipads[TargetIndex].longitude
@@ -266,11 +291,11 @@ function activateWarningAlert() {
 
   // Function to submit pressure value
   function submitPressureValue() {
-    log({"page": "Inflight", "action": "Pressure Warning submit button pressed"}); 
     const pressureValue = document.getElementById('pressureValue').value;
     const resultMessage = document.getElementById('resultMessage');
     const finalMessage = document.getElementById('finalMessage');
     const okButton = document.getElementById('okButton');
+    log({"page": "Inflight", "action": "Pressure Warning- submit button pressed with pressure value as:"+ pressureValue}); 
     const correctValue = "75"; // The correct pressure value
 
     if (pressureValue === correctValue) {
@@ -301,7 +326,7 @@ function activateWarningAlert() {
       pWoverlay.style.visibility = 'hidden';
       document.body.classList.remove('dull-background');
     }, { once: true });
-    PressureWarning=0
+    PressureWarning=0  
     audio.pause()
     //updating the server
     await fetch("/var?pressure-warning=" + PressureWarning)
@@ -345,6 +370,7 @@ function activateEngineAlert() {
   // Function to close engine failure alert
   function closeAlert() {
     console.log("closing")
+    log({"page": "Inflight", "action": "Engine failure emergency- close button pressed"}); 
     const overlay = document.getElementById('alertOverlay');
     overlay.style.opacity = '0';
     overlay.addEventListener('transitionend', () => {
@@ -389,6 +415,7 @@ function activateFuelAlert() {
   // Function to close the emergency alert
   function closeFuelAlert() {
     console.log("closing")
+    log({"page": "Inflight", "action": "Empty Tank emergency- close button pressed"}); 
     const fAoverlay = document.getElementById('fuelAlertOverlay');
     fAoverlay.style.opacity = '0';
     fAoverlay.addEventListener('transitionend', () => {

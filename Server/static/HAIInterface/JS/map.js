@@ -1,6 +1,6 @@
 window.setInterval(async () => {
     getSimulatorData()
-
+    console.log( (new Date()).getTime() / 1000 - flightStartTime)
     // if resetting the user display, change page
     if (resetUserDisplay == "1") {
         await fetch("/var?reset-user-display=0")
@@ -33,7 +33,7 @@ window.setInterval(async () => {
     // if requesting to open map
     if (mapPage == "1") {
         await fetch("/var?map-page=0")
-        window.location.href = showMap()
+        window.location.href = document.getElementById("map").href
     }
 
     updateMap()
@@ -194,6 +194,7 @@ async function getSimulatorData() {
             EngineFailure=data["engine-failure"]
             EmptyTank=data["empty-tank"]
             satisfied = data["satisfied"]
+            warning_satisfied = data["warning-satisfied"]
             destChanged = data["dest-changed"]
             flightStartTime = data["flight-start-time"]
             resetUserDisplay = data["reset-user-display"]
@@ -337,7 +338,7 @@ function showHelipads(helipads) {
     })
 
     marker.on('dblclick', function() {
-        if (studyStage == 4 && index == 11) { // Southside Hospital for sceanario 4
+        if (studyStage == 4 && index == 19) { // Old Forth Hospital for sceanario 4
             fillDestinationBox();
         } else {
             marker.bindPopup("Cannot fly to this location in given conditions").openPopup();
@@ -365,7 +366,7 @@ function setAsDestination(helipadIndex) {
     //var selectedMarker = button.closest('.leaflet-popup')._source; // Access the marker from the popup context
     
     // Condition to check if the destination is favorable
-    var isFavorable = helipadIndex== 11; 
+    var isFavorable = helipadIndex== 19; 
     
     if (isFavorable) {
         alert('Success! Rerouting to ' + helipads[helipadIndex].name);
@@ -387,6 +388,9 @@ function fillDestinationBox(helipadIndex) {
     if (helipadIndex == -1) {
         document.getElementById("destination-box-name").innerHTML =
             "Select a helipad to see details."
+        document.getElementById("destination-box-name").innerHTML =""
+        document.getElementById("destination-box-address").innerHTML = ""
+        document.getElementById("destination-box-type").innerHTML = ""
         return
     }
 
@@ -528,15 +532,15 @@ function initMap() {
         targetIndex = mapSelection // setting the selected helipad as target
         log({ page: "map", action: "changing helipad", value: mapSelection })
         if (studyStage == 4){
-            targetIndex = 11 //landing for scenario 4
-            if(mapSelection==11) {
+            targetIndex = 19//landing for scenario 4
+            if(mapSelection==19) {
                 selectItem(mapSelection) // reload the bottom bar for the selected item
             } else{
                 alert('Cannot fly to this location in given conditions')
             }
         }
         else {
-            targetIndex = 15 //landing for all scenarios except 4
+            targetIndex = 3 //landing emory for all scenarios except 4
             alert('Destination location can not be changed. Exit map')
         //showHelipads(helipads)
         }

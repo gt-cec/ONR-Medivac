@@ -25,7 +25,7 @@
                         <div id="preflight"  class="control-button">Preflight Response</div>
                         <div id="administer" class="control-button">Administer Medication Response</div> 
                         <div id="continue" class="control-button">Continue Response</div>
-                        <div id="southside" class="control-button">land Southside Response</div>
+                        <div id="oldForth" class="control-button">land at Old Forth Response</div>
                     </div>
 
                     <div class="subcontent-container" style="flex-grow:0">
@@ -128,17 +128,15 @@
                 body: JSON.stringify({ type: "continue"}), 
             });
         }
-        document.getElementById('southside').onclick = async () => {
+        document.getElementById('oldForth').onclick = async () => {
             await fetch("/speak", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
                 },
-                body: JSON.stringify({ type: "southside"}), 
+                body: JSON.stringify({ type: "oldForth"}), 
             });
         }
-
-
 
 
 

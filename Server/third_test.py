@@ -45,10 +45,10 @@ def main(event):
             #with engine_lock:
             engine = pyttsx3.init()
             with engine_lock:  # lock to ensure only one thread speaks at a time
-                engine.say(txt)
                 if engine._inLoop:
                     engine.endLoop()
                 else:
+                    engine.say(txt)
                     engine.runAndWait()
 
         # WebSocket server address

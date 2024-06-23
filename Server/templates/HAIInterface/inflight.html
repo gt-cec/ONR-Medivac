@@ -35,7 +35,7 @@
     var bell = document.getElementById("bell"); 
     document.getElementById('help').onclick = () => { log({"page": "Inflight", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
     document.getElementById("emergency-landing").onclick = () => { log({"page": "Inflight", "action": "emergency landing button pressed"}); window.location.href = '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 }
-    document.getElementById("return-departure").onclick = () => {  log({"page": "Inflight", "action": "return to departure button pressed"}); window.location.href = '/hai-interface/location?inflight=' + 1 + '&dest=' + 15 }
+    document.getElementById("return-departure").onclick = () => {  log({"page": "Inflight", "action": "return to departure button pressed"}); window.location.href = '/hai-interface/location?inflight=' + 1 + '&dest=' + 21 }
     document.getElementById("change-destination").onclick = () => {  log({"page": "Inflight", "action": "change destination button pressed"}); window.location.href = '/hai-interface/change-destination?inflight=' + 1 }
     document.getElementById("change-altitude").onclick = () => { log({"page": "Inflight", "action": "change altitude button pressed"}); window.location.href = '/hai-interface/change-altitude?Changed_altitude='+ 1500 }
 
@@ -53,16 +53,65 @@
         bell.pause()
     } 
 
-    // interval for the inflight stage
-    setInterval(() => {
+    function vitalsLogging() {
+     if(EngineFailure == 0 && PressureWarning == 0 &&  EmptyTank == 0 && timeToDestination>0.5){
         var curr = new window.Date().getTime()
-        if (EngineFailure == 0 && PressureWarning == 0 &&  EmptyTank == 0 &&  curr - lastClicked > 60000 && timeToDestination>0.5) {
+        if( curr - lastClicked > 10500 ){  // 105s assuming 30s gap + 45s radio update + 30s gap
             log({"page": "inflight", "action": "displaying vitals prompt"})
-            lastClicked = Infinity  // set to infinity so it does not immediately trigger
+            lastClicked = Infinity  
             document.getElementById('vitals').style.display = "flex"
             bell.play()
             bell.volume=0.2;
-    }}, 350)
+        }
+     }
+    }
+    async function fetchRadioData() {
+        try {
+            const response = await fetch("/speak", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify({ type: 'Radio-Update'}), 
+            });
+    
+            if (!response.ok) {
+                throw new Error(`HTTP error: ${response.status}`);
+            }
+    
+            const json = await response.json();
+            if (json.radioUpdateComplete){
+                console.log('Radio Update Completed')
+                vitalsLogging()
+            }
+        } catch (err) {
+            console.error('Fetch problem: ${err.message}');
+        }
+    } 
+    setInterval(vitalsLogging, 350);  
+    // Initial fetch
+    fetchRadioData();  
+
+    // interval for the inflight stage- want the radio updates and vitals prompt to show up at regular intervals when emergency not occuring such that both don't overlap
+    /* setInterval(() => {
+        const response = await fetch("/speak", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+            },
+            body: JSON.stringify({ type: "radioUpdate"}), 
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error: ${response.status}`);
+        }
+        const json = await response.json();
+        
+        radio_update_complete= json.radioUpdateComplete
+            
+        
+        
+         
+    }}, 1000) */
 
 {% endblock %}
 </script>
