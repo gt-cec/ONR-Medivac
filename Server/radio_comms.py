@@ -12,24 +12,26 @@ def speak(text):
        if engine._inLoop:
          engine.endLoop() #end loop is running
        else:
-         engine.startLoop(False)
+         engine.say(text)
+         engine.runAndWait()
+         """ engine.startLoop(False)
          engine.say(text)
          engine.iterate() # Wait until speech is complete
          engine.endLoop()# Stop the event loop
-
+ """
       #   engine.say(text)
       #   engine.runAndWait()
 
 # Function to mimic initial communication before takeoff
 def pre_takeoff(takeoff_event):
+   print('Received')
+   print(takeoff_event.is_set())
    if(takeoff_event.is_set()):
+      print('Speaking!')
       speak("Control Tower: Callsign NASXGS, radio COMM1 ")
-      takeoff_event.wait(2)  # Wait for 2 seconds
-      speak("Control Tower: Flight and weather conditions look good. Ready for takeoff.")
-      takeoff_event.wait(2) 
-      speak('Set the Callsign NASXGS and Radio to COMM1')
-      takeoff_event.wait(5) 
-      takeoff_event.clear()
+   speak("Control Tower: Flight and weather conditions look good. Ready for takeoff.")
+   speak('Set the Callsign NASXGS and Radio to COMM1')
+   takeoff_event.clear()
 
 # Function to simulate in-flight status checks
 def inflight_status_check(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event):
@@ -48,7 +50,7 @@ def administer(status_report_event,emergency_event,administer_event,response_eve
    with status_lock:  
        speak("Control Tower: What are patient's current vitals?")
        if response_event.wait(30):  # Wait for user to respond --> transmit button radio
-                   response_event.clear()
+         response_event.clear()
        else:
          speak("Control Tower: Awaiting patient's current status.")
          
@@ -59,13 +61,13 @@ def administer(status_report_event,emergency_event,administer_event,response_eve
        speak("4. Monitor patient's vital signs and response to the medication")
        speak("5. Inform the pilot to change the altitude to 1000 feet")
 
-def continueGrady():
+def continueEmory():
    with status_lock:  
-      speak("Control Tower: Continue flying to Grady Hospital")
+      speak("Control Tower: Continue flying to Emory University Hospital")
 
-def flySouthside():
+def flyOldForth():
    with status_lock:  
-      speak("Control Tower: Reroute to Southside Medical Center")
+      speak("Control Tower: Reroute to Old Forth Hospital")
 
    
 
@@ -76,13 +78,14 @@ def emergency_guidance(status_report_event,emergency_event,administer_event,resp
       emergency_event.set() # setting emergency event when other emergency happens
    
    while not emergency_event.is_set():
-       time.sleep(1)
+      time.sleep(60)
+      print("status", takeoff_event.is_set(), status_report_event.is_set() )
    if(administer_event.is_set()):
       administer(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event)
    if(tank_event.is_set()):
-      continueGrady()
+      continueEmory()
    if(engine_event.is_set()):
-      flySouthside()
+      flyOldForth()
 
 # Function to respond to user's input
 def user_input_activation(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event):
