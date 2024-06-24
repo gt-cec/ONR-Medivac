@@ -14,7 +14,6 @@ import webbrowser
 #from geventwebsocket.handler import WebSocketHandler
 import third_test
 import radio_comms
-import radio_comms_new
 import wave
 from  VoiceInterface import AudioToText
 import os
