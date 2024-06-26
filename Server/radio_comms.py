@@ -1,117 +1,151 @@
 import threading
 import time
 import pyttsx3
+import requests
 
-# Engine initialization 
-engine = pyttsx3.init()
 
+# Global events and locks
+status_lock = threading.Lock()   
 speech_lock = threading.Lock()
+last_radio_update = 0
+
+ # Engine initialization 
+engine = pyttsx3.init()
+voices = engine.getProperty('voices')
+currentVoice = engine.setProperty('voice', voices[10].id)
+engine.setProperty('rate', 170)
+
 
 def speak(text):
    with speech_lock:  # lock to ensure only one thread speaks at a time
-       if engine._inLoop:
-         engine.endLoop() #end loop is running
-       else:
-         engine.say(text)
-         engine.runAndWait()
-         """ engine.startLoop(False)
-         engine.say(text)
-         engine.iterate() # Wait until speech is complete
-         engine.endLoop()# Stop the event loop
- """
-      #   engine.say(text)
-      #   engine.runAndWait()
+        if engine._inLoop:
+            engine.endLoop() #end loop if running
+        engine.say(text)
+        engine.runAndWait()
+            
+        """ engine.startLoop(False)
+        engine.say(text)
+        engine.iterate() # Wait until speech is complete """
+
+def delay(t):
+     while t>0:
+        t=t-1
+        #print("t=",t)
+ 
+
+def fetch_states():
+    try:
+        response = requests.post("http://127.0.0.1:8080/state")
+        if response.status_code == 200:
+            return response.json()
+        else:
+            print(f"Error: Received status code {response.status_code}")
+    except requests.RequestException as e:
+        print(f"Error fetching states: {e}")
+    return None
 
 # Function to mimic initial communication before takeoff
-def pre_takeoff(takeoff_event):
+def pre_takeoff(states):
    print('Received')
-   print(takeoff_event.is_set())
-   if(takeoff_event.is_set()):
-      print('Speaking!')
-      speak("Control Tower: Callsign NASXGS, radio COMM1 ")
+   with status_lock:  
+        print('Speaking!')
+   speak("Control Tower: Callsign NASXGS, radio COMM1 ")
+   print(engine.isBusy())
+   print('speaking line 2')
    speak("Control Tower: Flight and weather conditions look good. Ready for takeoff.")
+   print('speaking line 3')
    speak('Set the Callsign NASXGS and Radio to COMM1')
-   takeoff_event.clear()
+   requests.post("http://127.0.0.1:8080/state", json={"event": "takeoff_event", "action": "clear"}) #clearing takeoff event
+   print('sent request to clear takeoff event')
+      
 
 # Function to simulate in-flight status checks
-def inflight_status_check(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event):
-   while not emergency_event.is_set():
-       time.sleep(10)  # Regular interval for status checks
-       with status_lock:  
-           if not emergency_event.is_set():  # when no emergency 
+def inflight_status_check(states):
+      global last_radio_update 
+      #print('Inflight radio updates ', states)
+      while not states["emergency_event"]:
+         #print('radio updates')
+         current_time = time.time()
+         #print("last update", (current_time -last_radio_update))
+         #speak("Inflight")
+         if not states["emergency_event"] and (current_time - last_radio_update >90):  # when no emergency and last radio update >90s ago (assuming 30s gap + 30s vitals + 30s gap)
+            print("here")
+            with status_lock:  
+               print("Asking for radio updates")
                speak("Control Tower: Please report your flight status, patient status, and ETA.")
-               if status_report_event.wait(30):  # Wait for user to report back
-                   status_report_event.clear()
-               else: 
-                   speak("Control Tower: Awaiting your status report.")
+               if states["response_event"]: #user reported back
+                 continue
+               else:
+                 delay(45) # Wait for user to report back  --> set with transmit button?
+            last_radio_update = time.time()
+            #radio_update_complete.set()
+            requests.post("http://127.0.0.1:8080/state", json={"event": "radioUpdateComplete", "action":"set"})
+            print('sent request to set radio update complete')
+         delay(100)
 
-# Function to provide medicine administeration guidance
-def administer(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event):
+# Function to provide medicine administration guidance
+def administer(states):
+   print('administering medication')
    with status_lock:  
        speak("Control Tower: What are patient's current vitals?")
-       if response_event.wait(30):  # Wait for user to respond --> transmit button radio
-         response_event.clear()
-       else:
-         speak("Control Tower: Awaiting patient's current status.")
-         
+       time.sleep(45) # Wait for user to report back
        speak("Control Tower: Follow these steps:")
        speak("1. Verify patient's identity and medication orders")
        speak("2. Prepare the medication and IV equipment")
        speak("3. Administer the dexamethasone via IV push")
        speak("4. Monitor patient's vital signs and response to the medication")
        speak("5. Inform the pilot to change the altitude to 1000 feet")
+       requests.post("http://127.0.0.1:8080/state", json={"event": "administer_event", "action":"clear"}) #clearing adminster event
+       print('sent request to clear administer event')
+       
 
-def continueEmory():
+def continueEmory(states):
+   print('Continue to Emory')
    with status_lock:  
       speak("Control Tower: Continue flying to Emory University Hospital")
+      requests.post("http://127.0.0.1:8080/state", json={"event": "tank_event", "action":"clear"}) #clearing tank event
+      print('sent request to clear tank_event')
 
-def flyOldForth():
+def flyOldForth(states):
+   print('reroute to Oldforthh')
    with status_lock:  
       speak("Control Tower: Reroute to Old Forth Hospital")
+      requests.post("http://127.0.0.1:8080/state", json={"event": "engine_event", "action":"clear"}) #clearing engine event
+      print('sent request to clear engine_event')
 
+def set_radio_update():  
+    print("Radio Update completed")
    
+def set_response_event():
+    print("Emergency situation detected")
+    
 
-# Function to handle emergencies- administering medication, empty fuel tank, engine failure
-def emergency_guidance(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event):
-   
-   if((administer_event.is_set() or tank_event.is_set() or engine_event.is_set()) and (not emergency_event.is_set())):
-      emergency_event.set() # setting emergency event when other emergency happens
-   
-   while not emergency_event.is_set():
-      time.sleep(60)
-      print("status", takeoff_event.is_set(), status_report_event.is_set() )
-   if(administer_event.is_set()):
-      administer(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event)
-   if(tank_event.is_set()):
-      continueEmory()
-   if(engine_event.is_set()):
-      flyOldForth()
+def handle_emergency():
+    print("Emergency situation detected")
 
-# Function to respond to user's input
-def user_input_activation(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event):
-   time.sleep(35) 
-   administer_event.set(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event)
+#giving reference to the function that needs to be called depending to event set, not calling the function 
+event_handlers = {
+   #"radioUpdateComplete": set_radio_update,
+    "inflight_event":inflight_status_check, 
+    "takeoff_event": pre_takeoff,
+    #"response_event": set_response_event,
+    "administer_event": administer,
+    "engine_event": flyOldForth,
+    "tank_event": continueEmory,
+    #"status_response_event": set_status_response_event,
+    #"emergency_event": handle_emergency
 
+}
 
-def main(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event):
-   # Start pre-takeoff communication
-   pre_takeoff(takeoff_event)
-
-   #running as thread at all times but engine speaks only when event set
-
-   # Start threads for in-flight status checks and emergency guidance
-   threading.Thread(target=inflight_status_check,args={status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event}, daemon=True).start()
-   threading.Thread(target=emergency_guidance, args={status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event}, daemon=True).start()
-
-   # user input- when transmit through radio
-   #user_input_activation(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event)
-
-# Global events and locks
-""" status_report_event = threading.Event()  #to be set when user says or should assume?
-administer_event = threading.Event()
-response_event = threading.Event() #to be set when user responds with vitals"""
-status_lock = threading.Lock()   
-
+def main():
+    while True:
+        states = fetch_states()
+        if states:
+            for event, is_set in states.items():    # W3school
+                if is_set and event in event_handlers:  
+                    event_handlers[event](states)
+        time.sleep(1)  # Wait for 1 second before next fetch
 
 if __name__ == "__main__":
-   main(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event)
+   #main(inflight_event,status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event)
+   main()

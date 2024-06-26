@@ -24,8 +24,13 @@
                         <div id="regular-updates" class="control-button">Regular Updates</div>
                         <div id="preflight"  class="control-button">Preflight Response</div>
                         <div id="administer" class="control-button">Administer Medication Response</div> 
-                        <div id="continue" class="control-button">Continue Response</div>
-                        <div id="oldForth" class="control-button">land at Old Forth Response</div>
+                        <div id="tank" class="control-button">Empty Fuel Tank Response</div>
+                        <div id="engine" class="control-button">Engine Failure Response</div>
+                        <div id="radioUpdate" class="control-button">Set Radio Update complete</div>
+                        <div id="userRadio" class="control-button">Set status report</div>
+                        <div id="userResp" class="control-button">Set response event </div> 
+                        <div id="emergency" class="control-button">Set Emergency event </div>
+                        <div id="reset" class="control-button">Reset all evens </div>
                     </div>
 
                     <div class="subcontent-container" style="flex-grow:0">
@@ -92,49 +97,98 @@
         }
 
         document.getElementById('regular-updates').onclick = async () => {
-            await fetch("/speak", {
+            await fetch("/state", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
                 },
-                body: JSON.stringify({ type: "updates"}), 
+                body: JSON.stringify({ event: "inflight_event", action:"toggle"}), 
             });
         }
-     
-        document.getElementById('preflight').onclick = async () => {
-            await fetch("/speak", {
+
+        document.getElementById('emergency').onclick = async () => {
+            await fetch("/state", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
                 },
-                body: JSON.stringify({ type: "preflight"}), 
+                body: JSON.stringify({ event: "emergency_event", action:"toggle"}), 
+            });
+        }
+
+        document.getElementById('radioUpdate').onclick = async () => {
+            await fetch("/state", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+                },
+                body: JSON.stringify({ event: "radioUpdateComplete", action:"toggle"}), 
+            });
+        }
+
+        document.getElementById('userRadio').onclick = async () => {
+            await fetch("/state", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+                },
+                body: JSON.stringify({ event: "status_report", action:"toggle"}), 
+            });
+        }
+
+        document.getElementById('userResp').onclick = async () => {
+            await fetch("/state", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+                },
+                body: JSON.stringify({ event: "response_event", action:"toggle"}), 
+            });
+        }
+    
+        document.getElementById('preflight').onclick = async () => {
+            await fetch("/state", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+                },
+                body: JSON.stringify({ event: "takeoff_event", action:"toggle"}), 
             });
         }
         document.getElementById('administer').onclick = async () => {
-            await fetch("/speak", {
+            await fetch("/state", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
                 },
-                body: JSON.stringify({ type: "administer"}), 
+                body: JSON.stringify({ event: "administer_event", action:"toggle"}), 
             });
         }
-        document.getElementById('continue').onclick = async () => {
-            await fetch("/speak", {
+        document.getElementById('tank').onclick = async () => {
+            await fetch("/state", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
                 },
-                body: JSON.stringify({ type: "continue"}), 
+                body: JSON.stringify({ event: "tank_event", action:"toggle"}), 
             });
         }
-        document.getElementById('oldForth').onclick = async () => {
-            await fetch("/speak", {
+        document.getElementById('engine').onclick = async () => {
+            await fetch("/state", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
                 },
-                body: JSON.stringify({ type: "oldForth"}), 
+                body: JSON.stringify({ event: "engine_event", action:"toggle"}), 
+            });
+        }
+        document.getElementById('reset').onclick = async () => {
+            await fetch("/state", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+                },
+                body: JSON.stringify({ event: "reset", action:"toggle"}), 
             });
         }
 

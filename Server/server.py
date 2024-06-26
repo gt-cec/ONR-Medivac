@@ -31,7 +31,7 @@ study_participant_id = 0
 sequence=0
 study_stage = '1'  # 1= nominal 2=change altitude 3= empty fuel 4=pressure warninhg+ engine failure
 destination_index = None  # will be overwritten, just giving a default value
-departure_index = 15 # will be overwritten, just giving a default value
+departure_index = 21 # will be overwritten, just giving a default value(Miller Farm)
 decision_state = 0  # 0=wait, 1=land
 vitals_state = 0  # 0=normal, 1=emergency
 airspace_emergency_state = 0  # 0=normal, 1=emergency
@@ -54,6 +54,10 @@ rd_page=0
 ca_page=0
 cd_page=0
 map_page=0
+
+
+#radio variables
+takeoffEvent=False
 
 
 position = {
@@ -616,13 +620,13 @@ emergency = False
 last_radio_update = 0
 
 
-
+ 
 #for radio comms
-status_report_event = threading.Event()  #to be set when participant gives the update
+status_report_event = threading.Event()  #to be set when participant gives the radio update
 status_report_event.clear()
 administer_event = threading.Event()
 administer_event.clear()
-response_event = threading.Event() #to be set when user responds with vitals in emergency or should assumes gives answer?
+response_event = threading.Event() #to be set when user responds with vitals during vitals emergency or should assumes gives answer?
 response_event.clear()
 takeoff_event= threading.Event() #to be set when ready for takeoff
 takeoff_event.clear()
@@ -638,9 +642,124 @@ radio_update_complete = threading.Event() # for ensuring regular radio updates a
 radio_update_complete.clear()
 
 
+events = {
+    'radioUpdateComplete': radio_update_complete,
+    'status_report': status_report_event,
+    'takeoff_event': takeoff_event,
+    'response_event': response_event,
+    'administer_event': administer_event,
+    'engine_event': engine_event,
+    'tank_event': tank_event,
+    'emergency_event': emergency_event,
+    'inflight_event': inflight_event
+}
 
-@app.route('/speak', methods=['POST'])
+@app.route('/set_event', methods=['POST'])
+def set_event():
+    print("request received in /set_event: ", request.get_json())
+    received_request= request.get_json()
+
+    event_name = received_request["event"]
+
+    if event_name == "reset":  # clear all events 
+        for event in events:
+          events[event].clear()
+    elif event_name in events:
+        action= received_request["action"]
+        event = events[event_name]
+        if action=="clear":
+            event.clear()
+        elif action=="set":
+            event.set()
+        elif action=="toggle":
+            if event.is_set():
+                event.clear()
+                action = "cleared"
+            else:
+                event.set()
+                action = "set"
+        else:
+            action= "action not found"
+        print("message: Event", event_name ,action)
+    else:
+        print("error: Invalid event name")
+
+    """ elif event_name in events:
+        event = events[event_name]
+        if event.is_set():
+            event.clear()
+            action = "cleared"
+        else:
+            event.set()
+            action = "set"
+        print("message: Event", event_name ,action,"successfully")
+        #return jsonify({"message": f"Event {event_name} {action} successfully"})
+    else:
+        print("error: Invalid event name")
+        #return jsonify({"error": "Invalid event name"}), 400 """
+
+    return ""
+
+
+@app.route('/state', methods=['POST'])
+def get_states():
+    global takeoffEvent, engine_failure, pressure_warning, empty_tank, vitals_state #does var need to be called?
+    if(airspace_emergency_state==1 or vitals_state==1 or engine_failure==1 or pressure_warning==1 or empty_tank==1):
+        emergency_event.set()
+    if(engine_failure==1):
+        engine_event.set()
+    if(vitals_state==1):
+        administer_event.set()
+    if(empty_tank==1):
+        tank_event.set()
+
+    if request.is_json:
+        received_request = request.get_json()
+        print("request received in /state: ", received_request)
+        event_name = received_request["event"]
+        if event_name == "reset":  # clear all events 
+            for event in events:
+                events[event].clear()
+        elif event_name in events:
+            action= received_request["action"]
+            event = events[event_name]
+            if action=="clear":
+                event.clear()
+            elif action=="set":
+                event.set()
+            elif action=="toggle":
+                if event.is_set():
+                    event.clear()
+                    action = "cleared"
+                else:
+                    event.set()
+                    action = "set"
+            else:
+                action= "action not found"
+            print("message: Event", event_name ,action)
+        else:
+            print("error: Invalid event name")
+        
+    takeoffEvent=takeoff_event.is_set()
+    response = {
+        "radioUpdateComplete": radio_update_complete.is_set(),
+        "status_report": status_report_event.is_set(),
+        "takeoff_event": takeoff_event.is_set(),
+        "response_event": response_event.is_set(),
+        "administer_event": administer_event.is_set(),
+        "engine_event": engine_event.is_set(),
+        "tank_event": tank_event.is_set(),
+        "emergency_event": emergency_event.is_set(),
+        "inflight_event": inflight_event.is_set()
+    }
+    
+    return jsonify(response), 200
+
+
+""" @app.route('/speak', methods=['POST'])
 def speak():
+    global takeoffEvent, engine_failure, pressure_warning, empty_tank, vitals_state
+    
     print("request received: ", request.get_json())
     received_request= request.get_json()
 
@@ -655,14 +774,16 @@ def speak():
     if received_request["type"] == "continue":
         if not tank_event.is_set():
             tank_event.set()
+            #empty_tank=1
         
     if received_request["type"] == "oldForth":
         if not engine_event.is_set():
             engine_event.set()
+            #engine_failure=1
     
     if received_request["type"] == "administer":
         if not administer_event.is_set():
-            administer_event.clear()
+            administer_event.set()
 
     if received_request["type"] == "radioUpdate":
         resp = { "radioUpdateComplete": radio_update_complete.is_set()}
@@ -677,6 +798,16 @@ def speak():
         tank_event.clear()
         emergency_event.clear()
 
+    if(airspace_emergency_state==1 or vitals_state==1 or engine_failure==1 or pressure_warning==1 or empty_tank==1):
+        emergency_event.set()
+    if(engine_failure==1):
+        engine_event.set()
+    if(vitals_state==1):
+        administer_event.set()
+    if(empty_tank==1):
+        tank_event.set()
+    takeoffEvent=takeoff_event.is_set()
+
     response = {
         "radioUpdateComplete": radio_update_complete.is_set(),
         "status_report": status_report_event.is_set(),
@@ -685,11 +816,13 @@ def speak():
         "administer_event": administer_event.is_set(),
         "engine_event": engine_event.is_set(),
         "tank_event": tank_event.is_set(),
-       "emergency_event": emergency_event.is_set()
+        "emergency_event": emergency_event.is_set(),
+        "inflight_event" : inflight_event.is_set()
     }
     
     return jsonify(response), 200
         
+ """
 
 @app.route('/ws', methods=['POST'])
 def ws():
@@ -699,8 +832,7 @@ def ws():
     if event.is_set():
         last_time_set=time.time()
         
-
-    print("request received: ", request.get_json())
+    print("request received on /ws: ", request.get_json())
     received_request= request.get_json()
     
     if received_request["type"] == "user_text":
@@ -774,7 +906,7 @@ def reset_params():
     sequence=0
     study_stage = 1
     destination_index = None # will be overwritten, just giving a default value
-    departure_index = 15  # will be overwritten, just giving a default value
+    departure_index = 21  # will be overwritten, just giving a default value
     decision_state = 0  # 0=normal, 1=wait
     vitals_state = 0  # 0=normal, 1=emergency
     airspace_emergency_state = 0  # 0=normal, 1=emergency
@@ -796,11 +928,23 @@ def reset_params():
     ca_page=0
     cd_page=0
     map_page=0
+
+    #clearing all events on reset 
+    status_report_event.clear()
+    takeoff_event.clear()
+    response_event.clear()
+    administer_event.clear()
+    engine_event.clear()
+    tank_event.clear()
+    emergency_event.clear()
+    inflight_event.clear()
+    event.clear()
+    print('All events cleared',takeoff_event.is_set())
     
 
     return "Reset all system parameters!"
 
-# experimenter control page
+# experimenter control page 
 
 
 @app.route("/control", methods=["GET"])
@@ -820,7 +964,7 @@ def clean(s):
 
 @app.route("/var", methods=["GET"])
 def get_var():
-    global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure,pressure_warning,empty_tank,emergency_page,rd_page,ca_page,cd_page,map_page
+    global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude, engine_failure, pressure_warning, empty_tank, emergency_page, rd_page, ca_page, cd_page, map_page
     if request.args.get("user-id"):
         study_participant_id = clean(request.args.get("user-id"))
         # Remove all handlers associated with the root logger object, from (https://stackoverflow.com/questions/12158048)
@@ -898,10 +1042,6 @@ def get_var():
     if request.args.get("map-page"):
         map_page =  clean(request.args.get("map-page"))
    
-   
-    
-        
-
     return_dict = {"user-id": str(study_participant_id),
                    "sequence": sequence,
                    "study-stage": study_stage,
@@ -986,8 +1126,9 @@ def hai_interface(subroute=None):
         resp = make_response(render_template("HAIInterface/location.html", helipads=data, data=HelpData))
     elif subroute == "checklist":
         takeoff_event.set()
-        print(takeoff_event.is_set())
-        print("Takeoff event set")
+        print("TOES",takeoff_event.is_set())
+        print(takeoffEvent)
+        #radio_comms.pre_takeoff(takeoff_event)
         resp = make_response(render_template("HAIInterface/checklist.html", helipads=data))
     elif subroute == "countdown":
         resp = make_response(render_template("HAIInterface/countdown.html", helipads=data))
@@ -995,6 +1136,8 @@ def hai_interface(subroute=None):
         resp = make_response(render_template("HAIInterface/takeoff_gif.html", helipads=data))
     elif subroute == "inflight":
         inflight_event.set()
+        print('inflight',inflight_event.is_set())
+        #radio_comms.inflight_status_check(inflight_event,status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event)
         resp = make_response(render_template("HAIInterface/inflight.html", helipads=data))
     elif subroute == "change-destination":
         resp = make_response(render_template("HAIInterface/change-destination.html", helipads=data))
@@ -1017,7 +1160,7 @@ def hai_interface(subroute=None):
     return resp
 
 def start_flask_app():
-    app.run(host="0.0.0.0", port=8080, threaded=True)
+    app.run(host="0.0.0.0", port=8080)
 
 # Defining the function to run voice assistant in a separate thread
 """ def run_voice():
@@ -1046,13 +1189,27 @@ if __name__ == "__main__":
     va = threading.Thread(target=third_test.main, args={event})
     va.start()
 
+
+    # setting emergency event when other emergency happens
+    if((administer_event.is_set() or tank_event.is_set() or engine_event.is_set()) and (not emergency_event.is_set())):
+      emergency_event.set() 
+
+    """ if(administer_event.is_set()):
+      radio_comms.administer(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event)
+    if(tank_event.is_set()):
+      radio_comms.continueEmory()
+    if(engine_event.is_set()):
+     radio_comms.flyOldForth()
+ """
+
     #radio comms thread
-    radio = threading.Thread(target=radio_comms.main, args={status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event})
+    #radio = threading.Thread(target=radio_comms.inflight_status_check, args={inflight_event,status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event})
     #radio = threading.Thread(target=radio_comms_new.main, args={status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event, radio_update_complete, inflight_event})
+    radio = threading.Thread(target=radio_comms.main)
     radio.start()  # starting radio thread
 
     # Run the Flask server
-    app.run(host='127.0.0.1', port=8080)
+    app.run(host='127.0.0.1', port=8080, threaded=True)
    
 
     # Run the Flask server in a separate thread
