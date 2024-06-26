@@ -4,46 +4,88 @@
     <head>
         <title>HAI Vitals Logger Pro</title>
         <link rel="stylesheet" href="../../static/VitalsTask/styles.css"/>
-        <script src="../../static/VitalsTask/vitals.js"></script>    
+        <script src="../../static/VitalsTask/vitals.js"></script>
+        <style>
+            body {
+                margin: 0;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            .main-pane {
+                display: flex;
+                height: 100vh;
+            }
+            .left-pane {
+                width: 33%;
+                height: 100%;
+                overflow: hidden;
+                border-right: 1px solid #ccc;
+            }
+            .right-pane {
+                width: 67%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+            .horizontal-container {
+                display: flex;
+                flex: 1;
+            }
+            .vertical-container {
+                display: flex;
+                flex-direction: column;
+                flex: 1;
+            }
+            .iframe-container {
+                width: 100%;
+                height: 100%;
+                border: none;
+                overflow: hidden;
+            }
+        </style>
     </head>
     
     <!-- main content -->
     <body>
         <div class="main-pane">
-            <div class="vertical-container">
-                <div class="title-pane">
-                    <i><b>HAI</b></i>&ensp;Vitals Logger&nbsp;<b>Pro</b>
-                </div>
-                <div class="horizontal-container">
-                    <div id="menu-pane" class="menu-pane">
-                        <!-- buttons -->
-                        <div class="vertical-container">
-                            <!-- separate the sensor buttons and the submit button -->
-                            <div class="vertical-container">
-                                <button id="heartrate-button" onclick="setSensor('Heart Rate')" class="menu">Heart Rate</button>
-                                <button id="o2-button" onclick="setSensor('O₂ Saturation')" class="menu">O₂ Saturation</button>
-                                <button id="bloodpressure-button" onclick="setSensor('Blood Pressure')" class="menu">Blood Pressure</button>  
-                            </div>
-                            <div class="vertical-container" style="flex:.2">
-                                <!-- timer countup -->
-                                <div id="submit-timer" class="action-text" style="border-bottom:none">0:00</div>
-                                <button id="submit-button" onclick="submit()" class="submit" style="background-color:#86ffbf">Submit</button>
-                            </div>
-                        </div>
+            <div class="left-pane">
+                <iframe src="flight_gauges.html" class="iframe-container"></iframe>
+            </div>
+            <div class="right-pane">
+                <div class="vertical-container">
+                    <div class="title-pane">
+                        <i><b>HAI</b></i>&ensp;Vitals Logger&nbsp;<b>Pro</b>
                     </div>
-                    <div id="action-pane" class="action-pane">
-                        <!-- buttons -->
-                        <div id="action-sensor-text" class="action-text">Heart Rate</div>
-                        <div id="keypad-container" class="keypad-container">
-                            <div id="keypad-value" class="keypad-value">0</div>
-                            <div id="keypad" class="keypad"></div>
+                    <div class="horizontal-container">
+                        <div id="menu-pane" class="menu-pane">
+                            <!-- buttons -->
+                            <div class="vertical-container">
+                                <!-- separate the sensor buttons and the submit button -->
+                                <div class="vertical-container">
+                                    <button id="heartrate-button" onclick="setSensor('Heart Rate')" class="menu">Heart Rate</button>
+                                    <button id="o2-button" onclick="setSensor('O₂ Saturation')" class="menu">O₂ Saturation</button>
+                                    <button id="bloodpressure-button" onclick="setSensor('Blood Pressure')" class="menu">Blood Pressure</button>  
+                                </div>
+                                <div class="vertical-container" style="flex:.2">
+                                    <!-- timer countup -->
+                                    <div id="submit-timer" class="action-text" style="border-bottom:none">0:00</div>
+                                    <button id="submit-button" onclick="submit()" class="submit" style="background-color:#86ffbf">Submit</button>
+                                </div>
+                            </div>
                         </div>
-                        <div id="action-button-container" style="flex-direction: column;">
-                            <button id="action-capture-button" onclick="recordVital('capture')" class="menu action-button"><div id="action-capture-button-text" class="button-text"></div><div id="action-capture-button-loading-bar" class="button-loading-bar"></div></button>
-                            <button id="action-log-button" onclick="recordVital('log')" class="menu action-button"><div id="action-log-button-text" class="button-text"></div><div id="action-log-button-loading-bar" class="button-loading-bar"></div></button>
-                            <button id="action-save-button" onclick="recordVital('save')" class="menu action-button"><div id="action-save-button-text" class="button-text"></div><div id="action-save-button-loading-bar" class="button-loading-bar"></div></button>
-                        </div>
-                    </div>    
+                        <div id="action-pane" class="action-pane">
+                            <!-- buttons -->
+                            <div id="action-sensor-text" class="action-text">Heart Rate</div>
+                            <div id="keypad-container" class="keypad-container">
+                                <div id="keypad-value" class="keypad-value">0</div>
+                                <div id="keypad" class="keypad"></div>
+                            </div>
+                            <div id="action-button-container" style="flex-direction: column;">
+                                <button id="action-capture-button" onclick="recordVital('capture')" class="menu action-button"><div id="action-capture-button-text" class="button-text"></div><div id="action-capture-button-loading-bar" class="button-loading-bar"></div></button>
+                                <button id="action-log-button" onclick="recordVital('log')" class="menu action-button"><div id="action-log-button-text" class="button-text"></div><div id="action-log-button-loading-bar" class="button-loading-bar"></div></button>
+                                <button id="action-save-button" onclick="recordVital('save')" class="menu action-button"><div id="action-save-button-text" class="button-text"></div><div id="action-save-button-loading-bar" class="button-loading-bar"></div></button>
+                            </div>
+                        </div>    
+                    </div>
                 </div>
             </div>
         </div>
@@ -119,4 +161,3 @@
     </script>
     
 </html>
-

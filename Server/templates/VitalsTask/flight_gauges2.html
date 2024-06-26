@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Control Interface</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+        }
+
+        .gauge-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 100%;
+        }
+
+        .gauge-wrapper {
+            width: 200px;
+            height: 100px;
+            padding: 20px;
+        }
+
+        .gauge {
+            background: #e7e7e7;
+            box-shadow: 0 -3px 6px 2px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            height: 100%;
+            border-radius: 100px 100px 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gauge-center {
+            width: 60%;
+            height: 60%;
+            background: #15222e;
+            border-radius: 100px 100px 0 0;
+            position: absolute;
+            box-shadow: 0 -13px 15px -10px rgba(0, 0, 0, 0.28);
+            right: 21%;
+            bottom: 0;
+            color: #fff;
+            text-align: center;
+        }
+
+            .gauge-center .label {
+                font-size: 0.75em;
+                opacity: 0.6;
+                margin: 1.1em 0 0.3em 0;
+            }
+
+            .gauge-center .number {
+                font-size: 1.2em;
+            }
+
+        .needle {
+            width: 80px;
+            height: 7px;
+            background: #15222e;
+            border-radius: 100%;
+            position: absolute;
+            bottom: -2px;
+            left: 20px;
+            transform-origin: 100% 4px;
+            transform: rotate(0deg);
+            display: none;
+        }
+
+        .four.gauge1 .needle {
+            animation: fourspeed1 2s 1 both;
+            display: block;
+        }
+
+        .four.gauge2 .needle {
+            animation: fourspeed2 2s 1 both;
+            display: block;
+        }
+
+        .four.gauge3 .needle {
+            animation: fourspeed3 2s 1 both;
+            display: block;
+        }
+
+        .four.gauge4 .needle {
+            animation: fourspeed4 2s 1 both;
+            display: block;
+        }
+
+        .slice-colors {
+            height: 100%;
+        }
+
+            .slice-colors .st {
+                position: absolute;
+                bottom: 0;
+                width: 0;
+                height: 0;
+                border: 50px solid transparent;
+            }
+
+        .four .slice-colors .st.slice-item:nth-child(2) {
+            border-top: 50px #f1c40f solid;
+            border-right: 50px #f1c40f solid;
+            background-color: #1eaa59;
+        }
+
+        .four .slice-colors .st.slice-item:nth-child(4) {
+            left: 50%;
+            border-bottom: 50px #e84c3d solid;
+            border-right: 50px #e84c3d solid;
+            background-color: #e67e22;
+        }
+
+        @keyframes fourspeed1 {
+            0% {
+                transform: rotate(0);
+            }
+
+            100% {
+                transform: rotate(16deg);
+            }
+        }
+
+        @keyframes fourspeed2 {
+            0% {
+                transform: rotate(0);
+            }
+
+            100% {
+                transform: rotate(65deg);
+            }
+        }
+
+        @keyframes fourspeed3 {
+            0% {
+                transform: rotate(0);
+            }
+
+            100% {
+                transform: rotate(115deg);
+            }
+        }
+
+        @keyframes fourspeed4 {
+            0% {
+                transform: rotate(0);
+            }
+
+            100% {
+                transform: rotate(164deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="gauge-container">
+        <div class="gauge-wrapper">
+            <div class="gauge four gauge3">
+                <div class="slice-colors">
+                    <div class="st slice-item"></div>
+                    <div class="st slice-item"></div>
+                    <div class="st slice-item"></div>
+                    <div class="st slice-item"></div>
+                </div>
+                <div class="needle"></div>
+                <div class="gauge-center">
+                    <div class="label">HYDRAULICS</div>
+                    <div class="number">85 psi</div>
+                </div>
+            </div>
+        </div>
+        <div class="gauge-wrapper">
+            <div class="gauge four gauge4">
+                <div class="slice-colors">
+                    <div class="st slice-item"></div>
+                    <div class="st slice-item"></div>
+                    <div class="st slice-item"></div>
+                    <div class="st slice-item"></div>
+                </div>
+                <div class="needle"></div>
+                <div class="gauge-center">
+                    <div class="label">FUEL</div>
+                    <div class="number">85%</div>
+                </div>
+            </div>
+        </div>
+        <div class="gauge-wrapper">
+            <div class="gauge four gauge3" id="altitude-gauge">
+                <div class="slice-colors">
+                    <div class="st slice-item"></div>
+                    <div class="st slice-item"></div>
+                    <div class="st slice-item"></div>
+                    <div class="st slice-item"></div>
+                </div>
+                <div class="needle"></div>
+                <div class="gauge-center">
+                    <div class="label">ALTITUDE</div>
+                    <div class="number" id="altitude-value">1000 ft</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    const altitudeGauge = document.getElementById('altitude-gauge');
+    const altitudeValue = document.getElementById('altitude-value');
+
+    function updateAltitude() {
+        altitudeValue.textContent = 'HIGH';
+        altitudeGauge.classList.remove('gauge3');
+        altitudeGauge.classList.add('gauge4');
+    }
+
+    setInterval(async function fetchVitalstate() {
+        let response = await fetch("/var");
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        let message = await response.text();
+        message = JSON.parse(message);
+        if (message["vitals-state"]==1)
+        {
+            updateAltitude()  //altitude change for vitals emergency
+        }
+    }, 1000);  // Fetch vitalstate every 1 second
+</script>
+</html>

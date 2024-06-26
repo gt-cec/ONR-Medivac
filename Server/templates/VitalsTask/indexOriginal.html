@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <!-- import CSS -->
+    <head>
+        <title>HAI Vitals Logger Pro</title>
+        <link rel="stylesheet" href="../../static/VitalsTask/styles.css"/>
+        <script src="../../static/VitalsTask/vitals.js"></script>    
+    </head>
+    
+    <!-- main content -->
+    <body>
+        <div class="main-pane">
+            <div class="vertical-container">
+                <div class="title-pane">
+                    <i><b>HAI</b></i>&ensp;Vitals Logger&nbsp;<b>Pro</b>
+                </div>
+                <div class="horizontal-container">
+                    <div id="menu-pane" class="menu-pane">
+                        <!-- buttons -->
+                        <div class="vertical-container">
+                            <!-- separate the sensor buttons and the submit button -->
+                            <div class="vertical-container">
+                                <button id="heartrate-button" onclick="setSensor('Heart Rate')" class="menu">Heart Rate</button>
+                                <button id="o2-button" onclick="setSensor('O₂ Saturation')" class="menu">O₂ Saturation</button>
+                                <button id="bloodpressure-button" onclick="setSensor('Blood Pressure')" class="menu">Blood Pressure</button>  
+                            </div>
+                            <div class="vertical-container" style="flex:.2">
+                                <!-- timer countup -->
+                                <div id="submit-timer" class="action-text" style="border-bottom:none">0:00</div>
+                                <button id="submit-button" onclick="submit()" class="submit" style="background-color:#86ffbf">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="action-pane" class="action-pane">
+                        <!-- buttons -->
+                        <div id="action-sensor-text" class="action-text">Heart Rate</div>
+                        <div id="keypad-container" class="keypad-container">
+                            <div id="keypad-value" class="keypad-value">0</div>
+                            <div id="keypad" class="keypad"></div>
+                        </div>
+                        <div id="action-button-container" style="flex-direction: column;">
+                            <button id="action-capture-button" onclick="recordVital('capture')" class="menu action-button"><div id="action-capture-button-text" class="button-text"></div><div id="action-capture-button-loading-bar" class="button-loading-bar"></div></button>
+                            <button id="action-log-button" onclick="recordVital('log')" class="menu action-button"><div id="action-log-button-text" class="button-text"></div><div id="action-log-button-loading-bar" class="button-loading-bar"></div></button>
+                            <button id="action-save-button" onclick="recordVital('save')" class="menu action-button"><div id="action-save-button-text" class="button-text"></div><div id="action-save-button-loading-bar" class="button-loading-bar"></div></button>
+                        </div>
+                    </div>    
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script>
+        // variables
+        let sensors = ["Heart Rate", "O₂ Saturation", "Blood Pressure"]  // used as a lookup, does not set the HTML
+        let actions = ["capture", "log", "save"]  // used as a lookup, does not set the HTML
+        let currentSensor = ""
+        let checklist = {}
+        let countupTimerStart = Date.now()
+        let countupTimerWarningRed = 110  // warn the user when timer has been ignored for 100 seconds, but turning it red
+        let countupTimerWarningStart = countupTimerWarningRed - 10  // when the countup timer background starts changing color
+        let vitalsLog = {}
+        let preTrialWindow
+        
+        let inProgress = false;  // whether a sensor collection is in progress -- is blocking
+        let showingKeypad = false;  // whether the keypad is being shown -- block changing
+
+        // colors
+        let heartRateButtonColor = "#d3e8d0" //"#ffb9bb"
+        let heartRateBackgroundColor = "#edffec" //"#ffeced"
+        let o2ButtonColor = "#b9bbff"
+        let o2BackgroundColor = "#ecedff"
+        let bloodPressureButtonColor = "#ffb9bb" // "#fffdb9"
+        let bloodPressureBackgroundColor = "#ffeced" // "#fffeec"
+
+        document.getElementById("heartrate-button").style.backgroundColor = heartRateButtonColor
+        document.getElementById("o2-button").style.backgroundColor = o2ButtonColor
+        document.getElementById("bloodpressure-button").style.backgroundColor = bloodPressureButtonColor
+
+        // initialization
+        generateKeypad()
+        resetVitalsLog()
+        resetChecklist()
+        setSensor("Heart Rate")
+        startCountupTimer()
+        showKeypad()
+        showActionButtons()
+
+
+        //polling from the server every 5 secs, giving post trial after landing
+        setInterval(async function get_variables() {
+            let response = await fetch("/var");
+            let message = await response.text();
+            message = JSON.parse(message);
+            if (message["decision-state"]==1)
+            {
+                window.location.href = '/vitals/post-trial'
+            }
+
+            //pre-trial
+            if (message["pre-trial"]==1){
+                    preTrialWindow = window.open("https://gatech.co1.qualtrics.com/jfe/form/SV_8bL0WISQKgm8cPc", "_blank")
+                    await fetch("/var?pre-trial=0")
+            }
+
+            //post-trial
+            if (message["post-trial"]==1){
+                    postTrialWindow = window.open("https://gatech.co1.qualtrics.com/jfe/form/SV_d6vGK1a4V87A7zw", "_blank")
+                    await fetch("/var?post-trial=0")
+            }
+
+            if (message["reset-vitals-display"] == "1") {
+                await fetch("/var?reset-vitals-display=0")
+                preTrialWindow.close();
+                postTrialWindow.close();
+            }
+
+    
+        }, 5000);
+    </script>
+    
+</html>
+
