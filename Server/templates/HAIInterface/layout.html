@@ -164,9 +164,11 @@
 
         <!-- Pressure Warning  -->
         <div class="pressure-warning-overlay" id="pressureWarningalertOverlay">
-            <div class="pressure-warning-alert-box" id="pressureWarningalertBox">
+            <div class="pressure-warning-alert-box" id="pressureWarningalertBox"> 
               <div class="engine-failure" id="warningText">Low Pressure Warning!</div>
-              <div class="pressure-warning-sign"></div>
+              <div class="pressure-warning-sign">
+                <img src="../static/HAIInterface/img/warning-sign.png" class="siren-gif" alt="warning-sign">
+              </div>
               <button class="alert-button" id="pressureWarningmoreInfoButton" onclick="showInfo()">Click for more info</button>
               <div id="pressureWarningalertExplanation" style="display: none;">
                 <p>Report the value shown by the secondary hydraulic pressure sensor:</p>
@@ -215,15 +217,16 @@
        <div class="alertbody">
          <div class="alertoverlay" id="fuelAlertOverlay">
             <div class="alert-box" id="fuelAlertBox">
-              <img src="../static/HAIInterface/img/siren.gif" class="siren-gif" alt="Siren"> 
               <div class="engine-failure" id="emptyTankText"> Fuel Tank Empty</div>
-              <div class="warning-sign"></div>
+              <div class="warning-sign">
+                <img src="../static/HAIInterface/img/empty-tank.png" class="siren-gif" alt="empty-tank"> 
+              </div>
               <button class="alert-button" id="fuelInfoButton" onclick="showFuelInfo()">Click for more info</button>
               <div id="fuelAlertExplanation" style="display: none;">
                 <ul style="list-style-type:circle; padding: 15px; text-align: justify; ">
                     <li>Fuel gauge might be malfunctioning </li>
                     <li>Indicates empty, but 95% confident we have fuel</li>
-                    <li> Safe to continue with secondary fuel tank available </li>
+                    <li>Safe to continue with secondary fuel tank available </li>
                     <li> Following planned route unless receive any requests or updates</li>
                     <li>Option to Change destination is available</li>
                     <li>Seek ground support if needed</li> 

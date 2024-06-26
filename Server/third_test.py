@@ -68,7 +68,7 @@ def main(event):
                     # Assistant's response
                     speak("Opening " + keyword)
                     # Open the route in the default browser
-                    webbrowser.open(route)
+                    #webbrowser.open(route)
                     break  # Exit loop after finding the first matching keyword
                 else:
                     print("Sorry, didn't find " + user_text)

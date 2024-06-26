@@ -4,24 +4,72 @@
     console.log('showing')
     document.body.classList.add('assistant-dull-background', 'active');
     document.getElementById('assistant').style.display = 'block';
+    document.getElementById('userTextBox').style.display = 'block';
+    document.getElementById('userTextBox').innerHTML = "<b>Jarvis: </b>Hello, What can I help you with?<br><br>" +
+    "You could say: <i>Change Destination</i>, <i>Emergency</i>, <i>Open Map</i>",  "<i>ETA</i>";
     
 }
 
 // Function to hide assistant indicator
 function hideAssistant() {
     console.log('hiding')
-    document.getElementById('assistant').style.display = 'none';
-    document.body.classList.remove('assistant-dull-background', 'active');
     setTimeout(() => {
+        document.getElementById('assistant').style.display = 'none';
+        document.body.classList.remove('assistant-dull-background', 'active');
         document.getElementById('userTextBox').style.display = 'none';
-    }, 5000)
+    }, 3000)  // wait 3 seconds to hide
+    
 }
+
+//Keywords and corresponding routes
+const keywordsRoutes = {
+    //"help": "http://127.0.0.1:8080/hai-interface/help",
+    "altitude": "/hai-interface/change-altitude",
+    "height": "/hai-interface/change-altitude",
+    "change": "/hai-interface/change-destination",
+    "destination": "/hai-interface/change-destination",
+    "emergency": "/hai-interface/inflight",
+    "map":"/hai-interface/map",
+    "ETA": "hai-interface/map",
+    //"radio": open radio panel
+     //add more keywords and routes 
+}  
+
+function performAction(usertext){
+    usertext = usertext.toLowerCase();
+    console.log("Looking");
+
+    for (let [keyword, route] of Object.entries(keywordsRoutes)) {
+        if (usertext.includes(keyword)) {
+            window.location.href = route
+            txt="Going to"+ keyword
+            return; // Exit function after finding the first matching keyword
+        }
+        else {
+            // If no keyword is found
+            console.log("Sorry, didn't find  ${usertext}")
+            txt= "Sorry, didn't find"+ usertext
+        }
+    }
+    
+    const userTextBox = document.getElementById('userTextBox');
+    const newContent = document.createElement('div');
+    newContent.innerHTML = txt;
+    userTextBox.appendChild(newContent);
+    userTextBox.scrollTop = userTextBox.scrollHeight; // Auto-scroll to the bottom
+    }
+
 
 // Function to handle user text
 function handleUserText(text) {
     console.log('text')
-    document.getElementById('userTextBox').style.display = 'block';
-    document.getElementById('userTextBox').innerText = text;
+    //document.getElementById('userTextBox').style.display = 'block';
+    const userTextBox = document.getElementById('userTextBox');
+    const newContent = document.createElement('div');
+    newContent.innerHTML = "<b>Participant: </b> " + text;
+    userTextBox.appendChild(newContent);
+    //userTextBox.scrollTop = userTextBox.scrollHeight; // Auto-scroll to the bottom
+    performAction(text)
 }
 
 function initAssistant()

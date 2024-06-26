@@ -776,15 +776,91 @@ div.vitals-popup {
 
   .user-text-box {
     background: white;
+    border: 2px solid #FF5722; 
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-size: 30px;
+    text-align: center;
+    color: #000000;
+    z-index: 10000; 
+    position: absolute;
+    bottom: 180px; /* Adjust this value to position the box above the assistant */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: max-content;
+    min-height: min-content;
+}
+
+.user-text-box::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 20px solid white; 
+}
+
+.user-text-box::before {
+    content: '';
+    position: absolute;
+    bottom: -23px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 22px solid transparent;
+    border-right: 22px solid transparent;
+    border-top: 22px solid #FF5722; 
+    z-index: -1;
+}
+
+.voice-assistant {
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 100px;
+    background: #FF5722;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 0 rgba(255, 87, 34, 0.4);
+    animation: pulse 2s infinite;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s ease;
+    z-index: 9999;
+}
+
+
+
+  /* .user-text-box {
+    background: white;
     border: 2px solid #4CAF50;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    font-size: 25px;
+    font-size: 35px;
     text-align: center;
-    z-index: 1;
+    color:#000000;
+    z-index: 9999;
+    position: absolute;
+    bottom: 150px; /* Adjust to position the text box above the assistant 
+    left: 50%;
+    /* transform: translateX(-50%);
+    visibility: hidden; 
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s ease;  
   }
-
+ 
   .voice-assistant {
     position: fixed;
     bottom: 50px;
@@ -802,7 +878,7 @@ div.vitals-popup {
     visibility: hidden;
     opacity: 0;
     transition: visibility 0s, opacity 0.5s ease;
-  }
+  }*/
 
   .voice-assistant:before {
     content: '';
@@ -915,7 +991,7 @@ div.vitals-popup {
     }
 
     .engine-failure {
-      font-size: 32px;
+      font-size: 40px;
       font-weight: bold;
       margin: 20px 0;
       animation: flash 1s infinite;
@@ -970,16 +1046,18 @@ div.vitals-popup {
     }
 
     .pressure-warning-body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #f0f0f0;
-            transition: opacity 0.5s ease, background-color 0.5s ease;
-          }
+      font-family: Arial, sans-serif;
+      font-size: 40px;
+      font-weight: bold;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f0f0;
+      transition: opacity 0.5s ease, background-color 0.5s ease;
+    }
       
       .pressure-warning-overlay {
         position: absolute;

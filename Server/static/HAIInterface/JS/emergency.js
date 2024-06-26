@@ -148,12 +148,12 @@ function initEmergency() {
             helipads[20].nearest=true
 
             //destination for higher workload scenario-Old Forth
-            destinationIndex=19
+            //destinationIndex=19
 
             //checking when the destination index has changed
             if (TargetIndex != 3) {
               log({"page": "emergency", "action": "trying to change destination to"+ TargetIndex })
-                TargetIndex = destinationIndex
+                TargetIndex = 19 //destination for higher workload scenario-Old Forth
                 console.log(TargetIndex)
                 target_lat = helipads[TargetIndex].latitude
                 target_long = helipads[TargetIndex].longitude

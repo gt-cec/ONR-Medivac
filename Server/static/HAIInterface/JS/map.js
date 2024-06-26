@@ -1,3 +1,4 @@
+var flightStartTime=0
 window.setInterval(async () => {
     getSimulatorData()
     console.log( (new Date()).getTime() / 1000 - flightStartTime)
@@ -23,7 +24,7 @@ window.setInterval(async () => {
     // if requesting change altitude page
     if (CAPage == "1") {
         await fetch("/var?ca-page=0")
-        window.location.href = '/hai-interface/change-altitude?Changed_altitude='+ 10000 
+        window.location.href = '/hai-interface/change-altitude?Changed_altitude='+ 1500 
     }
     // if requesting return to departure page
     if (RDPage == "1") {
@@ -211,13 +212,13 @@ async function getSimulatorData() {
             mapPage=data["map-page"] //open map
 
             if (typeof(urlParams) !== 'undefined' && (urlParams.get("emergency") == "1") && (studyStage == '3' || studyStage == '4')) {
-                //making FTY Heliport the nearest in emergency
-                helipads[20].nearest=true
+                //making Hilton Heliport the nearest in emergency
+                helipads[5].nearest=true
             }
 
             if ((EngineFailure==1 || EmptyTank ==1) && (studyStage == '3' || studyStage == '4')) {
-                //making FTY Heliport the nearest in emergency
-                helipads[20].nearest=true
+                //making Hilton Heliport the nearest in emergency
+                helipads[5].nearest=true
             }
             
             // show the helipads
