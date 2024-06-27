@@ -61,27 +61,29 @@ def pre_takeoff(states):
 
 # Function to simulate in-flight status checks
 def inflight_status_check(states):
-      global last_radio_update 
+    global last_radio_update 
       #print('Inflight radio updates ', states)
-      while not states["emergency_event"]:
+      #while not states["emergency_event"]:
          #print('radio updates')
-         current_time = time.time()
-         #print("last update", (current_time -last_radio_update))
-         #speak("Inflight")
-         if not states["emergency_event"] and (current_time - last_radio_update >90):  # when no emergency and last radio update >90s ago (assuming 30s gap + 30s vitals + 30s gap)
-            print("here")
-            with status_lock:  
-               print("Asking for radio updates")
-               speak("Control Tower: Please report your flight status, patient status, and ETA.")
-               if states["response_event"]: #user reported back
-                 continue
-               else:
-                 delay(45) # Wait for user to report back  --> set with transmit button?
-            last_radio_update = time.time()
-            #radio_update_complete.set()
-            requests.post("http://127.0.0.1:8080/state", json={"event": "radioUpdateComplete", "action":"set"})
-            print('sent request to set radio update complete')
-         delay(100)
+    current_time = time.time()
+    #print("last update", (current_time -last_radio_update))
+    #speak("Inflight")
+    if not states["emergency_event"] and (current_time - last_radio_update >90):  # when no emergency and last radio update >90s ago (assuming 30s gap + 30s vitals + 30s gap)
+        print("here")
+    with status_lock:  
+        print("Asking for radio updates")
+        speak("Control Tower: Please report your flight status, patient status, and ETA.")
+        if states["response_event"]: #user reported back
+            print('Transmit button pressed')
+        else:
+            delay(45) # Wait for user to report back  --> set with transmit button?
+    last_radio_update = time.time()
+    #radio_update_complete.set()
+    requests.post("http://127.0.0.1:8080/state", json={"event": "radioUpdateComplete", "action":"set"})
+    print('sent request to set radio update complete')
+    if states["emergency_event"]:
+        print("curr state:",states)
+    delay(100)
 
 # Function to provide medicine administration guidance
 def administer(states):
@@ -107,7 +109,7 @@ def continueEmory(states):
       print('sent request to clear tank_event')
 
 def flyOldForth(states):
-   print('reroute to Oldforthh')
+   print('reroute to Oldforth')
    with status_lock:  
       speak("Control Tower: Reroute to Old Forth Hospital")
       requests.post("http://127.0.0.1:8080/state", json={"event": "engine_event", "action":"clear"}) #clearing engine event
@@ -126,7 +128,7 @@ def handle_emergency():
 #giving reference to the function that needs to be called depending to event set, not calling the function 
 event_handlers = {
    #"radioUpdateComplete": set_radio_update,
-    "inflight_event":inflight_status_check, 
+    #"inflight_event":inflight_status_check, 
     "takeoff_event": pre_takeoff,
     #"response_event": set_response_event,
     "administer_event": administer,
@@ -141,10 +143,13 @@ def main():
     while True:
         states = fetch_states()
         if states:
-            for event, is_set in states.items():    # W3school
-                if is_set and event in event_handlers:  
-                    event_handlers[event](states)
-        time.sleep(1)  # Wait for 1 second before next fetch
+           if states["inflight_event"] and not states["emergency_event"]:
+                inflight_status_check(states)
+           else:
+                for event, is_set in states.items():    # W3school
+                    if is_set and event in event_handlers:  
+                        event_handlers[event](states)
+        #time.sleep(1)  # Wait for 1 second before next fetch
 
 if __name__ == "__main__":
    #main(inflight_event,status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event)

@@ -936,97 +936,121 @@ div.vitals-popup {
     opacity: 0.7;
   }
 
-.alertbody {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #f0f0f0;
-      transition: opacity 0.5s ease, background-color 0.5s ease;
+  .alertbody {
+    font-family: 'Roboto', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1a1a1a;
+    transition: opacity 0.5s ease, background-color 0.5s ease;
+  }
+  
+  .alertoverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    opacity: 0;
+    z-index: 9999;
+    transition: visibility 0s, opacity 0.5s ease;
+  }
+  
+  .alert-box {
+    background: linear-gradient(145deg, #ff3019 0%, #cf0404 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.2);
+    text-align: center;
+    max-width: 350px;
+    transition: max-width 0.5s ease, transform 0.3s ease;
+    position: relative;
+    border: 2px solid #ff6b6b;
+  }
+  
+  .alert-box.expanded {
+    max-width: 700px;
+    font-size: 28px;
+    transform: scale(1.05);
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 0;
+  }
+  
+  ul li {
+    padding: 12px;
+    background-color: rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+    border-radius: 8px;
+    text-align: left;
+    font-size: 22px;
+    border-left: 4px solid #ffcc00;
+  }
+  
+  .siren-gif {
+    width: 130px;
+    height: 130px;
+    margin-top: 15px;
+    align-self: center;
+  }
+  
+  .engine-failure {
+    font-size: 47px;
+    font-weight: bold;
+    margin: 25px 0;
+    animation: flash 1s infinite;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+  
+  .alert-box.expanded .engine-failure {
+    animation: none;
+  }
+  
+  @keyframes flash {
+    0%, 50%, 100% {
+      opacity: 1;
     }
-
-    .alertoverlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 0, 0, 0.7);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      visibility: hidden;
-      opacity: 0;
-      z-index: 9999;
-      transition: visibility 0s, opacity 0.5s ease;
+    25%, 75% {
+      opacity: 0.5;
     }
-
-    .alert-box {
-      background: red;
-      color: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      max-width: 300px;
-      transition: max-width 0.5s ease;
-      position: relative;
-    }
-
-    .alert-box.expanded {
-      max-width: 600px;
-      font-size: 25px;
-    }
-    ul li {
-      padding: 8px;
-    }
-
-    .siren-gif {
-      width: 100px;
-      height: 100px;
-      margin-top: 10px;
-    }
-
-    .engine-failure {
-      font-size: 40px;
-      font-weight: bold;
-      margin: 20px 0;
-      animation: flash 1s infinite;
-    }
-
-    .alert-box.expanded .engine-failure {
-      animation: none;
-    }
-
-    @keyframes flash {
-      0%, 50%, 100% {
-        opacity: 1;
-      }
-      25%, 75% {
-        opacity: 0;
-      }
-    }
-
-    .warning-sign {
-      width: 100px;
-      height: 100px;
-      margin: 0 auto 20px;
-      background-size: contain;
-    }
-
-    .alert-button, .close-button {
-      background: white;
-      color: red;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: 10px;
-    }
+  }
+  
+  .warning-sign {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 25px;
+    background-size: contain;
+  }
+  
+  .alert-button, .close-button {
+    background: #ffcc00;
+    color: #000;
+    border: none;
+    padding: 15px 30px; 
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 20px;
+    margin-top: 15px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .alert-button:hover, .close-button:hover, .submit-button:hover {
+    background-color: #ffd700;
+    transform: scale(1.05);
+  }
 
     /* .close-button {
       position: absolute;
@@ -1163,121 +1187,163 @@ div.vitals-popup {
         font-size: 16px;
       }
 
-.radiopanel {
-  max-height: fit-content;
-  position: absolute;
-  z-index: 1;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  max-width: fit-content;
-  justify-content: space-around;
-  margin-top: 350px; 
-  background-color: rgb(192, 190, 190);
-  overflow-x: hidden;
-  transition: 0.5s;
-  font-size: 20px;
-  padding-top: 15px;
-} 
+      .radiopanel {
+        position: fixed;
+        bottom: 100px; 
+        left: 30px;
+        z-index: 1000;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        width: 350px;
+        background-color: rgba(30, 40, 60, 0.9);
+        overflow: hidden;
+        font-size: 18px;
+        color: #e0e0e0;
+        display: none; /* Hide panel by default */
 
-.radio-container {
-  display: flex;
-  gap: 40px;
-  width: 0; /* 0 width - changing with JavaScript */
-  position: fixed; 
-  z-index: 1; 
-  top: 0;
-  left: 0;
-  background-color: rgb(63, 89, 136); 
-  overflow-x: hidden; /* Disable horizontal scroll */
-  padding-top: 60px; /* Place content 60px from the top */
-  transition: 0.5s; /* 0.5 second transition effect to slide in the side panel */
-        }
-       
-  .radio-interface {
-      background-color: rgb(227, 232, 242);
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      margin-top: 20px;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      width: 320px;
-      max-height: max-content;
-  }
-  .radiopanel h2 {
-      text-align: center;
-      color: #ccc;
-      font-size: 25px;
-      /* margin-bottom: 15px; */
-      background-color: #253ad5;
-      border-radius: 8px;
-  }
-  .frequency-display, .channel-display, .volume-display {
-      font-size: 20px;
-      text-align: center;
-      margin: 5px 0;
-      padding: 2px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background-color: #e9e9e9;
-      display: inline;
-      max-width: fit-content;
-      max-height: fit-content;
-  }
-  .controls {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 20px;
-  }
-  .controls div {
-      text-align: center;
-  }
-  .radio-button, input, select {
-      padding: 7px;
-      margin: 5px;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-      display: inline;
-      cursor: pointer;
-      text-align: center;
-  }
-
-  .radio-button:disabled {
-      background-color: #ccc;
-  }
-  .radio-group {
-      display: flex;
-      justify-content: space-around;
-      margin-bottom: 20px;
-      font-size: 20px;
-  }
-/* Position and style Radio Panel close button (top right corner) */
-.radiopanel-closebtn {
-  position: absolute; 
-  margin-top: 6px; 
-  right: 10px; 
-  font-size: 22px;
-  font-weight: bold;
-  color: rgb(246, 0, 0); 
-  background-color: none;
-  cursor: pointer;
-  border-radius: 17px;
-  border: none;
-}
-
-/* Radio Panel open button */
-.openbtn {
-  font-size: 20px;
-  top: 20px;
-  cursor: pointer;
-  background-color: rgb(23, 61, 133);
-  color: white;
-  padding: 10px 15px;
-  border: none;
-}
-
-.openbtn:hover {
-  background-color: #444;
-}
+      }
+      
+      .radiopanel.open {
+        display: block; /* Show panel when open */
+      }
+      .radio-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 100%;
+      }
+      
+      .radio-interface {
+        background-color: rgba(50, 60, 80, 0.8);
+        border: 1px solid #4a5d7e;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      }
+      
+      .radiopanel h2 {
+        text-align: center;
+        color: #fff;
+        font-size: 28px;
+        margin-bottom: 15px;
+        background-color: #3f51b5;
+        border-radius: 8px;
+        padding: 10px;
+      }
+      
+      .frequency-display, .channel-display, .volume-display {
+        font-size: 22px;
+        text-align: center;
+        margin: 8px 0;
+        padding: 8px;
+        border: 1px solid #4a5d7e;
+        border-radius: 8px;
+        background-color: #1e2838;
+        display: inline-block;
+        min-width: 100px;
+      }
+      
+      .controls {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+      }
+      
+      .controls div {
+        text-align: center;
+      }
+      
+      .radio-button, input, select {
+        padding: 12px 15px;
+        margin: 8px;
+        border: 1px solid #4a5d7e;
+        border-radius: 8px;
+        display: inline-block;
+        cursor: pointer;
+        text-align: center;
+        font-size: 18px;
+        background-color: #3f51b5;
+        color: #fff;
+        transition: background-color 0.3s, transform 0.1s;
+      }
+      
+      .radio-button:hover, input:hover, select:hover {
+        background-color: #5c6bc0;
+        transform: scale(1.05);
+      }
+      
+      .radio-button:disabled {
+        background-color: #7986cb;
+        cursor: not-allowed;
+      }
+      
+      .radio-group {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+        font-size: 20px;
+      }
+      
+      .radiopanel-closebtn {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #ff4081;
+        background: none;
+        cursor: pointer;
+        border: none;
+        transition: color 0.3s;
+      }
+      
+      .radiopanel-closebtn:hover {
+        color: #f50057;
+      }
+      
+      .openbtn {
+        position: fixed;
+        bottom: 30px;
+        left: 30px;
+        width: 80px;
+        height: 80px;
+        cursor: pointer;
+        background-color: #464545; /* Grey color */
+        color: white;
+        border: none;
+        border-radius: 50%; /* Make it circular */
+        transition: background-color 0.3s, transform 0.2s;
+        z-index: 1001;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        overflow: hidden;
+        padding-top: 5px;
+      }
+      
+      .openbtn::before {
+        content: '\1F4E1'; /* Unicode for antenna icon */
+        font-size: 30px;
+        line-height: 1;
+        margin-bottom: 2px;
+      }
+      
+      .openbtn::after {
+        content: 'RADIO';
+        font-size: 10px;
+        font-weight: bold;
+        line-height: 1;
+      }
+      .openbtn:hover {
+        background-color: #292828; 
+        transform: scale(1.05);
+      }
+      
+      .openbtn:active {
+        transform: scale(0.95);
+      }
   
       

@@ -56,7 +56,7 @@
     function vitalsLogging() {
      if(EngineFailure == 0 && PressureWarning == 0 &&  EmptyTank == 0 && timeToDestination>0.5){
         var curr = new window.Date().getTime()
-        if( curr - lastClicked > 10500 ){  // 105s assuming 30s gap + 45s radio update + 30s gap
+        if( curr - lastClicked > 105000 ){  // 105s assuming 30s gap + 45s radio update + 30s gap
             log({"page": "inflight", "action": "displaying vitals prompt"})
             lastClicked = Infinity  
             document.getElementById('vitals').style.display = "flex"
@@ -88,7 +88,7 @@
             console.error('Fetch problem: ${err.message}');
         }
     } 
-    setInterval(vitalsLogging, 350);  
+    setInterval(fetchRadioData, 350);  
     // Initial fetch
     fetchRadioData();  
 
