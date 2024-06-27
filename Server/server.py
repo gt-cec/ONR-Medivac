@@ -486,8 +486,8 @@ data = {
 # UDP update for MATLAB
 def matlab_destination_update():
     MATLAB_IP = '127.0.0.1'
-    MATLAB_PORT_LAT_MIN = 8082
-    MATLAB_PORT_LONG_MIN = 8084
+    MATLAB_PORT_LAT_MIN = 8080
+    MATLAB_PORT_LONG_MIN = 8088
     MATLAB_PORT_LAND = 8086
 
     while True:
@@ -1178,19 +1178,16 @@ def start_flask_app():
 # start the webserver
 if __name__ == "__main__":
     # start the destination update (for Python->MATLAB interfacing)
-    """ t = threading.Thread(target=matlab_destination_update)
+    t = threading.Thread(target=matlab_destination_update, daemon=True)
     t.start()
 
-    # Start the voice assistant thread
-    voice_assistant_thread =  threading.Thread(target=voice_assistant.voice_assistant,args=(event, active_assistant,lock))
-    voice_assistant_thread.start()
-
+  
     # start the logging thread
-    werkzeug_logger = logging.getLogger('werkzeug')
+    """werkzeug_logger = logging.getLogger('werkzeug')
     werkzeug_logger.disabled = True """
    
     #starting voice assistant thread
-    va = threading.Thread(target=third_test.main, args={event})
+    va = threading.Thread(target=third_test.main, args={event}, daemon=True)
     va.start()
 
 
@@ -1209,7 +1206,7 @@ if __name__ == "__main__":
     #radio comms thread
     #radio = threading.Thread(target=radio_comms.inflight_status_check, args={inflight_event,status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event})
     #radio = threading.Thread(target=radio_comms_new.main, args={status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event, radio_update_complete, inflight_event})
-    radio = threading.Thread(target=radio_comms.main)
+    radio = threading.Thread(target=radio_comms.main, daemon=True)
     radio.start()  # starting radio thread
 
     # Run the Flask server

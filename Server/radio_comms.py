@@ -149,7 +149,7 @@ def main():
                 for event, is_set in states.items():    # W3school
                     if is_set and event in event_handlers:  
                         event_handlers[event](states)
-        #time.sleep(1)  # Wait for 1 second before next fetch
+        time.sleep(1)  # Wait for 1 second before next fetch
 
 if __name__ == "__main__":
    #main(inflight_event,status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event)
