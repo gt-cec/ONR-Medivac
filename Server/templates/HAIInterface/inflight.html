@@ -67,12 +67,12 @@
     }
     async function fetchRadioData() {
         try {
-            const response = await fetch("/speak", {
+            const response = await fetch("/state", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json' 
                 },
-                body: JSON.stringify({ type: 'Radio-Update'}), 
+                body: JSON.stringify({ event: 'Radio-Update'}), 
             });
     
             if (!response.ok) {
