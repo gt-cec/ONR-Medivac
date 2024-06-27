@@ -8,6 +8,15 @@ import requests
 status_lock = threading.Lock()   
 speech_lock = threading.Lock()
 last_radio_update = 0
+pressure_warning=0
+engine_failure=0
+empty_tank=0
+PW=0
+ET=0
+EF=0
+receive=0
+transmit=0
+study_stage=1
 
  # Engine initialization 
 engine = pyttsx3.init()
@@ -46,7 +55,7 @@ def fetch_states():
 
 def fetch_var():
     try:
-        response = requests.post("http://127.0.0.1:8080/var")
+        response = requests.get("/var")
         if response.status_code == 200:
             return response.json()
         else:
@@ -56,7 +65,7 @@ def fetch_var():
     return None
 
 # Function to mimic initial communication before takeoff
-def pre_takeoff(states):
+def pre_takeoff():
    print('Received')
    with status_lock:  
         print('Speaking!')
@@ -86,23 +95,23 @@ def inflight_status_check(states):
             speak("Control Tower: Please report your flight status, patient status, and ETA.")
             if states["response_event"]: #user reported back
                 print('Transmit button pressed')
+                requests.post("http://127.0.0.1:8080/state", json={"event": "response_event", "action":"clear"})
+                print('sent request to clear response event')
             else:
-                delay(45) # Wait for user to report back  --> set with transmit button?
+                delay(55) # Wait for user to report back? --> set with transmit button?
         last_radio_update = time.time()
         #radio_update_complete.set()
         requests.post("http://127.0.0.1:8080/state", json={"event": "radioUpdateComplete", "action":"set"})
         print('sent request to set radio update complete')
-        if states["emergency_event"]:
-            print("curr state:",states)
     delay(100)
 
 # Function to provide medicine administration guidance
-def administer(states):
+def administer():
    print('administering medication')
    with status_lock:  
-       speak("Control Tower: What are patient's current vitals?")
-       time.sleep(45) # Wait for user to report back
-       speak("Control Tower: Follow these steps:")
+       speak("Control Tower: The patient has a history of altitude sickness")
+       #time.sleep(45) # Wait for user to report back
+       speak("Follow these steps:")
        speak("1. Verify patient's identity and medication orders")
        speak("2. Prepare the medication and IV equipment")
        speak("3. Administer the dexamethasone via IV push")
@@ -112,14 +121,14 @@ def administer(states):
        print('sent request to clear administer event')
        
 
-def continueEmory(states):
+def continueEmory():
    print('Continue to Emory')
    with status_lock:  
       speak("Control Tower: Continue flying to Emory University Hospital")
       requests.post("http://127.0.0.1:8080/state", json={"event": "tank_event", "action":"clear"}) #clearing tank event
       print('sent request to clear tank_event')
 
-def flyOldForth(states):
+def flyOldForth():
    print('reroute to Oldforth')
    with status_lock:  
       speak("Control Tower: Reroute to Old Forth Hospital")
@@ -151,15 +160,38 @@ event_handlers = {
 }
 
 def main():
+    global PW,  ET, EF,receive,transmit,study_stage 
     while True:
         states = fetch_states()
+        data= fetch_var()
+
+        if data:
+            PW=data["pressure-warning"]
+            EF=data["engine-failure"]
+            ET=data["empty-tank"]
+            receive=data["receive"]
+            transmit=data["transmit"] 
+            study_stage=data["study-stage"]
+
+        if (receive==1 and study_stage==2):
+            administer()  
+        elif(receive==1 and study_stage==3):
+            continueEmory()
+        elif(receive==1 and study_stage==4):
+            flyOldForth()
+
         if states:
+           if (PW==1 or EF==1 or ET==1):
+                states["emergency_event"]=True
+           if transmit==1:
+                states["response_event"]=True
            if states["inflight_event"] and not states["emergency_event"]:
                 inflight_status_check(states)
            else:
                 for event, is_set in states.items():    # W3school
                     if is_set and event in event_handlers:  
-                        event_handlers[event](states)
+                        event_handlers[event]()
+            
         time.sleep(1)  # Wait for 1 second before next fetch
 
 if __name__ == "__main__":
