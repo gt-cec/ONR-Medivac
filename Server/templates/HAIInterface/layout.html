@@ -124,8 +124,8 @@
         </div>
 
         <!-- Radio Comms  -->
-        <div id="radiopanel"   style="display:none; justify-content: space-between;" class="radiopanel">
-            <button class="radiopanel-closebtn" onclick="closePanel()">&times;</button>
+        <div id="radiopanel"  class="radiopanel">
+            <button class="radiopanel-closebtn" >&times;</button>
                 <h2>Radio Communication</h2>
                 <label for="callsign">Callsign:</label>
                 <input type="text" id="callsign" placeholder="NASXGS">
@@ -160,7 +160,7 @@
 
         </div>
      
-        <button class="openbtn" onclick="openPanel()">&#9776; Radio</button> 
+        <button class="openbtn" ></button> 
 
         <!-- Pressure Warning  -->
         <div class="pressure-warning-overlay" id="pressureWarningalertOverlay">
@@ -188,9 +188,10 @@
        <div class="alertbody">
         <div class="alertoverlay" id="alertOverlay">
            <div class="alert-box" id="alertBox">
-             <img src="../static/HAIInterface/img/siren.gif" class="siren-gif" alt="Siren">
              <div class="engine-failure" id="engineFailureText"> Engine Failure!</div>
-             <div class="warning-sign"></div>
+             <div class="warning-sign">
+                <img src="../static/HAIInterface/img/siren.gif" class="siren-gif" alt="Siren">
+             </div>
              <button class="alert-button" id="moreInfoButton" onclick="showMoreInfo()">Click for more info</button>
              <!-- <button class="close-button" id="closeButton" onclick="closeAlert()">X</button> -->
              <div id="alertExplanation" style="display: none;">
@@ -198,7 +199,7 @@
                     <li >An engine failure has been detected. </li>
                     <li>Follow the emergency procedures immediately.</li>
                     <li>Click the button below and select an alternate helipad for emergency landing. </li>
-                    <li> I suggest landing at the nearest helipad (marked in green on map) which is FTY</li>
+                    <li> I suggest landing at the nearest helipad (marked in green on map) which is Heliwood Helipord</li>
                     <li>Seek ground support if needed</li>
                  </ul>
             </div>
@@ -288,18 +289,16 @@
         let helipadsLoaded = false  // flag automatically set to true (so helipads only load once, after we know where the origin and current destination are)
         let currentFrequency = 123.45;
 
-        /* Set the width of the radio-panel to show it */
-        function openPanel() {
+        document.querySelector('.openbtn').addEventListener('click', function() {
             log({"action": "radio panel opened"})
             console.log('clicked')
-            document.getElementById("radiopanel").style.display="inline-grid";
-        }
+            document.querySelector('.radiopanel').classList.toggle('open');
+            });
 
-        /* Set the width of the sidebar to 0 to hide it */
-        function closePanel() {
+        document.querySelector('.radiopanel-closebtn').addEventListener('click', function() {
             log({"action": "radio panel closed"})
-            document.getElementById("radiopanel").style.display = "none"
-        }
+            document.querySelector('.radiopanel').classList.remove('open');
+            });
 
        
        // changeFrequency(step)
@@ -323,7 +322,7 @@
             log({"action": "callsign set to: ${callsign}"})
 
             if(callsign!="NASXGS"){
-                alert('Enter correct callsign')
+                alert('Callsign incorrect or not entered')
             }
             else{
                 const Frequency = document.getElementById('frequency-input').value

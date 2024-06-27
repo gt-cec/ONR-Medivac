@@ -712,6 +712,7 @@ def get_states():
         administer_event.set()
     if(empty_tank==1):
         tank_event.set()
+        print('tank event set')
 
     if request.is_json:
         received_request = request.get_json()
@@ -720,9 +721,9 @@ def get_states():
         if event_name == "reset":  # clear all events 
             for event in events:
                 events[event].clear()
-        elif event_name == "Radio-Update":  
-            response = { "radioUpdateComplete": radio_update_complete.is_set()}
-            return jsonify(response), 200
+        if event_name == "Radio-Update":  # for vitals logging
+            response = {"radioUpdateComplete": radio_update_complete.is_set()}
+            return jsonify(response),200
         elif event_name in events:
             action= received_request["action"]
             event = events[event_name]

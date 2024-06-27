@@ -29,7 +29,7 @@ const keywordsRoutes = {
     "change": "/hai-interface/change-destination",
     "destination": "/hai-interface/change-destination",
     "emergency": "/hai-interface/inflight",
-    "map":"/hai-interface/map",
+    "map": "/hai-interface/inflight"+ showMap,
     "ETA": "hai-interface/map",
     //"radio": open radio panel
      //add more keywords and routes 
@@ -42,13 +42,13 @@ function performAction(usertext){
     for (let [keyword, route] of Object.entries(keywordsRoutes)) {
         if (usertext.includes(keyword)) {
             window.location.href = route
-            txt="Going to"+ keyword
+            txt="Going to "+ keyword
             return; // Exit function after finding the first matching keyword
         }
         else {
             // If no keyword is found
             console.log("Sorry, didn't find  ${usertext}")
-            txt= "Sorry, didn't find"+ usertext
+            txt= "Sorry, didn't find "+ usertext
         }
     }
     
