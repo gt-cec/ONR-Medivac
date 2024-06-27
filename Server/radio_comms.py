@@ -55,7 +55,7 @@ def fetch_states():
 
 def fetch_var():
     try:
-        response = requests.get("/var")
+        response = requests.get("http://127.0.0.1:8080/var")
         if response.status_code == 200:
             return response.json()
         else:
