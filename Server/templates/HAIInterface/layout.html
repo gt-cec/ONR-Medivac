@@ -158,7 +158,7 @@
                 <label for="frequency-input">Frequency:</label>
                 <div class="frequency-control">
                     <button class="frequency-btn" onclick="changeFrequency(-0.05)">-</button>
-                    <input type="text" id="frequency-display" placeholder="123.45" readonly>
+                    <input type="text" id="frequency-display" value="123.45" readonly>
                     <button class="frequency-btn" onclick="changeFrequency(0.05)">+</button>
                 </div>
                 <br><br>
@@ -317,10 +317,7 @@
        
        // changeFrequency(step)
 
-        document.getElementById('frequency-input').addEventListener('change', function() {
-            currentFrequency = parseFloat(this.value);
-            log({"action": "frequency input set to"+ currentFrequency })
-        });
+  
 
 
        /*  function changeFrequency(step) {
@@ -370,7 +367,7 @@
                 setTimeout(() => {
                  radioTransmit=0
                  fetch("/var?transmit=" + radioTransmit) 
-                }, 7000)  // wait 7 seconds to set is back to 0
+                }, 15000)  // wait 15 seconds to set is back to 0
             }
         }
 
@@ -390,11 +387,11 @@
                 }
                 else{
                     const radio = document.querySelector('input[name="radio-select"]:checked');
-                    if (radio== "Nav1") {
+                    if (radio.value== "Nav1") {
                         log({"action": "radio set to:"+ radio.value})
                         alert(`${callsign} transmitting on ${radio.value} ${currentFrequency.toFixed(2)} MHz`);
                         radioReceive=1
-                        fetch("/var?receive=" + radioTransmit) 
+                        fetch("/var?receive=" + radioReceive) 
                         log({"action": callsign+"receiving on" + radio.value + (currentFrequency.toFixed(2))+" MHz" })
                 } 
                 else {
@@ -405,8 +402,8 @@
           if (radioReceive==1){
                 setTimeout(() => {
                     radioReceive=0
-                 fetch("/var?receive=" + radioTransmit) 
-                }, 7000)  // wait 7 seconds to set is back to 0
+                 fetch("/var?receive=" + radioReceive) 
+                }, 15000)  // wait 15 seconds to set is back to 0
             }
         }
 

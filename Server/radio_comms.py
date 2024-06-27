@@ -69,7 +69,7 @@ def pre_takeoff():
    print('Received')
    with status_lock:  
         print('Speaking!')
-   speak("Control Tower: Callsign NASXGS, radio COMM1 ")
+   speak("Control Tower: Callsign N A S X G  S, radio C O M M 1 ")
    delay(10)
    print('speaking line 2')
    speak("Control Tower: Flight and weather conditions look good. Ready for takeoff.")
@@ -173,6 +173,9 @@ def main():
             transmit=data["transmit"] 
             study_stage=data["study-stage"]
 
+        print("receive:",receive)
+        print("study_stage:",study_stage)
+
         if (receive==1 and study_stage==2):
             administer()  
         elif(receive==1 and study_stage==3):
@@ -185,6 +188,8 @@ def main():
                 states["emergency_event"]=True
            if transmit==1:
                 states["response_event"]=True
+                requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"set"}) #clearing engine event
+                print('sent request to set emergency_event')
            if states["inflight_event"] and not states["emergency_event"]:
                 inflight_status_check(states)
            else:
