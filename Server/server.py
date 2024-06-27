@@ -54,6 +54,8 @@ rd_page=0
 ca_page=0
 cd_page=0
 map_page=0
+transmit=0
+receive=0
 
 
 #radio variables
@@ -907,7 +909,7 @@ def log():
 
 @app.route("/reset", methods=["GET"])
 def reset_params():
-    global study_participant_id, sequence, study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, flight_start_time, reset_user_display, reset_vitals_display, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure, pressure_warning, empty_tank, emergency_page,rd_page,ca_page,cd_page,map_page
+    global study_participant_id, sequence, study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, flight_start_time, reset_user_display, reset_vitals_display, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure, pressure_warning, empty_tank, emergency_page,rd_page,ca_page,cd_page,map_page,transmit,receive
     study_participant_id = 0
     sequence=0
     study_stage = 1
@@ -934,6 +936,8 @@ def reset_params():
     ca_page=0
     cd_page=0
     map_page=0
+    transmit=0
+    receive=0
 
     #clearing all events on reset 
     status_report_event.clear()
@@ -970,7 +974,7 @@ def clean(s):
 
 @app.route("/var", methods=["GET"])
 def get_var():
-    global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude, engine_failure, pressure_warning, empty_tank, emergency_page, rd_page, ca_page, cd_page, map_page
+    global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude, engine_failure, pressure_warning, empty_tank, emergency_page, rd_page, ca_page, cd_page, map_page, transmit, receive
     if request.args.get("user-id"):
         study_participant_id = clean(request.args.get("user-id"))
         # Remove all handlers associated with the root logger object, from (https://stackoverflow.com/questions/12158048)
@@ -1047,6 +1051,10 @@ def get_var():
         rd_page =  clean(request.args.get("rd-page"))
     if request.args.get("map-page"):
         map_page =  clean(request.args.get("map-page"))
+    if request.args.get("receive"):  # receive from radiopanel-- for emergency guidance
+        receive = clean(request.args.get("receive")) #1=receive pressed , 0=otherwise 
+    if request.args.get("transmit"):  # transmit from radiopanel-- for radio updates
+        transmit = clean(request.args.get("transmit")) #1=transmit pressed , 0=otherwise 
    
     return_dict = {"user-id": str(study_participant_id),
                    "sequence": sequence,
@@ -1073,7 +1081,9 @@ def get_var():
                    "cd-page":cd_page,
                    "ca-page":ca_page,
                    "rd-page":rd_page,
-                   "map-page":map_page
+                   "map-page":map_page,
+                   "receive":receive,
+                   "transmit":transmit,
 
                    }
 

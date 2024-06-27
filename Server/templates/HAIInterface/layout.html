@@ -128,34 +128,45 @@
             <button class="radiopanel-closebtn" >&times;</button>
                 <h2>Radio Communication</h2>
                 <label for="callsign">Callsign:</label>
-                <input type="text" id="callsign" placeholder="NASXGS">
+                <select id="callsign">
+                    <option value="" disabled selected>Select Callsign</option>
+                    <option value="NASXGS">NASXGS</option>
+                    <option value="MEDEVAC">MEDEVAC</option>
+                </select>
                 <br><br>
                 <div class="radio-group">
-                    <label for="radio-select">Select Radio:</label>
-                    <label>
-                        <input type="radio" name="radio-select" value="Nav1">
-                        NAV1
-                    </label>
-                    <label>
-                        <input type="radio" name="radio-select" value="Nav2">
-                        NAV2
-                    </label>
-                    <label>
-                        <input type="radio" name="radio-select" value="Comm1">
-                        COMM1
-                    </label>
-                    <label>
-                        <input type="radio" name="radio-select" value="Comm2">
-                        COMM2
-                    </label>
+                    <p>Select Radio:</p>
+                    <div class="radio-options">
+                        <label>
+                            <input type="radio" name="radio-select" value="Nav1">
+                            <span>NAV1</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="radio-select" value="Nav2">
+                            <span>NAV2</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="radio-select" value="Comm1">
+                            <span>COMM1</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="radio-select" value="Comm2">
+                            <span>COMM2</span>
+                        </label>
+                    </div>
                 </div>
                 <label for="frequency-input">Frequency:</label>
-                <input type="number"  id="frequency-input" step="0.01" placeholder="120.45", min="118.00" max="121.95">
+                <div class="frequency-control">
+                    <button class="frequency-btn" onclick="changeFrequency(-0.05)">-</button>
+                    <input type="text" id="frequency-display" placeholder="123.45" readonly>
+                    <button class="frequency-btn" onclick="changeFrequency(0.05)">+</button>
+                </div>
                 <br><br>
 
-            <div class="controls">
-                <button onclick="transmit()">Transmit</button>
-            </div>
+                <div class="controls">
+                    <button onclick="transmit()" class="transmit-btn">Transmit</button>
+                    <button onclick="receive()" class="receive-btn">Receive</button>
+                </div>
 
 
         </div>
@@ -274,6 +285,9 @@
         let EngineFailure = 0
         let PressureWarning = 0
         let EmptyTank = 0
+        var radioTransmit=0
+        var radioReceive=0
+        
 
         // initialize the map
 	    var planeMarker, map, mapSelection
@@ -309,12 +323,22 @@
         });
 
 
-        function changeFrequency(step) {
+       /*  function changeFrequency(step) {
             currentFrequency += step;
             document.getElementById('frequency-input').value = currentFrequency.toFixed(2);
             
             //updateFrequencyDisplay();
+        } */
+
+        function changeFrequency(step) {
+            const frequencyDisplay = document.getElementById('frequency-display');
+            let currentFrequency = parseFloat(frequencyDisplay.value);
+            currentFrequency += step;
+            currentFrequency = Math.max(118.00, Math.min(121.95, currentFrequency));  // Ensure frequency stays within valid range (118.00 to 121.95)
+            frequencyDisplay.value = currentFrequency.toFixed(2);
+            log({"action": "frequency input set to"+ currentFrequency })
         }
+        
 
         function transmit() {
             const callsign = document.getElementById('callsign').value;
@@ -322,24 +346,68 @@
             log({"action": "callsign set to: ${callsign}"})
 
             if(callsign!="NASXGS"){
-                alert('Callsign incorrect or not entered')
+                alert('Select correct Callsign for transmitting ')
             }
             else{
-                const Frequency = document.getElementById('frequency-input').value
+                const Frequency = document.getElementById('frequency-display').value
                 if(!Frequency){
                     alert("Set Frequency")
                 }
                 else{
                 const radio = document.querySelector('input[name="radio-select"]:checked');
                 if (radio) {
-                    log({"action": "radio set to:+ ${radio.value} "})
+                    log({"action": "radio set to:"+ radio.value})
                     alert(`${callsign} transmitting on ${radio.value} ${currentFrequency.toFixed(2)} MHz`);
+                    radioTransmit=1
+                    fetch("/var?transmit=" + radioTransmit) 
+                    log({"action": callsign+"transmitting on" + radio.value + (currentFrequency.toFixed(2))+" MHz" })
                 } 
                 else {
                     alert('Select a radio channel');
                 }
                 }
+          } if (radioTransmit==1){
+                setTimeout(() => {
+                 radioTransmit=0
+                 fetch("/var?transmit=" + radioTransmit) 
+                }, 7000)  // wait 7 seconds to set is back to 0
+            }
+        }
+
+
+        function receive() {
+            const callsign = document.getElementById('callsign').value;
+            log({"action": "receive button pressed"})
+            log({"action": "callsign set to: ${callsign}"})
+
+            if(callsign!="MEDEVAC"){
+                alert('Select receiving callsign')
+            }
+            else{
+                const Frequency = document.getElementById('frequency-display').value
+                if(!Frequency){
+                    alert("Set Frequency")
+                }
+                else{
+                    const radio = document.querySelector('input[name="radio-select"]:checked');
+                    if (radio== "Nav1") {
+                        log({"action": "radio set to:"+ radio.value})
+                        alert(`${callsign} transmitting on ${radio.value} ${currentFrequency.toFixed(2)} MHz`);
+                        radioReceive=1
+                        fetch("/var?receive=" + radioTransmit) 
+                        log({"action": callsign+"receiving on" + radio.value + (currentFrequency.toFixed(2))+" MHz" })
+                } 
+                else {
+                    alert('Radio channel for Receiving missing or incorrect');  
+                }
+                }
           }
+          if (radioReceive==1){
+                setTimeout(() => {
+                    radioReceive=0
+                 fetch("/var?receive=" + radioTransmit) 
+                }, 7000)  // wait 7 seconds to set is back to 0
+            }
         }
 
         //updateFrequencyDisplay();
