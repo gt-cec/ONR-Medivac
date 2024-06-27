@@ -15,13 +15,13 @@
                 height: 100vh;
             }
             .left-pane {
-                width: 33%;
+                width: 23%;
                 height: 100%;
                 overflow: hidden;
                 border-right: 1px solid #ccc;
             }
             .right-pane {
-                width: 67%;
+                width: 77%;
                 height: 100%;
                 display: flex;
                 flex-direction: column;
@@ -48,7 +48,57 @@
     <body>
         <div class="main-pane">
             <div class="left-pane">
-                <iframe src="flight_gauges.html" class="iframe-container"></iframe>
+                <!-- <iframe src="../../templates/VitalsTask/flight_gauges.html" class="iframe-container"></iframe> -->
+               
+                <div class="gauge-container">
+                    <h1>Flight Instruments</h1>
+                <div class="gauge-wrapper">
+                    <div class="gauge four gauge3">
+                    <div class="slice-colors">
+                        <div class="st slice-item"></div>
+                        <div class="st slice-item"></div>
+                        <div class="st slice-item"></div>
+                        <div class="st slice-item"></div>
+                    </div>
+                    <div class="needle"></div>
+                    <div class="gauge-center">
+                        <div class="label">HYDRAULICS</div>
+                        <div class="number">85 psi</div>
+                    </div>    
+                    </div>
+                </div>
+                <div class="gauge-wrapper">
+                    <div class="gauge four gauge4">
+                        <div class="slice-colors">
+                        <div class="st slice-item"></div>
+                        <div class="st slice-item"></div>
+                        <div class="st slice-item"></div>
+                        <div class="st slice-item"></div>
+                        </div>
+                        <div class="needle"></div>
+                        <div class="gauge-center">
+                        <div class="label">FUEL</div>
+                        <div class="number">85%</div>
+                        </div>    
+                    </div>
+                </div>
+
+                <div class="gauge-wrapper">
+                    <div class="gauge four gauge3" id="altitude-gauge">
+                        <div class="slice-colors">
+                        <div class="st slice-item"></div>
+                        <div class="st slice-item"></div>
+                        <div class="st slice-item"></div>
+                        <div class="st slice-item"></div>
+                        </div>
+                        <div class="needle"></div>
+                        <div class="gauge-center">
+                        <div class="label">ALTITUDE</div>
+                        <div class="number" id="altitude-value">1000 ft</div>
+                        </div>    
+                    </div>
+                </div>
+                </div>  
             </div>
             <div class="right-pane">
                 <div class="vertical-container">
@@ -158,6 +208,38 @@
 
     
         }, 5000);
+
+        const altitudeGauge = document.getElementById('altitude-gauge');
+      const altitudeValue = document.getElementById('altitude-value');
+  
+      function updateAltitude() {
+          altitudeValue.textContent = 'HIGH';
+          altitudeGauge.classList.remove('gauge3');
+          altitudeGauge.classList.add('gauge4');
+      }
+  
+      function changeGauge() {
+          altitudeValue.textContent ='MEDIUM';
+          altitudeGauge.classList.remove('gauge4');
+          altitudeGauge.classList.add('gauge3');
+      }
+
+    setInterval(async function fetchVitalstate() {
+        let response = await fetch("/var");
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        let message = await response.text();
+        message = JSON.parse(message);
+        if (message["vitals-state"]==1)
+        {
+          updateAltitude()  //altitude change for vitals emergency
+        }
+        if (message["change-altitude"]!= null || message["vitals-state"]==0 )
+        {
+          changeGauge()  //altitude change for vitals emergency
+        }
+      }, 1000);  // Fetch vitals state every 1 second
     </script>
     
 </html>

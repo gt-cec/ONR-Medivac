@@ -244,7 +244,7 @@
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        let message = await response.text();
+        let message = await response.json();
         message = JSON.parse(message);
         if (message["vitals-state"]==1)
         {
