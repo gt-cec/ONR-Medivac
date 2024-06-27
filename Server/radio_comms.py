@@ -44,6 +44,17 @@ def fetch_states():
         print(f"Error fetching states: {e}")
     return None
 
+def fetch_var():
+    try:
+        response = requests.post("http://127.0.0.1:8080/var")
+        if response.status_code == 200:
+            return response.json()
+        else:
+            print(f"Error: Received status code {response.status_code}")
+    except requests.RequestException as e:
+        print(f"Error fetching states: {e}")
+    return None
+
 # Function to mimic initial communication before takeoff
 def pre_takeoff(states):
    print('Received')
@@ -70,19 +81,19 @@ def inflight_status_check(states):
     #speak("Inflight")
     if not states["emergency_event"] and (current_time - last_radio_update >90):  # when no emergency and last radio update >90s ago (assuming 30s gap + 30s vitals + 30s gap)
         print("here")
-    with status_lock:  
-        print("Asking for radio updates")
-        speak("Control Tower: Please report your flight status, patient status, and ETA.")
-        if states["response_event"]: #user reported back
-            print('Transmit button pressed')
-        else:
-            delay(45) # Wait for user to report back  --> set with transmit button?
-    last_radio_update = time.time()
-    #radio_update_complete.set()
-    requests.post("http://127.0.0.1:8080/state", json={"event": "radioUpdateComplete", "action":"set"})
-    print('sent request to set radio update complete')
-    if states["emergency_event"]:
-        print("curr state:",states)
+        with status_lock:  
+            print("Asking for radio updates")
+            speak("Control Tower: Please report your flight status, patient status, and ETA.")
+            if states["response_event"]: #user reported back
+                print('Transmit button pressed')
+            else:
+                delay(45) # Wait for user to report back  --> set with transmit button?
+        last_radio_update = time.time()
+        #radio_update_complete.set()
+        requests.post("http://127.0.0.1:8080/state", json={"event": "radioUpdateComplete", "action":"set"})
+        print('sent request to set radio update complete')
+        if states["emergency_event"]:
+            print("curr state:",states)
     delay(100)
 
 # Function to provide medicine administration guidance

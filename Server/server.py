@@ -706,13 +706,15 @@ def get_states():
     global takeoffEvent, engine_failure, pressure_warning, empty_tank, vitals_state #does var need to be called?
     if(airspace_emergency_state==1 or vitals_state==1 or engine_failure==1 or pressure_warning==1 or empty_tank==1):
         emergency_event.set()
-    if(engine_failure==1):
+        print('Emergency event set')
+    """ if(engine_failure==1):
         engine_event.set()
+        print("engine event set")
     if(vitals_state==1):
         administer_event.set()
     if(empty_tank==1):
         tank_event.set()
-        print('tank event set')
+        print('tank event set') """
 
     if request.is_json:
         received_request = request.get_json()
