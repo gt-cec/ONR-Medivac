@@ -12,7 +12,7 @@ last_radio_update = 0
  # Engine initialization 
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
-currentVoice = engine.setProperty('voice', voices[10].id)
+#currentVoice = engine.setProperty('voice', voices[2].id)
 engine.setProperty('rate', 170)
 
 
@@ -20,12 +20,12 @@ def speak(text):
    with speech_lock:  # lock to ensure only one thread speaks at a time
         if engine._inLoop:
             engine.endLoop() #end loop if running
-        engine.say(text)
-        engine.runAndWait()
+        # engine.say(text)
+        # engine.runAndWait()
             
-        """ engine.startLoop(False)
+        engine.startLoop(False)
         engine.say(text)
-        engine.iterate() # Wait until speech is complete """
+        engine.iterate() # Wait until speech is complete 
 
 def delay(t):
      while t>0:
@@ -50,11 +50,11 @@ def pre_takeoff(states):
    with status_lock:  
         print('Speaking!')
    speak("Control Tower: Callsign NASXGS, radio COMM1 ")
-   print(engine.isBusy())
+   delay(10)
    print('speaking line 2')
    speak("Control Tower: Flight and weather conditions look good. Ready for takeoff.")
    print('speaking line 3')
-   speak('Set the Callsign NASXGS and Radio to COMM1')
+   #speak('Set the Callsign NASXGS and Radio to COMM1')
    requests.post("http://127.0.0.1:8080/state", json={"event": "takeoff_event", "action": "clear"}) #clearing takeoff event
    print('sent request to clear takeoff event')
       

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, make_response
-from SimConnect import *
+#from SimConnect import *
 import logging
 import datetime
 import threading
@@ -720,6 +720,9 @@ def get_states():
         if event_name == "reset":  # clear all events 
             for event in events:
                 events[event].clear()
+        elif event_name == "Radio-Update":  
+            response = { "radioUpdateComplete": radio_update_complete.is_set()}
+            return jsonify(response), 200
         elif event_name in events:
             action= received_request["action"]
             event = events[event_name]
@@ -1209,7 +1212,7 @@ if __name__ == "__main__":
     radio.start()  # starting radio thread
 
     # Run the Flask server
-    app.run(host='127.0.0.1', port=8080, threaded=True)
+    app.run(host="0.0.0.0", port=8080, threaded=True)
    
 
     # Run the Flask server in a separate thread
