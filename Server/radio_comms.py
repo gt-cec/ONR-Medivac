@@ -166,19 +166,19 @@ def main():
         data= fetch_var()
 
         if data:
-            PW=data["pressure-warning"]
-            EF=data["engine-failure"]
-            ET=data["empty-tank"]
-            receive=data["receive"]
+            PW=int(data["pressure-warning"])
+            EF=int(data["engine-failure"])
+            ET=int(data["empty-tank"])
+            receive=int(data["receive"])
             transmit=data["transmit"] 
-            study_stage=data["study-stage"]
+            study_stage=int(data["study-stage"])
 
         print("receive:",receive)
         print("study_stage:",study_stage)
-
         if (receive==1 and study_stage==2):
             administer()  
         elif(receive==1 and study_stage==3):
+            print('Satisfied calling func')
             continueEmory()
         elif(receive==1 and study_stage==4):
             flyOldForth()
@@ -186,10 +186,10 @@ def main():
         if states:
            if (PW==1 or EF==1 or ET==1):
                 states["emergency_event"]=True
-           if transmit==1:
-                states["response_event"]=True
                 requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"set"}) #clearing engine event
                 print('sent request to set emergency_event')
+           if transmit==1:
+                states["response_event"]=True      
            if states["inflight_event"] and not states["emergency_event"]:
                 inflight_status_check(states)
            else:

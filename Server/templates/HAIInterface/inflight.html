@@ -79,10 +79,19 @@
                 throw new Error(`HTTP error: ${response.status}`);
             }
     
-            const json = await response.json();
-            if (json.radioUpdateComplete){
+            const radiodata = await response.json();
+            if (radiodata["radioUpdateComplete"]){
                 console.log('Radio Update Completed')
                 vitalsLogging()
+                //send request to clear radio update
+                const Radioresponse = await fetch("/state", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify({ event: 'Radio-Update', action: 'set'}), 
+            });
+
             }
         } catch (err) {
             console.error('Fetch problem: ${err.message}');
