@@ -7,11 +7,48 @@
     <!-- Ours -->
     <link rel="stylesheet" href="../static/HAIInterface/css/styling.css">
     <script src="/static/HAIInterface/JS/checklists.js"></script>
+    <style>
+        table {
+            border-collapse: collapse;
+          
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 5px;
+            font-size: large;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+            width: 100%;
+        }
+        .table-button
+        {
+            background-color: palegreen; 
+            border: 1px solid lightgrey;
+            color:darkslategray;
+            padding: 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: large;
+            cursor: pointer;
+            border-radius: 12px;
+            box-shadow: 2px 2px 5px grey;
+            width: 7vw;
+            align-self: center;
+        }
+        .table-button:hover
+        {
+            border: none;
+        }
+    </style>
+    
 
     <body>        
         <div id="topbar" class="topbar" style="justify-content: center">
             <div class="system-title">
-                MK217 Voicet<b>Control</b>
+                MK217 Voice<b>Control</b>
             </div>
         </div>
 
@@ -19,9 +56,17 @@
             <div class="main-content-container">
                 <div id="title" class="general-title">Experimenter Voice Panel</div>
                 <div class="control-container">
-                    <div class="subcontent-container">
-                        <b>Radio Control</b>
-                        <div id="regular-updates" class="control-button">Regular Updates</div>
+                    <div class="subcontent-container"  >
+                            <table id="eventTable">
+                                <caption><b>Radio Events Control</b></caption>
+                                <tr>
+                                    <th style="width:40%">Event</th>
+                                    <th style="width:30%">Status</th>
+                                    <th style="width:30%">Action</th>
+                                </tr>
+                            </table>
+
+                        <!-- div id="regular-updates" class="control-button">Regular Updates</div>
                         <div id="preflight"  class="control-button">Preflight Response</div>
                         <div id="administer" class="control-button">Administer Medication Response</div> 
                         <div id="tank" class="control-button">Empty Fuel Tank Response</div>
@@ -30,18 +75,18 @@
                         <div id="userRadio" class="control-button">Set status report</div>
                         <div id="userResp" class="control-button">Set response event </div> 
                         <div id="emergency" class="control-button">Set Emergency event </div>
-                        <div id="reset" class="control-button">Reset all evens </div>
+                        <div id="reset" class="control-button">Reset all events </div> -->
                     </div>
 
-                    <div class="subcontent-container" style="flex-grow:0">
+                    <div class="subcontent-container" style="flex-grow:0;">
                         <b>Jarvis Control</b>
-                        <div id="activate-jarvis" class="control-button">Activate Jarvis</div>
-                        <div id="deactivate-jarvis"  class="control-button">Deactivate Jarvis</div>
-                        <div id="EMpage" class="control-button">Emergency Page</div>
-                        <div id="CDpage" class="control-button">Change Destination Page</div>
-                        <div id="CApage" class="control-button">Change Altitude Page</div>
-                        <div id="RDpage" class="control-button">Return to Departure Page</div>
-                        <div id="mappage" class="control-button">Open Map</div>
+                        <div id="activate-jarvis" class="control-button" style="font-size: large;">Activate Jarvis</div>
+                        <div id="deactivate-jarvis"  class="control-button" style="font-size: large;">Deactivate Jarvis</div>
+                        <div id="EMpage" class="control-button" style="font-size: large;">Emergency Page</div>
+                        <div id="CDpage" class="control-button" style="font-size: large;">Change Destination Page</div>
+                        <div id="CApage" class="control-button" style="font-size: large;">Change Altitude Page</div>
+                        <div id="RDpage" class="control-button" style="font-size: large;">Return to Departure Page</div>
+                        <div id="mappage" class="control-button" style="font-size: large;">Open Map</div>
                     </div>
                 </div>
             </div>
@@ -96,7 +141,7 @@
             await fetch("/var?map-page=1")
         }
 
-        document.getElementById('regular-updates').onclick = async () => {
+       /* document.getElementById('regular-updates').onclick = async () => {
             await fetch("/state", {
                 method: 'POST',
                 headers: {
@@ -106,7 +151,7 @@
             });
         }
 
-        document.getElementById('emergency').onclick = async () => {
+         document.getElementById('emergency').onclick = async () => {
             await fetch("/state", {
                 method: 'POST',
                 headers: {
@@ -117,6 +162,7 @@
         }
 
         document.getElementById('radioUpdate').onclick = async () => {
+            choose=prompt("set or clear")
             await fetch("/state", {
                 method: 'POST',
                 headers: {
@@ -203,6 +249,80 @@
                 }
             }
         }, 500)
+ */
+
+        async function updateEventStates() {
+            await fetch('/state', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ event: "status_report",  action:"set" }),
+            })
+            .then((resp) => {
+                // Check if the request was successful
+                if (!resp.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                // Parse the response as JSON
+                return resp.json();
+                })
+                .then((data) => {
+                    console.log("received")
+
+                    const table = document.getElementById('eventTable');
+                    // Clear existing rows except header
+                    while (table.rows.length > 1) {
+                        table.deleteRow(1);
+                    }
+                    
+                    // Add new rows based on the response
+                    for (const [event, state] of Object.entries(data)) {
+                        const row = table.insertRow();
+                        const cellEvent = row.insertCell(0);
+                        const cellStatus = row.insertCell(1);
+                        const cellAction = row.insertCell(2);
+
+                        cellEvent.textContent = event;
+                        cellStatus.textContent = state ? 'Set' : 'Cleared';
+                        
+                        const button = document.createElement('button');
+                        button.textContent = state ? 'clear' : 'set';
+                        button.classList.add("table-button");
+                        button.onclick = () => toggleEvent(event, button.textContent);
+                        cellAction.appendChild(button);
+                    }
+
+                 })
+                
+                .catch(error =>{
+                    console.error('Fetch error:', error);
+                        })
+                }
+                    
+        
+
+        async function toggleEvent(event, newState) {
+            await fetch(`/state`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ event: event, action: newState })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Event toggled:', data);
+                updateEventStates();  // Refresh the table
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Initial update
+        updateEventStates();
+
+        // Update every 2.5 seconds
+        setInterval(updateEventStates, 2500);
 
     </script>
 

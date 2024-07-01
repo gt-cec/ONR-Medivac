@@ -301,8 +301,8 @@ function activateWarningAlert() {
     if (pressureValue === correctValue) {
       document.getElementById('pressureWarningalertExplanation').style.display = 'none';
       resultMessage.style.display = 'none';
-      finalMessage.innerHTML = "The primary sensor was miscalibrated but everything appears to be fine. You are enroute as planned.";
-      finalMessage.style.color = "green";
+      finalMessage.innerHTML = "The primary sensor was miscalibrated but everything appears to be fine. We are enroute as planned. Please inform ground";
+      // finalMessage.style.color = "green";
       finalMessage.style.display = 'block';
       okButton.style.display = 'block';
       const pWalertBox = document.getElementById('pressureWarningalertBox');

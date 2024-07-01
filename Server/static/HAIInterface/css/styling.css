@@ -777,10 +777,10 @@ div.vitals-popup {
   .user-text-box {
     background: white;
     border: 2px solid #FF5722; 
-    padding: 20px;
+    padding: 22px;
     border-radius: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    font-size: 30px;
+    font-size: 35px;
     text-align: center;
     color: #000000;
     z-index: 10000; 
@@ -789,14 +789,14 @@ div.vitals-popup {
     left: 50%;
     transform: translateX(-50%);
     width: 80%;
-    max-width: max-content;
-    min-height: min-content;
+    /* min-width: max-content; */
+    min-height: max-content;
 }
 
 .user-text-box::after {
     content: '';
     position: absolute;
-    bottom: -20px;
+    bottom: -15px;
     left: 50%;
     transform: translateX(-50%);
     width: 0;
@@ -940,7 +940,7 @@ div.vitals-popup {
     font-family: 'Roboto', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    height: 100vh;
+    height: 200vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -971,15 +971,15 @@ div.vitals-popup {
     border-radius: 15px;
     box-shadow: 0 0 20px rgba(255, 0, 0, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.2);
     text-align: center;
-    max-width: 350px;
+    max-width: 370px;
     transition: max-width 0.5s ease, transform 0.3s ease;
     position: relative;
     border: 2px solid #ff6b6b;
   }
   
   .alert-box.expanded {
-    max-width: 700px;
-    font-size: 28px;
+    max-width: 800px;
+    font-size: 30px;
     transform: scale(1.05);
   }
   
@@ -1112,14 +1112,7 @@ div.vitals-popup {
       }
   
       .pressure-warning-alert-box.expanded {
-        max-width: 600px;
-      }
-  
-      .engine-failure {
-        font-size: 32px;
-        font-weight: bold;
-        margin: 20px 0;
-        animation: flash 1s infinite;
+        max-width: 8700px;
       }
   
       .pressure-warning-alert-box.expanded .engine-failure {
@@ -1184,7 +1177,13 @@ div.vitals-popup {
       #resultMessage {
         margin-top: 10px;
         margin-bottom: 10px;
-        font-size: 16px;
+        padding: 12px;
+        background-color: rgba(0, 0, 0, 0.2);
+        margin-bottom: 10px;
+        border-radius: 8px;
+        text-align: left;
+        font-size: 22px;
+        border-left: 4px solid #ffcc00;
       }
 
       .radiopanel {
@@ -1236,6 +1235,7 @@ div.vitals-popup {
         border-radius: 8px;
         color: #fff;
         font-size: 16px;
+        
     }
     
     .radio-group {
@@ -1251,6 +1251,8 @@ div.vitals-popup {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    align-items: center;
+    justify-content: center;
 }
 
 .radio-options label {
