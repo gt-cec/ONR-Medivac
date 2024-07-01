@@ -119,6 +119,9 @@ def administer():
        speak("5. Inform the pilot to change the altitude to 1000 feet")
        requests.post("http://127.0.0.1:8080/state", json={"event": "administer_event", "action":"clear"}) #clearing adminster event
        print('sent request to clear administer event')
+       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
+       print('sent request to clear emergency_event')
+       requests.get("http://127.0.0.1:8080/var", {"vitals-state":0})
        
 
 def continueEmory():
@@ -127,6 +130,9 @@ def continueEmory():
       speak("Control Tower: Continue flying to Emory University Hospital")
       requests.post("http://127.0.0.1:8080/state", json={"event": "tank_event", "action":"clear"}) #clearing tank event
       print('sent request to clear tank_event')
+      requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
+      print('sent request to clear emergency_event')
+      requests.get("http://127.0.0.1:8080/var", {"empty-tank":0})
 
 def flyOldForth():
    print('reroute to Oldforth')
@@ -134,6 +140,9 @@ def flyOldForth():
       speak("Control Tower: Reroute to Old Forth Hospital")
       requests.post("http://127.0.0.1:8080/state", json={"event": "engine_event", "action":"clear"}) #clearing engine event
       print('sent request to clear engine_event')
+      requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
+      print('sent request to clear emergency_event')
+      requests.get("http://127.0.0.1:8080/var", {"engine-failure":0,"vitals-state":0})
 
 def set_radio_update():  
     print("Radio Update completed")
@@ -167,26 +176,27 @@ def main():
 
         if data:
             PW=int(data["pressure-warning"])
+            vitals=int(data["vitals-state"])
             EF=int(data["engine-failure"])
             ET=int(data["empty-tank"])
             receive=int(data["receive"])
-            transmit=data["transmit"] 
+            transmit=int(data["transmit"])
             study_stage=int(data["study-stage"])
 
-        print("receive:",receive)
-        print("study_stage:",study_stage)
-        if (receive==1 and study_stage==2):
+        # print("receive:",receive)
+        # print("study_stage:",study_stage)
+        if (receive==1 and study_stage==2 and (PW==1 or EF==1 or ET==1 or vitals==1)):
             administer()  
-        elif(receive==1 and study_stage==3):
+        elif(receive==1 and study_stage==3 and (PW==1 or EF==1 or ET==1 or vitals==1)):
             print('Satisfied calling func')
             continueEmory()
-        elif(receive==1 and study_stage==4):
+        elif(receive==1 and study_stage==4 and (PW==1 or EF==1 or ET==1 or vitals==1)):
             flyOldForth()
 
         if states:
-           if (PW==1 or EF==1 or ET==1):
+           if (PW==1 or EF==1 or ET==1 or vitals==1):
                 states["emergency_event"]=True
-                requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"set"}) #clearing engine event
+                requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"set"}) #set emergency event
                 print('sent request to set emergency_event')
            if transmit==1:
                 states["response_event"]=True      

@@ -2,31 +2,27 @@
 
 <body>
 {% block content %}
-<audio id="myAudio">
-    <source src="../static/HAIInterface/img/audio.mp3" type="audio/mpeg">
-</audio>
+
 <style>
  .input-container {
   display: flex;
-  align-items: center; /* Center align the items vertically */
+  align-items: center; 
 }
 
-/* Style for the input box */
-input[type="number"] {
+/* drop-down box */
+.altitudeDropdown {
   flex: 1; 
   padding: 10px; 
   margin-left: 10px; 
   font-size: 16px; 
-  background-color:  rgb(236, 168, 245);
+  background-color: rgb(236, 168, 245);
   border: 1px solid #ccc; 
   border-radius: 4px;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 </style>
 
-<audio id="bell">
-    <source src="../static/HAIInterface/img/bell.mp3" type="audio/mpeg">
-</audio>
+
 
 <div id="main" class="main-content-container">
     <div id ='title' class="general-title">Altitude</div>
@@ -34,7 +30,14 @@ input[type="number"] {
         <!-- <div class="general-text" id="current-altitude" >Current Altitude:</div> -->
         <div class="input-container">
             <label for=" altChange:" class="general-text">Change altitute to:</label>
-            <input type="number" id="altChange" name="altChange" value="1500"><br><br>
+            <select id="altitudeDropdown" class="custom-dropdown">
+                <option value="1000">1000</option>
+                <option value="1100">1100</option>
+                <option value="1200">1200</option>
+                <option value="1300">1300</option>
+                <option value="1400">1400</option>
+                <option value="1500">1500</option>
+              </select><br><br>
         </div>
         <!-- <input class="button" type="submit" value="Change"> -->
         <div class="button" id="change-button" >Change</div>
@@ -59,14 +62,33 @@ input[type="number"] {
     // Change altitude when "change" button clicked
     document.getElementById("change-button").onclick = () => {
         console.log('Clicked')
-        console.log(document.getElementById("altChange").value)
-        log({"page": "change-altitude", "action": "altitude changed by participant" + document.getElementById("altChange").value })
-        alert("Altitude successfully changed to:"+ document.getElementById("altChange").value )
+        const dropdown = document.getElementById('altitudeDropdown');
+        const selectedValue = dropdown.value;
+        if (selectedAltitude === "") {
+            const dialog = document.createElement('dialog');
+            dialog.innerHTML = `
+            <p>Altitude not selected /p>
+            <button onclick="this.closest('dialog').close()">OK</button>
+            `;
+            document.body.appendChild(dialog);
+            dialog.showModal();
+        } else {
+            console.log(selectedValue)
+            log({"page": "change-altitude", "action": "altitude changed by participant" + selectedValue })
+            alert("Altitude successfully changed to:"+ selectedValue)
+            const dialog = document.createElement('dialog');
+            dialog.innerHTML = `
+            <p>Altitude successfully changed to ${selectedValue} feet/p>
+            <button onclick="this.closest('dialog').close()">Close</button>
+            `;
+            document.body.appendChild(dialog);
+            dialog.showModal();
         /* setInterval(() => {
             alertt("Pressure successfully changed to:"+ document.getElementById("altChange").value )
          }, 50000) */
-        window.location.href ='/hai-interface/inflight?Changed_altitude=' +  document.getElementById("altChange").value;
-    } 
+            window.location.href ='/hai-interface/inflight?Changed_altitude=' +  selectedValue;
+            fetch("/var?change-altitude"+ selectedValue)
+            } 
 
     
    

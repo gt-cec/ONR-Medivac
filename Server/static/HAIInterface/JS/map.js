@@ -233,6 +233,18 @@ async function getSimulatorData() {
     return false
 }
 
+function createCustomPopup(content) {
+    return L.popup({
+        closeButton: false,
+        autoClose: false,
+        closeOnEscapeKey: false,
+        closeOnClick: false,
+        maxWidth: 300,
+        zIndexOffset:2,
+        zIndex:1001
+    }).setContent(content);
+}
+
 function showHelipads(helipads) {
     // Icon options
     var helipadIconOptions = {
@@ -272,11 +284,9 @@ function showHelipads(helipads) {
         rotationAngle: 0,
         rotationOrigin: "center",
         zIndexOffset: 1,
-        iconSize:     [38, 95], // size of the icon
         iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
         popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
     }
-
 
     // create a marker for each hospital
     for (i in helipads) {
@@ -321,6 +331,7 @@ function showHelipads(helipads) {
                 [helipads[helipadIndex].latitude, helipads[helipadIndex].longitude],
                 selected)
             selectedmarker.addTo(map)
+            
 
             /* if (setDestination) {
                 selectedmarker.bindPopup("Set Destination", autoClose=false).addTo(map)
@@ -338,13 +349,36 @@ function showHelipads(helipads) {
         })
     })
 
-    marker.on('dblclick', function() {
-        if (studyStage == 4 && index == 19) { // Old Forth Hospital for sceanario 4
-            fillDestinationBox();
-        } else {
-            marker.bindPopup("Cannot fly to this location in given conditions").openPopup();
+    
+
+    marker.on('dblclick',  function (ev) {
+        if (!setDestination || typeof helipadIndex === "undefined") {
+            return
         }
-    })
+        console.log('Working')
+        targetIndex = helipadIndex // setting the selected helipad as target
+        log({ page: "map", action: "changing helipad", value: helipadIndex })
+        if (studyStage == 4){
+            targetIndex = 19//landing for scenario 4
+            if(helipadIndex==19) {
+                selectItem(helipadIndex) // reload the bottom bar for the selected item
+            } 
+            else{
+                var popup = L.popup()
+                            .setLatLng(marker.getLatLng())
+                            .setContent('<p>Cannot fly to this location in given conditions.</p>')
+                            .openOn(map);
+                // marker.bindPopup("Cannot fly to this location in given conditions.").openPopup();
+                }
+            }
+        else {
+            targetIndex = 3 //landing emory for all scenarios except 4
+            marker.bindPopup("Destination location can not be changed. Exit map").openPopup();
+                    
+            }
+        
+        
+    }); 
 
         marker.addTo(map)
         if (setDestination) {
@@ -389,7 +423,6 @@ function fillDestinationBox(helipadIndex) {
     if (helipadIndex == -1) {
         document.getElementById("destination-box-name").innerHTML =
             "Select a helipad to see details."
-        document.getElementById("destination-box-name").innerHTML =""
         document.getElementById("destination-box-address").innerHTML = ""
         document.getElementById("destination-box-type").innerHTML = ""
         return
@@ -526,7 +559,7 @@ function initMap() {
     //     selectItem(mapSelection) // reload the bottom bar for the selected item
     // }
 
-    document.getElementById("flightmap").addEventListener("dblclick", () => {
+    /* document.getElementById("flightmap").addEventListener("dblclick", () => {
         if (!setDestination || typeof mapSelection === "undefined") {
             return
         }
@@ -546,7 +579,48 @@ function initMap() {
         //showHelipads(helipads)
         }
        
-    })
+    }) */
 
+    document.getElementById("flightmap").addEventListener("dblclick", (e) => {
+        if (!setDestination || typeof mapSelection === "undefined") {
+            return;
+        }
         
+        targetIndex = mapSelection; // setting the selected helipad as target
+        log({ page: "map", action: "changing helipad", value: mapSelection });
+        
+        let popupContent;
+        let latlng = map.mouseEventToLatLng(e.originalEvent);
+        
+        if (studyStage == 4) {
+            targetIndex = 19; //landing for scenario 4
+            if (mapSelection == 19) {
+                selectItem(mapSelection); // reload the bottom bar for the selected item
+            } else {
+                console/log('popup')
+                popupContent = `
+                    <div class="popup-content">
+                        <p>Cannot fly to this location in given conditions.</p>
+                        <button class="popup-button" onclick="closeCustomPopup(map)">Acknowledge</button>
+                    </div>`;
+            }
+        } else {
+            targetIndex = 3; //landing emory for all scenarios except 4
+            popupContent = `
+                <div class="popup-content">
+                    <p>Destination location can not be changed. Exit map</p>
+                    <button class="popup-button" onclick="closeCustomPopup(map)">Acknowledge</button>
+                </div>`;
+        }
+        
+        if (popupContent) {
+            const popup = createCustomPopup(popupContent);
+            popup.setLatLng(latlng).openOn(map);
+        }
+    });
+
+}
+
+function closeCustomPopup(map) {
+    map.closePopup();
 }

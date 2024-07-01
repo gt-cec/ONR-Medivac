@@ -52,13 +52,13 @@
         lastClicked = new window.Date().getTime()
         bell.pause()
     } 
-    //fetch from server for emergence--fix!
+    //fetch from server for emergency?
     function vitalsLogging() {
      if(EngineFailure == 0 && PressureWarning == 0 &&  EmptyTank == 0 && timeToDestination>0.5){
         var curr = new window.Date().getTime()
-        if( curr - lastClicked > 105000 ){  // 105s assuming 30s gap + 45s radio update + 30s gap
+        if( curr - lastClicked > 135000 ){  // 135s assuming 30s logging+ 30s gap + 45s radio update + 30s gap
             log({"page": "inflight", "action": "displaying vitals prompt"})
-            lastClicked = Infinity  
+            lastClicked = new window.Date().getTime() //Infinity  
             document.getElementById('vitals').style.display = "flex"
             bell.play()
             bell.volume=0.2;
