@@ -17,7 +17,7 @@ function hideAssistant() {
         document.getElementById('assistant').style.display = 'none';
         document.body.classList.remove('assistant-dull-background', 'active');
         document.getElementById('userTextBox').style.display = 'none';
-    }, 3000)  // wait 3 seconds to hide
+    }, 1500)  // wait 3 seconds to hide
     
 }
 
@@ -41,9 +41,10 @@ function performAction(usertext){
 
     for (let [keyword, route] of Object.entries(keywordsRoutes)) {
         if (usertext.includes(keyword)) {
-            window.location.href = route
             txt="Going to "+ keyword
-            return; // Exit function after finding the first matching keyword
+            window.location.href = route
+            exit()
+            //return; // Exit function after finding the first matching keyword
         }
         else {
             // If no keyword is found
