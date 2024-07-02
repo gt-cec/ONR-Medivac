@@ -56,6 +56,7 @@ cd_page=0
 map_page=0
 transmit=0
 receive=0
+takeoff=0
 
 
 #radio variables
@@ -491,6 +492,7 @@ def matlab_destination_update():
     MATLAB_PORT_LAT_MIN = 8080
     MATLAB_PORT_LONG_MIN = 8088
     MATLAB_PORT_LAND = 8086
+    MATLAB_PORT_TAKEOFF = 8090
 
     while True:
         time.sleep(1)
@@ -502,7 +504,8 @@ def matlab_destination_update():
         latitude = float(data[str(destination_index)]["latitude"])
         longitude = float(data[str(destination_index)]["longitude"])
         # parse the decision state
-        land = int(decision_state)
+        land_signal = int(decision_state)
+        takeoff_signal = int(takeoff)
         # print("UPDATED MATLAB", latitude, longitude)
       
 
@@ -513,7 +516,8 @@ def matlab_destination_update():
         s.sendto(struct.pack('>f', longitude),
                  (MATLAB_IP, MATLAB_PORT_LONG_MIN))
         # send the decision state
-        s.sendto(struct.pack('>f', land), (MATLAB_IP, MATLAB_PORT_LAND))
+        s.sendto(struct.pack('>f', land_signal), (MATLAB_IP, MATLAB_PORT_LAND))
+        s.sendto(struct.pack('>f', takeoff_signal), (MATLAB_IP, MATLAB_PORT_TAKEOFF))
 
 
         # send the altitude
@@ -909,7 +913,7 @@ def log():
 
 @app.route("/reset", methods=["GET"])
 def reset_params():
-    global study_participant_id, sequence, study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, flight_start_time, reset_user_display, reset_vitals_display, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure, pressure_warning, empty_tank, emergency_page,rd_page,ca_page,cd_page,map_page,transmit,receive
+    global study_participant_id, sequence, study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, flight_start_time, reset_user_display, reset_vitals_display, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure, pressure_warning, empty_tank, emergency_page,rd_page,ca_page,cd_page,map_page,transmit,receive, takeoff
     study_participant_id = 0
     sequence=0
     study_stage = 1
@@ -974,7 +978,7 @@ def clean(s):
 
 @app.route("/var", methods=["GET"])
 def get_var():
-    global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude, engine_failure, pressure_warning, empty_tank, emergency_page, rd_page, ca_page, cd_page, map_page, transmit, receive
+    global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude, engine_failure, pressure_warning, empty_tank, emergency_page, rd_page, ca_page, cd_page, map_page, transmit, receive, takeoff
     if request.args.get("user-id"):
         study_participant_id = clean(request.args.get("user-id"))
         # Remove all handlers associated with the root logger object, from (https://stackoverflow.com/questions/12158048)
@@ -1055,6 +1059,8 @@ def get_var():
         receive = clean(request.args.get("receive")) #1=receive pressed , 0=otherwise 
     if request.args.get("transmit"):  # transmit from radiopanel-- for radio updates
         transmit = clean(request.args.get("transmit")) #1=transmit pressed , 0=otherwise 
+    if request.args.get("takeoff"):  # transmit from radiopanel-- for radio updates
+        takeoff = clean(request.args.get("takeoff")) #1=transmit pressed , 0=otherwise
    
     return_dict = {"user-id": str(study_participant_id),
                    "sequence": sequence,
@@ -1084,7 +1090,7 @@ def get_var():
                    "map-page":map_page,
                    "receive":receive,
                    "transmit":transmit,
-
+                    "takeoff":takeoff,
                    }
 
     # sometimes SimConnect breaks and throws an OS Error, so we are saving the current lat/long when it works (or sending the last one)

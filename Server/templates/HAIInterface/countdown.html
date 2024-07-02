@@ -46,6 +46,8 @@
             if (targetIndex) {
                 await fetch("/var?destination-index=" + targetIndex)
             }
+            // change system var takeoff to 1
+            await fetch("/var?takeoff=1")
             window.location.href = "/hai-interface/inflight"
         }
         else {
