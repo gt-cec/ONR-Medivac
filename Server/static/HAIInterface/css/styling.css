@@ -1166,13 +1166,20 @@ div.vitals-popup {
   
       .input-box {
         margin-top: 20px;
+        width: 80%;
+        padding: 10px;
+        border-radius: 5px;
+        align-items: center;
       }
   
       .input-field {
         width: 80%;
-        padding: 10px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding: 12px;
         border: 1px solid #ccc;
         border-radius: 5px;
+        text-align: center;
       }
   
       #resultMessage {

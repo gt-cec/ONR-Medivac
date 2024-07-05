@@ -301,7 +301,7 @@ function activateWarningAlert() {
     if (pressureValue === correctValue) {
       document.getElementById('pressureWarningalertExplanation').style.display = 'none';
       resultMessage.style.display = 'none';
-      finalMessage.innerHTML = "The primary sensor was miscalibrated but everything appears to be fine. We are enroute as planned. Please inform ground";
+      finalMessage.innerHTML = "The primary sensor was miscalibrated but everything appears to be fine.<br><br> We are enroute as planned.<br> <br>Please inform ground";
       // finalMessage.style.color = "green";
       finalMessage.style.display = 'block';
       okButton.style.display = 'block';
@@ -311,7 +311,7 @@ function activateWarningAlert() {
     } 
     else {
       resultMessage.innerHTML = "Wrong value, check and submit the pressure value again.";
-      resultMessage.style.color = "white";
+      resultMessage.style.color = "yellow";
       resultMessage.style.display = 'block';
       log({"page": "Inflight", "action": "Pressure Warning- wrong pressure value entered"}); 
     }
@@ -337,7 +337,7 @@ function activateWarningAlert() {
 //Engine Failure
 // Function to activate the engine failure emergency alert
 function activateEngineAlert() {
-  log({"page": "Inflight", "action": "Engine failure emergency- show more info button pressed"}); 
+  log({"page": "Inflight", "action": "Engine failure emergency- emergnecy propmt displayed"}); 
   console.log(EngineFailure)
   const overlay = document.getElementById('alertOverlay');
   document.body.classList.add('dull-background');
@@ -349,6 +349,7 @@ function activateEngineAlert() {
   // Function to show more information about engine failure and stop the siren
   function showMoreInfo() {
     log({"page": "Inflight", "action": "Engine failure emergency- show more info button pressed"}); 
+    audio.pause()
     const alertBox = document.getElementById('alertBox');
     alertBox.classList.add('expanded');
     document.getElementById('alertExplanation').style.display = 'block';
@@ -370,6 +371,7 @@ function activateEngineAlert() {
   // Function to close engine failure alert
   function closeAlert() {
     console.log("closing")
+    audio.pause()
     log({"page": "Inflight", "action": "Engine failure emergency- close button pressed"}); 
     const overlay = document.getElementById('alertOverlay');
     overlay.style.opacity = '0';
@@ -385,7 +387,8 @@ function activateEngineAlert() {
 // Function to activate the empty fuel tank emergency alert
 function activateFuelAlert() {
   console.log(EmptyTank)
-  log({"page": "Inflight", "action": "Fuel tank emergency alert"}); 
+  audio.play()
+  log({"page": "Inflight", "action": "Fuel tank emergency alert-displayed"}); 
   const fAoverlay = document.getElementById('fuelAlertOverlay');
   document.body.classList.add('dull-background');
   fAoverlay.style.visibility = 'visible';
@@ -396,6 +399,7 @@ function activateFuelAlert() {
   // Function to show more information regarding fuel tank and stop the siren
   function showFuelInfo() {
     log({"page": "Inflight", "action": "Fuel tank emergency- show more info button pressed"}); 
+    audio.pause()
     const fAalertBox = document.getElementById('fuelAlertBox');
     fAalertBox.classList.add('expanded');
     document.getElementById('fuelAlertExplanation').style.display = 'block';
@@ -412,6 +416,7 @@ function activateFuelAlert() {
       window.location.href = '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 ;
     }
 
+  
     document.getElementById("groundButtonFuel").onclick = async () => { closeFuelAlert(); 
       log({"page": "Inflight", "action": "Ground button on Fuel tank emergency pressed"}); 
         console.log('opening radio panel')

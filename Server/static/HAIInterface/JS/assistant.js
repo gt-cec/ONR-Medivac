@@ -57,21 +57,6 @@ function performAction(usertext) {
         }
     }
     
-    // If no keyword is found (this is now outside the loop)
-    console.log("Sorry, didn't find " + usertext);
-    txt = "Sorry, didn't find " + usertext;
-    
-    const userTextBox = document.getElementById('userTextBox');
-    const newContent = document.createElement('div');
-    newContent.innerHTML = txt;
-    userTextBox.appendChild(newContent);
-    userTextBox.scrollTop = userTextBox.scrollHeight;
-}
-    
-    // If no keyword is found 
-    console.log("Sorry, didn't find " + usertext);
-    txt = "<b>Jarvis: </b> Sorry, didn't find " + usertext;
-    
     // If no keyword is found 
     console.log("Sorry, didn't find " + usertext);
     txt = "<b>Jarvis: </b> Sorry, didn't find " + usertext;
@@ -81,8 +66,10 @@ function performAction(usertext) {
     newContent.innerHTML = txt;
     userTextBox.appendChild(newContent);
     userTextBox.scrollTop = userTextBox.scrollHeight;
-    //Box.scrollTop = userTextBox.scrollHeight; // Auto-scroll to the bottom
 }
+    
+   
+
 
 
 // Function to handle user text
