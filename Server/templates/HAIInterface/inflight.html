@@ -3,23 +3,23 @@
 <body>
 {% block content %}
 <audio id="myAudio">
-    <source src="../static/HAIInterface/img/audio.mp3" type="audio/mpeg">
+	<source src="../static/HAIInterface/img/audio.mp3" type="audio/mpeg">
 </audio>
 
 <audio id="bell">
-    <source src="../static/HAIInterface/img/bell.mp3" type="audio/mpeg">
+	<source src="../static/HAIInterface/img/bell.mp3" type="audio/mpeg">
 </audio>
 
 <div id="main" class="main-content-container">
-    <div id ='title' class="general-title">Inflight Control</div>
-    <div class="subcontent-container" style="flex-grow: 1; justify-content: space-evenly;">
-     <div class="inflight-button-grid">
-        <div id="emergency-landing" class="grid-button emergency-landing ">Emergency Landing</div>
-        <div id="return-departure" class="grid-button return-departure">Return to Departure Location</div>
-        <div id="change-destination"  class="grid-button change-destination">Change Destination</div>
-        <div id="change-altitude"  class="grid-button change-altitude">Change Altitude</div>
-     </div>
-    </div>
+	<div id ='title' class="general-title">Inflight Control</div>
+	<div class="subcontent-container" style="flex-grow: 1; justify-content: space-evenly;">
+	 <div class="inflight-button-grid">
+		<div id="emergency-landing" class="grid-button emergency-landing ">Emergency Landing</div>
+		<div id="return-departure" class="grid-button return-departure">Return to Departure Location</div>
+		<div id="change-destination"  class="grid-button change-destination">Change Destination</div>
+		<div id="change-altitude"  class="grid-button change-altitude">Change Altitude</div>
+	 </div>
+	</div>
 
 </div>
 
@@ -28,99 +28,104 @@
 
 <script>
 {% block script %}
-    var HelpId=4;
-    let lastClicked = 0
-    let TargetIndex = 100
-    var audio = document.getElementById("myAudio"); 
-    var bell = document.getElementById("bell"); 
-    document.getElementById('help').onclick = () => { log({"page": "Inflight", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
-    document.getElementById("emergency-landing").onclick = () => { log({"page": "Inflight", "action": "emergency landing button pressed"}); window.location.href = '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 }
-    document.getElementById("return-departure").onclick = () => {  log({"page": "Inflight", "action": "return to departure button pressed"}); window.location.href = '/hai-interface/location?inflight=' + 1 + '&dest=' + 21 }
-    document.getElementById("change-destination").onclick = () => {  log({"page": "Inflight", "action": "change destination button pressed"}); window.location.href = '/hai-interface/change-destination?inflight=' + 1 }
-    document.getElementById("change-altitude").onclick = () => { log({"page": "Inflight", "action": "change altitude button pressed"}); window.location.href = '/hai-interface/change-altitude?Changed_altitude='+ 1500 }
+	var HelpId=4;
+	let lastClicked = 0
+	let TargetIndex = 100
+	var audio = document.getElementById("myAudio"); 
+	var bell = document.getElementById("bell"); 
+	document.getElementById('help').onclick = () => { log({"page": "Inflight", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
+	document.getElementById("emergency-landing").onclick = () => { log({"page": "Inflight", "action": "emergency landing button pressed"}); window.location.href = '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 }
+	document.getElementById("return-departure").onclick = () => {  log({"page": "Inflight", "action": "return to departure button pressed"}); window.location.href = '/hai-interface/location?inflight=' + 1 + '&dest=' + 21 }
+	document.getElementById("change-destination").onclick = () => {  log({"page": "Inflight", "action": "change destination button pressed"}); window.location.href = '/hai-interface/change-destination?inflight=' + 1 }
+	document.getElementById("change-altitude").onclick = () => { log({"page": "Inflight", "action": "change altitude button pressed"}); window.location.href = '/hai-interface/change-altitude?Changed_altitude='+ 1500 }
 
 
-    document.getElementById('help').href='/hai-interface/help?num='+HelpId
-    document.getElementById('map').href = '/hai-interface/map'
-    document.getElementById('cruise-sidebar').style.backgroundColor = "pink"
+	document.getElementById('help').href='/hai-interface/help?num='+HelpId
+	document.getElementById('map').href = '/hai-interface/map'
+	document.getElementById('cruise-sidebar').style.backgroundColor = "pink"
 
 
-    // vitals reminder, onclick for the vital reminder done button
-    document.getElementById("vitals-acknowledge-button").onclick = () => {
-        log({"page": "inflight", "action": "user acknowledged vitals prompt"})
-        document.getElementById('vitals').style.display = "none"
-        lastClicked = new window.Date().getTime()
-        bell.pause()
-    } 
-    //fetch from server for emergency?
-    function vitalsLogging() {
-     if(EngineFailure == 0 && PressureWarning == 0 &&  EmptyTank == 0 && timeToDestination>0.5){
-        var curr = new window.Date().getTime()
-        if( curr - lastClicked > 135000 ){  // 135s assuming 30s logging+ 30s gap + 45s radio update + 30s gap
-            log({"page": "inflight", "action": "displaying vitals prompt"})
-            lastClicked = new window.Date().getTime() //Infinity  
-            document.getElementById('vitals').style.display = "flex"
-            bell.play()
-            bell.volume=0.2;
-        }
-     }
-    }
-    async function fetchRadioData() {
-        try {
-            const response = await fetch("/state", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json' 
-                },
-                body: JSON.stringify({ event: 'Radio-Update'}), 
-            });
-    
-            if (!response.ok) {
-                throw new Error(`HTTP error: ${response.status}`);
-            }
-    
-            const radiodata = await response.json();
-            if (radiodata["radioUpdateComplete"]){
-                console.log('Radio Update Completed')
-                vitalsLogging()
-                //send request to clear radio update
-                const Radioresponse = await fetch("/state", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json' 
-                },
-                body: JSON.stringify({ event: 'Radio-Update', action: 'set'}), 
-            });
+	// vitals reminder, onclick for the vital reminder done button
+	document.getElementById("vitals-acknowledge-button").onclick = () => {
+		log({"page": "inflight", "action": "user acknowledged vitals prompt"})
+		console.log('vitals logging acknowledged')
+		document.getElementById('vitals').style.display = "none"
+		lastClicked = new window.Date().getTime()
+		bell.pause()
+		
+	} 
+	//fetch from server for emergency?
+	function vitalsLogging() {
+	 if(vitalsState==0 && EngineFailure == 0 && PressureWarning == 0 &&  EmptyTank == 0 && timeToDestination>0.5){
+		var curr = new window.Date().getTime()
+		if( curr - lastClicked > 135000 ){  // 135s assuming 30s logging+ 30s gap + 45s radio update + 30s gap
+			log({"page": "inflight", "action": "displaying vitals prompt"})
+			console.log('vitals logging prompt')
+			//lastClicked = Infinity  
+			document.getElementById('vitals').style.display = "flex"
+			bell.play()
+			bell.volume=0.2;
+		}
+	 }
+	}
+	async function fetchRadioData() {
+		try {
+			const response = await fetch("/state", {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json' 
+				},
+				body: JSON.stringify({ event: 'Radio-Update'}), 
+			});
+	
+			if (!response.ok) {
+				throw new Error(`HTTP error: ${response.status}`);
+			}
+	
+			const radiodata = await response.json();
+			console.log("json",radiodata.radioUpdateComplete)
+			console.log("dict:",radiodata["radioUpdateComplete"])
+			if (radiodata["radioUpdateComplete"]){
+				console.log('Radio Update Completed')
+				vitalsLogging()
+				//send request to clear radio update
+				const Radioresponse = await fetch("/state", {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json' 
+						},
+						body: JSON.stringify({ event: 'Radio-Update', action: 'clear'}), 
+					});
+					console.log('Radio Update event clear request sent')
+			}
+		} catch (err) {
+			console.error('Fetch problem: ${err.message}');
+		}
+	} 
+	setInterval(fetchRadioData, 350);  
+	// Initial fetch
+	//fetchRadioData();  
 
-            }
-        } catch (err) {
-            console.error('Fetch problem: ${err.message}');
-        }
-    } 
-    setInterval(fetchRadioData, 350);  
-    // Initial fetch
-    fetchRadioData();  
-
-    // interval for the inflight stage- want the radio updates and vitals prompt to show up at regular intervals when emergency not occuring such that both don't overlap
-    /* setInterval(() => {
-        const response = await fetch("/speak", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
-            },
-            body: JSON.stringify({ type: "radioUpdate"}), 
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error: ${response.status}`);
-        }
-        const json = await response.json();
-        
-        radio_update_complete= json.radioUpdateComplete
-            
-        
-        
-         
-    }}, 1000) */
+	// interval for the inflight stage- want the radio updates and vitals prompt to show up at regular intervals when emergency not occuring such that both don't overlap
+	/* setInterval(() => {
+		const response = await fetch("/speak", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+			},
+			body: JSON.stringify({ type: "radioUpdate"}), 
+		});
+		if (!response.ok) {
+			throw new Error(`HTTP error: ${response.status}`);
+		}
+		const json = await response.json();
+		
+		radio_update_complete= json.radioUpdateComplete
+			
+		
+		
+		 
+	}}, 1000) */
 
 {% endblock %}
 </script>

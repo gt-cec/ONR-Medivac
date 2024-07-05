@@ -349,37 +349,6 @@ function showHelipads(helipads) {
         })
     })
 
-    
-
-    marker.on('dblclick',  function (ev) {
-        if (!setDestination || typeof helipadIndex === "undefined") {
-            return
-        }
-        console.log('Working')
-        targetIndex = helipadIndex // setting the selected helipad as target
-        log({ page: "map", action: "changing helipad", value: helipadIndex })
-        if (studyStage == 4){
-            targetIndex = 19//landing for scenario 4
-            if(helipadIndex==19) {
-                selectItem(helipadIndex) // reload the bottom bar for the selected item
-            } 
-            else{
-                var popup = L.popup()
-                            .setLatLng(marker.getLatLng())
-                            .setContent('<p>Cannot fly to this location in given conditions.</p>')
-                            .openOn(map);
-                // marker.bindPopup("Cannot fly to this location in given conditions.").openPopup();
-                }
-            }
-        else {
-            targetIndex = 3 //landing emory for all scenarios except 4
-            marker.bindPopup("Destination location can not be changed. Exit map").openPopup();
-                    
-            }
-        
-        
-    }); 
-
         marker.addTo(map)
         if (setDestination) {
             console.log('set destination')
@@ -409,7 +378,7 @@ function setAsDestination(helipadIndex) {
         alert("Sorry, Unfavorable conditions, can't reroute to " + helipads[helipadIndex].name);
     }
     
-    map.closePopup(); // Close the popup after making a decision
+    //map.closePopup();  Close the popup after making a decision
 }
 
 // function for filling the destination information
@@ -589,38 +558,48 @@ function initMap() {
         targetIndex = mapSelection; // setting the selected helipad as target
         log({ page: "map", action: "changing helipad", value: mapSelection });
         
-        let popupContent;
-        let latlng = map.mouseEventToLatLng(e.originalEvent);
+        //let popupContent;
+        //let latlng =L.latLng(latitude, longitude);
+        // let latlng = map.mouseEventToLatLng(e.originalEvent);
         
         if (studyStage == 4) {
             targetIndex = 19; //landing for scenario 4
             if (mapSelection == 19) {
                 selectItem(mapSelection); // reload the bottom bar for the selected item
             } else {
-                console/log('popup')
-                popupContent = `
-                    <div class="popup-content">
-                        <p>Cannot fly to this location in given conditions.</p>
-                        <button class="popup-button" onclick="closeCustomPopup(map)">Acknowledge</button>
-                    </div>`;
+                    const dialog = document.createElement('dialog');
+                    dialog.innerHTML = `
+                    <p>Cannot fly to this location in given conditions.</p>
+                    <p style="justify-content: center; align-items: center;"
+                    <button  onclick="this.closest('dialog').close()">OK</button>
+                    `;
+                    document.body.appendChild(dialog);
+                    dialog.showModal();
             }
         } else {
             targetIndex = 3; //landing emory for all scenarios except 4
-            popupContent = `
+            /* popupContent = `
                 <div class="popup-content">
                     <p>Destination location can not be changed. Exit map</p>
                     <button class="popup-button" onclick="closeCustomPopup(map)">Acknowledge</button>
-                </div>`;
+                </div>`; */
+                const dialog = document.createElement('dialog');
+                dialog.innerHTML = `
+                <p> Destination location can not be changed. Exit map</p>
+                <button onclick="this.closest('dialog').close()">OK</button>
+                `;
+                document.body.appendChild(dialog);
+                dialog.showModal();
         }
         
-        if (popupContent) {
+        /* if (popupContent) {
             const popup = createCustomPopup(popupContent);
             popup.setLatLng(latlng).openOn(map);
-        }
+        } */
     });
 
 }
 
-function closeCustomPopup(map) {
-    map.closePopup();
-}
+/* function closeCustomPopup(map) {
+    map.closePopup(); 
+}*/
