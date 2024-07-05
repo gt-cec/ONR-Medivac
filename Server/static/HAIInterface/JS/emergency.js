@@ -120,7 +120,7 @@ function initEmergency() {
         //Pressure Warning
         if (studyStage == '4') {
           console.log("checking")
-          if (warning_dist <= 300 || (Math.abs(time_diff - 180) <= 2.3) || (PressureWarning==1))  {
+          if (warning_dist <= 350 || (Math.abs(time_diff - 180) <= 3.3) || (PressureWarning==1))  {
               console.log("here")
               if((warning_satisfied==false)|| (PressureWarning==1)){
                   console.log("WARNING LOCATION REACHED")
@@ -134,7 +134,7 @@ function initEmergency() {
           }
 
         // nominal condition landing
-        if (dist_to_dest <= 300 || timeToDestination<= 0.15) {
+        if (dist_to_dest <= 300 || timeToDestination<= 0.25) {
             console.log('dist', dist)
             console.log('time', timeToDestination)
             if (((studyStage == '1') || (studyStage == '2') || (studyStage == '3'))) {
@@ -172,7 +172,7 @@ function initEmergency() {
             }
             console.log(satisfied)
             //displaying the landing checklist when approaching the set destination
-            if ((dist_to_target <= 300) || (timeToDestination<= 0.15)){
+            if ((dist_to_target <= 300) || (timeToDestination<= 0.25)){
                 console.log('emergency occured and approaching destination')
                 window.location.href = "/hai-interface/checklist?inflight=" + 1 + "&target-index=" + targetIndex
             }
