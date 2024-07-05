@@ -75,6 +75,8 @@
         document.getElementById('confirm-button').style.backgroundColor = "#12d429"
         document.getElementById("confirm-button").onclick = async () => {
             log({"page": "checklist", "action": "confirm button clicked", "inflight": inflight})
+            // If inflight and the checklist is completed, then authorize approach
+            if (inflight) await fetch("/var?approach-clear=1")  
             window.location.href =  inflight ? "/hai-interface/landing-confirmation" : "/hai-interface/countdown?target-index=" + targetIndex
         }
         document.getElementById("confirm-button").style.boxShadow = ""
