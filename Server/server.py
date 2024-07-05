@@ -1154,11 +1154,12 @@ def hai_interface(subroute=None):
     if subroute is None or subroute == "":
         resp = make_response(render_template("HAIInterface/index.html", helipads=data))
     elif subroute == "location":
+        if(not inflight_event.is_set()): #so doesn't get set when landing
+            takeoff_event.set()
+            print("TOES",takeoff_event.is_set())
+            print(takeoffEvent)
         resp = make_response(render_template("HAIInterface/location.html", helipads=data, data=HelpData))
     elif subroute == "checklist":
-        takeoff_event.set()
-        print("TOES",takeoff_event.is_set())
-        print(takeoffEvent)
         #radio_comms.pre_takeoff(takeoff_event)
         resp = make_response(render_template("HAIInterface/checklist.html", helipads=data))
     elif subroute == "countdown":

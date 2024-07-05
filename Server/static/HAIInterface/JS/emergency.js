@@ -134,7 +134,7 @@ function initEmergency() {
           }
 
         // nominal condition landing
-        if (dist <= 300 || timeToDestination<= 0.08) {
+        if (dist_to_dest <= 300 || timeToDestination<= 0.15) {
             console.log('dist', dist)
             console.log('time', timeToDestination)
             if (((studyStage == '1') || (studyStage == '2') || (studyStage == '3'))) {
@@ -172,7 +172,7 @@ function initEmergency() {
             }
             console.log(satisfied)
             //displaying the landing checklist when approaching the set destination
-            if ((dist_to_target <= 300) || (timeToDestination<= 0.08)){
+            if ((dist_to_target <= 300) || (timeToDestination<= 0.15)){
                 console.log('emergency occured and approaching destination')
                 window.location.href = "/hai-interface/checklist?inflight=" + 1 + "&target-index=" + targetIndex
             }
