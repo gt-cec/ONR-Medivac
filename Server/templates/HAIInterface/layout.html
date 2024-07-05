@@ -182,10 +182,22 @@
               </div>
               <button class="alert-button" id="pressureWarningmoreInfoButton" onclick="showInfo()">Click for more info</button>
               <div id="pressureWarningalertExplanation" style="display: none;">
-                <p>Report the value shown by the secondary hydraulic pressure sensor:</p>
-                <div id="resultMessage"></div>
+                <p>Report the value shown by the secondary hydraulic  sensor:</p>
+                <div id="resultMessage" style="display: none;"></div>
                 <div class="input-box">
-                  <input type="text" id="pressureValue" class="input-field" placeholder="Enter pressure value">
+                  <select id="pressureValue" >
+                    <option value="" selected disabled>select pressure value</option>
+                    <option value="71">71</option>
+                    <option value="72">72</option>
+                    <option value="73">73</option>
+                    <option value="74">74</option>
+                    <option value="75">75</option>
+                    <option value="76">76</option>
+                    <option value="77">77</option>
+                    <option value="78">78</option>
+                    <option value="79">79</option>
+                    <option value="80">80</option>
+                  </select>
                 </div>
                 <button class="submit-button" onclick="submitPressureValue()">Submit</button>
               </div>
@@ -207,23 +219,23 @@
              <!-- <button class="close-button" id="closeButton" onclick="closeAlert()">X</button> -->
              <div id="alertExplanation" style="display: none;">
                  <ul style="list-style-type:circle; padding: 15px; text-align: justify; ">
-                    <li><bold>Alert:</bold> Engine failure detected. This is not a drill.</li>
-                     <li><bold>Action Required:</bold> Initiating emergency procedures now.</li> 
-                     <li><bold>Immediate Task:</bold> We need to select an alternate landing site.</li>
-                      <li><bold>Your Input Needed: </bold>Please use the button below to choose an emergency landing location.</li> 
-                      <li><bold>Recommendation: </bold>I suggest Heliwood Heliport, the nearest available site.</li> 
-                      <li><bold>Map Guide:</bold> Look for the green marker on the map - that's our closest option.</li> 
-                      <li><bold>Additional Support:</bold> Ground assistance is available if you deem it necessary.</li> 
-                      <li><bold>Time Sensitive:</bold> Swift action is crucial for our safety.</li>
+                    <li><b>Alert:</b> Engine failure detected. This is not a drill.</li>
+                     <li><b>Action Required:</b> Initiating emergency procedures now.</li> 
+                     <li><b>Immediate Task:</b> We need to select an alternate landing site.</li>
+                      <li><b>Your Input Needed: </b>Please use the button below to choose an emergency landing location.</li> 
+                      <li><b>Recommendation: </b>I suggest landing at Hilton Gardern Inn Heliport, the nearest available site.</li> 
+                      <li><b>Map Guide:</b> Look for the green marker on the map - that's our closest option.</li> 
+                      <li><b>Additional Support:</b> Ground assistance is available if you deem it necessary.</li> 
+                      <li><b>Time Sensitive:</b> Swift action is crucial for our safety.</li>
                  </ul>
 
             </div>
-            <button class="submit-button" style="display: none;" id="CDButton">Change Destination</button>
+            <button class="submit-button" style="display: none;" id="CDButton">Emergency Landing</button>
           </div>
         </div>        
-       <!--  <audio id="sirenSound" loop>
-           <source src="../static/HAIInterface/img/siren.mp3" type="audio/mpeg">
-        </audio> -->
+       <audio id="sirenSound" loop>
+           <source src="../static/HAIInterface/img/audio.mp3" type="audio/mpeg">
+        </audio> 
        </div>
         
             
@@ -240,22 +252,26 @@
               <button class="alert-button" id="fuelInfoButton" onclick="showFuelInfo()">Click for more info</button>
               <div id="fuelAlertExplanation" style="display: none;">
                 <ul style="list-style-type:circle; padding: 15px; text-align: justify; ">
-                    <li><bold>Fuel Gauge Alert:</bold> Our primary fuel gauge is indicating an empty tank. </li>
-                    <li><bold>Gauge Reliability:</bold> There's a high probability this reading is inaccurate.</li>
-                    <li><bold>Confidence Level: </bold>I am 95% certain we have sufficient fuel on board.</li>
-                    <li><bold>Safety Assessment:</bold> Based on my calculations, it is safe to continue our flight.</li>
-                    <li><bold>Backup Systems:</bold> A secondary fuel tank is available if needed.</li>
-                    <li><bold>Current Plan:</bold> I intend to maintain our planned route and destination unless requested otherwise.</li> 
-                    <li><bold>Your Options:</bold> <li>Request a change of destination </li> <li>Seek ground support</li> </li> 
-                </ul>
+                    <li><b>Fuel Gauge Alert:</b> Our primary fuel gauge is indicating an empty tank. </li>
+                    <li><b>Gauge Reliability:</b> There's a high probability this reading is inaccurate.</li>
+                    <li><b>Confidence Level: </b>I am 95% certain we have sufficient fuel on board.</li>
+                    <li><b>Safety Assessment:</b> Based on my calculations, it is safe to continue our flight.</li>
+                    <li><b>Backup Systems:</b> A secondary fuel tank is available if needed.</li>
+                    <li><b>Current Plan:</b> I intend to maintain our planned route and destination unless requested otherwise.</li> 
+                    <button class="ok-button" id="okButtonFuel" style="display: none;">Continue as planned</button>
+                    <li><b>Alternate Options:</b></li>  
+                 </ul>
+                    <button class="ok-button" id="cdButtonFuel" style="display: none;">Change Destination</button>&ensp;&ensp;
+                    <button class="ok-button" id="groundButtonFuel" style="display: none;">Seek ground support</button> 
+              
                </div>
-               <button class="ok-button" id="okButtonFuel" style="display: none;">OK</button>
+              
             </div>
            
          </div>        
-        <!--  <audio id="sirenSound" loop>
-            <source src="../static/HAIInterface/img/siren.mp3" type="audio/mpeg">
-         </audio> -->
+        <audio id="sirenSound" loop>
+            <source src="../static/HAIInterface/img/audio.mp3" type="audio/mpeg">
+         </audio> 
         </div>
             
     </body>
@@ -322,18 +338,6 @@
             document.querySelector('.radiopanel').classList.remove('open');
             });
 
-       
-       // changeFrequency(step)
-
-  
-
-
-       /*  function changeFrequency(step) {
-            currentFrequency += step;
-            document.getElementById('frequency-input').value = currentFrequency.toFixed(2);
-            
-            //updateFrequencyDisplay();
-        } */
 
         function changeFrequency(step) {
             const frequencyDisplay = document.getElementById('frequency-display');
@@ -348,7 +352,7 @@
         function transmit() {
             const callsign = document.getElementById('callsign').value;
             log({"action": "transmit button pressed"})
-            log({"action": "callsign set to: ${callsign}"})
+            log({"action": `callsign set to: + ${callsign}`})
 
             if(callsign!="NASXGS"){
                 // alert('Select correct Callsign for transmitting ')

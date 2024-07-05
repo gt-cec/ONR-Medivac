@@ -45,7 +45,7 @@ pre_trial=0
 post_trial=0
 time_to_destination=10
 current_altitude=None
-change_altitude=None
+change_altitude=0
 pressure_warning=0
 engine_failure=0
 empty_tank=0
@@ -935,7 +935,7 @@ def reset_params():
     time_to_destination=10.0
     pre_trial=0  #give pre-trial survey
     post_trial=0 #give post-trial survey
-    change_altitude=None
+    change_altitude=0
     engine_failure=0
     pressure_warning=0
     empty_tank=0
@@ -1050,7 +1050,7 @@ def get_var():
     if request.args.get("post-trial"):
         post_trial = request.args.get("post-trial")
     if request.args.get("change-altitude"):  #change altitude
-        change_altitude = request.args.get("change-altitude")
+        change_altitude = clean(request.args.get("change-altitude"))
     if request.args.get("emergency-page"):
         emergency_page =  clean(request.args.get("emergency-page"))
     if request.args.get("cd-page"):

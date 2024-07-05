@@ -213,22 +213,28 @@ body {
     bottom: 0;
     color: #fff;
     z-index: 10;
+    display: grid;
+    flex-direction: rows;
+    grid-template-rows: 50%, 50%;
+    place-content: center;
+    grid-gap: 3px;
     }
 
     .gauge-center .label,
     .gauge-center .number {
-    display: block;
     width: 100%;
     text-align: center;
     border: 0 !important;
     }
     .gauge-center .label {
-    font-size: 0.75em;
+    font-size: 0.80em;
     opacity: 0.6;
-    margin: 1.1em 0 0.3em 0;
+    /* margin: 3.2em 0 0.8em 1.3em; */
     }
     .gauge-center .number {
-    font-size: 1.2em;
+    font-size: 1.0em;
+    /* margin-right: 3.3em;
+    margin-bottom: 0.3em; */
     }
 
     .needle {

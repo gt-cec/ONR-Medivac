@@ -35,30 +35,54 @@ const keywordsRoutes = {
      //add more keywords and routes 
 }  
 
-function performAction(usertext){
+function performAction(usertext) {
     usertext = usertext.toLowerCase();
     console.log("Looking");
-
     for (let [keyword, route] of Object.entries(keywordsRoutes)) {
         if (usertext.includes(keyword)) {
-            txt="Going to "+ keyword
-            window.location.href = route
-            exit()
-            //return; // Exit function after finding the first matching keyword
-        }
-        else {
-            // If no keyword is found
-            console.log("Sorry, didn't find  ${usertext}")
-            txt= "Sorry, didn't find "+ usertext
+            txt = "Going to " + keyword;
+            // Display the message
+            const userTextBox = document.getElementById('userTextBox');
+            const newContent = document.createElement('div');
+            newContent.innerHTML = txt;
+            userTextBox.appendChild(newContent);
+            userTextBox.scrollTop = userTextBox.scrollHeight;
+            
+            // Delay the redirect
+            setTimeout(() => {
+                window.location.href = route;
+            }, 1500); // 1.5 second delay
+            
+            return; // Exit function after finding the first matching keyword
         }
     }
+    
+    // If no keyword is found (this is now outside the loop)
+    console.log("Sorry, didn't find " + usertext);
+    txt = "Sorry, didn't find " + usertext;
     
     const userTextBox = document.getElementById('userTextBox');
     const newContent = document.createElement('div');
     newContent.innerHTML = txt;
     userTextBox.appendChild(newContent);
-    userTextBox.scrollTop = userTextBox.scrollHeight; // Auto-scroll to the bottom
-    }
+    userTextBox.scrollTop = userTextBox.scrollHeight;
+}
+    
+    // If no keyword is found 
+    console.log("Sorry, didn't find " + usertext);
+    txt = "<b>Jarvis: </b> Sorry, didn't find " + usertext;
+    
+    // If no keyword is found 
+    console.log("Sorry, didn't find " + usertext);
+    txt = "<b>Jarvis: </b> Sorry, didn't find " + usertext;
+    
+    const userTextBox = document.getElementById('userTextBox');
+    const newContent = document.createElement('div');
+    newContent.innerHTML = txt;
+    userTextBox.appendChild(newContent);
+    userTextBox.scrollTop = userTextBox.scrollHeight;
+    //Box.scrollTop = userTextBox.scrollHeight; // Auto-scroll to the bottom
+}
 
 
 // Function to handle user text
@@ -69,7 +93,7 @@ function handleUserText(text) {
     const newContent = document.createElement('div');
     newContent.innerHTML = "<b>Participant: </b> " + text;
     userTextBox.appendChild(newContent);
-    //userTextBox.scrollTop = userTextBox.scrollHeight; // Auto-scroll to the bottom
+    userTextBox.scrollTop = userTextBox.scrollHeight; // Auto-scroll to the bottom
     performAction(text)
 }
 

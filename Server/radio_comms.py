@@ -2,6 +2,7 @@ import threading
 import time
 import pyttsx3
 import requests
+import logging
 
 
 # Global events and locks
@@ -67,16 +68,20 @@ def fetch_var():
 # Function to mimic initial communication before takeoff
 def pre_takeoff():
    print('Received')
+   logging.info('Takeoff radiocomms initiated')
    with status_lock:  
         print('Speaking!')
    speak("Control Tower: Callsign N A S X G  S, radio C O M M 1 ")
    delay(10)
    print('speaking line 2')
-   speak("Control Tower: Flight and weather conditions look good. Ready for takeoff.")
+   speak("Flight and weather conditions look good. Ready for takeoff.")
    print('speaking line 3')
-   #speak('Set the Callsign NASXGS and Radio to COMM1')
+   speak('Set the Callsign to N A S X G S and Radio channel to C O M M 1 for transmitting updates')
+   delay(20)
+   speak('Use the Callsign  M E D I V A C  and Radio channel N A V 2 for receiving')
    requests.post("http://127.0.0.1:8080/state", json={"event": "takeoff_event", "action": "clear"}) #clearing takeoff event
    print('sent request to clear takeoff event')
+   logging.info('Takeoff radiocomms clear request sent')
       
 
 # Function to simulate in-flight status checks
@@ -93,12 +98,15 @@ def inflight_status_check(states):
         with status_lock:  
             print("Asking for radio updates")
             speak("Control Tower: Please report your flight status, patient status, and ETA.")
+            logging.info('Inflight Radio Update asked')
             if states["response_event"]: #user reported back
-                print('Transmit button pressed')
+                print('Transmit button pressed- radio update received')
+                logging.info('Transmit button pressed') #in logs will tell if they did the radio update or not
                 requests.post("http://127.0.0.1:8080/state", json={"event": "response_event", "action":"clear"})
                 print('sent request to clear response event')
             else:
                 delay(55) # Wait for user to report back? --> set with transmit button?
+                #speak("Control Tower: Awaiting flight status, patient status, and ETA.")
         last_radio_update = time.time()
         #radio_update_complete.set()
         requests.post("http://127.0.0.1:8080/state", json={"event": "radioUpdateComplete", "action":"set"})
@@ -108,6 +116,7 @@ def inflight_status_check(states):
 # Function to provide medicine administration guidance
 def administer():
    print('administering medication')
+   logging.info('Administer medication radio comm initiated')
    with status_lock:  
        speak("Control Tower: The patient has a history of altitude sickness")
        #time.sleep(45) # Wait for user to report back
@@ -117,15 +126,17 @@ def administer():
        speak("3. Administer the dexamethasone via IV push")
        speak("4. Monitor patient's vital signs and response to the medication")
        speak("5. Inform the pilot to change the altitude to 1000 feet")
-       requests.post("http://127.0.0.1:8080/state", json={"event": "administer_event", "action":"clear"}) #clearing adminster event
+       requests.post("http://127.0.0.1:8080/state", json={"event": "administer_event", "action":"clear"}) # clearing adminster event
        print('sent request to clear administer event')
-       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
+       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) # clear emergency event
        print('sent request to clear emergency_event')
-       requests.get("http://127.0.0.1:8080/var", {"vitals-state":0})
+       requests.get("http://127.0.0.1:8080/var", {"vitals-state":0}) # making the vitals-state 0 again
+       logging.info('Administer medication radio comm done- command to clear event sent')
        
 
 def continueEmory():
    print('Continue to Emory')
+   logging.info('Continue flying to Emory radio comm response initiated')
    with status_lock:  
       speak("Control Tower: Continue flying to Emory University Hospital")
       requests.post("http://127.0.0.1:8080/state", json={"event": "tank_event", "action":"clear"}) #clearing tank event
@@ -133,16 +144,24 @@ def continueEmory():
       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
       print('sent request to clear emergency_event')
       requests.get("http://127.0.0.1:8080/var", {"empty-tank":0})
+      logging.info('Continue flying to Emory radio comm done- command to clear event and make the emergency variables 0 sent')
+
 
 def flyOldForth():
-   print('reroute to Oldforth')
+   print('Reroute to Oldforth')
+   logging.info('Reroute to Oldforth radio comm response initiated')
    with status_lock:  
       speak("Control Tower: Reroute to Old Forth Hospital")
       requests.post("http://127.0.0.1:8080/state", json={"event": "engine_event", "action":"clear"}) #clearing engine event
       print('sent request to clear engine_event')
       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
       print('sent request to clear emergency_event')
-      requests.get("http://127.0.0.1:8080/var", {"engine-failure":0,"vitals-state":0})
+      requests.get("http://127.0.0.1:8080/var", {"engine-failure":0,"vitals-state":0}) #making the vitals-state 0 again
+      print('sent request to clear emergency_event')
+      requests.get("http://127.0.0.1:8080/var", {"enfine-failure":0}) #making the engine-failure 0 again
+      logging.info('Reroute to Oldforth radio comm done- command to clear event and make the emergency variables 0 sent' )
+
+      
 
 def set_radio_update():  
     print("Radio Update completed")
