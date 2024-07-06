@@ -1178,6 +1178,7 @@ div.vitals-popup {
         margin-bottom: 10px;
         padding: 12px;
         border: 1px solid #ccc;
+        font-size: 7px;
         border-radius: 5px;
         text-align: center;
       }

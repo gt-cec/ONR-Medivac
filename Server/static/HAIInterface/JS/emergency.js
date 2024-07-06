@@ -120,7 +120,7 @@ function initEmergency() {
         //Pressure Warning
         if (studyStage == '4') {
           console.log("checking")
-          if (warning_dist <= 350 || (Math.abs(time_diff - 180) <= 3.3) || (PressureWarning==1))  {
+          if (warning_dist <= 350 || (Math.abs(time_diff - 180) <= 2.7) || (PressureWarning==1))  {
               console.log("here")
               if((warning_satisfied==false)|| (PressureWarning==1)){
                   console.log("WARNING LOCATION REACHED")
@@ -231,7 +231,7 @@ function initEmergency() {
         document.getElementById("main").style.display = "flex"
         document.getElementById("topbar").style.display = "flex"
         emergencyState = 0;
-        audio.pause()
+        document.getElementById('sirenSound').pause();
         //updating the server
         await fetch("/var?airspace-state=" + emergencyState)
     }
@@ -328,7 +328,7 @@ function activateWarningAlert() {
       document.body.classList.remove('dull-background');
     }, { once: true });
     PressureWarning=0  
-    audio.pause()
+    document.getElementById('sirenSound').pause();
     //updating the server
     await fetch("/var?pressure-warning=" + PressureWarning)
   }
@@ -349,7 +349,6 @@ function activateEngineAlert() {
   // Function to show more information about engine failure and stop the siren
   function showMoreInfo() {
     log({"page": "Inflight", "action": "Engine failure emergency- show more info button pressed"}); 
-    audio.pause()
     const alertBox = document.getElementById('alertBox');
     alertBox.classList.add('expanded');
     document.getElementById('alertExplanation').style.display = 'block';
@@ -371,7 +370,7 @@ function activateEngineAlert() {
   // Function to close engine failure alert
   function closeAlert() {
     console.log("closing")
-    audio.pause()
+    document.getElementById('sirenSound').pause();
     log({"page": "Inflight", "action": "Engine failure emergency- close button pressed"}); 
     const overlay = document.getElementById('alertOverlay');
     overlay.style.opacity = '0';
@@ -387,7 +386,7 @@ function activateEngineAlert() {
 // Function to activate the empty fuel tank emergency alert
 function activateFuelAlert() {
   console.log(EmptyTank)
-  audio.play()
+  document.getElementById('sirenSound').play();
   log({"page": "Inflight", "action": "Fuel tank emergency alert-displayed"}); 
   const fAoverlay = document.getElementById('fuelAlertOverlay');
   document.body.classList.add('dull-background');
@@ -399,7 +398,7 @@ function activateFuelAlert() {
   // Function to show more information regarding fuel tank and stop the siren
   function showFuelInfo() {
     log({"page": "Inflight", "action": "Fuel tank emergency- show more info button pressed"}); 
-    audio.pause()
+    document.getElementById('sirenSound').pause();
     const fAalertBox = document.getElementById('fuelAlertBox');
     fAalertBox.classList.add('expanded');
     document.getElementById('fuelAlertExplanation').style.display = 'block';
