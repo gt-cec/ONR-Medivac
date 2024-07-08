@@ -39,7 +39,7 @@ window.setInterval(async () => {
 
     updateMap()
     //time to destination 
-    document.getElementById("dest-time").innerHTML="Time to Destination: " +timeToDestination +" mins"
+    document.getElementById("dest-time").innerHTML="Time to Destination: " + Math.floor(timeToDestination)+" mins"+":"+ Math.floor((timeToDestination*60) % 60)+"s"
 
     // select the item if there is no map selection
     if (typeof mapSelection === "undefined") {

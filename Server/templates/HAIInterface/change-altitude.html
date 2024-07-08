@@ -95,11 +95,9 @@
             fetch("/var?change-altitude"+ selectedValue)
             fetch("/var?vitals-state=" + 0)  //removing vitals emergency
             
-        setTimeout(() => {
-            window.location.href ='/hai-interface/inflight?change-altitude=' +  selectedValue;
-         }, 1500) 
-            
-           
+            setTimeout(() => {
+                window.location.href ='/hai-interface/inflight?change-altitude=' +  selectedValue;
+            }, 1500) 
             
             }
         } 

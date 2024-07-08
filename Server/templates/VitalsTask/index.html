@@ -209,8 +209,9 @@
     
         }, 5000);
 
-        const altitudeGauge = document.getElementById('altitude-gauge');
+      const altitudeGauge = document.getElementById('altitude-gauge');
       const altitudeValue = document.getElementById('altitude-value');
+      let vitalsEmergency=false
   
       function updateAltitude() {
           altitudeValue.textContent = 'HIGH';
@@ -234,8 +235,10 @@
         if (message["vitals-state"]==1)
         {
           updateAltitude()  //altitude change for vitals emergency
+          vitalsEmergency=true
         }
-        if (message["change-altitude"]!= null || message["vitals-state"]==0 )
+        //if (message["change-altitude"]!= null || message["vitals-state"]==0 )
+        if ( vitalsEmergency==true && ["vitals-state"]==0 )
         {
           changeGauge()  //altitude change for vitals emergency
         }

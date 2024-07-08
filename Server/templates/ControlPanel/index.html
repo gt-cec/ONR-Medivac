@@ -47,6 +47,7 @@
                     </div>
                     <div class="subcontent-container" style="flex-grow:0">
                         <div id="trigger-emergency" class="control-button">Trigger Emergency</div>
+                        <div id="trigger-vitals" class="control-button">Trigger Vitals</div>
                         <div id="trigger-pressure-warning" class="control-button">Trigger Pressure Warning</div>
                         <div id="trigger-engine-failure" class="control-button">Trigger Engine Failure</div>
                         <div id="trigger-empty-tank" class="control-button">Trigger Empty Tank</div>
@@ -95,6 +96,10 @@
         document.getElementById("trigger-emergency").onclick = async () => {
             await fetch("/var?airspace-state=1")
             //await fetch("/var?dest-changed=" + false)  //so as to force them to choose a destination
+        }
+
+        document.getElementById("trigger-vitals").onclick = async () => {
+            await fetch("/var?vitals-state=1")
         }
 
         document.getElementById("trigger-pressure-warning").onclick = async () => {

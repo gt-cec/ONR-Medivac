@@ -183,8 +183,8 @@ function initEmergency() {
         if (EmptyTank == 1) {
           log({"page": "emergency", "action": "show Fuel Tank Empty Alert , hide map"})
           hideMap()
-          audio.play()
-          audio.volume=0.05
+         /*  audio.play()
+          audio.volume=0.05 */
           activateFuelAlert()
       }
 
@@ -192,8 +192,8 @@ function initEmergency() {
         if (PressureWarning == 1) {
             log({"page": "emergency", "action": "show Pressure Miscalibrated Warning, hide map"})
             hideMap()
-            audio.play()
-            audio.volume=0.05
+            /* audio.play()
+            audio.volume=0.05 */
             activateWarningAlert()
         }
 
@@ -201,8 +201,8 @@ function initEmergency() {
         if (EngineFailure == 1) {
           log({"page": "emergency", "action": "show Engine Failure Alert, hide map"})
           hideMap()
-          audio.play()
-          audio.volume=0.05
+       /*    audio.play()
+          audio.volume=0.05 */
           activateEngineAlert()
         }
 
@@ -282,6 +282,7 @@ function activateWarningAlert() {
     log({"page": "Inflight", "action": "Pressure Warning- show info button pressed"}); 
     const pWalertBox = document.getElementById('pressureWarningalertBox');
     pWalertBox.classList.add('expanded');
+    document.getElementById('sirenSound').pause();
     document.getElementById('pressureWarningalertExplanation').style.display = 'block';
     document.getElementById('pressureWarningmoreInfoButton').style.display = 'none';
     //document.getElementById('pressureWarningcloseButton').style.display = 'block';
@@ -404,14 +405,21 @@ function activateFuelAlert() {
     document.getElementById('fuelAlertExplanation').style.display = 'block';
     document.getElementById('fuelInfoButton').style.display = 'none';
     document.getElementById('okButtonFuel').style.display = 'block';
-    document.getElementById('sirenSound').pause();
     document.getElementById('sirenSound').currentTime = 0;
     document.getElementById("okButtonFuel").onclick = async () => { closeFuelAlert(); 
       log({"page": "Inflight", "action": "Continue button on Fuel tank emergency pressed"}); 
+      EmptyTank=0
+      console.log(EmptyTank); 
+      //updating the server
+      await fetch("/var?empty-tank=" + EmptyTank)
     }
 
     document.getElementById("elButtonFuel").onclick = async () => { closeFuelAlert(); 
       log({"page": "Inflight", "action": "Change destination button on Fuel tank emergency pressed"}); 
+      EmptyTank=0
+      console.log(EmptyTank); 
+      //updating the server
+      await fetch("/var?empty-tank=" + EmptyTank)
       window.location.href = '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 ;
     }
 
@@ -420,11 +428,12 @@ function activateFuelAlert() {
       log({"page": "Inflight", "action": "Ground button on Fuel tank emergency pressed"}); 
         console.log('opening radio panel')
         document.querySelector('.radiopanel').classList.toggle('open');
-    }
-      EmptyTank=0
+        EmptyTank=0
       console.log(EmptyTank); 
       //updating the server
-      fetch("/var?empty-tank=" + EmptyTank)
+      await fetch("/var?empty-tank=" + EmptyTank)
+    }
+      
     
  }
 

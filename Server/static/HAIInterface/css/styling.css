@@ -315,8 +315,8 @@ div.flightmap-instruction {
 div.time {
     font-size: 25pt;
     position: absolute;
-    left: 10px;  
-    bottom: 550px;
+    right: 10px;  
+    bottom: 670px;
     padding: 0.5vh;
     background-color:  #b2a4dd; 
     border: 2px solid lightgrey;
@@ -1178,7 +1178,7 @@ div.vitals-popup {
         margin-bottom: 10px;
         padding: 12px;
         border: 1px solid #ccc;
-        font-size: 7px;
+        font-size: 17px;
         border-radius: 5px;
         text-align: center;
       }

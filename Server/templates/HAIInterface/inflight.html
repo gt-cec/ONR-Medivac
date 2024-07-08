@@ -75,7 +75,8 @@
 			lastClicked = new window.Date().getTime()
 			//lastClicked = Infinity  
 			document.getElementById('vitals').style.display = "flex"
-			bell.play()
+			//bell.play()
+			setInterval(bell.play(), 3000);  //delayimg sound to every 3 seconds
 			bell.volume=0.2;
 		}
 	 }
@@ -97,7 +98,7 @@
 			const radiodata = await response.json();
 			if (radiodata["radioUpdateComplete"]){
 				console.log('Radio Update Completed')
-				setTimeout(vitalsLogging(),10000) //after 10 seconds
+				setTimeout(vitalsLogging(),135000) //after 30 seconds
 				/* //send request to clear radio update
 				const Radioresponse = await fetch("/state", {
 						method: 'POST',

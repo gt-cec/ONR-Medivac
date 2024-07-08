@@ -84,7 +84,7 @@ def pre_takeoff():
    print('speaking line 3')
    speak('Set the Callsign to N A S X G S and Radio channel to C O M M 1 for transmitting updates')
    delay(20)
-   speak('Use the Callsign  M E D I V A C  and Radio channel N A V 2 for receiving')
+   speak('Use the Callsign  M E D I V A C  and Radio channel C O M M 2 for receiving')
    requests.post("http://127.0.0.1:8080/state", json={"event": "takeoff_event", "action": "clear"}) #clearing takeoff event
    print('sent request to clear takeoff event')
    logging.info('Takeoff radiocomms clear request sent')
@@ -138,7 +138,6 @@ def administer():
        print('sent request to clear administer event')
        requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) # clear emergency event
        print('sent request to clear emergency_event')
-       requests.get("http://127.0.0.1:8080/var", {"vitals-state":0}) # making the vitals-state 0 again
        logging.info('Administer medication radio comm done- command to clear event sent')
        
 
@@ -151,7 +150,7 @@ def continueEmory():
       print('sent request to clear tank_event')
       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
       print('sent request to clear emergency_event')
-      requests.get("http://127.0.0.1:8080/var", {"empty-tank":0})
+      #requests.get("http://127.0.0.1:8080/var", {"empty-tank":0})
       logging.info('Continue flying to Emory radio comm done- command to clear event and make the emergency variables 0 sent')
 
 
@@ -164,9 +163,7 @@ def flyOldForth():
       print('sent request to clear engine_event')
       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
       print('sent request to clear emergency_event')
-      requests.get("http://127.0.0.1:8080/var", {"engine-failure":0,"vitals-state":0}) #making the vitals-state 0 again
-      print('sent request to clear emergency_event')
-      requests.get("http://127.0.0.1:8080/var", {"enfine-failure":0}) #making the engine-failure 0 again
+      #requests.get("http://127.0.0.1:8080/var", {"enfine-failure":0}) #making the engine-failure 0 again
       logging.info('Reroute to Oldforth radio comm done- command to clear event and make the emergency variables 0 sent' )
 
 def miscalibratedSensor():
@@ -178,7 +175,7 @@ def miscalibratedSensor():
       print('sent request to clear engine_event')
       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
       print('sent request to clear emergency_event')
-      requests.get("http://127.0.0.1:8080/var", {"pressure-warning":0}) #making the vitals-state 0 again
+      #requests.get("http://127.0.0.1:8080/var", {"pressure-warning":0}) #making the vitals-state 0 again
       print('sent request to clear sensor_event')
       logging.info('Miscalibrated sensor radio comm done- command to clear event and make the emergency variables 0 sent' )
 
