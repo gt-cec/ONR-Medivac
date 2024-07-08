@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, make_response
-from SimConnect import *
+#from SimConnect import *
 import logging
 import datetime
 import threading
@@ -640,7 +640,7 @@ response_event = threading.Event() #to be set when user responds with vitals dur
 response_event.clear()
 takeoff_event= threading.Event() #to be set when ready for takeoff
 takeoff_event.clear()
-tank_event = threading.Event() #to be set when user responds with vitals
+tank_event = threading.Event() #to be set when user responds with vitals for sceanrio 2 altitude emergency
 tank_event.clear()
 engine_event = threading.Event() #to be set when engine failure 
 engine_event.clear()
@@ -650,6 +650,8 @@ inflight_event=threading.Event() #when inflight
 inflight_event.clear()
 radio_update_complete = threading.Event() # for ensuring regular radio updates and vitals don't overlap
 radio_update_complete.clear()
+sensor_event= threading.Event() # to be set when pressure waning (miscalbirated sensor) comes up
+sensor_event.clear()
 
 
 events = {
@@ -661,7 +663,8 @@ events = {
     'engine_event': engine_event,
     'tank_event': tank_event,
     'emergency_event': emergency_event,
-    'inflight_event': inflight_event
+    'inflight_event': inflight_event,
+    'sensor_event': sensor_event,
 }
 
 @app.route('/set_event', methods=['POST'])
@@ -733,7 +736,7 @@ def get_states():
         if event_name == "reset":  # clear all events 
             for event in events:
                 events[event].clear()
-        if event_name == "Radio-Update":  # for vitals logging
+        if event_name == "Radio-Update-status":  # for vitals logging
             response = {"radioUpdateComplete": radio_update_complete.is_set()}
             return jsonify(response),200
         elif event_name in events:
@@ -766,7 +769,8 @@ def get_states():
         "engine_event": engine_event.is_set(),
         "tank_event": tank_event.is_set(),
         "emergency_event": emergency_event.is_set(),
-        "inflight_event": inflight_event.is_set()
+        "inflight_event": inflight_event.is_set(),
+        "sensor_event":sensor_event.is_set()
     }
     
     return jsonify(response), 200
@@ -887,7 +891,7 @@ def favicon():
     return app.send_static_file('favicon.ico')
 
 
-@app.route("/audio-input", methods=['POST'])
+""" @app.route("/audio-input", methods=['POST'])
 def audio_input():
     # Captured user input from microphone
     user_audio_data = request.get_json()
@@ -896,7 +900,7 @@ def audio_input():
     # Perform action based on detected keywords
     voice_assistant.perform_action(user_text)
 
-    return "OK"
+    return "OK" """
 
 
 # data for MATLAB route
@@ -932,7 +936,7 @@ def reset_params():
     flight_start_time = 0
     reset_user_display = 1  # resets the user display
     reset_vitals_display = 1  # resets the vitals display
-    time_to_destination=10.0
+    time_to_destination=11.0
     pre_trial=0  #give pre-trial survey
     post_trial=0 #give post-trial survey
     change_altitude=0
@@ -954,10 +958,12 @@ def reset_params():
     takeoff_event.clear()
     response_event.clear()
     administer_event.clear()
+    radio_update_complete.clear()
     engine_event.clear()
     tank_event.clear()
     emergency_event.clear()
     inflight_event.clear()
+    sensor_event.clear()
     event.clear()
     print('All events cleared',takeoff_event.is_set())
     
@@ -1220,7 +1226,7 @@ if __name__ == "__main__":
 
 
     # setting emergency event when other emergency happens
-    if((administer_event.is_set() or tank_event.is_set() or engine_event.is_set()) and (not emergency_event.is_set())):
+    if((administer_event.is_set() or tank_event.is_set() or engine_event.is_set() or sensor_event.is_set()) and (not emergency_event.is_set())):
       emergency_event.set() 
 
     """ if(administer_event.is_set()):

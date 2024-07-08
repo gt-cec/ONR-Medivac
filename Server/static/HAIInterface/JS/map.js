@@ -570,7 +570,6 @@ function initMap() {
                     const dialog = document.createElement('dialog');
                     dialog.innerHTML = `
                     <p>Cannot fly to this location in given conditions.</p>
-                    <p style="justify-content: center; align-items: center;"
                     <button  onclick="this.closest('dialog').close()">OK</button>
                     `;
                     document.body.appendChild(dialog);
