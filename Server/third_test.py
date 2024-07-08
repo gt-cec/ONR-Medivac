@@ -82,14 +82,15 @@ def main(event):
             user_text=recorder.text().strip()
             print(user_text)
             user_audio=dict(text=user_text)
-            #requests.post('http://127.0.0.1:8080/ws', data=user_audio)
+            requests.post('http://127.0.0.1:8080/ws', json={'type': "user_text", 'text': user_text})
+
             
             print("Done. Now we should exit. Bye!")
 
         #speak(user_text)
-        if(len(user_text)!= 0):
+        """ if(len(user_text)!= 0):
             perform_action(user_text)
-        
+         """
  
 
 if __name__ == '__main__':

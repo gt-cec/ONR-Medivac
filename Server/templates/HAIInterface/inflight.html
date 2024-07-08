@@ -50,17 +50,29 @@
 		log({"page": "inflight", "action": "user acknowledged vitals prompt"})
 		console.log('vitals logging acknowledged')
 		document.getElementById('vitals').style.display = "none"
-		lastClicked = new window.Date().getTime()
-		bell.pause()
-		
+		bell.pause()	
+		console.log("vitals completed time:", lastClicked)
+		//send request to clear radio update after vitals done
+		fetch("/state", {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json' 
+						},
+						body: JSON.stringify({ event: 'radioUpdateComplete', action: 'clear'}), 
+					});
+					console.log('Clear Radio Update event request sent');
 	} 
+
 	//fetch from server for emergency?
 	function vitalsLogging() {
 	 if(vitalsState==0 && EngineFailure == 0 && PressureWarning == 0 &&  EmptyTank == 0 && timeToDestination>0.5){
 		var curr = new window.Date().getTime()
+		console.log("lastclicked:", lastClicked)
+		console.log("vitals time:", curr)
 		if( curr - lastClicked > 135000 ){  // 135s assuming 30s logging+ 30s gap + 45s radio update + 30s gap
 			log({"page": "inflight", "action": "displaying vitals prompt"})
 			console.log('vitals logging prompt')
+			lastClicked = new window.Date().getTime()
 			//lastClicked = Infinity  
 			document.getElementById('vitals').style.display = "flex"
 			bell.play()
@@ -75,7 +87,7 @@
 				headers: {
 					'Content-Type': 'application/json' 
 				},
-				body: JSON.stringify({ event: 'Radio-Update'}), 
+				body: JSON.stringify({ event: 'Radio-Update-status'}), 
 			});
 	
 			if (!response.ok) {
@@ -83,21 +95,19 @@
 			}
 	
 			const radiodata = await response.json();
-			console.log("json",radiodata.radioUpdateComplete)
-			console.log("dict:",radiodata["radioUpdateComplete"])
 			if (radiodata["radioUpdateComplete"]){
 				console.log('Radio Update Completed')
-				vitalsLogging()
-				//send request to clear radio update
+				setTimeout(vitalsLogging(),10000) //after 10 seconds
+				/* //send request to clear radio update
 				const Radioresponse = await fetch("/state", {
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json' 
 						},
-						body: JSON.stringify({ event: 'Radio-Update', action: 'clear'}), 
+						body: JSON.stringify({ event: 'radioUpdateComplete', action: 'clear'}), 
 					});
-					console.log('Radio Update event clear request sent')
-			}
+					console.log('Clear Radio Update event request sent');*/
+			} 
 		} catch (err) {
 			console.error('Fetch problem: ${err.message}');
 		}

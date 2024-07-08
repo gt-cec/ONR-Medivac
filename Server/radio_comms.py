@@ -3,6 +3,7 @@ import time
 import pyttsx3
 import requests
 import logging
+import asyncio
 
 
 # Global events and locks
@@ -37,8 +38,13 @@ def speak(text):
         engine.say(text)
         engine.iterate() # Wait until speech is complete 
 
+async def delayForResponse(t):
+    await asyncio.sleep(t)
+    print('waiting for response')
+    
+
 def delay(t):
-     while t>0:
+    while t>0:
         t=t-1
         #print("t=",t)
  
@@ -93,7 +99,7 @@ def inflight_status_check(states):
     current_time = time.time()
     #print("last update", (current_time -last_radio_update))
     #speak("Inflight")
-    if not states["emergency_event"] and (current_time - last_radio_update >90):  # when no emergency and last radio update >90s ago (assuming 30s gap + 30s vitals + 30s gap)
+    if not states["emergency_event"] and (current_time - last_radio_update >90) and not states["radioUpdateComplete"]:  # when no emergency and last radio update >90s ago (assuming 30s gap + 30s vitals + 30s gap) and radio_update is clear (i.e. vitals logging completed)
         print("here")
         with status_lock:  
             print("Asking for radio updates")
@@ -101,11 +107,13 @@ def inflight_status_check(states):
             logging.info('Inflight Radio Update asked')
             if states["response_event"]: #user reported back
                 print('Transmit button pressed- radio update received')
-                logging.info('Transmit button pressed') #in logs will tell if they did the radio update or not
+                logging.info('Transmit button pressed- radio update received') #in logs will tell if they did the radio update or not
                 requests.post("http://127.0.0.1:8080/state", json={"event": "response_event", "action":"clear"})
                 print('sent request to clear response event')
             else:
-                delay(55) # Wait for user to report back? --> set with transmit button?
+                #asyncio.run(delayForResponse(45))
+                #threading.Timer(45, delay(5)).start
+                delay(550) # Wait for user to report back? --> set with transmit button?
                 #speak("Control Tower: Awaiting flight status, patient status, and ETA.")
         last_radio_update = time.time()
         #radio_update_complete.set()
@@ -161,6 +169,19 @@ def flyOldForth():
       requests.get("http://127.0.0.1:8080/var", {"enfine-failure":0}) #making the engine-failure 0 again
       logging.info('Reroute to Oldforth radio comm done- command to clear event and make the emergency variables 0 sent' )
 
+def miscalibratedSensor():
+   print('Miscalibrated pressure sensor response')
+   logging.info('Ok, continue to monitor the patients vitals and keep us updated ')
+   with status_lock:  
+      speak("Control Tower: Ok, continue to monitor the patients vitals and keep us updated ")
+      requests.post("http://127.0.0.1:8080/state", json={"event": "sensor_event", "action":"clear"}) #clearing sensor event
+      print('sent request to clear engine_event')
+      requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
+      print('sent request to clear emergency_event')
+      requests.get("http://127.0.0.1:8080/var", {"pressure-warning":0}) #making the vitals-state 0 again
+      print('sent request to clear sensor_event')
+      logging.info('Miscalibrated sensor radio comm done- command to clear event and make the emergency variables 0 sent' )
+
       
 
 def set_radio_update():  
@@ -182,6 +203,7 @@ event_handlers = {
     "administer_event": administer,
     "engine_event": flyOldForth,
     "tank_event": continueEmory,
+    "sensor_event":miscalibratedSensor,
     #"status_response_event": set_status_response_event,
     #"emergency_event": handle_emergency
 
@@ -209,7 +231,9 @@ def main():
         elif(receive==1 and study_stage==3 and (PW==1 or EF==1 or ET==1 or vitals==1)):
             print('Satisfied calling func')
             continueEmory()
-        elif(receive==1 and study_stage==4 and (PW==1 or EF==1 or ET==1 or vitals==1)):
+        elif(receive==1 and study_stage==4 and PW==1):
+            miscalibratedSensor()
+        elif(receive==1 and study_stage==4 and EF==1):
             flyOldForth()
 
         if states:
