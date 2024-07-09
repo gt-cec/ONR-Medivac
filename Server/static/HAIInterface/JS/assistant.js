@@ -31,8 +31,8 @@ const keywordsRoutes = {
     "emergency": "/hai-interface/inflight",
     "map": "/hai-interface/inflight"+ showMap,
     "ETA": "hai-interface/map",
-    //"radio": open radio panel
-     //add more keywords and routes 
+    "radio":document.querySelector('.radiopanel').classList.toggle('open') +  document.querySelector('.radiopanel').classList.toggle('open'),     
+    //add more keywords and routes 
 }  
 
 function performAction(usertext){
@@ -46,13 +46,12 @@ function performAction(usertext){
             exit()
             //return; // Exit function after finding the first matching keyword
         }
-        else {
-            // If no keyword is found
-            console.log("Sorry, didn't find  ${usertext}")
-            txt= "Sorry, didn't find "+ usertext
-        }
+        else{
+            // If no keyword is found 
+            console.log("Sorry, didn't find " + usertext);
+            txt = "<b>Jarvis: </b> Sorry, didn't find " + usertext;
+            }  
     }
-    
     const userTextBox = document.getElementById('userTextBox');
     const newContent = document.createElement('div');
     newContent.innerHTML = txt;
@@ -64,6 +63,8 @@ function performAction(usertext){
 // Function to handle user text
 function handleUserText(text) {
     console.log('text')
+    //console.log("prevtext:",prevText)
+    
     //document.getElementById('userTextBox').style.display = 'block';
     const userTextBox = document.getElementById('userTextBox');
     const newContent = document.createElement('div');
@@ -90,15 +91,23 @@ function initAssistant()
             }
     
             const json = await response.json();
-    
-            if (json.userText != "") {
+            console.log("Parsed JSON:", json);
+
+            if (json.userText && json.userText !== prevText) {
+                console.log("Received new text:", json.userText);
+                try {
+                    handleUserText(json.userText);
+                    prevText = json.userText;
+                } catch (error) {
+                    console.error("Error in handleUserText:", error);
+                }
+            } 
+
+            /* if (json.userText != "") {
                 console.log("Received text")
-                if(prevTxt!=json.userText)
-                    prevTxt=json.userText
-                    console.log('prevTxt',prevTxt)
                 handleUserText(json.userText);
-            }
-            
+            } */
+
             if (json.assistantIsActive) {
                 showAssistant();
             }
@@ -107,10 +116,15 @@ function initAssistant()
             }
         } catch (err) {
             console.error(`Fetch problem: ${err.message}`);
+            if (err.name === 'TypeError') {
+                console.error("This might be a network issue");
+            }
         }
     }
-    setInterval(fetchData, 2500);  
 
-    // Initial fetch
-    //fetchData();  
+    //console.log("Setting up interval for fetchData");
+    setInterval(fetchData, 2500);
+
+    //console.log("Performing initial fetchData call");
+    //fetchData();
 }
