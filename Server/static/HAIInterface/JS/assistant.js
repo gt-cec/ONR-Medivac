@@ -17,7 +17,7 @@ function hideAssistant() {
         document.getElementById('assistant').style.display = 'none';
         document.body.classList.remove('assistant-dull-background', 'active');
         document.getElementById('userTextBox').style.display = 'none';
-    }, 1500)  // wait 1.5 seconds before hide
+    }, 1500)  // wait 3 seconds to hide
     
 }
 
@@ -29,116 +29,88 @@ const keywordsRoutes = {
     "change": "/hai-interface/change-destination",
     "destination": "/hai-interface/change-destination",
     "emergency": "/hai-interface/inflight",
-    "map": "/hai-interface/inflight"+ showMap(),
+    "map": "/hai-interface/inflight"+ showMap,
     "ETA": "hai-interface/map",
-    "radio":"document.querySelector('.radiopanel').classList.toggle('open')" +  console.log('opening radio panel') +  document.querySelector('.radiopanel').classList.toggle('open'),     //add more keywords and routes 
+    //"radio": open radio panel
+     //add more keywords and routes 
 }  
 
-function performAction(usertext) {
+function performAction(usertext){
     usertext = usertext.toLowerCase();
-    const userTextBox = document.getElementById('userTextBox');
-    const newContent = document.createElement('div');
     console.log("Looking");
 
     for (let [keyword, route] of Object.entries(keywordsRoutes)) {
         if (usertext.includes(keyword)) {
-            txt = "Going to " + keyword;
-            // Display the message
-            newContent.innerHTML = txt;
-            userTextBox.appendChild(newContent);
-            userTextBox.scrollTop = userTextBox.scrollHeight;
-            console.log('found')
-            
-            // Delay the redirect
-            setTimeout(() => {
-                window.location.href = route;
-            }, 1500); // 1.5 second delay
-            return; // Exit function after finding the first matching keyword
+            txt="Going to "+ keyword
+            window.location.href = route
+            exit()
+            //return; // Exit function after finding the first matching keyword
+        }
+        else {
+            // If no keyword is found
+            console.log("Sorry, didn't find  ${usertext}")
+            txt= "Sorry, didn't find "+ usertext
         }
     }
-    // If no keyword is found 
-    console.log("Sorry, didn't find " + usertext);
-    txt = "<b>Jarvis: </b> Sorry, didn't find " + usertext;
+    
+    const userTextBox = document.getElementById('userTextBox');
+    const newContent = document.createElement('div');
     newContent.innerHTML = txt;
     userTextBox.appendChild(newContent);
-    userTextBox.scrollTop = userTextBox.scrollHeight;
-}
-    
-   
+    userTextBox.scrollTop = userTextBox.scrollHeight; // Auto-scroll to the bottom
+    }
 
 
-let prevText= ""
 // Function to handle user text
 function handleUserText(text) {
     console.log('text')
-    console.log(typeof(text))
-    //console.log("prevtext:",prevText)
-    
     //document.getElementById('userTextBox').style.display = 'block';
     const userTextBox = document.getElementById('userTextBox');
     const newContent = document.createElement('div');
     newContent.innerHTML = "<b>Participant: </b> " + text;
     userTextBox.appendChild(newContent);
-    userTextBox.scrollTop = userTextBox.scrollHeight; // Auto-scroll to the bottom
-    performAction(text)
-    prevText=text
-    
+    //userTextBox.scrollTop = userTextBox.scrollHeight; // Auto-scroll to the bottom
+    //performAction(text)
 }
 
-
-
-function initAssistant() {
-    let prevText = "";
-    console.log("initAssistant function started");
-
+function initAssistant()
+{  let prevTxt=""
     async function fetchData() {
-        console.log("fetchData function called");
         try {
-            console.log("Attempting fetch to /ws");
             const response = await fetch("/ws", {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
                 },
-                body: JSON.stringify({ type: 'status_check' })
+                body: JSON.stringify({ type: 'status_check'}), // Dummy body to comply with POST others throws error 400
             });
-
+    
             if (!response.ok) {
                 throw new Error(`HTTP error: ${response.status}`);
             }
-
-            console.log("Fetch successful, parsing JSON");
+    
             const json = await response.json();
-            console.log("Parsed JSON:", json);
-
-            if (json.userText && json.userText !== prevText) {
-                console.log("Received new text:", json.userText);
-                try {
-                    handleUserText(json.userText);
-                    prevText = json.userText;
-                } catch (error) {
-                    console.error("Error in handleUserText:", error);
-                }
+    
+            if (json.userText != "") {
+                console.log("Received text")
+                if(prevTxt!=json.userText)
+                    prevTxt=json.userText
+                    console.log('prevTxt',prevTxt)
+                handleUserText(json.userText);
             }
-
+            
             if (json.assistantIsActive) {
-                console.log("Showing assistant");
                 showAssistant();
-            } else {
-                console.log("Hiding assistant");
-                hideAssistant();
+            }
+            else {
+                 hideAssistant();
             }
         } catch (err) {
             console.error(`Fetch problem: ${err.message}`);
-            if (err.name === 'TypeError') {
-                console.error("This might be a CORS or network issue");
-            }
         }
     }
+    setInterval(fetchData, 2500);  
 
-    console.log("Setting up interval for fetchData");
-    setInterval(fetchData, 2500);
-
-    console.log("Performing initial fetchData call");
-    //fetchData();
+    // Initial fetch
+    //fetchData();  
 }

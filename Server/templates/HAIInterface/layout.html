@@ -164,8 +164,8 @@
                 <br><br>
 
                 <div class="controls">
-                    <button onclick="transmit()" class="transmit-btn">Transmit</button>
-                    <button onclick="receive()" class="receive-btn">Receive</button>
+                    <button onclick="transmit()" class="transmit-btn">Transmit COMM1</button>
+                    <button onclick="receive()" class="receive-btn">Transmit COMM2</button>
                 </div>
 
 
@@ -362,7 +362,7 @@
                 // alert('Select correct Callsign for transmitting ')
                 const dialog = document.createElement('dialog');
                     dialog.innerHTML = `
-                    <p>Select correct Callsign for transmitting</p>
+                    <p>Select correct Callsign for transmitting updates</p>
                     <button onclick="this.closest('dialog').close()">OK</button>
                     `;
                     document.body.appendChild(dialog);
@@ -385,23 +385,24 @@
                 const radio = document.querySelector('input[name="radio-select"]:checked');
                 if (radio) {
                     log({"action": "radio set to:"+ radio.value})
+                    showMap()
                     //alert(`${callsign} transmitting on ${radio.value} ${currentFrequency.toFixed(2)} MHz`);
                     const dialog = document.createElement('dialog');
                     dialog.innerHTML = `
-                    <p>${callsign} transmitting on ${radio.value} ${currentFrequency.toFixed(2)} MHz</p>
+                    <p>${callsign} transmitting updates on ${radio.value} ${currentFrequency.toFixed(2)} MHz</p>
                     <button onclick="this.closest('dialog').close()">Close</button>
                     `;
                     document.body.appendChild(dialog);
                     dialog.showModal();
                     radioTransmit=1
                     fetch("/var?transmit=" + radioTransmit) 
-                    log({"action": callsign+"transmitting on" + radio.value + (currentFrequency.toFixed(2))+" MHz" })
+                    log({"action": callsign+"transmitting updates on" + radio.value + (currentFrequency.toFixed(2))+" MHz" })
                 } 
                 else {
                     //alert('Select a radio channel');
                     const dialog = document.createElement('dialog');
                     dialog.innerHTML = `
-                    <p>Select a radio channel</p>
+                    <p>Select a radio channel for transmitting updates</p>
                     <button onclick="this.closest('dialog').close()">OK</button>
                     `;
                     document.body.appendChild(dialog);
@@ -426,7 +427,7 @@
                 //alert('Select receiving callsign')
                 const dialog = document.createElement('dialog');
                     dialog.innerHTML = `
-                    <p>Select correct Callsign for receiving</p>
+                    <p>Select correct Callsign for contacting ground</p>
                     <button onclick="this.closest('dialog').close()">OK</button>
                     `;
                     document.body.appendChild(dialog);
@@ -448,23 +449,24 @@
                     const radio = document.querySelector('input[name="radio-select"]:checked');
                     if (radio.value== "Comm2") {
                         log({"action": "radio set to:"+ radio.value})
+                        showMap()
                         //alert(`${callsign} receiving on ${radio.value} ${currentFrequency.toFixed(2)} MHz`);
                         const dialog = document.createElement('dialog');
                         dialog.innerHTML = `
-                        <p>${callsign} receiving on ${radio.value} ${currentFrequency.toFixed(2)} MHz</p>
+                        <p>${callsign} contacting ground on ${radio.value} ${currentFrequency.toFixed(2)} MHz</p>
                         <button onclick="this.closest('dialog').close()">Close</button>
                         `;
                         document.body.appendChild(dialog);
                         dialog.showModal();
                         radioReceive=1
                         fetch("/var?receive=" + radioReceive) 
-                        log({"action": callsign+"receiving on" + radio.value + (currentFrequency.toFixed(2))+" MHz" })
+                        log({"action": callsign+"transmitting on" + radio.value + (currentFrequency.toFixed(2))+" MHz" })
                 } 
                 else {
                     // alert('Radio channel for Receiving missing or incorrect');  
                     const dialog = document.createElement('dialog');
                     dialog.innerHTML = `
-                    <p>'Radio channel for Receiving missing or incorrect'</p>
+                    <p>'Radio channel for contacting ground missing or incorrect'</p>
                     <button onclick="this.closest('dialog').close()">OK</button>
                     `;
                     document.body.appendChild(dialog);

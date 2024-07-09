@@ -98,7 +98,7 @@
 			const radiodata = await response.json();
 			if (radiodata["radioUpdateComplete"]){
 				console.log('Radio Update Completed')
-				setTimeout(vitalsLogging(),135000) //after 30 seconds
+				setTimeout(vitalsLogging(),200000) //after 30 seconds
 				/* //send request to clear radio update
 				const Radioresponse = await fetch("/state", {
 						method: 'POST',
