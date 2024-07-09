@@ -93,7 +93,6 @@ def pre_takeoff():
 # Function to simulate in-flight status checks
 def inflight_status_check(states):
     global last_radio_update 
-    t=0
       #print('Inflight radio updates ', states)
       #while not states["emergency_event"]:
          #print('radio updates')
@@ -102,28 +101,24 @@ def inflight_status_check(states):
     #speak("Inflight")
     if not states["emergency_event"] and (current_time - last_radio_update >90) and not states["radioUpdateComplete"]:  # when no emergency and last radio update >90s ago (assuming 30s gap + 30s vitals + 30s gap) and radio_update is clear (i.e. vitals logging completed)
         print("here")
-        start = time.time()
         with status_lock:  
             print("Asking for radio updates")
             speak("Control Tower: Please report your flight status, patient status, and ETA.")
             logging.info('Inflight Radio Update asked')
-            end = time.time()
-            elapsed=end-start
-            #print("elapsed",elapsed)
-            while not states["response_event"] or (time.time() - start >45) : #waiting for user to report back
-                t=t+1
-
-        print('Transmit button pressed- radio update received')
-        logging.info('Transmit button pressed- radio update received') #in logs will tell if they did the radio update or not
-        requests.post("http://127.0.0.1:8080/state", json={"event": "response_event", "action":"clear"})
-        print('sent request to clear response event')
-        requests.post("http://127.0.0.1:8080/state", json={"event": "radioUpdateComplete", "action":"set"})
-        print('sent request to set radio update complete')
-       
+            if states["response_event"]: #user reported back
+                print('Transmit button pressed- radio update received')
+                logging.info('Transmit button pressed- radio update received') #in logs will tell if they did the radio update or not
+                requests.post("http://127.0.0.1:8080/state", json={"event": "response_event", "action":"clear"})
+                print('sent request to clear response event')
+            else:
+                #asyncio.run(delayForResponse(45))
+                #threading.Timer(45, delay(5)).start
+                delay(550) # Wait for user to report back? --> set with transmit button?
+                #speak("Control Tower: Awaiting flight status, patient status, and ETA.")
         last_radio_update = time.time()
         #radio_update_complete.set()
-        #yield
-        
+        requests.post("http://127.0.0.1:8080/state", json={"event": "radioUpdateComplete", "action":"set"})
+        print('sent request to set radio update complete')
     delay(100)
 
 # Function to provide medicine administration guidance

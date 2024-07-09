@@ -383,14 +383,14 @@
                 }
                 else{
                 const radio = document.querySelector('input[name="radio-select"]:checked');
-                if (radio) {
+                if (radio.value== "Comm1") {
                     log({"action": "radio set to:"+ radio.value})
                     showMap()
                     //alert(`${callsign} transmitting on ${radio.value} ${currentFrequency.toFixed(2)} MHz`);
                     const dialog = document.createElement('dialog');
                     dialog.innerHTML = `
                     <p>${callsign} transmitting updates on ${radio.value} ${currentFrequency.toFixed(2)} MHz</p>
-                    <button onclick="this.closest('dialog').close()">Close</button>
+                    <button onclick="this.closest('dialog').close() ,  hideMap()">Close</button>
                     `;
                     document.body.appendChild(dialog);
                     dialog.showModal();
@@ -454,7 +454,7 @@
                         const dialog = document.createElement('dialog');
                         dialog.innerHTML = `
                         <p>${callsign} contacting ground on ${radio.value} ${currentFrequency.toFixed(2)} MHz</p>
-                        <button onclick="this.closest('dialog').close()">Close</button>
+                        <button onclick="this.closest('dialog').close(), hideMap()">Close</button>
                         `;
                         document.body.appendChild(dialog);
                         dialog.showModal();

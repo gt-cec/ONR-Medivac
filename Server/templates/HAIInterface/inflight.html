@@ -29,7 +29,9 @@
 <script>
 {% block script %}
 	var HelpId=4;
-	let lastClicked = 0
+	let lastClicked = Infinity
+	let radioCompletetime=0
+	const myTimeout=0
 	let TargetIndex = 100
 	var audio = document.getElementById("myAudio"); 
 	var bell = document.getElementById("bell"); 
@@ -51,7 +53,7 @@
 		console.log('vitals logging acknowledged')
 		document.getElementById('vitals').style.display = "none"
 		bell.pause()	
-		console.log("vitals completed time:", lastClicked)
+		//console.log("vitals completed time:", lastClicked)
 		//send request to clear radio update after vitals done
 		fetch("/state", {
 						method: 'POST',
@@ -67,19 +69,22 @@
 	function vitalsLogging() {
 	 if(vitalsState==0 && EngineFailure == 0 && PressureWarning == 0 &&  EmptyTank == 0 && timeToDestination>0.5){
 		var curr = new window.Date().getTime()
-		console.log("lastclicked:", lastClicked)
+		//console.log("lastclicked:", lastClicked)
+		console.log("radiocompletetime".radioCompletetime)
 		console.log("vitals time:", curr)
-		if( curr - lastClicked > 135000 ){  // 135s assuming 30s logging+ 30s gap + 45s radio update + 30s gap
+		
+		//if( radioCompletetime - curr > 135000 ){  // 135s assuming 30s logging+ 30s gap + 45s radio update + 30s gap
 			log({"page": "inflight", "action": "displaying vitals prompt"})
 			console.log('vitals logging prompt')
 			lastClicked = new window.Date().getTime()
 			//lastClicked = Infinity  
 			document.getElementById('vitals').style.display = "flex"
-			//bell.play()
-			setInterval(bell.play(), 3000);  //delayimg sound to every 3 seconds
+			bell.play()
+			//setInterval(bell.play(), 300);  //delayimg sound
 			bell.volume=0.2;
-		}
-	 }
+			clearTimeout(myTimeout);
+	
+	 	}
 	}
 	async function fetchRadioData() {
 		try {
@@ -98,7 +103,11 @@
 			const radiodata = await response.json();
 			if (radiodata["radioUpdateComplete"]){
 				console.log('Radio Update Completed')
-				setTimeout(vitalsLogging(),15000) //after 15 seconds
+				const myTimeout = setTimeout(() => {
+					radioCompletetime=new window.Date().getTime()
+					console.log("calling vitals logging")
+					vitalsLogging()
+				},75000) //after 75 seconds
 				/* //send request to clear radio update
 				const Radioresponse = await fetch("/state", {
 						method: 'POST',
