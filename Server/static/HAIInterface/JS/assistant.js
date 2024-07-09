@@ -31,13 +31,12 @@ const keywordsRoutes = {
     "emergency": "/hai-interface/inflight",
     "map": "/hai-interface/inflight"+ showMap(),
     "ETA": "hai-interface/map",
-    "radio":"document.querySelector('.radiopanel').classList.toggle('open')" +  console.log('opening radio panel') +  document.querySelector('.radiopanel').classList.toggle('open'),     //add more keywords and routes 
+    "radio":document.querySelector('.radiopanel').classList.toggle('open') +  document.querySelector('.radiopanel').classList.toggle('open'),     
+    //add more keywords and routes 
 }  
 
 function performAction(usertext) {
     usertext = usertext.toLowerCase();
-    const userTextBox = document.getElementById('userTextBox');
-    const newContent = document.createElement('div');
     console.log("Looking");
 
     for (let [keyword, route] of Object.entries(keywordsRoutes)) {
@@ -55,10 +54,14 @@ function performAction(usertext) {
             }, 1500); // 1.5 second delay
             return; // Exit function after finding the first matching keyword
         }
+        else{
+            // If no keyword is found 
+            console.log("Sorry, didn't find " + usertext);
+            txt = "<b>Jarvis: </b> Sorry, didn't find " + usertext;
+            }  
     }
-    // If no keyword is found 
-    console.log("Sorry, didn't find " + usertext);
-    txt = "<b>Jarvis: </b> Sorry, didn't find " + usertext;
+    const userTextBox = document.getElementById('userTextBox');
+    const newContent = document.createElement('div');
     newContent.innerHTML = txt;
     userTextBox.appendChild(newContent);
     userTextBox.scrollTop = userTextBox.scrollHeight;
@@ -71,7 +74,6 @@ let prevText= ""
 // Function to handle user text
 function handleUserText(text) {
     console.log('text')
-    console.log(typeof(text))
     //console.log("prevtext:",prevText)
     
     //document.getElementById('userTextBox').style.display = 'block';
@@ -92,9 +94,7 @@ function initAssistant() {
     console.log("initAssistant function started");
 
     async function fetchData() {
-        console.log("fetchData function called");
         try {
-            console.log("Attempting fetch to /ws");
             const response = await fetch("/ws", {
                 method: 'POST',
                 headers: {
@@ -119,7 +119,12 @@ function initAssistant() {
                 } catch (error) {
                     console.error("Error in handleUserText:", error);
                 }
-            }
+            } 
+
+            /* if (json.userText != "") {
+                console.log("Received text")
+                handleUserText(json.userText);
+            } */
 
             if (json.assistantIsActive) {
                 console.log("Showing assistant");
@@ -131,14 +136,14 @@ function initAssistant() {
         } catch (err) {
             console.error(`Fetch problem: ${err.message}`);
             if (err.name === 'TypeError') {
-                console.error("This might be a CORS or network issue");
+                console.error("This might be a network issue");
             }
         }
     }
 
-    console.log("Setting up interval for fetchData");
+    //console.log("Setting up interval for fetchData");
     setInterval(fetchData, 2500);
 
-    console.log("Performing initial fetchData call");
+    //console.log("Performing initial fetchData call");
     //fetchData();
 }
