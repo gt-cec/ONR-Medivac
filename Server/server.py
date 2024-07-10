@@ -183,7 +183,6 @@ data = {
         "longitude": "-83.4070611",
     },
     "1": {
-        #landing for all except scenario 4
         "name": "Grady Memorial Hospital",
         "id": "1GE8",
         "location": "80 JESSE HILL JR DR. ATLANTA, GA 30303",
@@ -210,7 +209,7 @@ data = {
         "longitude": "-84.4358333",
     },
     "3": {
-        #Landing for all scenarios except 4
+        #Landing for all scenarios except 4 Medevac II
         "name": "Emory University Hospital Heliport",
         "id": "7GA8",
         "location": "1364 CLIFTON ROAD NEATLANTA, GA 30322",
@@ -220,8 +219,10 @@ data = {
         "nominal_departure": False,
         "image1": "../static/HAIInterface/img/Mary1.png",
         "image2": "../static/HAIInterface/img/Emory.png",
-        "latitude": "33.7919194",
-        "longitude": "-84.3225861",
+        # "latitude": "33.7919194", original
+        # "longitude": "-84.3225861", original
+        "latitude": "33.7955484240535", #offset for visibility to Chappell Park baseball fields
+        "longitude": "-84.3290985066887", #offset to chappel Park baseball fields
     },
     "4": {
         "name": "Emory University Hospital Midtown Heliport",
@@ -431,8 +432,10 @@ data = {
         "nominal_departure": False,
         "image1": "../static/HAIInterface/img/Mary1.png",
         "image2": "../static/HAIInterface/img/Emory.png",
-        "latitude": "33.7626693",
-        "longitude": "-84.3739344",
+        # "latitude": "33.7626693", original
+        # "longitude": "-84.3739344", original
+        "latitude": "33.764998716424294", # offset for visibility
+        "longitude": "-84.37480637385347", #offset for visibility
     },
 
     "20": {
