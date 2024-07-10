@@ -212,7 +212,7 @@ data = {
         #Landing for all scenarios except 4 Medevac II
         "name": "Emory University Hospital Heliport",
         "id": "7GA8",
-        "location": "1364 CLIFTON ROAD NEATLANTA, GA 30322",
+        "location": "1364 CLIFTON ROAD NE, ATLANTA, GA 30322",
         "hasHospital": True,
         "nearest": False,
         "nominal": True,
@@ -860,12 +860,14 @@ def ws():
     received_request= request.get_json()
     
     if received_request["type"] == "user_text":
-        user_text_audio=received_request["text"]
-        print("prev txt:", prev_text)
-        if(user_text_audio==prev_text):
-            user_text_audio=""
-        else:
+       user_text_audio=received_request["text"]
+       if(user_text_audio==prev_text): #if same as prev text then send empty string
+            user_text_audio==""
+       else:
+            user_text_audio=received_request["text"]
             prev_text=user_text_audio
+
+
 
     if received_request["type"] == "activate_assistant":
         event.set()
@@ -1200,7 +1202,7 @@ def hai_interface(subroute=None):
         num = request.args.get("num")
         resp = make_response(render_template("HAIInterface/help.html", helipads=data, data=HelpData[num]))
     elif subroute == "change-altitude":
-        resp = make_response(render_template("HAIInterface/change-altitude.html", helipads=data, current_altitude=1500)) # current_altitude= position["altitude"]
+        resp = make_response(render_template("HAIInterface/change-altitude.html", helipads=data)) # current_altitude= position["altitude"]
     else:
         resp = make_response("Route in HAI Interface not found!")
 

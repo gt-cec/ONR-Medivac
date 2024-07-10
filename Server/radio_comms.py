@@ -214,6 +214,8 @@ def main():
 
         if data:
             PW=int(data["pressure-warning"])
+            PWsat=data["warning-satisfied"]
+            emerSat=data["satisfied"]
             vitals=int(data["vitals-state"])
             EF=int(data["engine-failure"])
             ET=int(data["empty-tank"])
@@ -223,14 +225,14 @@ def main():
 
         # print("receive:",receive)
         # print("study_stage:",study_stage)
-        if (receive==1 and study_stage==2 and (PW==1 or EF==1 or ET==1 or vitals==1)):
+        if (receive==1 and study_stage==2 and (PW==1 or EF==1 or ET==1 or vitals==1  or emerSat==True)):
             administer()  
-        elif(receive==1 and study_stage==3 and (PW==1 or EF==1 or ET==1 or vitals==1)):
+        elif(receive==1 and study_stage==3 and (PW==1 or EF==1 or ET==1 or vitals==1  or emerSat==True)):
             print('Satisfied calling func')
             continueEmory()
-        elif(receive==1 and study_stage==4 and PW==1):
+        elif(receive==1 and study_stage==4 and (PW==1 or PWsat==True)):
             miscalibratedSensor()
-        elif(receive==1 and study_stage==4 and EF==1):
+        elif(receive==1 and study_stage==4 and (EF==1 or emerSat==True)):
             flyOldForth()
 
         if states:
