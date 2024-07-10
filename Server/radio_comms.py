@@ -82,7 +82,7 @@ def pre_takeoff():
    print('speaking line 2')
    speak('Control Tower:Set the Callsign to NASXGS and Radio channel to COMM 1 for transmitting updates')
    delay(20)
-   speak('Use the Callsign  MEDEVAC  and Radio channel COMM 2 for receiving')
+   speak('Use the Callsign  MED E VAC  and Radio channel COMM 2 for receiving')
    speak("Flight and weather conditions look good. Ready for takeoff.")
    print('speaking line 3')
    requests.post("http://127.0.0.1:8080/state", json={"event": "takeoff_event", "action": "clear"}) #clearing takeoff event
