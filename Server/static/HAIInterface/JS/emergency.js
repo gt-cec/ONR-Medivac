@@ -180,7 +180,7 @@ function initEmergency() {
         }
 
         // to show Fuel tank empty alert 
-        if (EmptyTank == 1) {
+        if (EmptyTank == 1 && satisfied==true) {
           log({"page": "emergency", "action": "show Fuel Tank Empty Alert , hide map"})
           hideMap()
          /*  audio.play()
@@ -189,7 +189,7 @@ function initEmergency() {
       }
 
         // to show pressure miscalibration warning 
-        if (PressureWarning == 1) {
+        if (PressureWarning == 1 && warning_satisfied==true) {
             log({"page": "emergency", "action": "show Pressure Miscalibrated Warning, hide map"})
             hideMap()
             /* audio.play()
@@ -198,7 +198,7 @@ function initEmergency() {
         }
 
         // For Engine failure emergency
-        if (EngineFailure == 1) {
+        if (EngineFailure == 1 && satisfied==true) {
           log({"page": "emergency", "action": "show Engine Failure Alert, hide map"})
           hideMap()
        /*    audio.play()
@@ -212,14 +212,14 @@ function initEmergency() {
         }
         console.log(destChanged)
         
-        if(satisfied ==true && destChanged==false && studyStage == '4'){
+      /*   if(satisfied ==true && destChanged==false && studyStage == '4'){
             console.log('Engine Failure  dest not set')
             log({"page": "emergency", "action": "Engine Failure- destination not changed"})
             // Engine failure alert showed but destination hasn't been changed yet then flying to Old forth
             setTimeout(async ()  => {
               destChanged==True 
               }, 5000);
-        }
+        } */
 
     }, 5000)
 
@@ -283,7 +283,7 @@ function activateWarningAlert() {
     log({"page": "Inflight", "action": "Pressure Warning- show info button pressed"}); 
     const pWalertBox = document.getElementById('pressureWarningalertBox');
     pWalertBox.classList.add('expanded');
-    document.getElementById('sirenSound').pause();
+    document.getElementById('warningSound').pause();
     document.getElementById('pressureWarningalertExplanation').style.display = 'block';
     document.getElementById('pressureWarningmoreInfoButton').style.display = 'none';
     //document.getElementById('pressureWarningcloseButton').style.display = 'block';
@@ -353,6 +353,7 @@ function activateEngineAlert() {
     log({"page": "Inflight", "action": "Engine failure emergency- show more info button pressed"}); 
     const alertBox = document.getElementById('alertBox');
     alertBox.classList.add('expanded');
+    document.getElementById('sirenSound').pause();
     document.getElementById('alertExplanation').style.display = 'block';
     document.getElementById('moreInfoButton').style.display = 'none';
     document.getElementById('CDButton').style.display = 'block';
@@ -372,7 +373,7 @@ function activateEngineAlert() {
   // Function to close engine failure alert
   function closeAlert() {
     console.log("closing")
-    document.getElementById('sirenSound').pause();
+    //document.getElementById('sirenSound').pause();
     log({"page": "Inflight", "action": "Engine failure emergency- close button pressed"}); 
     const overlay = document.getElementById('alertOverlay');
     overlay.style.opacity = '0';

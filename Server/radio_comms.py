@@ -82,7 +82,7 @@ def pre_takeoff():
    print('speaking line 2')
    speak('Control Tower:Set the Callsign to NASXGS and Radio channel to COMM 1 for transmitting updates')
    delay(20)
-   speak('Use the Callsign  MED E VAC  and Radio channel COMM 2 for receiving')
+   speak('Use the Callsign  MEDEVAC  and Radio channel COMM 2 for receiving')
    speak("Flight and weather conditions look good. Ready for takeoff.")
    print('speaking line 3')
    requests.post("http://127.0.0.1:8080/state", json={"event": "takeoff_event", "action": "clear"}) #clearing takeoff event
@@ -214,8 +214,6 @@ def main():
 
         if data:
             PW=int(data["pressure-warning"])
-            PWsat=data["warning-satisfied"]
-            emerSat=data["satisfied"]
             vitals=int(data["vitals-state"])
             EF=int(data["engine-failure"])
             ET=int(data["empty-tank"])
@@ -225,14 +223,14 @@ def main():
 
         # print("receive:",receive)
         # print("study_stage:",study_stage)
-        if (receive==1 and study_stage==2 and (PW==1 or EF==1 or ET==1 or vitals==1  or emerSat==True)):
+        if (receive==1 and study_stage==2 and (PW==1 or EF==1 or ET==1 or vitals==1)):
             administer()  
-        elif(receive==1 and study_stage==3 and (PW==1 or EF==1 or ET==1 or vitals==1  or emerSat==True)):
+        elif(receive==1 and study_stage==3 and (PW==1 or EF==1 or ET==1 or vitals==1)):
             print('Satisfied calling func')
             continueEmory()
-        elif(receive==1 and study_stage==4 and (PW==1 or PWsat==True)):
+        elif(receive==1 and study_stage==4 and PW==1):
             miscalibratedSensor()
-        elif(receive==1 and study_stage==4 and (EF==1 or emerSat==True)):
+        elif(receive==1 and study_stage==4 and EF==1):
             flyOldForth()
 
         if states:
