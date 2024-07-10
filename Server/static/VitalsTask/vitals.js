@@ -262,16 +262,18 @@ function startCountupTimer() {
         
         // set the timer text
         document.getElementById("submit-timer").innerHTML = formatCountupTimer(seconds)
+        document.getElementById("submit-timer").style.color = "black"
+        //document.getElementById("submit-timer").style.backgroundColor = "rgba(255, 0, 0, " + .5 * ((seconds - countupTimerWarningStart) / (countupTimerWarningRed - countupTimerWarningStart)) + ")"
         
         // visual formatting
-        if (seconds > countupTimerWarningRed) {
+       /*  if (seconds > countupTimerWarningRed) {
             document.getElementById("submit-timer").style.color = "darkred"
             document.getElementById("submit-timer").style.fontWeight = 600
         }
         else {
             document.getElementById("submit-timer").style.color = "black"
             document.getElementById("submit-timer").style.backgroundColor = "rgba(255, 0, 0, " + .5 * ((seconds - countupTimerWarningStart) / (countupTimerWarningRed - countupTimerWarningStart)) + ")"
-        }
+        } */
     }, 50)
 }
 
