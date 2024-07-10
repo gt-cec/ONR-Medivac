@@ -275,6 +275,11 @@ body {
     animation-delay: 1s;
     display: block;
     }
+    .fuel-four.gauge4.gauge4 .needle {
+        animation: fourspeed4 2s 1 both;
+        animation-delay: 1s;
+        display: block;
+        }
 
     .slice-colors {
     height: 100%;
@@ -299,6 +304,19 @@ body {
     border-bottom: 50px #e84c3d solid;
     border-right: 50px #e84c3d solid;
     background-color: #e67e22;
+    }
+
+    .fuel-four .slice-colors .st.slice-item:nth-child(2) {
+    border-top: 50px #e67e22 solid;
+    border-right: 50px  #e67e22 solid;
+    background-color: #e84c3d ;
+    }
+    
+    .fuel-four .slice-colors .st.slice-item:nth-child(4) {
+    left: 50%;
+    border-bottom: 50px #1eaa59 solid;
+    border-right: 50px #1eaa59 solid;
+    background-color:#f1c40f ;
     }
 
     @-webkit-keyframes fourspeed1 {

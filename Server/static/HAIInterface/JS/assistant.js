@@ -31,33 +31,37 @@ const keywordsRoutes = {
     "emergency": "/hai-interface/inflight",
     "map": "/hai-interface/inflight"+ showMap,
     "ETA": "hai-interface/map",
-    "radio":document.querySelector('.radiopanel').classList.toggle('open') +  document.querySelector('.radiopanel').classList.toggle('open'),     
+    //"radio":document.querySelector('.radiopanel').classList.toggle('open') +  document.querySelector('.radiopanel').classList.toggle('open'),     
     //add more keywords and routes 
 }  
 
 function performAction(usertext){
     usertext = usertext.toLowerCase();
     console.log("Looking");
+    const userTextBox = document.getElementById('userTextBox');
+    const newContent = document.createElement('div');
 
     for (let [keyword, route] of Object.entries(keywordsRoutes)) {
         if (usertext.includes(keyword)) {
             txt="Going to "+ keyword
+            newContent.innerHTML = txt;
+            userTextBox.appendChild(newContent);
+            userTextBox.scrollTop = userTextBox.scrollHeight; // Auto-scroll to the bottom
+            
             window.location.href = route
-            exit()
-            //return; // Exit function after finding the first matching keyword
+            
+            //exit()
+            return; // Exit function after finding the first matching keyword
         }
-        else{
-            // If no keyword is found 
-            console.log("Sorry, didn't find " + usertext);
-            txt = "<b>Jarvis: </b> Sorry, didn't find " + usertext;
-            }  
     }
-    const userTextBox = document.getElementById('userTextBox');
-    const newContent = document.createElement('div');
+        
+    // If no keyword is found 
+    console.log("Sorry, didn't find " + usertext);
+    txt = "<b>Jarvis: </b> Sorry, didn't find " + usertext;
     newContent.innerHTML = txt;
     userTextBox.appendChild(newContent);
     userTextBox.scrollTop = userTextBox.scrollHeight; // Auto-scroll to the bottom
-    }
+}
 
 
 // Function to handle user text
@@ -70,7 +74,7 @@ function handleUserText(text) {
     const newContent = document.createElement('div');
     newContent.innerHTML = "<b>Participant: </b> " + text;
     userTextBox.appendChild(newContent);
-    //userTextBox.scrollTop = userTextBox.scrollHeight; // Auto-scroll to the bottom
+    userTextBox.scrollTop = userTextBox.scrollHeight; // Auto-scroll to the bottom
     //performAction(text)
 }
 
@@ -93,11 +97,12 @@ function initAssistant()
             const json = await response.json();
             console.log("Parsed JSON:", json);
 
-            if (json.userText && json.userText !== prevText) {
+            //if (json.userText && json.userText !== prevText) {
+            if (json.userText) {
                 console.log("Received new text:", json.userText);
                 try {
                     handleUserText(json.userText);
-                    prevText = json.userText;
+                    //prevText = json.userText;
                 } catch (error) {
                     console.error("Error in handleUserText:", error);
                 }

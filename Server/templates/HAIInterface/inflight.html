@@ -54,15 +54,7 @@
 		document.getElementById('vitals').style.display = "none"
 		bell.pause()	
 		//console.log("vitals completed time:", lastClicked)
-		//send request to clear radio update after vitals done
-		fetch("/state", {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json' 
-						},
-						body: JSON.stringify({ event: 'radioUpdateComplete', action: 'clear'}), 
-					});
-					console.log('Clear Radio Update event request sent');
+		
 	} 
 
 	//fetch from server for emergency?
@@ -70,19 +62,20 @@
 	 if(vitalsState==0 && EngineFailure == 0 && PressureWarning == 0 &&  EmptyTank == 0 && timeToDestination>0.5){
 		var curr = new window.Date().getTime()
 		//console.log("lastclicked:", lastClicked)
-		console.log("radiocompletetime".radioCompletetime)
+		//console.log("radiocompletetime".radioCompletetime)
 		console.log("vitals time:", curr)
 		
 		//if( radioCompletetime - curr > 135000 ){  // 135s assuming 30s logging+ 30s gap + 45s radio update + 30s gap
-			log({"page": "inflight", "action": "displaying vitals prompt"})
-			console.log('vitals logging prompt')
-			lastClicked = new window.Date().getTime()
-			//lastClicked = Infinity  
-			document.getElementById('vitals').style.display = "flex"
-			bell.play()
-			//setInterval(bell.play(), 300);  //delayimg sound
-			bell.volume=0.2;
-			clearTimeout(myTimeout);
+		log({"page": "inflight", "action": "displaying vitals prompt"})
+		console.log('vitals logging prompt')
+		lastClicked = new window.Date().getTime()
+		//lastClicked = Infinity  
+		document.getElementById('vitals').style.display = "flex"
+		bell.play()
+		//setInterval(bell.play(), 300);  //delayimg sound
+		bell.volume=0.2;
+		//send request to clear radio update after vitals done
+		
 	
 	 	}
 	}
@@ -103,12 +96,14 @@
 			const radiodata = await response.json();
 			if (radiodata["radioUpdateComplete"]){
 				console.log('Radio Update Completed')
-				const myTimeout = setTimeout(() => {
+				 this.timeoutID = setTimeout(() => {
 					radioCompletetime=new window.Date().getTime()
 					console.log("calling vitals logging")
 					vitalsLogging()
-				},75000) //after 75 seconds
-				/* //send request to clear radio update
+					clearTimeout(this.timeoutID)
+					console.log("Timeout cleared")
+				},45000) //after 45 seconds
+				//send request to clear radio update
 				const Radioresponse = await fetch("/state", {
 						method: 'POST',
 						headers: {
@@ -116,7 +111,12 @@
 						},
 						body: JSON.stringify({ event: 'radioUpdateComplete', action: 'clear'}), 
 					});
-					console.log('Clear Radio Update event request sent');*/
+				console.log('Clear Radio Update event request sent')
+				//consle.log(typeof this.timeoutID)
+				/* if (typeof this.timeoutID==="number"){
+					clearTimeout(this.timeoutID)
+					console.log("Timeout cleared")
+				} */
 			} 
 		} catch (err) {
 			console.error('Fetch problem: ${err.message}');

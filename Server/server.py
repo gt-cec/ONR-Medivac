@@ -221,8 +221,8 @@ data = {
         "image2": "../static/HAIInterface/img/Emory.png",
         # "latitude": "33.7919194", original
         # "longitude": "-84.3225861", original
-        "latitude": "33.7955484240535", #offset for visibility to Chappell Park baseball fields
-        "longitude": "-84.3290985066887", #offset to chappel Park baseball fields
+        "latitude": "33.795954485398155", #offset for visibility to Chappell Park baseball fields
+        "longitude": "-84.32677430346087", #offset to chappel Park baseball fields
     },
     "4": {
         "name": "Emory University Hospital Midtown Heliport",
@@ -434,8 +434,8 @@ data = {
         "image2": "../static/HAIInterface/img/Emory.png",
         # "latitude": "33.7626693", original
         # "longitude": "-84.3739344", original
-        "latitude": "33.764998716424294", # offset for visibility
-        "longitude": "-84.37480637385347", #offset for visibility
+        "latitude": "33.764773021803975", # offset for visibility
+        "longitude": "-84.37335433252277", #offset for visibility
     },
 
     "20": {
@@ -616,6 +616,7 @@ def handle_message(message):
 # Global variables
 active_assistant = 'T'
 user_text_audio = ""
+prev_text=""
 message = 'deactivate_assistant'
 
 #lock to protect the global variable
@@ -849,7 +850,7 @@ def speak():
 
 @app.route('/ws', methods=['POST'])
 def ws():
-    global user_text_audio
+    global user_text_audio, prev_text
     print("ws method ", request.method)
 
     if event.is_set():
@@ -860,6 +861,11 @@ def ws():
     
     if received_request["type"] == "user_text":
         user_text_audio=received_request["text"]
+        print("prev txt:", prev_text)
+        if(user_text_audio==prev_text):
+            user_text_audio=""
+        else:
+            prev_text=user_text_audio
 
     if received_request["type"] == "activate_assistant":
         event.set()

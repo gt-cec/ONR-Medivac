@@ -449,12 +449,11 @@
                     const radio = document.querySelector('input[name="radio-select"]:checked');
                     if (radio.value== "Comm2") {
                         log({"action": "radio set to:"+ radio.value})
-                        showMap()
                         //alert(`${callsign} receiving on ${radio.value} ${currentFrequency.toFixed(2)} MHz`);
                         const dialog = document.createElement('dialog');
                         dialog.innerHTML = `
                         <p>${callsign} contacting ground on ${radio.value} ${currentFrequency.toFixed(2)} MHz</p>
-                        <button onclick="this.closest('dialog').close(), hideMap()">Close</button>
+                        <button onclick="this.closest('dialog').close()">Close</button>
                         `;
                         document.body.appendChild(dialog);
                         dialog.showModal();
