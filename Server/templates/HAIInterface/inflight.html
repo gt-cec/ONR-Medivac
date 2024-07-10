@@ -57,7 +57,7 @@
 		
 	} 
 
-	//fetch from server for emergency?
+	//checking for emergency
 	function vitalsLogging() {
 	 if(vitalsState==0 && EngineFailure == 0 && PressureWarning == 0 &&  EmptyTank == 0 && timeToDestination>0.5){
 		var curr = new window.Date().getTime()
@@ -121,8 +121,9 @@
 		} catch (err) {
 			console.error('Fetch problem: ${err.message}');
 		}
-	} 
+	
 	setInterval(fetchRadioData, 350);  
+	}
 	// Initial fetch
 	//fetchRadioData();  
 

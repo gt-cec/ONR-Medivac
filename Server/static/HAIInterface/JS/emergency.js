@@ -89,7 +89,7 @@ function initEmergency() {
 
         //declaring emergency
         if ((studyStage == '2') || (studyStage == '3') || (studyStage == '4')) {
-            if (dist <= 500 || (Math.abs(time_diff - 300) <= 2.3) || (EmptyTank==1) || (EngineFailure==1))  {
+            if (dist <= 500 || (Math.abs(time_diff - 300) <= 2.3) || (EmptyTank==1) || (EngineFailure==1)|| (vitalsState==1) ){
                 console.log('Entered here')
                 if((satisfied==false)|| (EngineFailure==1) || (EmptyTank==1)){
                     console.log("EMERGENCY LOCATION REACHED")
@@ -120,7 +120,7 @@ function initEmergency() {
         //Pressure Warning
         if (studyStage == '4') {
           console.log("checking")
-          if (warning_dist <= 350 || (Math.abs(time_diff - 180) <= 2.7) || (PressureWarning==1))  {
+          if (warning_dist <= 330 || (Math.abs(time_diff - 180) <= 2.6) || (PressureWarning==1))  {
               console.log("here")
               if((warning_satisfied==false)|| (PressureWarning==1)){
                   console.log("WARNING LOCATION REACHED")
@@ -270,6 +270,7 @@ function TimeToDestination() {
 // Function to activate the pressure warning alert
 function activateWarningAlert() {
   console.log("PressureWarning activated")
+  document.getElementById('warningSound').play();
   log({"page": "Inflight", "action": "Pressure Warning alert activated"}); 
     document.body.classList.add('dull-background');
     const pWoverlay = document.getElementById('pressureWarningalertOverlay');
@@ -329,7 +330,7 @@ function activateWarningAlert() {
       document.body.classList.remove('dull-background');
     }, { once: true });
     PressureWarning=0  
-    document.getElementById('sirenSound').pause();
+    document.getElementById('warningSound').pause();
     //updating the server
     await fetch("/var?pressure-warning=" + PressureWarning)
   }
@@ -429,9 +430,9 @@ function activateFuelAlert() {
         console.log('opening radio panel')
         document.querySelector('.radiopanel').classList.toggle('open');
         EmptyTank=0
-      console.log(EmptyTank); 
-      //updating the server
-      await fetch("/var?empty-tank=" + EmptyTank)
+        console.log(EmptyTank); 
+        //updating the server
+        await fetch("/var?empty-tank=" + EmptyTank)
     }
       
     
