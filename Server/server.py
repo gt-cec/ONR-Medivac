@@ -724,6 +724,10 @@ def get_states():
     if(airspace_emergency_state==1 or vitals_state==1 or engine_failure==1 or pressure_warning==1 or empty_tank==1):
         emergency_event.set()
         print('Emergency event set')
+    if(emergency_event.is_set() and airspace_emergency_state==0 and vitals_state==0 and engine_failure==0 and pressure_warning==0 and empty_tank==0):
+        emergency_event.clear()
+        print('Emergency event cleared')
+        
     """ if(engine_failure==1):
         engine_event.set()
         print("engine event set")
@@ -1186,7 +1190,6 @@ def hai_interface(subroute=None):
     elif subroute == "inflight":
         inflight_event.set()
         print('inflight',inflight_event.is_set())
-        #radio_comms.inflight_status_check(inflight_event,status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event)
         resp = make_response(render_template("HAIInterface/inflight.html", helipads=data))
     elif subroute == "change-destination":
         resp = make_response(render_template("HAIInterface/change-destination.html", helipads=data))

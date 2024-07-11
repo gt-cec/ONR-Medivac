@@ -220,17 +220,19 @@ def main():
             receive=int(data["receive"])
             transmit=int(data["transmit"])
             study_stage=int(data["study-stage"])
+            satisfied=data["satisfied"]
+            pwSatisfied=data["warning-satisfied"]
 
         # print("receive:",receive)
         # print("study_stage:",study_stage)
-        if (receive==1 and study_stage==2 and (PW==1 or EF==1 or ET==1 or vitals==1)):
+        if (receive==1 and study_stage==2 and (PW==1 or EF==1 or ET==1 or vitals==1 or satisfied==True)):
             administer()  
-        elif(receive==1 and study_stage==3 and (PW==1 or EF==1 or ET==1 or vitals==1)):
+        elif(receive==1 and study_stage==3 and (PW==1 or EF==1 or ET==1 or vitals==1 or satisfied==True)):
             print('Satisfied calling func')
             continueEmory()
-        elif(receive==1 and study_stage==4 and PW==1):
+        elif(receive==1 and study_stage==4 and (PW==1 or pwSatisfied==True)):
             miscalibratedSensor()
-        elif(receive==1 and study_stage==4 and EF==1):
+        elif(receive==1 and study_stage==4 and (EF==1 or satisfied==True)):
             flyOldForth()
 
         if states:
