@@ -566,7 +566,17 @@ function initMap() {
             targetIndex = 19; //landing for scenario 4
             if (mapSelection == 19) {
                 selectItem(mapSelection); // reload the bottom bar for the selected item
-            } else {
+            } 
+            else if (mapSelection == 5) {
+                const dialog = document.createElement('dialog');
+                dialog.innerHTML = `
+                <p>Ground has asked to reroute to Old Forth. Contact ground for more information</p>
+                <button  onclick="this.closest('dialog').close()">OK</button>
+                `;
+                document.body.appendChild(dialog);
+                dialog.showModal();
+            } 
+            else {
                     const dialog = document.createElement('dialog');
                     dialog.innerHTML = `
                     <p>Cannot fly to this location in given conditions.</p>

@@ -80,7 +80,7 @@ def pre_takeoff():
    #speak("Control Tower: Callsign N A S X G  S, radio C O M M 1 ")
    delay(10)
    print('speaking line 2')
-   speak('Control Tower:Set the Callsign to NASXGS and Radio channel to COMM 1 for transmitting updates')
+   speak('Control Tower:Set the Callsign to N A S X G S and Radio channel to COMM 1 for transmitting updates')
    delay(20)
    speak('Use the Callsign  MEDEVAC  and Radio channel COMM 2 for receiving')
    speak("Flight and weather conditions look good. Ready for takeoff.")
@@ -232,10 +232,10 @@ def main():
         elif(receive==1 and study_stage==3 and (PW==1 or EF==1 or ET==1 or vitals==1 or satisfied=="true")):
             print('Satisfied calling func')
             continueEmory()
-        elif(receive==1 and study_stage==4 and (PW==1 or pwSatisfied=="true")):
-            miscalibratedSensor()
-        elif(receive==1 and study_stage==4 and (EF==1 or satisfied=="true")):
+        elif(receive==1 and study_stage==4 and (EF==1 or satisfied=="true" ) and PW==0):
             flyOldForth()
+        elif(receive==1 and study_stage==4 and (PW==1 or pwSatisfied=="true")):
+            miscalibratedSensor()   
 
         if states:
            if (PW==1 or EF==1 or ET==1 or vitals==1):

@@ -184,6 +184,9 @@ function initEmergency() {
             //displaying the landing checklist when approaching the set destination
             if ((dist_to_target <= 300) || (timeToDestination<= 0.25)){
                 console.log('emergency occured and approaching destination')
+                if(studyStage == '4'){
+                  targetIndex=19 //goes to Old forth for scenario 4 b default
+                }
                 window.location.href = "/hai-interface/checklist?inflight=" + 1 + "&target-index=" + targetIndex
             }
 
@@ -295,6 +298,7 @@ function activateWarningAlert() {
   function showInfo() {
     log({"page": "Inflight", "action": "Pressure Warning- show info button pressed"}); 
     document.getElementById('warningSound').pause();
+    document.getElementById('warningSound').currenTime=0;
     const pWalertBox = document.getElementById('pressureWarningalertBox');
     pWalertBox.classList.add('expanded');
     document.getElementById('pressureWarningalertExplanation').style.display = 'block';
@@ -307,6 +311,7 @@ function activateWarningAlert() {
   // Function to submit pressure value
   function submitPressureValue() {
     document.getElementById('warningSound').pause();
+    document.getElementById('warningSound').currenTime=0;
     const pressureValue = document.getElementById('pressureValue').value;
     const resultMessage = document.getElementById('resultMessage');
     const finalMessage = document.getElementById('finalMessage');
@@ -365,6 +370,7 @@ function activateEngineAlert() {
   function showMoreInfo() {
     log({"page": "Inflight", "action": "Engine failure emergency- show more info button pressed"}); 
     document.getElementById('sirenSound').pause();
+    document.getElementById('sirenSound').currentTime = 0;
     const alertBox = document.getElementById('alertBox');
     alertBox.classList.add('expanded');
     document.getElementById('alertExplanation').style.display = 'block';
@@ -382,6 +388,7 @@ function activateEngineAlert() {
     console.log("closing")
     log({"page": "Inflight", "action": "Engine failure emergency- close button pressed"});
     document.getElementById('sirenSound').pause(); 
+    document.getElementById('sirenSound').currentTime = 0;
     const overlay = document.getElementById('alertOverlay');
     overlay.style.opacity = '0';
     overlay.addEventListener('transitionend', () => {
@@ -413,6 +420,7 @@ function activateFuelAlert() {
   function showFuelInfo() {
     log({"page": "Inflight", "action": "Fuel tank emergency- show more info button pressed"}); 
     document.getElementById('emptytankSound').pause();
+    document.getElementById('emptytankSound').currentTime = 0;
     console.log("Fuel alert expanded")
     const fAalertBox = document.getElementById('fuelAlertBox');
     fAalertBox.classList.add('expanded');

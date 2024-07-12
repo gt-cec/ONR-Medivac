@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, make_response
-#from SimConnect import *
+from SimConnect import *
 import logging
 import datetime
 import threading
@@ -238,6 +238,7 @@ data = {
         "longitude": "-84.3868750",
     },
     "5": {
+         # Nearest for high workload scenario (AI suggestion)
         "name": "Hilton Garden Inn Downtown Heliport",
         "id": "7GA6",
         "location": "300 MARIETTA ST. NW, STE 304, ATLANTA, GA 30313",
@@ -434,12 +435,12 @@ data = {
         "image2": "../static/HAIInterface/img/Emory.png",
         # "latitude": "33.7626693", original
         # "longitude": "-84.3739344", original
-        "latitude": "33.764773021803975", # offset for visibility
-        "longitude": "-84.37335433252277", #offset for visibility
+        "latitude": "33.76400330983825", # offset for visibility
+        "longitude": "-84.37359282618218", #offset for visibility , 
     },
 
     "20": {
-    # Nearest for high workload scenario (AI suggestion)
+   
     "name": "Fulton County Executive Airport ",
     "id": "FTY",
     "location": "3977 Aviation Cir NW, Atlanta, GA 30336",
@@ -1012,7 +1013,7 @@ def get_var():
         for handler in logging.root.handlers[:]:
             logging.root.removeHandler(handler)
         # set up logging
-        logging.basicConfig(filename="Desktop\\MedevacII_201\\Logs\\" + str(study_participant_id) + '_' + str(
+        logging.basicConfig(filename="c:\\Users\\ae-dagbeyibor3\\Desktop\\MedevacII_201\\Logs\\" + str(study_participant_id) + '_' + str(
             study_stage) + '.log', level=logging.INFO)  # output logs to the logs file
     if request.args.get("study-stage"):
         study_stage = clean(request.args.get("study-stage"))
@@ -1020,7 +1021,7 @@ def get_var():
         for handler in logging.root.handlers[:]:
             logging.root.removeHandler(handler)
         # set up logging
-        logging.basicConfig(filename="Desktop\\MedevacII_201\\Logs\\" + str(study_participant_id) + '_' + str(
+        logging.basicConfig(filename="c:\\Users\\ae-dagbeyibor3\\Desktop\\MedevacII_201\\Logs\\" + str(study_participant_id) + '_' + str(
             study_stage) + '.log', level=logging.INFO)  # output logs to the logs file
     if request.args.get("sequence"):
         sequence = clean(request.args.get("sequence"))
@@ -1028,7 +1029,7 @@ def get_var():
         for handler in logging.root.handlers[:]:
             logging.root.removeHandler(handler)
         # set up logging
-        logging.basicConfig(filename="Desktop\\MedevacII_201\\Logs\\" + str(study_participant_id) + '_' + str(
+        logging.basicConfig(filename="c:\\Users\\ae-dagbeyibor3\\Desktop\\MedevacII_201\\Logs\\" + str(study_participant_id) + '_' + str(
             study_stage)+ '_' + str(sequence) + '.log', level=logging.INFO)  # output logs to the logs file
     if request.args.get("destination-index"):
         destination_index = clean(request.args.get("destination-index"))

@@ -205,7 +205,7 @@
               <div id="finalMessage" style="display: none;"></div>
               <button class="ok-button" id="okButton" style="display: none;" onclick="closePressureAlert()">OK</button>
             </div>
-             <audio id="warningSound" loop>
+             <audio id="warningSound" >
                 <source src="../static/HAIInterface/img/warning-sound.mp3" type="audio/mpeg">
              </audio> 
           </div>
@@ -237,7 +237,7 @@
             <button class="submit-button" style="display: none;" id="CDButton">Emergency Landing</button>
           </div>
         </div>        
-       <audio id="sirenSound" loop>
+       <audio id="sirenSound" >
            <source src="../static/HAIInterface/img/audio.mp3" type="audio/mpeg">
         </audio> 
        </div>
@@ -273,7 +273,7 @@
             </div>
            
          </div>        
-        <audio id="emptytankSound" loop>
+        <audio id="emptytankSound" >
             <source src="../static/HAIInterface/img/audio.mp3" type="audio/mpeg">
          </audio> 
         </div>
@@ -477,7 +477,7 @@
                 setTimeout(() => {
                     radioReceive=0
                  fetch("/var?receive=" + radioReceive) 
-                }, 15000)  // wait 15 seconds to set is back to 0
+                }, 30000)  // wait 30 seconds to set is back to 0
             }
 
             if (radioTransmit==1){
