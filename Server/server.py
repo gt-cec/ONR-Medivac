@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, make_response
-from SimConnect import *
+#from SimConnect import *
 import logging
 import datetime
 import threading
