@@ -91,7 +91,7 @@ function initEmergency() {
         if ((studyStage == '2') || (studyStage == '3') || (studyStage == '4')) {
             if (dist <= 500 || (Math.abs(time_diff - 300) <= 2.3) || (EmptyTank==1) || (EngineFailure==1)|| (vitalsState==1) ){
                 console.log('Entered here')
-                if((satisfied==false)|| (EngineFailure==1) || (EmptyTank==1)){
+                if((satisfied==false) || ((EngineFailure==1) || (EmptyTank==1) || (vitalsState==1))){
                     console.log("EMERGENCY LOCATION REACHED")
                     satisfied=true
                     await fetch("/var?satisfied=" + satisfied)
@@ -101,16 +101,22 @@ function initEmergency() {
                       vitalsState = 1
                       await fetch("/var?vitals-state=" + vitalsState)
                   }
-                    if (studyStage == '3') {
+                    else if (studyStage == '3') {
                         EmptyTank=1
                         await fetch("/var?empty-tank=" + EmptyTank)
                     }
-                    if (studyStage == '4') {
+                    else if (studyStage == '4') {
                         // Engine failure scenario and vitals
-                        EngineFailure = 1;
-                        await fetch("/var?engine-failure=" + EngineFailure)
                         vitalsState = 1
                         await fetch("/var?vitals-state=" + vitalsState)
+                        EngineFailure = 1;
+                        await fetch("/var?engine-failure=" + EngineFailure)
+                       /*  const emergencyTimeout=setTimeout(async() => {
+                         
+                          clearTimeout(emergencyTimeout)
+                          console.log("showing engine failure")
+                        }, 5000);  //calling the engine failure 5 seconds after vitals */
+                       
                     }
                 }
             }
@@ -120,9 +126,9 @@ function initEmergency() {
         //Pressure Warning
         if (studyStage == '4') {
           console.log("checking")
-          if (warning_dist <= 330 || (Math.abs(time_diff - 180) <= 2.6) || (PressureWarning==1))  {
+          if (warning_dist <= 350 || (Math.abs(time_diff - 180) <= 2.7) || (PressureWarning==1))  {
               console.log("here")
-              if((warning_satisfied==false)|| (PressureWarning==1)){
+              if((warning_satisfied==false) || (PressureWarning==1)){
                   console.log("WARNING LOCATION REACHED")
                   warning_satisfied=true
                   PressureWarning=1
@@ -378,13 +384,14 @@ function activateEngineAlert() {
       overlay.style.visibility = 'hidden';
       document.body.classList.remove('dull-background');
       EngineFailure=0
-    }, { once: true});  
+    });  
   }
 
 
 //Empty Fuel Tank 
 // Function to activate the empty fuel tank emergency alert
 function activateFuelAlert() {
+  console.log("Fuel alert activated")
   console.log(EmptyTank)
   document.getElementById('emptytankSound').play();
   log({"page": "Inflight", "action": "Fuel tank emergency alert-displayed"}); 
@@ -398,6 +405,7 @@ function activateFuelAlert() {
   function showFuelInfo() {
     log({"page": "Inflight", "action": "Fuel tank emergency- show more info button pressed"}); 
     document.getElementById('emptytankSound').pause();
+    console.log("Fuel alert expanded")
     const fAalertBox = document.getElementById('fuelAlertBox');
     fAalertBox.classList.add('expanded');
     document.getElementById('fuelAlertExplanation').style.display = 'block';
@@ -405,6 +413,7 @@ function activateFuelAlert() {
     document.getElementById('okButtonFuel').style.display = 'block';
     document.getElementById("okButtonFuel").onclick = async () => { closeFuelAlert(); 
     log({"page": "Inflight", "action": "Continue button on Fuel tank emergency pressed"}); 
+    document.getElementById('emptytankSound').pause();
     EmptyTank=0
     console.log(EmptyTank); 
     //updating the server
@@ -413,6 +422,7 @@ function activateFuelAlert() {
 
     document.getElementById("elButtonFuel").onclick = async () => { closeFuelAlert(); 
       log({"page": "Inflight", "action": "Change destination button on Fuel tank emergency pressed"}); 
+      document.getElementById('emptytankSound').pause();
       EmptyTank=0
       console.log(EmptyTank); 
       //updating the server
@@ -424,6 +434,7 @@ function activateFuelAlert() {
     document.getElementById("groundButtonFuel").onclick = async () => { closeFuelAlert(); 
       log({"page": "Inflight", "action": "Ground button on Fuel tank emergency pressed"}); 
         console.log('opening radio panel')
+        document.getElementById('emptytankSound').pause();
         document.querySelector('.radiopanel').classList.toggle('open');
         EmptyTank=0
         console.log(EmptyTank); 
@@ -438,13 +449,14 @@ function activateFuelAlert() {
   function closeFuelAlert() {
     console.log("closing")
     log({"page": "Inflight", "action": "Empty Tank emergency- close button "}); 
+    document.getElementById('emptytankSound').pause();
     const fAoverlay = document.getElementById('fuelAlertOverlay');
     fAoverlay.style.opacity = '0';
     fAoverlay.addEventListener('transitionend', () => {
       fAoverlay.style.visibility = 'hidden';
       document.body.classList.remove('dull-background');
       EmptyTank=0
-    }, { once: true});  
+    });  
   }
 
 

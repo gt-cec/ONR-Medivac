@@ -101,9 +101,12 @@ function initAssistant()
             if (json.userText) {
                 console.log("Received new text:", json.userText);
                 try {
-                    handleUserText(json.userText);
-                    //prevText = json.userText;
-                } catch (error) {
+                    if(json.userText!==prevTxt){
+                        console.log("new text")
+                        handleUserText(json.userText);
+                        prevTxt = json.userText;
+                } 
+            } catch (error) {
                     console.error("Error in handleUserText:", error);
                 }
             } 

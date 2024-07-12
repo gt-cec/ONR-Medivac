@@ -921,7 +921,7 @@ def audio_input():
 # data for MATLAB route
 @app.route("/current-destination")
 def current_destination():
-    return jsonify({"destlatitude": data[str(destination_index)]["latitude"], "destlongitude": data[str(destination_index)]["longitude"],  "altitude": altitude})
+    return jsonify({"destlatitude": data[str(destination_index)]["latitude"], "destlongitude": data[str(destination_index)]["longitude"]})
 
 
 # logging route
@@ -1012,7 +1012,7 @@ def get_var():
         for handler in logging.root.handlers[:]:
             logging.root.removeHandler(handler)
         # set up logging
-        logging.basicConfig(filename='Logs\\' + str(study_participant_id) + '_' + str(
+        logging.basicConfig(filename="Desktop\\MedevacII_201\\Logs\\" + str(study_participant_id) + '_' + str(
             study_stage) + '.log', level=logging.INFO)  # output logs to the logs file
     if request.args.get("study-stage"):
         study_stage = clean(request.args.get("study-stage"))
@@ -1020,7 +1020,7 @@ def get_var():
         for handler in logging.root.handlers[:]:
             logging.root.removeHandler(handler)
         # set up logging
-        logging.basicConfig(filename='Logs\\' + str(study_participant_id) + '_' + str(
+        logging.basicConfig(filename="Desktop\\MedevacII_201\\Logs\\" + str(study_participant_id) + '_' + str(
             study_stage) + '.log', level=logging.INFO)  # output logs to the logs file
     if request.args.get("sequence"):
         sequence = clean(request.args.get("sequence"))
@@ -1028,7 +1028,7 @@ def get_var():
         for handler in logging.root.handlers[:]:
             logging.root.removeHandler(handler)
         # set up logging
-        logging.basicConfig(filename='Logs\\' + str(study_participant_id) + '_' + str(
+        logging.basicConfig(filename="Desktop\\MedevacII_201\\Logs\\" + str(study_participant_id) + '_' + str(
             study_stage)+ '_' + str(sequence) + '.log', level=logging.INFO)  # output logs to the logs file
     if request.args.get("destination-index"):
         destination_index = clean(request.args.get("destination-index"))
@@ -1231,8 +1231,8 @@ if __name__ == "__main__":
 
   
     # start the logging thread
-    """werkzeug_logger = logging.getLogger('werkzeug')
-    werkzeug_logger.disabled = True """
+    werkzeug_logger = logging.getLogger('werkzeug')
+    werkzeug_logger.disabled = True 
    
     #starting voice assistant thread
     va = threading.Thread(target=third_test.main, args={event}, daemon=True)

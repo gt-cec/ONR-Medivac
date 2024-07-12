@@ -150,7 +150,7 @@ def continueEmory():
       print('sent request to clear tank_event')
       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
       print('sent request to clear emergency_event')
-      #requests.get("http://127.0.0.1:8080/var", {"empty-tank":0})
+      requests.get("http://127.0.0.1:8080/var",  {"receive":0}) #making the receive 0 
       logging.info('Continue flying to Emory radio comm done- command to clear event and make the emergency variables 0 sent')
 
 
@@ -163,7 +163,7 @@ def flyOldForth():
       print('sent request to clear engine_event')
       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
       print('sent request to clear emergency_event')
-      #requests.get("http://127.0.0.1:8080/var", {"enfine-failure":0}) #making the engine-failure 0 again
+      requests.get("http://127.0.0.1:8080/var", {"receive":0}) #making the receive 0 
       logging.info('Reroute to Oldforth radio comm done- command to clear event and make the emergency variables 0 sent' )
 
 def miscalibratedSensor():
@@ -175,7 +175,7 @@ def miscalibratedSensor():
       print('sent request to clear engine_event')
       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
       print('sent request to clear emergency_event')
-      #requests.get("http://127.0.0.1:8080/var", {"pressure-warning":0}) #making the vitals-state 0 again
+      requests.get("http://127.0.0.1:8080/var", {"receive":0}) #making the receive 0 
       print('sent request to clear sensor_event')
       logging.info('Miscalibrated sensor radio comm done- command to clear event and make the emergency variables 0 sent' )
 
@@ -220,19 +220,21 @@ def main():
             receive=int(data["receive"])
             transmit=int(data["transmit"])
             study_stage=int(data["study-stage"])
-            satisfied=data["satisfied"]
-            pwSatisfied=data["warning-satisfied"]
+            satisfied=str(data["satisfied"])
+            pwSatisfied=str(data["warning-satisfied"])
 
-        # print("receive:",receive)
-        # print("study_stage:",study_stage)
-        if (receive==1 and study_stage==2 and (PW==1 or EF==1 or ET==1 or vitals==1 or satisfied==True)):
+        print("satisfied:",satisfied)
+        print("study_stage:",study_stage)
+        print("warning",pwSatisfied)
+        print("warning",PW)
+        if (receive==1 and study_stage==2 and (PW==1 or EF==1 or ET==1 or vitals==1 or satisfied=="true")):
             administer()  
-        elif(receive==1 and study_stage==3 and (PW==1 or EF==1 or ET==1 or vitals==1 or satisfied==True)):
+        elif(receive==1 and study_stage==3 and (PW==1 or EF==1 or ET==1 or vitals==1 or satisfied=="true")):
             print('Satisfied calling func')
             continueEmory()
-        elif(receive==1 and study_stage==4 and (PW==1 or pwSatisfied==True)):
+        elif(receive==1 and study_stage==4 and (PW==1 or pwSatisfied=="true")):
             miscalibratedSensor()
-        elif(receive==1 and study_stage==4 and (EF==1 or satisfied==True)):
+        elif(receive==1 and study_stage==4 and (EF==1 or satisfied=="true")):
             flyOldForth()
 
         if states:

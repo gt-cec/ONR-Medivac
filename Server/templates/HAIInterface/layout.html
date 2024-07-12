@@ -477,14 +477,14 @@
                 setTimeout(() => {
                     radioReceive=0
                  fetch("/var?receive=" + radioReceive) 
-                }, 45000)  // wait 45 seconds to set is back to 0
+                }, 15000)  // wait 15 seconds to set is back to 0
             }
 
             if (radioTransmit==1){
                 setTimeout(() => {
                     radioTransmit=0
                  fetch("/var?transmit=" + radioTransmit) 
-                }, 45000)  // wait 45 seconds to set is back to 0
+                }, 15000)  // wait 15 seconds to set is back to 0
             }
         }
 
