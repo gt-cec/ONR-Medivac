@@ -156,15 +156,15 @@ def continueEmory():
 
 def flyOldForth():
    print('Reroute to Oldforth')
-   logging.info('Reroute to Oldforth radio comm response initiated')
+   logging.info('Reroute to Old fourth radio comm response initiated')
    with status_lock:  
-      speak("MEDEVAC, Control:  Acknowledged. Under the current situation, reroute to Old Forth Hospital")
+      speak("MEDEVAC, Control:  Acknowledged. Under the current situation, reroute to Old Fourth Ward Hospital")
       requests.post("http://127.0.0.1:8080/state", json={"event": "engine_event", "action":"clear"}) #clearing engine event
       print('sent request to clear engine_event')
       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
       print('sent request to clear emergency_event')
       requests.get("http://127.0.0.1:8080/var", {"receive":0}) #making the receive 0 
-      logging.info('Reroute to Oldforth radio comm done- command to clear event and make the emergency variables 0 sent' )
+      logging.info('Reroute to Old fourth radio comm done- command to clear event and make the emergency variables 0 sent' )
 
 def weatherEmer():
    print('Weather emergency response')
