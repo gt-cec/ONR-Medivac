@@ -194,8 +194,12 @@ async function getSimulatorData() {
             PressureWarning=data["pressure-warning"]
             EngineFailure=data["engine-failure"]
             EmptyTank=data["empty-tank"]
+            altitudeAlert=data["altitude-alert"]
+            weatherEmergency=data["weather-emergency"]
             satisfied = data["satisfied"]
             warning_satisfied = data["warning-satisfied"]
+            altitude_satisfied = data["altitude-satisfied"]
+            weather_satisfied = data["weather-satisfied"]
             destChanged = data["dest-changed"]
             flightStartTime = data["flight-start-time"]
             resetUserDisplay = data["reset-user-display"]
@@ -211,12 +215,12 @@ async function getSimulatorData() {
             RDPage=data["rd-page"] // return to departure page
             mapPage=data["map-page"] //open map
 
-            if (typeof(urlParams) !== 'undefined' && (urlParams.get("emergency") == "1") && (studyStage == '3' || studyStage == '4')) {
+            if (typeof(urlParams) !== 'undefined' && (urlParams.get("emergency") == "1") && (studyStage == '1' ||studyStage == '3' || studyStage == '4')) {
                 //making Hilton Heliport the nearest in emergency
                 helipads[5].nearest=true
             }
 
-            if ((EngineFailure==1 || EmptyTank ==1) && (studyStage == '3' || studyStage == '4')) {
+            if ((EngineFailure==1 || EmptyTank ==1 || weatherEmergency==1) && (studyStage == '1' ||studyStage == '3' || studyStage == '4')) {
                 //making Hilton Heliport the nearest in emergency
                 helipads[5].nearest=true
             }
@@ -570,7 +574,7 @@ function initMap() {
             else if (mapSelection == 5) {
                 const dialog = document.createElement('dialog');
                 dialog.innerHTML = `
-                <p>Ground has asked to reroute to Old Forth. Contact ground for more information</p>
+                <p>Control has asked to reroute to Old Forth. Contact control for more information</p>
                 <button  onclick="this.closest('dialog').close()">OK</button>
                 `;
                 document.body.appendChild(dialog);
@@ -585,7 +589,14 @@ function initMap() {
                     document.body.appendChild(dialog);
                     dialog.showModal();
             }
-        } else {
+        }
+        else if(studyStage == 1) {
+            targetIndex = mapSelection // setting the selected helipad as target
+            log({ page: "map", action: "changing helipad", value: mapSelection })
+            selectItem(mapSelection) // reload the bottom bar for the selected item
+        }
+        
+        else {
             targetIndex = 3; //landing emory for all scenarios except 4
             /* popupContent = `
                 <div class="popup-content">
@@ -594,7 +605,7 @@ function initMap() {
                 </div>`; */
                 const dialog = document.createElement('dialog');
                 dialog.innerHTML = `
-                <p> Destination location can not be changed. Exit map</p>
+                <p> Destination location can not be changed. Control has asked to continue as planned. Contact control if needed </p>
                 <button onclick="this.closest('dialog').close()">OK</button>
                 `;
                 document.body.appendChild(dialog);

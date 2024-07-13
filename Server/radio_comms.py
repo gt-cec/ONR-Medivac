@@ -77,10 +77,10 @@ def pre_takeoff():
    logging.info('Takeoff radiocomms initiated')
    with status_lock:  
         print('Speaking!')
-   #speak("Control Tower: Callsign N A S X G  S, radio C O M M 1 ")
+   #speak("Control: Callsign N A S X G  S, radio C O M M 1 ")
    delay(10)
    print('speaking line 2')
-   speak('Control Tower:Set the Callsign to N A S X G S and Radio channel to COMM 1 for transmitting updates')
+   speak('Control:Set the Callsign to N A S X G S and Radio channel to COMM 1 for transmitting updates')
    delay(20)
    speak('Use the Callsign  MEDEVAC  and Radio channel COMM 2 for receiving')
    speak("Flight and weather conditions look good. Ready for takeoff.")
@@ -103,7 +103,7 @@ def inflight_status_check(states):
         print("here")
         with status_lock:  
             print("Asking for radio updates")
-            speak("Control Tower: Please report your flight status, patient status, and ETA.")
+            speak("N A S X G S , Control:  request status update on flight, patient condition, and ETA.")
             logging.info('Inflight Radio Update asked')
             if states["response_event"]: #user reported back
                 print('Transmit button pressed- radio update received')
@@ -114,7 +114,7 @@ def inflight_status_check(states):
                 #asyncio.run(delayForResponse(45))
                 #threading.Timer(45, delay(5)).start
                 delay(550) # Wait for user to report back? --> set with transmit button?
-                #speak("Control Tower: Awaiting flight status, patient status, and ETA.")
+                #speak("Control: Awaiting flight status, patient status, and ETA.")
         last_radio_update = time.time()
         #radio_update_complete.set()
         requests.post("http://127.0.0.1:8080/state", json={"event": "radioUpdateComplete", "action":"set"})
@@ -126,7 +126,7 @@ def administer():
    print('administering medication')
    logging.info('Administer medication radio comm initiated')
    with status_lock:  
-       speak("Control Tower: The patient has a history of altitude sickness")
+       speak("MEDEVAC, Control: Acknowledged. The patient has a history of altitude sickness")
        #time.sleep(45) # Wait for user to report back
        speak("Follow these steps:")
        speak("1. Verify patient's identity and medication orders")
@@ -145,7 +145,7 @@ def continueEmory():
    print('Continue to Emory')
    logging.info('Continue flying to Emory radio comm response initiated')
    with status_lock:  
-      speak("Control Tower: Continue flying to Emory University Hospital")
+      speak("Control, MEDEVAC: Acknowledged. Continue flying to Emory University Hospital")
       requests.post("http://127.0.0.1:8080/state", json={"event": "tank_event", "action":"clear"}) #clearing tank event
       print('sent request to clear tank_event')
       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
@@ -158,9 +158,21 @@ def flyOldForth():
    print('Reroute to Oldforth')
    logging.info('Reroute to Oldforth radio comm response initiated')
    with status_lock:  
-      speak("Control Tower: Reroute to Old Forth Hospital")
+      speak("MEDEVAC, Control:  Acknowledged. Under the current situation, reroute to Old Forth Hospital")
       requests.post("http://127.0.0.1:8080/state", json={"event": "engine_event", "action":"clear"}) #clearing engine event
       print('sent request to clear engine_event')
+      requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
+      print('sent request to clear emergency_event')
+      requests.get("http://127.0.0.1:8080/var", {"receive":0}) #making the receive 0 
+      logging.info('Reroute to Oldforth radio comm done- command to clear event and make the emergency variables 0 sent' )
+
+def weatherEmer():
+   print('Weather emergency response')
+   logging.info('weather emergency radio comm response initiated')
+   with status_lock:  
+      speak("MEDEVAC, Control:  Acknowledged. You are cleared for immediate landing at [nearest suitable airport/helipad]. Emergency services have been notified and are en route")
+      requests.post("http://127.0.0.1:8080/state", json={"event": "weather_event", "action":"clear"}) #clearing weather event
+      print('sent request to clear weather_event')
       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
       print('sent request to clear emergency_event')
       requests.get("http://127.0.0.1:8080/var", {"receive":0}) #making the receive 0 
@@ -170,14 +182,25 @@ def miscalibratedSensor():
    print('Miscalibrated pressure sensor response')
    logging.info('Ok, continue to monitor the patients vitals and keep us updated ')
    with status_lock:  
-      speak("Control Tower: Ok, continue to monitor the patients vitals and keep us updated ")
+      speak("MEDEVAC, Control: Acknowledged, continue to monitor the patients vitals and keep us updated ")
       requests.post("http://127.0.0.1:8080/state", json={"event": "sensor_event", "action":"clear"}) #clearing sensor event
-      print('sent request to clear engine_event')
+      print('sent request to clear sensor_event')
       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
       print('sent request to clear emergency_event')
       requests.get("http://127.0.0.1:8080/var", {"receive":0}) #making the receive 0 
-      print('sent request to clear sensor_event')
       logging.info('Miscalibrated sensor radio comm done- command to clear event and make the emergency variables 0 sent' )
+
+def altitudeSensor():
+   print('Miscalibrated altitude sensor response')
+   logging.info('Ok, continue to monitor the patients vitals and keep us updated ')
+   with status_lock:  
+      speak("MEDEVAC, Control : Acknowledged, continue to monitor the patients vitals and keep us updated ")
+      requests.post("http://127.0.0.1:8080/state", json={"event": "altitude_event", "action":"clear"}) #clearing altitude event
+      print('sent request to clear sensor_event')
+      requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
+      print('sent request to clear emergency_event')
+      requests.get("http://127.0.0.1:8080/var", {"receive":0}) #making the receive 0 
+      logging.info('altitude sensor radio comm done- command to clear event and make the emergency variables 0 sent' )
 
       
 
@@ -201,6 +224,8 @@ event_handlers = {
     "engine_event": flyOldForth,
     "tank_event": continueEmory,
     "sensor_event":miscalibratedSensor,
+    "weather_event":weatherEmer,
+    "altitude_event":altitudeSensor,
     #"status_response_event": set_status_response_event,
     #"emergency_event": handle_emergency
 
@@ -217,16 +242,24 @@ def main():
             vitals=int(data["vitals-state"])
             EF=int(data["engine-failure"])
             ET=int(data["empty-tank"])
+            WE=int(data["weather-emergency"])
+            AA=int(data["altitude-alert"])
             receive=int(data["receive"])
             transmit=int(data["transmit"])
             study_stage=int(data["study-stage"])
             satisfied=str(data["satisfied"])
             pwSatisfied=str(data["warning-satisfied"])
+            aaSatisfied=str(data["altitude-satisfied"])
+            weSatisfied=str(data["weather-satisfied"])
 
         print("satisfied:",satisfied)
         print("study_stage:",study_stage)
         print("warning",pwSatisfied)
-        print("warning",PW)
+        print("pressure warning",PW)
+        print("weather warning",weSatisfied)
+        print("weather emergency",WE)
+        print("altitude warning",aaSatisfied)
+        print("altitude alert",AA)
         if (receive==1 and study_stage==2 and (PW==1 or EF==1 or ET==1 or vitals==1 or satisfied=="true")):
             administer()  
         elif(receive==1 and study_stage==3 and (PW==1 or EF==1 or ET==1 or vitals==1 or satisfied=="true")):
@@ -236,9 +269,13 @@ def main():
             flyOldForth()
         elif(receive==1 and study_stage==4 and (PW==1 or pwSatisfied=="true")):
             miscalibratedSensor()   
+        elif(receive==1 and study_stage==1 and (WE==1 or weSatisfied=="true" ) and AA==0):
+            weatherEmer()
+        elif(receive==1 and study_stage==1 and (AA==1 or aaSatisfied=="true")):
+            altitudeSensor()   
 
         if states:
-           if (PW==1 or EF==1 or ET==1 or vitals==1):
+           if (PW==1 or EF==1 or ET==1 or vitals==1 or WE==1 or AA==1):
                 states["emergency_event"]=True
                 requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"set"}) #set emergency event
                 print('sent request to set emergency_event')

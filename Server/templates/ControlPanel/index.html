@@ -35,6 +35,8 @@
                         <div class="control-var"><div class="control-var-title">Empty Tank State</div><div class="control-var-value" id="empty-tank"></div></div>
                         <div class="control-var"><div class="control-var-title">Engine Failure State</div><div class="control-var-value" id="engine-failure"></div></div>
                         <div class="control-var"><div class="control-var-title">Airspace State</div><div class="control-var-value" id="airspace-state"></div></div>
+                        <div class="control-var"><div class="control-var-title">Weather Emergency</div><div class="control-var-value" id="weather-emergency"></div></div>
+                        <div class="control-var"><div class="control-var-title">Altitude Alert</div><div class="control-var-value" id="altitude-alert"></div></div>
                         <div class="control-var"><div class="control-var-title">Latitude</div><div class="control-var-value" id="latitude"></div></div>
                         <div class="control-var"><div class="control-var-title">Longitude</div><div class="control-var-value" id="longitude"></div></div>
                         <div class="control-var"><div class="control-var-title">Compass</div><div class="control-var-value" id="compass"></div></div>
@@ -48,6 +50,8 @@
                     <div class="subcontent-container" style="flex-grow:0">
                         <div id="trigger-emergency" class="control-button">Trigger Emergency</div>
                         <div id="trigger-vitals" class="control-button">Trigger Vitals</div>
+                        <div id="trigger-altitude-alert" class="control-button">Trigger Altitude Alert</div>
+                        <div id="trigger-weather-emergency" class="control-button">Trigger Weather Emergency</div>
                         <div id="trigger-pressure-warning" class="control-button">Trigger Pressure Warning</div>
                         <div id="trigger-engine-failure" class="control-button">Trigger Engine Failure</div>
                         <div id="trigger-empty-tank" class="control-button">Trigger Empty Tank</div>
@@ -81,6 +85,8 @@
         var PressureWarning = 0
         var EmptyTank = 0
         var EngineFailure = 0
+        var altitudeAlert=0
+        var weatherEmergency=0
     
 
         // initialize the map
@@ -116,6 +122,12 @@
         document.getElementById("trigger-empty-tank").onclick = async () => {
             await fetch("/var?empty-tank=1")
             //await fetch("/var?dest-changed=" + false)  //so as to force them to choose a destination
+        }
+        document.getElementById("trigger-weather-emergency").onclick = async () => {
+            await fetch("/var?weather-emergency=1")
+        }
+        document.getElementById("trigger-altitude-alert").onclick = async () => {
+            await fetch("/var?altitude-alert=1")
         }
 
         document.getElementById("set-stage").onclick = async () => {
