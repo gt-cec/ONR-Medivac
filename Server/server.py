@@ -1033,7 +1033,7 @@ def get_var():
         for handler in logging.root.handlers[:]:
             logging.root.removeHandler(handler)
         # set up logging
-        logging.basicConfig(filename="c:\\Users\\ae-dagbeyibor3\\Desktop\\MedevacII_201\\Logs\\" + str(study_participant_id) + '_' + str(
+        logging.basicConfig(filename="c:\\Users\\ae-dagbeyibor3\\Desktop\\MedevacII_userStudy\\Logs\\" + str(study_participant_id) + '_' + str(
             study_stage) + '.log', level=logging.INFO)  # output logs to the logs file
     if request.args.get("study-stage"):
         study_stage = clean(request.args.get("study-stage"))
@@ -1041,7 +1041,7 @@ def get_var():
         for handler in logging.root.handlers[:]:
             logging.root.removeHandler(handler)
         # set up logging
-        logging.basicConfig(filename="c:\\Users\\ae-dagbeyibor3\\Desktop\\MedevacII_201\\Logs\\" + str(study_participant_id) + '_' + str(
+        logging.basicConfig(filename="c:\\Users\\ae-dagbeyibor3\\Desktop\\MedevacII_userStudy\\Logs\\" + str(study_participant_id) + '_' + str(
             study_stage) + '.log', level=logging.INFO)  # output logs to the logs file
     if request.args.get("sequence"):
         sequence = clean(request.args.get("sequence"))
@@ -1049,7 +1049,7 @@ def get_var():
         for handler in logging.root.handlers[:]:
             logging.root.removeHandler(handler)
         # set up logging
-        logging.basicConfig(filename="c:\\Users\\ae-dagbeyibor3\\Desktop\\MedevacII_201\\Logs\\" + str(study_participant_id) + '_' + str(
+        logging.basicConfig(filename="c:\\Users\\ae-dagbeyibor3\\Desktop\\MedevacII_userStudy\\Logs\\" + str(study_participant_id) + '_' + str(
             study_stage)+ '_' + str(sequence) + '.log', level=logging.INFO)  # output logs to the logs file
     if request.args.get("destination-index"):
         destination_index = clean(request.args.get("destination-index"))

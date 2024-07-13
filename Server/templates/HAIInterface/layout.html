@@ -519,8 +519,9 @@
                         document.body.appendChild(dialog);
                         dialog.showModal();
                         log({"action": callsign+"transmitting on" + radio.value + (currentFrequency.toFixed(2))+" MHz" })
-                        setTimeout(() => {radioReceive=1
+                        this.timeoutID=setTimeout(() => {radioReceive=1
                         fetch("/var?receive=" + radioReceive) 
+                        clearTimeout(this.timeoutID)
                          }, 5000)  // wait 5 seconds to send to server
                         
                 } 
