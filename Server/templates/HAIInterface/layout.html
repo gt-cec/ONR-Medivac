@@ -229,7 +229,7 @@
                       <li><b>Your Input Needed: </b>Use the button below to choose an emergency landing location.</li> 
                       <li><b>Recommendation: </b>I suggest landing at Hilton Gardern Inn Heliport, the nearest available site.</li> 
                       <li><b>Map Guide:</b> Look for the green marker on the map - that's our closest option.</li> 
-                      <li><b>Additional Support:</b> Ground assistance is available if you deem it necessary.</li> 
+                      <li><b>Additional Support:</b>  Assistance from Control is available if you deem it necessary.</li> 
                       <li><b>Time Sensitive:</b> Swift action is crucial for our safety.</li>
                  </ul>
 
@@ -242,9 +242,6 @@
         </audio> 
        </div>
         
-            
-
-
        <!-- Fuel Tank Emergency    -->
        <div class="alertbody">
          <div class="alertoverlay" id="fuelAlertOverlay">
@@ -266,17 +263,77 @@
                     <li style="max-width:max-content"><b>Alternate Options:</b></li>  
                  </ul>
                     <button class="ok-button" id="elButtonFuel" >Change Destination</button>&ensp;&ensp;
-                    <button class="ok-button" id="groundButtonFuel" >Seek ground support</button> 
-              
+                    <button class="ok-button" id="groundButtonFuel" >Contact Control</button> 
                </div>
-              
             </div>
-           
          </div>        
         <audio id="emptytankSound" >
             <source src="../static/HAIInterface/img/audio.mp3" type="audio/mpeg">
          </audio> 
         </div>
+
+         
+         <!-- Report altitude Value  -->
+         <div class="alertoverlay" id="altitudealertOverlay">
+            <div class="alert-box" id="altitudealertBox"> 
+              <div class="engine-failure" id="altitudeText"> Sensor Miscalibrated!</div>
+              <div class="warning-signn">
+                <img src="../static/HAIInterface/img/warning-sign.png" class="siren-gif" alt="warning-sign">
+              </div>
+              <button class="alert-button" id="altitudemoreInfoButton" onclick="showAltitudeInfo()">Click for more info</button>
+              <div id="altitudealertExplanation" style="display: none;">
+                <p>Report the value shown by the backup Altitude  sensor:</p>
+                  <select id="altitudeValue" class="input-field" >
+                    <option value="" selected disabled>select altitude</option>
+                    <option value="1000">1000</option>
+                    <option value="1100">1100</option>
+                    <option value="1200">1200</option>
+                    <option value="1300">1300</option>
+                    <option value="1400">1400</option>
+                    <option value="1500">1500</option>
+                  </select>
+                 <br><br>
+                <button class="submit-button" onclick="submitAltitudeValue()">Submit</button>
+              </div>
+              <div id="finalMessage" style="display: none;"></div>
+              <button class="ok-button" id="okButton" style="display: none;" onclick="closeAltitudeAlert()">OK</button>
+            </div>
+             <audio id="altitudeSound" >
+                <source src="../static/HAIInterface/img/warning-sound.mp3" type="audio/mpeg">
+             </audio> 
+          </div>
+
+        <!-- Weather Emergency    -->  
+       <div class="alertbody">
+        <div class="alertoverlay" id="weatheralertOverlay">
+           <div class="alert-box" id="weatheralertBox">
+             <div class="engine-failure" id="engineFailureText"> UNFAVORABLE WEATHER!</div>
+             <div class="warning-sign">
+                <img src="../static/HAIInterface/img/siren.gif" class="siren-gif" alt="Siren">
+             </div>
+             <button class="alert-button" id="weathermoreInfoButton" onclick="showMoreWeatherInfo()">Click for more info</button>
+             <!-- <button class="close-button" id="closeButton" onclick="closeAlert()">X</button> -->
+             <div id="weatheralertExplanation" style="display: none;">
+                 <ul style="list-style-type:circle; padding: 15px; text-align: justify; ">
+                    <li><b>Alert:</b> Unfavorable Weather Conditions.</li>
+                     <li><b>Action Required:</b> Initiating emergency procedures now.</li> 
+                     <li><b>Immediate Task:</b> We need to select an alternate landing site.</li>
+                      <li><b>Your Input Needed: </b>Use the button below to choose an emergency landing location.</li> 
+                      <li><b>Recommendation: </b>I suggest landing at Hilton Gardern Inn Heliport, the nearest available site.</li> 
+                      <li><b>Map Guide:</b> Look for the green marker on the map - that's our closest option.</li> 
+                      <li><b>Additional Support:</b> Assistance from Control is available if you deem it necessary.</li> 
+                      <li><b>Time Sensitive:</b> Swift action is crucial for our safety.</li>
+                 </ul>
+
+            </div>
+            <button class="submit-button" style="display: none;" id="weatherCDButton">Emergency Landing</button>
+          </div>
+        </div>        
+       <audio id="weathersirenSound" >
+           <source src="../static/HAIInterface/img/audio.mp3" type="audio/mpeg">
+        </audio> 
+       </div>
+        
             
     </body>
 
@@ -294,6 +351,8 @@
         var resetUserDisplay = 0
         var satisfied = false
         var warningSatisfied = false
+        var weatherSatisfied=false
+        var altitudeSatisfied = false
         var destChanged = false
         var timeToDestination=11.0
         var selectedmarker="none"
@@ -309,6 +368,8 @@
         let targetIndex = -1
         let EngineFailure = 0
         let PressureWarning = 0
+        let weatherEmergency=0
+        let altitudeAlert=0
         let EmptyTank = 0
         var radioTransmit=0
         var radioReceive=0
@@ -413,7 +474,7 @@
                 setTimeout(() => {
                  radioTransmit=0
                  fetch("/var?transmit=" + radioTransmit) 
-                }, 45000)  // wait 45 seconds to set is back to 0
+                }, 20000)  // wait 20 seconds to set is back to 0
             }
         }
 
@@ -427,7 +488,7 @@
                 //alert('Select receiving callsign')
                 const dialog = document.createElement('dialog');
                     dialog.innerHTML = `
-                    <p>Select correct Callsign for contacting ground</p>
+                    <p>Select correct Callsign for contacting Control</p>
                     <button onclick="this.closest('dialog').close()">OK</button>
                     `;
                     document.body.appendChild(dialog);
@@ -452,20 +513,22 @@
                         //alert(`${callsign} receiving on ${radio.value} ${currentFrequency.toFixed(2)} MHz`);
                         const dialog = document.createElement('dialog');
                         dialog.innerHTML = `
-                        <p>${callsign} contacting ground on ${radio.value} ${currentFrequency.toFixed(2)} MHz</p>
+                        <p>${callsign} contacting Control on ${radio.value} ${currentFrequency.toFixed(2)} MHz</p>
                         <button onclick="this.closest('dialog').close()">Close</button>
                         `;
                         document.body.appendChild(dialog);
                         dialog.showModal();
-                        radioReceive=1
-                        fetch("/var?receive=" + radioReceive) 
                         log({"action": callsign+"transmitting on" + radio.value + (currentFrequency.toFixed(2))+" MHz" })
+                        setTimeout(() => {radioReceive=1
+                        fetch("/var?receive=" + radioReceive) 
+                         }, 5000)  // wait 5 seconds to send to server
+                        
                 } 
                 else {
                     // alert('Radio channel for Receiving missing or incorrect');  
                     const dialog = document.createElement('dialog');
                     dialog.innerHTML = `
-                    <p>'Radio channel for contacting ground missing or incorrect'</p>
+                    <p>'Radio channel for contacting Control missing or incorrect'</p>
                     <button onclick="this.closest('dialog').close()">OK</button>
                     `;
                     document.body.appendChild(dialog);
@@ -478,13 +541,6 @@
                     radioReceive=0
                  fetch("/var?receive=" + radioReceive) 
                 }, 30000)  // wait 30 seconds to set is back to 0
-            }
-
-            if (radioTransmit==1){
-                setTimeout(() => {
-                    radioTransmit=0
-                 fetch("/var?transmit=" + radioTransmit) 
-                }, 15000)  // wait 15 seconds to set is back to 0
             }
         }
 

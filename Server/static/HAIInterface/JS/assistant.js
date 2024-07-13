@@ -97,8 +97,8 @@ function initAssistant()
             const json = await response.json();
             console.log("Parsed JSON:", json);
 
-            //if (json.userText && json.userText !== prevText) {
-            if (json.userText) {
+            // if (json.userText) {
+            if (json.userText && json.userText !== prevText){
                 console.log("Received new text:", json.userText);
                 try {
                     if(json.userText!==prevTxt){
