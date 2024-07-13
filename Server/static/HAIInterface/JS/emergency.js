@@ -64,7 +64,7 @@ function initEmergency() {
         await fetch("/var?time-to-destination=" + timeToDestination)
   
 
-        if (studyStage == '4') {
+        if (studyStage == '1' || studyStage == '4') {
           warning_lat_diff = (warning_lat - latitude) * Math.PI / 180  //radians
           warning_long_diff = (warning_long - longitude) * Math.PI / 180 //radians
           warning_lat1 = warning_lat
@@ -86,9 +86,36 @@ function initEmergency() {
         console.log('dist ', dist)
 
 
+        //emergency declaration for scenario 1 (training)
+        if (studyStage == '1') {
+        // Altitude alert 
+          if (warning_dist <= 350 || (Math.abs(time_diff - 180) <= 2.7)){
+              console.log('Entered here')
+              if(altitude_satisfied==false) {
+                  console.log("ALTITUDE ALERT LOCATION REACHED")
+                  altitude_satisfied=true
+                  await fetch("/var?altitude-satisfied=" + altitude_satisfied)
+                  console.log('altitude alert occured')
+                  altitudeAlert = 1
+                  await fetch("/var?altitude-alert=" + altitudeAlert)
+              }
+           }
+          // weather emergency
+          if (dist <= 500 || (Math.abs(time_diff - 300) <= 2.3))   {
+            console.log('Entered here')
+            if(weather_satisfied==false) {
+                  console.log("EMERGENCY LOCATION REACHED")
+                  weather_satisfied=true
+                  await fetch("/var?weather-satisfied=" + weather_satisfied)
+                  console.log('weather emergency occured')
+                  weatherEmergency = 1
+                  await fetch("/var?weather-emergency=" +  weatherEmergency)
+              }
+           }
+        }
 
         //declaring emergency
-        if ((studyStage == '2') || (studyStage == '3') || (studyStage == '4')) {
+        if ((studyStage == '1')||(studyStage == '2') || (studyStage == '3') || (studyStage == '4')) {
             //if (dist <= 500 || (Math.abs(time_diff - 300) <= 2.3) || (EmptyTank==1) || (EngineFailure==1)|| (vitalsState==1) ){
               if (dist <= 500 || (Math.abs(time_diff - 300) <= 2.3)){
                 console.log('Entered here')
@@ -120,13 +147,17 @@ function initEmergency() {
                         }, 5000);  //calling the engine failure 5 seconds after vitals */
                        
                     }
+                    else if (studyStage == '1') {
+                      weatherEmergency = 1
+                      await fetch("/var?weather-emergency=" + weatherEmergency)
+                    }
                 }
             }
         }
 
 
         //Pressure Warning
-        if (studyStage == '4') {
+        if (studyStage == '1'||studyStage == '4') {
           console.log("checking")
           //if (warning_dist <= 350 || (Math.abs(time_diff - 180) <= 2.7) || (PressureWarning==1))  {
             if (warning_dist <= 350 || (Math.abs(time_diff - 180) <= 2.7))  {
@@ -140,6 +171,15 @@ function initEmergency() {
                   console.log('showing pressure warning')
                   await fetch("/var?pressure-warning=" + PressureWarning)
                   }
+
+                  if(altitude_satisfied==false) {
+                    console.log("WARNING LOCATION REACHED")
+                    altitude_satisfied=true
+                    altitudeAlert=1
+                    await fetch("/var?altitude-satisfied=" + altitude_satisfied)
+                    console.log('showing pressure warning')
+                    await fetch("/var?altitude-alert=" + altitudeAlert)
+                    }
               }
           }
 
@@ -222,6 +262,20 @@ function initEmergency() {
           activateEngineAlert()
         }
 
+        if (altitudeAlert == 1 ) {
+          console.log('altitude alert')
+          log({"page": "emergency", "action": "show Altitude Miscalibrated Warning, hide map"})
+          hideMap()
+          activateAltitudeAlert()
+        }
+
+      // For weather emergency
+      if (weatherEmergency == 1 ) {
+        console.log('Weather emergency')
+        log({"page": "emergency", "action": "show Weather Emergency Alert, hide map"})
+        hideMap()
+        activateWeatherAlert()
+       }
         console.log(satisfied, destinationIndex)
         if(satisfied ==true){
             console.log("satisfied")
@@ -306,6 +360,9 @@ function activateWarningAlert() {
     //document.getElementById('pressureWarningcloseButton').style.display = 'block';
     // Stop the flashing animation
     document.getElementById('warningText').style.animation = 'none';
+    PressureWarning=0  
+    //updating the server
+    fetch("/var?pressure-warning=" + PressureWarning)
   }
 
   // Function to submit pressure value
@@ -322,7 +379,7 @@ function activateWarningAlert() {
     if (pressureValue === correctValue) {
       document.getElementById('pressureWarningalertExplanation').style.display = 'none';
       resultMessage.style.display = 'none';
-      finalMessage.innerHTML = "The primary sensor was miscalibrated but everything appears to be fine.<br><br> We are enroute as planned.<br> <br>Please inform ground";
+      finalMessage.innerHTML = "The primary sensor was miscalibrated but everything appears to be fine.<br><br> We are enroute as planned.<br> <br>Please inform Control";
       // finalMessage.style.color = "green";
       finalMessage.style.display = 'block';
       okButton.style.display = 'block';
@@ -373,6 +430,10 @@ function activateEngineAlert() {
     document.getElementById('sirenSound').currentTime = 0;
     const alertBox = document.getElementById('alertBox');
     alertBox.classList.add('expanded');
+    EngineFailure=0
+    console.log(EngineFailure); 
+    //updating the server
+    fetch("/var?engine-failure=" + EngineFailure)
     document.getElementById('alertExplanation').style.display = 'block';
     document.getElementById('moreInfoButton').style.display = 'none';
     document.getElementById('CDButton').style.display = 'block';
@@ -424,6 +485,10 @@ function activateFuelAlert() {
     console.log("Fuel alert expanded")
     const fAalertBox = document.getElementById('fuelAlertBox');
     fAalertBox.classList.add('expanded');
+    EmptyTank=0
+    console.log(EmptyTank); 
+    //updating the server
+    fetch("/var?empty-tank=" + EmptyTank)
     document.getElementById('fuelAlertExplanation').style.display = 'block';
     document.getElementById('fuelInfoButton').style.display = 'none';
     document.getElementById('okButtonFuel').style.display = 'block';
@@ -440,7 +505,7 @@ function activateFuelAlert() {
 
   
     document.getElementById("groundButtonFuel").onclick =  () => { closeFuelAlert(); 
-      log({"page": "Inflight", "action": "Ground button on Fuel tank emergency pressed"}); 
+      log({"page": "Inflight", "action": "Control button on Fuel tank emergency pressed"}); 
         console.log('opening radio panel')
         document.getElementById('emptytankSound').pause();
         document.querySelector('.radiopanel').classList.toggle('open');
@@ -454,6 +519,7 @@ function activateFuelAlert() {
     console.log("closing")
     log({"page": "Inflight", "action": "Empty Tank emergency- close button "}); 
     document.getElementById('emptytankSound').pause();
+    document.getElementById('emptytankSound').currentTime = 0;
     const fAoverlay = document.getElementById('fuelAlertOverlay');
     fAoverlay.style.opacity = '0';
     fAoverlay.addEventListener('transitionend', () => {
@@ -466,6 +532,125 @@ function activateFuelAlert() {
     await fetch("/var?empty-tank=" + EmptyTank)
   }
 
+
+//training scenario
+// Function to activate the altitude  alert
+function activateAltitudeAlert() {
+  console.log("Altitude alert activated")
+  document.getElementById('altitudeSound').play();
+  log({"page": "Inflight", "action": " Altitude alert activated"}); 
+  const altitudeoverlay = document.getElementById('altitudealertOverlay');
+  document.body.classList.add('dull-background');
+  altitudeoverlay.style.visibility = 'visible';
+  altitudeoverlay.style.opacity = '1';
+  }
+
+  // Function to show more information for altitude alert
+  function showAltitudeInfo() {
+    log({"page": "Inflight", "action": "Altitude alert- show more info button pressed"}); 
+    document.getElementById('altitudeSound').pause();
+    document.getElementById('altitudeSound').currenTime=0;
+    const altitudealertBox = document.getElementById('altitudealertBox');
+    altitudealertBox.classList.add('expanded');
+    document.getElementById('altitudealertExplanation').style.display = 'block';
+    document.getElementById('altitudemoreInfoButton').style.display = 'none';
+    //document.getElementById('pressureWarningcloseButton').style.display = 'block';
+    // Stop the flashing animation
+    document.getElementById('altitudeText').style.animation = 'none';
+    altitudeAlert=0
+     //updating the server
+     fetch("/var?altitude-alert=" + altitudeAlert)
+
+  }
+
+  // Function to submit pressure value
+  function submitAltitudeValue() {
+    document.getElementById('altitudeSound').pause();
+    document.getElementById('altitudeSound').currenTime=0;
+    const altitudeValue = document.getElementById('altitudeValue').value;
+    console.log(altitudeValue)
+    log({"page": "Inflight", "action": "Altitude alert- submit button pressed with altitude value as:"+ altitudeValue}); 
+    const dialog = document.createElement('dialog');
+    dialog.innerHTML = `
+    <p>Altitude successfully changed to ${altitudeValue} feet</p>
+    <br>
+    <centre><button onclick="this.closest('dialog').close()">OK</button></centre>
+    `;
+    document.body.appendChild(dialog);
+    dialog.showModal();
+   log({"page": "Inflight", "action": "Altitude alert- altitude submitted"});  
+   closeAltitudeAlert()
+  }
+
+  // Function to close the altitude alert
+  async function closeAltitudeAlert()  {
+    console.log('pressed')
+    log({"page": "Inflight", "action": "Altitude alert close button pressed"}); 
+    const pWoverlay = document.getElementById('altitudealertOverlay');
+    pWoverlay.style.opacity = '0';
+    pWoverlay.addEventListener('transitionend', () => {
+      pWoverlay.style.visibility = 'hidden';
+      document.body.classList.remove('dull-background');
+    }, { once: true });
+    altitudeAlert=0  
+    //updating the server
+    await fetch("/var?altitude-alert=" + altitudeAlert)
+  }
+
+  //Weather Emergency
+  // Function to activate the weather emergency alert
+  function activateWeatherAlert() {
+    log({"page": "Inflight", "action": "Weather emergency- emergnecy propmt displayed"}); 
+    console.log("Weather Emergency",weatherEmergency)
+    document.getElementById('weathersirenSound').play();
+    const weatheroverlay = document.getElementById('weatheralertOverlay');
+    document.body.classList.add('dull-background');
+    weatheroverlay.style.visibility = 'visible';
+    weatheroverlay.style.opacity = '1';
+  }
+
+    // Function to show more information about weather emergency and stop the siren
+    function showMoreWeatherInfo() {
+      log({"page": "Inflight", "action": "Weather emergency- show more info button pressed"}); 
+      document.getElementById('weathersirenSound').pause();
+      document.getElementById('weathersirenSound').currentTime = 0;
+      const weatheralertBox = document.getElementById('weatheralertBox');
+      weatheralertBox.classList.add('expanded');
+      weatherEmergency=0
+      console.log(weatherEmergency); 
+      //updating the server
+      fetch("/var?weather-emergency=" + weatherEmergency)
+      document.getElementById('weatheralertExplanation').style.display = 'block';
+      document.getElementById('weathermoreInfoButton').style.display = 'none';
+      document.getElementById('weatherCDButton').style.display = 'block';
+      document.getElementById("weatherCDButton").onclick = () => { closeWeatherAlert(); 
+      log({"page": "Inflight", "action": "change destination button pressed during weather emergency"}); 
+      window.location.href = '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1
+      }
+    
+    }
+
+    // Function to close weather emergency alert
+    async function closeWeatherAlert() {
+      console.log("closing")
+      log({"page": "Inflight", "action": "Weather emergency- close button pressed"});
+      document.getElementById('weathersirenSound').pause(); 
+      document.getElementById('weathersirenSound').currentTime = 0;
+      const weatheroverlay = document.getElementById('weatheralertOverlay');
+      weatheroverlay.style.opacity = '0';
+      weatheroverlay.addEventListener('transitionend', () => {
+        weatheroverlay.style.visibility = 'hidden';
+        document.body.classList.remove('dull-background');
+      },{ once: true });
+      weatherEmergency=0
+      console.log(weatherEmergency); 
+      //updating the server
+      await fetch("/var?weather-emergency=" + weatherEmergency)
+    }
+
+
+
+  
 
 
 
