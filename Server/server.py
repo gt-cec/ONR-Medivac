@@ -37,6 +37,8 @@ vitals_state = 0  # 0=normal, 1=emergency
 airspace_emergency_state = 0  # 0=normal, 1=emergency
 satisfied = False  # becomes true when emergency occured
 warning_satisfied = False  # becomes true when pressure warning appears
+weather_satisfied = False  # becomes true when weather emergency occurs
+altitude_satisfied = False  # becomes true when altitude alert appears
 dest_changed=False # becomes true when destination changed during emergency
 flight_start_time = 0
 reset_user_display = 0
@@ -49,6 +51,8 @@ change_altitude=0
 pressure_warning=0
 engine_failure=0
 empty_tank=0
+weather_emergency=0
+altitude_alert=0
 emergency_page=0
 rd_page=0
 ca_page=0
@@ -657,6 +661,10 @@ radio_update_complete = threading.Event() # for ensuring regular radio updates a
 radio_update_complete.clear()
 sensor_event= threading.Event() # to be set when pressure waning (miscalbirated sensor) comes up
 sensor_event.clear()
+weather_event= threading.Event() # to be set when weather emergency occurs
+weather_event.clear()
+altitude_event= threading.Event() # to be set when altitude alert comes up
+altitude_event.clear()
 
 
 events = {
@@ -670,6 +678,9 @@ events = {
     'emergency_event': emergency_event,
     'inflight_event': inflight_event,
     'sensor_event': sensor_event,
+    'weather_event': weather_event,
+    'altitude_event': altitude_event,
+
 }
 
 @app.route('/set_event', methods=['POST'])
@@ -721,11 +732,11 @@ def set_event():
 
 @app.route('/state', methods=['POST'])
 def get_states():
-    global takeoffEvent, engine_failure, pressure_warning, empty_tank, vitals_state #does var need to be called?
-    if(airspace_emergency_state==1 or vitals_state==1 or engine_failure==1 or pressure_warning==1 or empty_tank==1):
+    global takeoffEvent, engine_failure, pressure_warning, empty_tank, vitals_state, weather_emergency, altitude_alert#does var need to be called?
+    if(airspace_emergency_state==1 or vitals_state==1 or engine_failure==1 or pressure_warning==1 or empty_tank==1 or weather_emergency==1 or altitude_alert==1):
         emergency_event.set()
         print('Emergency event set')
-    if(emergency_event.is_set() and airspace_emergency_state==0 and vitals_state==0 and engine_failure==0 and pressure_warning==0 and empty_tank==0):
+    if(emergency_event.is_set() and airspace_emergency_state==0 and vitals_state==0 and engine_failure==0 and pressure_warning==0 and empty_tank==0 and weather_emergency==0 and altitude_alert==0):
         emergency_event.clear()
         print('Emergency event cleared')
         
@@ -779,7 +790,10 @@ def get_states():
         "tank_event": tank_event.is_set(),
         "emergency_event": emergency_event.is_set(),
         "inflight_event": inflight_event.is_set(),
-        "sensor_event":sensor_event.is_set()
+        "sensor_event":sensor_event.is_set(),
+        "weather_event":weather_event.is_set(),
+        "altitude_event":altitude_event.is_set()
+
     }
     
     return jsonify(response), 200
@@ -937,7 +951,7 @@ def log():
 
 @app.route("/reset", methods=["GET"])
 def reset_params():
-    global study_participant_id, sequence, study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, flight_start_time, reset_user_display, reset_vitals_display, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure, pressure_warning, empty_tank, emergency_page,rd_page,ca_page,cd_page,map_page,transmit,receive, takeoff,approach_clear
+    global study_participant_id, sequence, study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page,rd_page,ca_page,cd_page,map_page,transmit,receive, takeoff,approach_clear
     study_participant_id = 0
     sequence=0
     study_stage = 1
@@ -948,6 +962,8 @@ def reset_params():
     airspace_emergency_state = 0  # 0=normal, 1=emergency
     satisfied=False
     warning_satisfied= False
+    weather_satisfied=False
+    altitude_satisfied= False
     dest_changed=False
     flight_start_time = 0
     reset_user_display = 1  # resets the user display
@@ -959,6 +975,8 @@ def reset_params():
     engine_failure=0
     pressure_warning=0
     empty_tank=0
+    weather_emergency=0
+    altitude_alert=0
     emergency_page=0
     rd_page=0
     ca_page=0
@@ -980,6 +998,8 @@ def reset_params():
     emergency_event.clear()
     inflight_event.clear()
     sensor_event.clear()
+    weather_event.clear()
+    altitude_event.clear()
     event.clear()
     print('All events cleared',takeoff_event.is_set())
     
@@ -1006,7 +1026,7 @@ def clean(s):
 
 @app.route("/var", methods=["GET"])
 def get_var():
-    global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude, engine_failure, pressure_warning, empty_tank, emergency_page, rd_page, ca_page, cd_page, map_page, transmit, receive, takeoff, approach_clear
+    global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude, engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page, rd_page, ca_page, cd_page, map_page, transmit, receive, takeoff, approach_clear
     if request.args.get("user-id"):
         study_participant_id = clean(request.args.get("user-id"))
         # Remove all handlers associated with the root logger object, from (https://stackoverflow.com/questions/12158048)
@@ -1050,11 +1070,21 @@ def get_var():
     if request.args.get("warning-satisfied"):
        warning_satisfied = clean(request.args.get(
             "warning-satisfied"))  
+    if request.args.get("weather-satisfied"):
+       weather_satisfied = clean(request.args.get(
+            "weather-satisfied"))  
+    if request.args.get("altitude-satisfied"):
+       altitude_satisfied = clean(request.args.get(
+            "altitude-satisfied"))  
     if request.args.get("dest-changed"):
        dest_changed = clean(request.args.get(
             "dest-changed"))    
     if request.args.get("empty-tank"):  # fuel tank empty emergency
         empty_tank = clean(request.args.get("empty-tank"))
+    if request.args.get("weather-emergency"):  # weather emergencyy
+        weather_emergency = clean(request.args.get("weather-emergency"))
+    if request.args.get("altitude-alert"):  
+        altitude_alert= clean(request.args.get("altitude-alert"))
     if request.args.get("pressure-warning"):  # pressure warninhg
         pressure_warning = clean(request.args.get("pressure-warning"))
     if request.args.get("engine-failure"):  # engine failure emergency
@@ -1102,6 +1132,8 @@ def get_var():
                    "airspace-state": airspace_emergency_state,
                    "satisfied":satisfied,
                    "warning-satisfied": warning_satisfied,
+                   "weather-satisfied": weather_satisfied,
+                   "altitude-satisfied": altitude_satisfied,
                    "dest-changed" :dest_changed,
                    "flight-start-time": flight_start_time,
                    "reset-user-display": reset_user_display,
@@ -1113,6 +1145,8 @@ def get_var():
                    "engine-failure": engine_failure,
                    "pressure-warning": pressure_warning,
                    "empty-tank": empty_tank,
+                   "altitude-alert": altitude_alert,
+                   "weather-emergency": weather_emergency,
                    "emergency-page":emergency_page,
                    "cd-page":cd_page,
                    "ca-page":ca_page,
@@ -1241,7 +1275,7 @@ if __name__ == "__main__":
 
 
     # setting emergency event when other emergency happens
-    if((administer_event.is_set() or tank_event.is_set() or engine_event.is_set() or sensor_event.is_set()) and (not emergency_event.is_set())):
+    if((administer_event.is_set() or tank_event.is_set() or engine_event.is_set() or sensor_event.is_set() or weather_event.is_set() or altitude_event.is_set()) and (not emergency_event.is_set())):
       emergency_event.set() 
 
     """ if(administer_event.is_set()):
