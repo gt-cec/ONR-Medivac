@@ -45,8 +45,8 @@ const keywordsRoutes = {
     "change": "/hai-interface/change-destination",
     "destination": "/hai-interface/change-destination",
     "emergency": "/hai-interface/inflight",
-    "map": "/hai-interface/inflight"+ showMap,
-    "ETA": "hai-interface/map",
+    //"map": "/hai-interface/inflight"+ showMap,
+    //"ETA": "hai-interface/map",
     //"radio":document.querySelector('.radiopanel').classList.toggle('open') +  document.querySelector('.radiopanel').classList.toggle('open'),     
     //add more keywords and routes 
 }  

@@ -20,14 +20,35 @@ receive=0
 transmit=0
 study_stage=1
 
+global Jarvis
+
+
  # Engine initialization 
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
-#currentVoice = engine.setProperty('voice', voices[2].id)
+
 engine.setProperty('rate', 170)
 
 
 def speak(text):
+   global Jarvis
+   print("Jarvis",Jarvis)
+   if(Jarvis=="True"):
+       engine.setProperty('voice', voices[1].id)
+       print("Jarvis speaking")
+   else:
+       engine.setProperty('voice', voices[0].id)
+       print("Radio speaking")
+	
+   if engine.isBusy():
+       requests.post("http://127.0.0.1:8080/state", json={"event": "stop_engine", "action": "set"}) #clearing takeoff event
+       print('sent request to clear stop_engine')
+       logging.info('stop_engine set request sent')
+       """   else:
+       requests.post("http://127.0.0.1:8080/state", json={"event": "stop_engine", "action": "clear"}) #clearing takeoff event
+       print('sent request to clear stop_engine') """
+       
+
    with speech_lock:  # lock to ensure only one thread speaks at a time
         if engine._inLoop:
             engine.endLoop() #end loop if running
@@ -37,6 +58,14 @@ def speak(text):
         engine.startLoop(False)
         engine.say(text)
         engine.iterate() # Wait until speech is complete 
+        
+def stop_engine():
+   engine.stop()
+   print("stopping engine")
+   requests.post("http://127.0.0.1:8080/state", json={"event": "stop_engine", "action": "clear"}) #clearing takeoff event
+   print('sent request to clear stop_engine')
+   logging.info('stop_engine clear request sent')
+    
 
 async def delayForResponse(t):
     await asyncio.sleep(t)
@@ -73,6 +102,8 @@ def fetch_var():
 
 # Function to mimic initial communication before takeoff
 def pre_takeoff():
+   global Jarvis
+   Jarvis="False"
    print('Received')
    logging.info('Takeoff radiocomms initiated')
    with status_lock:  
@@ -92,6 +123,9 @@ def pre_takeoff():
 
 # Function to simulate in-flight status checks
 def inflight_status_check(states):
+    global Jarvis
+    Jarvis="False"
+
     global last_radio_update 
       #print('Inflight radio updates ', states)
       #while not states["emergency_event"]:
@@ -124,6 +158,9 @@ def inflight_status_check(states):
 
 # Function to provide medicine administration guidance
 def administer():
+   global Jarvis
+   Jarvis="False"
+
    print('administering medication')
    logging.info('Administer medication radio comm initiated')
    with status_lock:  
@@ -143,6 +180,9 @@ def administer():
        
 
 def continueEmory():
+   global Jarvis
+   Jarvis="False"
+
    print('Continue to Emory')
    logging.info('Continue flying to Emory radio comm response initiated')
    with status_lock:  
@@ -156,6 +196,9 @@ def continueEmory():
 
 
 def flyOldForth():
+   global Jarvis
+   Jarvis="False"
+
    print('Reroute to Oldforth')
    logging.info('Reroute to Old Fourth Ward radio comm response initiated')
    with status_lock:  
@@ -168,6 +211,8 @@ def flyOldForth():
       logging.info('Reroute to Old Fourth Ward radio comm done- command to clear event and make the emergency variables 0 sent' )
 
 def weatherEmer():
+   global Jarvis
+   Jarvis="False"
    print('Weather emergency response')
    logging.info('weather emergency radio comm response initiated')
    with status_lock:  
@@ -180,6 +225,8 @@ def weatherEmer():
       logging.info('Reroute to weather emergency radio comm done- command to clear event and make the emergency variables 0 sent' )
 
 def miscalibratedSensor():
+   global Jarvis
+   Jarvis="False"
    print('Miscalibrated pressure sensor response')
    logging.info('Ok, continue to monitor the patients vitals and keep us updated ')
    with status_lock:  
@@ -192,6 +239,8 @@ def miscalibratedSensor():
       logging.info('Miscalibrated sensor radio comm done- command to clear event and make the emergency variables 0 sent' )
 
 def altitudeSensor():
+   global Jarvis
+   Jarvis="False"
    print('Miscalibrated altitude sensor response')
    logging.info('Ok, continue to monitor the patients vitals and keep us updated ')
    with status_lock:  
@@ -215,6 +264,105 @@ def set_response_event():
 def handle_emergency():
     print("Emergency situation detected")
 
+
+
+#Jarvis
+def acknowledge():
+    global Jarvis
+    Jarvis="True"
+    print("acknowledge")
+    with status_lock:  
+        speak("Acknowledge")      
+        requests.post("http://127.0.0.1:8080/state", json={"event": "acknowledge", "action":"clear"}) #clearing acknowledge
+        print('sent request to clear acknowledge')
+        logging.info('sent request to clear acknowledge')
+
+
+def jarvis_emergency():
+    global Jarvis
+    Jarvis=True
+    print("jarvis_emergency")
+    with status_lock:  
+        speak("EMEREGENCY, ATTENTION EMERGENCY")   
+        speak("Your input needed")   
+        requests.post("http://127.0.0.1:8080/state", json={"event": "jarvis_emergency", "action":"clear"}) #clearing acknowledge
+        print('sent request to clear jarvis_emergency')
+        logging.info('sent request to clear acknowledge')
+        
+def engine_failure_emergency():
+    global Jarvis
+    Jarvis="True"
+    print("engine failure")
+    with status_lock:  
+        speak( "Engine failure detected. This is not a drill")
+        speak( "Initiating emergency procedures now.")
+        speak( " We need to select an alternate landing site.")
+        speak( "Use the button below to choose an emergency landing location.")
+        speak( "I suggest landing at Hilton Gardern Inn Heliport, the nearest available site")
+        speak( " Look for the green marker on the map - that's our closest option.")
+        speak( " Assistance from Control is available if you deem it necessary.")
+        speak( "Time Sensitive Event Swift action is crucial for our safety.")
+        requests.post("http://127.0.0.1:8080/state", json={"event": "engine_failure", "action":"clear"}) #clearing acknowledge
+        print('sent request to clear engine_failure')
+        logging.info('Engine Failure alert given, sent request to clear engine_failure_emergency')
+
+
+def empty_fuel_emergency():
+    global Jarvis
+    Jarvis="True"
+    print("empty_fuel")
+    with status_lock:  
+        speak( "My primary fuel gauge is indicating an empty tank")
+        speak( "There's a high probability this reading is inaccurate.")
+        speak( "I am 95 percent certain we have sufficient fuel on board.")
+        speak( "Use the button below to choose an emergency landing location.")
+        speak(  "Based on my calculations, it is safe to continue our flight.")
+        speak( " A reserve fuel tank is available if needed.")
+        speak( " I intend to maintain our planned route and destination unless requested otherwise")
+        speak( " Assistance from Control is available if you deem it necessary. ")
+        speak( " Option to change destination is available")
+        requests.post("http://127.0.0.1:8080/state", json={"event": "empty_fuel", "action":"clear"}) #clearing empty_fuel
+        print('sent request to clear empty_fuel')
+        logging.info('Empty Fuel alert given, sent request to clear empty_fuel_emergency')
+
+def weather_emergency():
+  speak( "Unfavorable Weather Conditions.")
+  speak( "Initiating emergency procedures now.")
+  speak( " We need to select an alternate landing site.")
+  speak( "I suggest landing at Hilton Gardern Inn Heliport, the nearest available site")
+  speak( " Look for the green marker on the map - that's our closest option.")
+  speak( " Assistance from Control is available if you deem it necessary.")
+  speak( "Time Sensitive Event Swift action is crucial for our safety.")
+  requests.post("http://127.0.0.1:8080/state", json={"event": "weather_emergency", "action":"clear"}) #clearing weather_emergency
+  print('sent request to clear weather_emergency')
+  logging.info('Weather emergency alert given, sent request to clear weather_emergency')
+
+
+def altitude_warning_alert():
+  speak( "Unfavorable Weather Conditions.")
+  speak( "Initiating emergency procedures now.")
+  speak( " We need to select an alternate landing site.")
+  speak( "I suggest landing at Hilton Gardern Inn Heliport, the nearest available site")
+  speak( " Look for the green marker on the map - that's our closest option.")
+  speak( " Assistance from Control is available if you deem it necessary.")
+  speak( "Time Sensitive Event Swift action is crucial for our safety.")
+  requests.post("http://127.0.0.1:8080/state", json={"event": "altitude_warning_alert", "action":"clear"}) #clearing altitude_warning_alert
+  print('sent request to clear altitude_warning_alert')
+  logging.info('Altitude Warning alert given, sent request to clear altitude_warning_alert')
+
+
+def pressure_warning_alert():
+   speak( "Low Pressure Warning")
+   speak( "Attention, Low pressure Warning")
+   speak( " My primary gauge is detecting low hydraulic pressure.")
+   speak( " However, the backup sensor shows hydraulic pressure is normal")
+   speak( " The primary sensor is most likely miscalibrated.")
+   speak( " Need your assistance is verifyng the value")
+   speak( " Report the value shown by the backup hydraulic sensor")
+   requests.post("http://127.0.0.1:8080/state", json={"event": "pressure_warning_alert", "action":"clear"}) #clearing pressure_warning_alert
+   print('sent request to clear pressure_warning_alert')
+   logging.info('Pressure Warning alert given, sent request to clear pressure_warning_alert')
+
 #giving reference to the function that needs to be called depending to event set, not calling the function 
 event_handlers = {
    #"radioUpdateComplete": set_radio_update,
@@ -227,9 +375,16 @@ event_handlers = {
     "sensor_event":miscalibratedSensor,
     "weather_event":weatherEmer,
     "altitude_event":altitudeSensor,
+    "acknowledge": acknowledge,
+    "jarvis_emergency":jarvis_emergency,
+    "engine_failure_emergency":engine_failure_emergency,
+    "empty_fuel_emergency":empty_fuel_emergency,
+    "weather_emergency_event":weather_emergency,
+    "altitude_warning_alert":altitude_warning_alert,
+    "pressure_warning_alert":pressure_warning_alert,
+    "stop_engine":stop_engine,
     #"status_response_event": set_status_response_event,
     #"emergency_event": handle_emergency
-
 }
 
 def main():
@@ -253,14 +408,14 @@ def main():
             aaSatisfied=str(data["altitude-satisfied"])
             weSatisfied=str(data["weather-satisfied"])
 
-        print("satisfied:",satisfied)
+        """  print("satisfied:",satisfied)
         print("study_stage:",study_stage)
         print("warning",pwSatisfied)
         print("pressure warning",PW)
         print("weather warning",weSatisfied)
         print("weather emergency",WE)
         print("altitude warning",aaSatisfied)
-        print("altitude alert",AA)
+        print("altitude alert",AA) """
         if (receive==1 and study_stage==2 and (PW==1 or EF==1 or ET==1 or vitals==1 or satisfied=="true")):
             administer()  
         elif(receive==1 and study_stage==3 and (PW==1 or EF==1 or ET==1 or vitals==1 or satisfied=="true")):
@@ -284,6 +439,14 @@ def main():
                 states["response_event"]=True      
            if states["inflight_event"] and not states["emergency_event"]:
                 inflight_status_check(states)
+           if(EF==1):
+               engine_failure_emergency()
+           elif(ET==1):
+               empty_fuel_emergency()
+           elif(WE==1):
+               weather_emergency()
+               
+               
            else:
                 for event, is_set in states.items():    # W3school
                     if is_set and event in event_handlers:  

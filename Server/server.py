@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, make_response
-#from SimConnect import *
+from SimConnect import *
 import logging
 import datetime
 import threading
@@ -107,6 +107,22 @@ weather_event= threading.Event() # to be set when weather emergency occurs
 weather_event.clear()
 altitude_event= threading.Event() # to be set when altitude alert comes up
 altitude_event.clear()
+acknowledge= threading.Event()
+acknowledge.clear()
+jarvis_emergency= threading.Event()
+jarvis_emergency.clear()
+engine_failure_emergency= threading.Event()
+engine_failure_emergency.clear()
+empty_fuel_emergency= threading.Event()
+empty_fuel_emergency.clear()
+weather_emergency_event= threading.Event()
+weather_emergency_event.clear()
+altitude_warning_alert=threading.Event()
+altitude_warning_alert.clear()
+pressure_warning_alert= threading.Event()
+pressure_warning_alert.clear()
+stop_engine=threading.Event()
+stop_engine.clear()
 
 
 events = {
@@ -122,6 +138,14 @@ events = {
     'sensor_event': sensor_event,
     'weather_event': weather_event,
     'altitude_event': altitude_event,
+    "acknowledge":acknowledge,
+    "jarvis_emergency":jarvis_emergency,
+    "engine_failure_emergency":engine_failure_emergency,
+    "empty_fuel_emergency":empty_fuel_emergency,
+    "weather_emergency_event":weather_emergency_event,
+    "altitude_warning_alert":altitude_warning_alert,
+    "pressure_warning_alert":pressure_warning_alert,
+    "stop_engine":stop_engine
 }
 
 
@@ -793,7 +817,15 @@ def get_states():
         "inflight_event": inflight_event.is_set(),
         "sensor_event":sensor_event.is_set(),
         "weather_event":weather_event.is_set(),
-        "altitude_event":altitude_event.is_set()
+        "altitude_event":altitude_event.is_set(),
+        "acknowledge": acknowledge.is_set(),
+        "jarvis_emergency":jarvis_emergency.is_set(),
+        "engine_failure_emergency":engine_failure_emergency.is_set(),
+        "empty_fuel_emergency":empty_fuel_emergency.is_set(),
+        "weather_emergency_event":weather_emergency_event.is_set(),
+        "altitude_warning_alert":altitude_warning_alert.is_set(),
+        "pressure_warning_alert":pressure_warning_alert.is_set(),
+        "stop_engine": stop_engine.is_set()
 
     }
     
@@ -991,6 +1023,14 @@ def reset_params():
     weather_event.clear()
     altitude_event.clear()
     jarvis_event.clear()
+    acknowledge.clear()
+    jarvis_emergency.clear()
+    engine_failure_emergency.clear()
+    empty_fuel_emergency.clear()
+    weather_emergency_event.clear()
+    altitude_warning_alert.clear()
+    pressure_warning_alert.clear()
+    stop_engine.clear()
     print('All events cleared',takeoff_event.is_set())
     
    # reseting other global variables

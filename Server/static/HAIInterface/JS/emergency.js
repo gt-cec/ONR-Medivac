@@ -622,11 +622,13 @@ function activateAltitudeAlert() {
       fetch("/var?weather-emergency=" + weatherEmergency)
       document.getElementById('weatheralertExplanation').style.display = 'block';
       document.getElementById('weathermoreInfoButton').style.display = 'none';
-      document.getElementById('weatherCDButton').style.display = 'block';
+      document.getElementById('weathercloseButton').style.display = 'block';
+      document.getElementById('weathercloseButton').onclick = () => { closeWeatherAlert(); }
+      /* document.getElementById('weatherCDButton').style.display = 'block';
       document.getElementById("weatherCDButton").onclick = () => { closeWeatherAlert(); 
       log({"page": "Inflight", "action": "change destination button pressed during weather emergency"}); 
       window.location.href = '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1
-      }
+      } */
     
     }
 

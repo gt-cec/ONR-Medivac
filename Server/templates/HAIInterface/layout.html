@@ -312,13 +312,13 @@
                 <img src="../static/HAIInterface/img/siren.gif" class="siren-gif" alt="Siren">
              </div>
              <button class="alert-button" id="weathermoreInfoButton" onclick="showMoreWeatherInfo()">Click for more info</button>
-             <!-- <button class="close-button" id="closeButton" onclick="closeAlert()">X</button> -->
+            
              <div id="weatheralertExplanation" style="display: none;">
                  <ul style="list-style-type:circle; padding: 15px; text-align: justify; ">
                     <li><b>Alert:</b> Unfavorable Weather Conditions.</li>
                      <li><b>Action Required:</b> Initiating emergency procedures now.</li> 
                      <li><b>Immediate Task:</b> We need to select an alternate landing site.</li>
-                      <li><b>Your Input Needed: </b>Use the button below to choose an emergency landing location.</li> 
+                      <li><b>Your Input Needed: </b>Please say "Jarvis, Change Destination" after closing this to choose an emergency landing location.</li> 
                       <li><b>Recommendation: </b>I suggest landing at Hilton Gardern Inn Heliport, the nearest available site.</li> 
                       <li><b>Map Guide:</b> Look for the green marker on the map - that's our closest option.</li> 
                       <li><b>Additional Support:</b> Assistance from Control is available if you deem it necessary.</li> 
@@ -326,7 +326,8 @@
                  </ul>
 
             </div>
-            <button class="submit-button" style="display: none;" id="weatherCDButton">Emergency Landing</button>
+             <button class="close-button" id="weathercloseButton" onclick="closeWeatherAlert()">Close</button> 
+            <!-- <button class="submit-button" style="display: none;" id="weatherCDButton">Emergency Landing</button>  -->
           </div>
         </div>        
        <audio id="weathersirenSound" >
