@@ -87,7 +87,7 @@ function initEmergency() {
 
 
         //emergency declaration for scenario 1 (training)
-        if (studyStage == '1') {
+        /* if (studyStage == '1') {
         // Altitude alert 
           if (warning_dist <= 350 || (Math.abs(time_diff - 180) <= 2.7)){
               console.log('Entered here')
@@ -112,7 +112,7 @@ function initEmergency() {
                   await fetch("/var?weather-emergency=" +  weatherEmergency)
               }
            }
-        }
+        } */
 
         //declaring emergency
         if ((studyStage == '1')||(studyStage == '2') || (studyStage == '3') || (studyStage == '4')) {
@@ -163,7 +163,7 @@ function initEmergency() {
             if (warning_dist <= 350 || (Math.abs(time_diff - 180) <= 2.7))  {
               console.log("here")
               //if((warning_satisfied==false) || (PressureWarning==1)){
-                if(warning_satisfied==false) {
+                if(studyStage == '4' && warning_satisfied==false) {
                   console.log("WARNING LOCATION REACHED")
                   warning_satisfied=true
                   PressureWarning=1
@@ -172,7 +172,7 @@ function initEmergency() {
                   await fetch("/var?pressure-warning=" + PressureWarning)
                   }
 
-                  if(altitude_satisfied==false) {
+                  if(studyStage == '1' && altitude_satisfied==false) {
                     console.log("WARNING LOCATION REACHED")
                     altitude_satisfied=true
                     altitudeAlert=1

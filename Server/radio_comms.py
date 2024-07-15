@@ -119,6 +119,7 @@ def inflight_status_check(states):
         #radio_update_complete.set()
         requests.post("http://127.0.0.1:8080/state", json={"event": "radioUpdateComplete", "action":"set"})
         print('sent request to set radio update complete')
+        logging.info('sent request to set radio update complete')
     delay(100)
 
 # Function to provide medicine administration guidance
@@ -156,7 +157,7 @@ def continueEmory():
 
 def flyOldForth():
    print('Reroute to Oldforth')
-   logging.info('Reroute to Old fourth radio comm response initiated')
+   logging.info('Reroute to Old Fourth Ward radio comm response initiated')
    with status_lock:  
       speak("MEDEVAC, Control:  Acknowledged. Under the current situation, reroute to Old Fourth Ward Hospital")
       requests.post("http://127.0.0.1:8080/state", json={"event": "engine_event", "action":"clear"}) #clearing engine event
@@ -164,7 +165,7 @@ def flyOldForth():
       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
       print('sent request to clear emergency_event')
       requests.get("http://127.0.0.1:8080/var", {"receive":0}) #making the receive 0 
-      logging.info('Reroute to Old fourth radio comm done- command to clear event and make the emergency variables 0 sent' )
+      logging.info('Reroute to Old Fourth Ward radio comm done- command to clear event and make the emergency variables 0 sent' )
 
 def weatherEmer():
    print('Weather emergency response')
@@ -176,7 +177,7 @@ def weatherEmer():
       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
       print('sent request to clear emergency_event')
       requests.get("http://127.0.0.1:8080/var", {"receive":0}) #making the receive 0 
-      logging.info('Reroute to Oldforth radio comm done- command to clear event and make the emergency variables 0 sent' )
+      logging.info('Reroute to weather emergency radio comm done- command to clear event and make the emergency variables 0 sent' )
 
 def miscalibratedSensor():
    print('Miscalibrated pressure sensor response')

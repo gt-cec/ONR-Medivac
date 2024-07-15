@@ -22,24 +22,26 @@ keywords_routes = {
 
 engine_lock = threading.Lock()
 
-def main(event):
+def main(jarvis_event):
     while True:
         def recording_started():
             #speak("Hello")
             print("Speak now...")
-            # mark the event as  set
-            event.set()
+            # mark the jarvis_event as set
+            jarvis_event.set()
+            print("jarvis_event set")
             # Send to Flask server
             #requests.post('http://127.0.0.1:8080/ws', json={'type': "activate_assistant"})
             
 
         def recording_finished():
             print("Speech end detected... transcribing...")
-            # mark the event as not set
-            event.clear()
+            # mark the jarvis_event as not set
+            jarvis_event.clear()
+            print("jarvis_event cleared")
             # Send to Flask server
             #requests.post('http://127.0.0.1:8080/ws', json={'type': "deactivate_assistant"}) 
-
+ 
         
         def speak(txt):
             #with engine_lock:
@@ -94,5 +96,5 @@ def main(event):
  
 
 if __name__ == '__main__':
-    main(event)
+    main(jarvis_event)
  

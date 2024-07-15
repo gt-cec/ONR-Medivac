@@ -1,23 +1,39 @@
+let ourText = ""
+const synth = window.speechSynthesis;
+ 
+ //check for browser compatibility
+   
+'speechSynthesis' in window ? console.log("Web Speech API supported") : console.log("Web Speech API not supported ")
 
+//speak function
+ function JarvisSpeak(ourText){
+        const utterThis = new SpeechSynthesisUtterance(ourText)
+        synth.speak(utterThis)
+    }
+    
+
+ 
  // Function to show assistant indicator
  function showAssistant() {
     console.log('showing')
+    JarvisSpeak("Hello")
     document.body.classList.add('assistant-dull-background', 'active');
     document.getElementById('assistant').style.display = 'block';
     document.getElementById('userTextBox').style.display = 'block';
     document.getElementById('userTextBox').innerHTML = "<b>Jarvis: </b>Hello, What can I help you with?<br><br>" +
-    "You could say: <i>Change Destination</i>, <i>Emergency</i>, <i>Open Map</i>",  "<i>ETA</i>";
+    "You could say: <i>Change Destination</i>, <i>Emergency</i>, <i>Open Map</i>",  "<i>ETA</i> <br><br>";
     
 }
 
 // Function to hide assistant indicator
 function hideAssistant() {
     console.log('hiding')
-    setTimeout(() => {
+    this.TimeoutID= setTimeout(() => {
         document.getElementById('assistant').style.display = 'none';
         document.body.classList.remove('assistant-dull-background', 'active');
         document.getElementById('userTextBox').style.display = 'none';
-    }, 1500)  // wait 3 seconds to hide
+        clearTimeout(this.TimeoutID)
+    }, 10000)  // wait 5 seconds to hide
     
 }
 
@@ -35,7 +51,9 @@ const keywordsRoutes = {
     //add more keywords and routes 
 }  
 
-function performAction(usertext){
+let currentRoute = window.location.pathname;
+
+function performAction(usertext) {
     usertext = usertext.toLowerCase();
     console.log("Looking");
     const userTextBox = document.getElementById('userTextBox');
@@ -43,31 +61,38 @@ function performAction(usertext){
 
     for (let [keyword, route] of Object.entries(keywordsRoutes)) {
         if (usertext.includes(keyword)) {
-            txt="Going to "+ keyword
-            newContent.innerHTML = txt;
-            userTextBox.appendChild(newContent);
-            userTextBox.scrollTop = userTextBox.scrollHeight; // Auto-scroll to the bottom
-            
-            window.location.href = route
-            
-            //exit()
-            return; // Exit function after finding the first matching keyword
+            if (route !== currentRoute) {
+                txt = "Going to " + keyword;
+                newContent.innerHTML = txt;
+                userTextBox.appendChild(newContent);
+                userTextBox.scrollTop = userTextBox.scrollHeight;
+                
+                currentRoute = route; // Update the current route
+                this.TimeoutID= setTimeout(() => {
+                window.location.href = route;
+                clearTimeout(this.TimeoutID)
+                 }, 500)  // wait 0.5 before going to the location
+                return;
+            } else {
+                console.log("Already on this page");
+                return;
+            }
         }
     }
-        
+    
     // If no keyword is found 
     console.log("Sorry, didn't find " + usertext);
     txt = "<b>Jarvis: </b> Sorry, didn't find " + usertext;
     newContent.innerHTML = txt;
     userTextBox.appendChild(newContent);
-    userTextBox.scrollTop = userTextBox.scrollHeight; // Auto-scroll to the bottom
+    userTextBox.scrollTop = userTextBox.scrollHeight;
 }
+        
 
 
 // Function to handle user text
 function handleUserText(text) {
-    console.log('text')
-    //console.log("prevtext:",prevText)
+    console.log('text:', text)
     
     //document.getElementById('userTextBox').style.display = 'block';
     const userTextBox = document.getElementById('userTextBox');
@@ -75,12 +100,22 @@ function handleUserText(text) {
     newContent.innerHTML = "<b>Participant: </b> " + text;
     userTextBox.appendChild(newContent);
     userTextBox.scrollTop = userTextBox.scrollHeight; // Auto-scroll to the bottom
-    //performAction(text)
+    performAction(text)
 }
 
+
+
+
+
+let prevTxt=""
 function initAssistant()
-{  let prevTxt=""
+{  
     async function fetchData() {
+
+        // Update currentRoute if it has changed
+        if (currentRoute !== window.location.pathname) {
+            currentRoute = window.location.pathname;
+        }
         try {
             const response = await fetch("/ws", {
                 method: 'POST',
@@ -98,11 +133,12 @@ function initAssistant()
             console.log("Parsed JSON:", json);
 
             // if (json.userText) {
-            if (json.userText && json.userText !== prevText){
+            if (json.userText && json.userText !== prevTxt){
                 console.log("Received new text:", json.userText);
                 try {
                     if(json.userText!==prevTxt){
                         console.log("new text")
+                        //showAssistant()
                         handleUserText(json.userText);
                         prevTxt = json.userText;
                 } 
