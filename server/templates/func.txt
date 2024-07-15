@@ -1,0 +1,37 @@
+def engine_failure():
+  speak( "Engine failure detected. This is not a drill")
+  speak( "Initiating emergency procedures now.")
+  speak( " We need to select an alternate landing site.")
+  speak( "Use the button below to choose an emergency landing location.")
+  speak( "I suggest landing at Hilton Gardern Inn Heliport, the nearest available site")
+  speak( " Look for the green marker on the map - that's our closest option.")
+  speak( " Assistance from Control is available if you deem it necessary.")
+  speak( "Time Sensitive Event Swift action is crucial for our safety.")
+
+
+def empty_fuel():
+  speak( "My primary fuel gauge is indicating an empty tank")
+  speak( "There's a high probability this reading is inaccurate.")
+  speak( "I am 95% certain we have sufficient fuel on board.")
+  speak( "Use the button below to choose an emergency landing location.")
+  speak(  Based on my calculations, it is safe to continue our flight.")
+  speak( " A reserve fuel tank is available if needed.")
+  speak( " I intend to maintain our planned route and destination unless requested otherwise")
+  speak( " Assistance from Control is available if you deem it necessary. ")
+  speak( " Option to change destination is available")
+
+def weather_emergency():
+  speak( "Unfavorable Weather Conditions.")
+  speak( "Initiating emergency procedures now.")
+  speak( " We need to select an alternate landing site.")
+  speak( "I suggest landing at Hilton Gardern Inn Heliport, the nearest available site")
+  speak( " Look for the green marker on the map - that's our closest option.")
+  speak( " Assistance from Control is available if you deem it necessary.")
+  speak( "Time Sensitive Event Swift action is crucial for our safety.")
+  speak( "Close this and call for me and say Change Destination if you need my assistance with this")
+
+
+
+
+
+
