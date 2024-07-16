@@ -6,6 +6,7 @@ import logging
 import asyncio
 
 
+
 # Global events and locks
 status_lock = threading.Lock()   
 speech_lock = threading.Lock()
@@ -23,23 +24,20 @@ study_stage=1
 global Jarvis
 
 
- # Engine initialization 
+# Engine initialization 
+#Radio Comms
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
-
 engine.setProperty('rate', 170)
+#Jarvis
+jarvis_engine = pyttsx3.init()
+voices = jarvis_engine.getProperty('voices')
+jarvis_engine.setProperty('voice', voices[1].id)
+jarvis_engine.setProperty('rate', 170)
 
 
 def speak(text):
-   global Jarvis
-   print("Jarvis",Jarvis)
-   if(Jarvis=="True"):
-       engine.setProperty('voice', voices[1].id)
-       print("Jarvis speaking")
-   else:
-       engine.setProperty('voice', voices[0].id)
-       print("Radio speaking")
-	
+   print("Radio speaking")
    if engine.isBusy():
        requests.post("http://127.0.0.1:8080/state", json={"event": "stop_engine", "action": "set"}) #clearing takeoff event
        print('sent request to clear stop_engine')
@@ -47,17 +45,33 @@ def speak(text):
        """   else:
        requests.post("http://127.0.0.1:8080/state", json={"event": "stop_engine", "action": "clear"}) #clearing takeoff event
        print('sent request to clear stop_engine') """
-       
-
    with speech_lock:  # lock to ensure only one thread speaks at a time
         if engine._inLoop:
             engine.endLoop() #end loop if running
         # engine.say(text)
-        # engine.runAndWait()
-            
+        # engine.runAndWait()   
         engine.startLoop(False)
         engine.say(text)
         engine.iterate() # Wait until speech is complete 
+
+
+def jarvis_speak(text):
+   print("Jarvis speaking")
+   if jarvis_engine.isBusy():
+       requests.post("http://127.0.0.1:8080/state", json={"event": "stop_engine", "action": "set"}) #clearing takeoff event
+       print('sent request to clear stop_engine')
+       logging.info('stop_engine set request sent')
+       """   else:
+       requests.post("http://127.0.0.1:8080/state", json={"event": "stop_engine", "action": "clear"}) #clearing takeoff event
+       print('sent request to clear stop_engine') """
+       
+   with speech_lock:  # lock to ensure only one thread speaks at a time
+        if jarvis_engine._inLoop:
+            jarvis_engine.endLoop() #end loop if running
+
+        jarvis_engine.startLoop(False)
+        jarvis_engine.say(text)
+        jarvis_engine.iterate() # Wait until speech is complete 
         
 def stop_engine():
    engine.stop()
@@ -272,7 +286,7 @@ def acknowledge():
     Jarvis="True"
     print("acknowledge")
     with status_lock:  
-        speak("Acknowledge")      
+        jarvis_speak("Acknowledge")      
         requests.post("http://127.0.0.1:8080/state", json={"event": "acknowledge", "action":"clear"}) #clearing acknowledge
         print('sent request to clear acknowledge')
         logging.info('sent request to clear acknowledge')
@@ -283,8 +297,8 @@ def jarvis_emergency():
     Jarvis=True
     print("jarvis_emergency")
     with status_lock:  
-        speak("EMEREGENCY, ATTENTION EMERGENCY")   
-        speak("Your input needed")   
+        jarvis_speak("EMEREGENCY, ATTENTION EMERGENCY")   
+        jarvis_speak("Your input needed")   
         requests.post("http://127.0.0.1:8080/state", json={"event": "jarvis_emergency", "action":"clear"}) #clearing acknowledge
         print('sent request to clear jarvis_emergency')
         logging.info('sent request to clear acknowledge')
@@ -294,14 +308,14 @@ def engine_failure_emergency():
     Jarvis="True"
     print("engine failure")
     with status_lock:  
-        speak( "Engine failure detected. This is not a drill")
-        speak( "Initiating emergency procedures now.")
-        speak( " We need to select an alternate landing site.")
-        speak( "Use the button below to choose an emergency landing location.")
-        speak( "I suggest landing at Hilton Gardern Inn Heliport, the nearest available site")
-        speak( " Look for the green marker on the map - that's our closest option.")
-        speak( " Assistance from Control is available if you deem it necessary.")
-        speak( "Time Sensitive Event Swift action is crucial for our safety.")
+        jarvis_speak( "Engine failure detected. This is not a drill")
+        jarvis_speak( "Initiating emergency procedures now.")
+        jarvis_speak( " We need to select an alternate landing site.")
+        jarvis_speak( "Use the button below to choose an emergency landing location.")
+        jarvis_speak( "I suggest landing at Hilton Gardern Inn Heliport, the nearest available site")
+        jarvis_speak( " Look for the green marker on the map - that's our closest option.")
+        jarvis_speak( " Assistance from Control is available if you deem it necessary.")
+        jarvis_speak( "Time Sensitive Event Swift action is crucial for our safety.")
         requests.post("http://127.0.0.1:8080/state", json={"event": "engine_failure", "action":"clear"}) #clearing acknowledge
         print('sent request to clear engine_failure')
         logging.info('Engine Failure alert given, sent request to clear engine_failure_emergency')
@@ -312,53 +326,53 @@ def empty_fuel_emergency():
     Jarvis="True"
     print("empty_fuel")
     with status_lock:  
-        speak( "My primary fuel gauge is indicating an empty tank")
-        speak( "There's a high probability this reading is inaccurate.")
-        speak( "I am 95 percent certain we have sufficient fuel on board.")
-        speak( "Use the button below to choose an emergency landing location.")
-        speak(  "Based on my calculations, it is safe to continue our flight.")
-        speak( " A reserve fuel tank is available if needed.")
-        speak( " I intend to maintain our planned route and destination unless requested otherwise")
-        speak( " Assistance from Control is available if you deem it necessary. ")
-        speak( " Option to change destination is available")
+        jarvis_speak( "My primary fuel gauge is indicating an empty tank")
+        jarvis_speak( "There's a high probability this reading is inaccurate.")
+        jarvis_speak( "I am 95 percent certain we have sufficient fuel on board.")
+        jarvis_speak( "Use the button below to choose an emergency landing location.")
+        jarvis_speak(  "Based on my calculations, it is safe to continue our flight.")
+        jarvis_speak( " A reserve fuel tank is available if needed.")
+        jarvis_speak( " I intend to maintain our planned route and destination unless requested otherwise")
+        jarvis_speak( " Assistance from Control is available if you deem it necessary. ")
+        jarvis_speak( " Option to change destination is available")
         requests.post("http://127.0.0.1:8080/state", json={"event": "empty_fuel", "action":"clear"}) #clearing empty_fuel
         print('sent request to clear empty_fuel')
         logging.info('Empty Fuel alert given, sent request to clear empty_fuel_emergency')
 
 def weather_emergency():
-  speak( "Unfavorable Weather Conditions.")
-  speak( "Initiating emergency procedures now.")
-  speak( " We need to select an alternate landing site.")
-  speak( "I suggest landing at Hilton Gardern Inn Heliport, the nearest available site")
-  speak( " Look for the green marker on the map - that's our closest option.")
-  speak( " Assistance from Control is available if you deem it necessary.")
-  speak( "Time Sensitive Event Swift action is crucial for our safety.")
+  jarvis_speak( "Unfavorable Weather Conditions.")
+  jarvis_speak( "Initiating emergency procedures now.")
+  jarvis_speak( " We need to select an alternate landing site.")
+  jarvis_speak( "I suggest landing at Hilton Gardern Inn Heliport, the nearest available site")
+  jarvis_speak( " Look for the green marker on the map - that's our closest option.")
+  jarvis_speak( " Assistance from Control is available if you deem it necessary.")
+  jarvis_speak( "Time Sensitive Event Swift action is crucial for our safety.")
   requests.post("http://127.0.0.1:8080/state", json={"event": "weather_emergency", "action":"clear"}) #clearing weather_emergency
   print('sent request to clear weather_emergency')
   logging.info('Weather emergency alert given, sent request to clear weather_emergency')
 
 
 def altitude_warning_alert():
-  speak( "Unfavorable Weather Conditions.")
-  speak( "Initiating emergency procedures now.")
-  speak( " We need to select an alternate landing site.")
-  speak( "I suggest landing at Hilton Gardern Inn Heliport, the nearest available site")
-  speak( " Look for the green marker on the map - that's our closest option.")
-  speak( " Assistance from Control is available if you deem it necessary.")
-  speak( "Time Sensitive Event Swift action is crucial for our safety.")
+  jarvis_speak( "Unfavorable Weather Conditions.")
+  jarvis_speak( "Initiating emergency procedures now.")
+  jarvis_speak( " We need to select an alternate landing site.")
+  jarvis_speak( "I suggest landing at Hilton Gardern Inn Heliport, the nearest available site")
+  jarvis_speak( " Look for the green marker on the map - that's our closest option.")
+  jarvis_speak( " Assistance from Control is available if you deem it necessary.")
+  jarvis_speak( "Time Sensitive Event Swift action is crucial for our safety.")
   requests.post("http://127.0.0.1:8080/state", json={"event": "altitude_warning_alert", "action":"clear"}) #clearing altitude_warning_alert
   print('sent request to clear altitude_warning_alert')
   logging.info('Altitude Warning alert given, sent request to clear altitude_warning_alert')
 
 
 def pressure_warning_alert():
-   speak( "Low Pressure Warning")
-   speak( "Attention, Low pressure Warning")
-   speak( " My primary gauge is detecting low hydraulic pressure.")
-   speak( " However, the backup sensor shows hydraulic pressure is normal")
-   speak( " The primary sensor is most likely miscalibrated.")
-   speak( " Need your assistance is verifyng the value")
-   speak( " Report the value shown by the backup hydraulic sensor")
+   jarvis_speak( "Low Pressure Warning")
+   jarvis_speak( "Attention, Low pressure Warning")
+   jarvis_speak( " My primary gauge is detecting low hydraulic pressure.")
+   jarvis_speak( " However, the backup sensor shows hydraulic pressure is normal")
+   jarvis_speak( " The primary sensor is most likely miscalibrated.")
+   jarvis_speak( " Need your assistance is verifyng the value")
+   jarvis_speak( " Report the value shown by the backup hydraulic sensor")
    requests.post("http://127.0.0.1:8080/state", json={"event": "pressure_warning_alert", "action":"clear"}) #clearing pressure_warning_alert
    print('sent request to clear pressure_warning_alert')
    logging.info('Pressure Warning alert given, sent request to clear pressure_warning_alert')
