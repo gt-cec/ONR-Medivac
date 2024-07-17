@@ -152,7 +152,7 @@
         }
         
         document.getElementById("mappage").onclick = async () => {
-            window.location.href ="/hai-interface/inflight"+ showMap()
+            await fetch("/var?map_page=1")
         }
 
        /* document.getElementById('regular-updates').onclick = async () => {

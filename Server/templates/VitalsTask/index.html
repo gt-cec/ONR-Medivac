@@ -214,13 +214,13 @@
       let vitalsEmergency=false
   
       function updateAltitude() {
-          altitudeValue.textContent = 'HIGH';
+          altitudeValue.textContent = '1500 ft';
           altitudeGauge.classList.remove('gauge3');
           altitudeGauge.classList.add('gauge4');
       }
   
       function changeGauge() {
-          altitudeValue.textContent ='MEDIUM';
+          altitudeValue.textContent ='1000 ft';
           altitudeGauge.classList.remove('gauge4');
           altitudeGauge.classList.add('gauge3');
       }
@@ -238,9 +238,10 @@
           vitalsEmergency=true
         }
         //if (message["change-altitude"]!= null || message["vitals-state"]==0 )
-        if ( vitalsEmergency==true && ["vitals-state"]==0 )
+        if ( vitalsEmergency==true && message["vitals-state"]==0 )
         {
           changeGauge()  //altitude change for vitals emergency
+          vitalsEmergency=false
         }
       }, 1000);  // Fetch vitals state every 1 second
     </script>
