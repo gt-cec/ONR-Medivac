@@ -16,7 +16,6 @@ const synth = window.speechSynthesis;
  // Function to show assistant indicator
  function showAssistant() {
     console.log('showing')
-    JarvisSpeak("Hello")
     document.body.classList.add('assistant-dull-background', 'active');
     document.getElementById('assistant').style.display = 'block';
     document.getElementById('userTextBox').style.display = 'block';
@@ -28,12 +27,12 @@ const synth = window.speechSynthesis;
 // Function to hide assistant indicator
 function hideAssistant() {
     console.log('hiding')
-    this.TimeoutID= setTimeout(() => {
+    hideTimeOut= setTimeout(() => {
         document.getElementById('assistant').style.display = 'none';
         document.body.classList.remove('assistant-dull-background', 'active');
         document.getElementById('userTextBox').style.display = 'none';
-        clearTimeout(this.TimeoutID)
-    }, 10000)  // wait 5 seconds to hide
+        clearTimeout(hideTimeOut)
+    }, 20000)  // wait 20 seconds to hide
     
 }
 
@@ -44,7 +43,7 @@ const keywordsRoutes = {
     "height": "/hai-interface/change-altitude",
     "change": "/hai-interface/change-destination",
     "destination": "/hai-interface/change-destination",
-    "emergency": "/hai-interface/inflight",
+    "emergency": '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 ,
     //"map": "/hai-interface/inflight"+ showMap,
     //"ETA": "hai-interface/map",
     //"radio":document.querySelector('.radiopanel').classList.toggle('open') +  document.querySelector('.radiopanel').classList.toggle('open'),     
@@ -53,7 +52,7 @@ const keywordsRoutes = {
 
 let currentRoute = window.location.pathname;
 
-function performAction(usertext) {
+async function performAction(usertext) {
     usertext = usertext.toLowerCase();
     console.log("Looking");
     const userTextBox = document.getElementById('userTextBox');
@@ -62,16 +61,26 @@ function performAction(usertext) {
     for (let [keyword, route] of Object.entries(keywordsRoutes)) {
         if (usertext.includes(keyword)) {
             if (route !== currentRoute) {
+                //send request to set acknowledge-Jarvis say acknowledge
+				const Radioresponse = await fetch("/state", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json' 
+                    },
+                    body: JSON.stringify({ event: 'acknowledge', action: 'set'}), 
+                });
+                console.log('event to say aknowledge sent')
+
                 txt = "Going to " + keyword;
                 newContent.innerHTML = txt;
                 userTextBox.appendChild(newContent);
                 userTextBox.scrollTop = userTextBox.scrollHeight;
                 
                 currentRoute = route; // Update the current route
-                this.TimeoutID= setTimeout(() => {
+                routingTimeOut= setTimeout(() => {
                 window.location.href = route;
-                clearTimeout(this.TimeoutID)
-                 }, 500)  // wait 0.5 before going to the location
+                clearTimeout(routingTimeOut)
+                 }, 1000)  // wait 1 before going to the location
                 return;
             } else {
                 console.log("Already on this page");
@@ -91,7 +100,7 @@ function performAction(usertext) {
 
 
 // Function to handle user text
-function handleUserText(text) {
+async function handleUserText(text) {
     console.log('text:', text)
     
     //document.getElementById('userTextBox').style.display = 'block';
@@ -100,14 +109,21 @@ function handleUserText(text) {
     newContent.innerHTML = "<b>Participant: </b> " + text;
     userTextBox.appendChild(newContent);
     userTextBox.scrollTop = userTextBox.scrollHeight; // Auto-scroll to the bottom
+    console.log("showing user text")
     performAction(text)
-}
+    await fetch("/ws", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+        },
+        body: JSON.stringify({ type: "user_text", text: ""}), // clearing user text in server
+    });
 
-
-
+    }
 
 
 let prevTxt=""
+
 function initAssistant()
 {  
     async function fetchData() {
@@ -152,7 +168,7 @@ function initAssistant()
                 handleUserText(json.userText);
             } */
 
-            if (json.assistantIsActive) {
+            if (json.assistantIsActive|| (json.userText && json.userText !== prevTxt)) {
                 showAssistant();
             }
             else {
@@ -167,7 +183,7 @@ function initAssistant()
     }
 
     //console.log("Setting up interval for fetchData");
-    setInterval(fetchData, 2500);
+    setInterval(fetchData, 1500);
 
     //console.log("Performing initial fetchData call");
     //fetchData();

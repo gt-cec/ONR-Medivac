@@ -87,6 +87,9 @@
                         <div id="CApage" class="control-button" style="font-size: large;">Change Altitude Page</div>
                         <div id="RDpage" class="control-button" style="font-size: large;">Return to Departure Page</div>
                         <div id="mappage" class="control-button" style="font-size: large;">Open Map</div>
+                        <label for="saytext">Enter text to say:</label><br>
+                        <input type="text"id="saytext" name="saytext"><br>
+                        <button id="sendtxt">Send</button>
                     </div>
                 </div>
             </div>
@@ -119,6 +122,17 @@
         document.getElementById("CApage").onclick = () => { window.location.href = '/hai-interface/change-destination?inflight=' + 1 }
         document.getElementById("CApage").onclick = () => { window.location.href = '/hai-interface/change-altitude?Changed_altitude='+ 10000 }
         document.getElementById('mappage').href = '/hai-interface/map' */
+
+        document.getElementById("sendtxt").onclick = async () => {
+            sendText=document.getElementById("saytext").value
+            await fetch("/speak", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+                },
+                body: JSON.stringify({ type: "say_text", text: sendText}), 
+            });
+        }
 
 
         document.getElementById("EMpage").onclick = async () => {

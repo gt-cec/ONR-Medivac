@@ -21,8 +21,10 @@ keywords_routes = {
 }  
 
 engine_lock = threading.Lock()
+prev_text= str(" ")
 
 def main(jarvis_event):
+    global prev_text
     while True:
         def recording_started():
             #speak("Hello")
@@ -78,13 +80,18 @@ def main(jarvis_event):
 
 
         with AudioToText(spinner=False, model="small.en", language="en", wake_words="jarvis", on_wakeword_detected=recording_started, on_recording_stop=recording_finished
-        , wake_word_timeout=7.0 ) as recorder:
+        , wake_word_timeout=10.0, enable_realtime_transcription=True, use_microphone=True) as recorder:
             print('Say "Jarvis" then speak.')
             #print(recorder.text())
             user_text=recorder.text().strip()
-            print(user_text)
+            print("this is user text:",user_text)
+            print(len(user_text))
             user_audio=dict(text=user_text)
-            requests.post('http://127.0.0.1:8080/ws', json={'type': "user_text", 'text': user_text})
+            print("Prev_text",prev_text)
+            if(user_text!=prev_text and len(user_text)!= 0):
+                requests.post('http://127.0.0.1:8080/ws', json={'type': "user_text", 'text': user_text})
+                prev_text=user_text
+
 
             
             print("Done. Now we should exit. Bye!")
@@ -97,4 +104,4 @@ def main(jarvis_event):
 
 if __name__ == '__main__':
     main(jarvis_event)
- 
+    

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, make_response
-from SimConnect import *
+#from SimConnect import *
 import logging
 import datetime
 import threading
@@ -68,6 +68,7 @@ approach_clear=0
 active_assistant = 'T'
 user_text_audio = ""
 prev_text=""
+received_text=""
 message = 'deactivate_assistant'
 emergency = False
 last_radio_update = 0
@@ -942,6 +943,22 @@ def ws():
     return jsonify(response), 200
 
 
+
+@app.route('/speak', methods=['POST'])
+def get_text():
+    global received_text
+    if request.is_json:
+        print("request received on speak: ", request.get_json())
+        received_text_request= request.get_json()
+        
+        if received_text_request["type"] == "say_text":
+           received_text = str(received_text_request["text"])
+   
+    response = {
+        "received_text": received_text
+    }
+    return jsonify(response), 200
+
 # index route
 @app.route("/")
 def index():
@@ -971,7 +988,7 @@ def log():
 # reset server parameters
 @app.route("/reset", methods=["GET"])
 def reset_params():
-    global study_participant_id, sequence, study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page,rd_page,ca_page,cd_page,map_page,transmit,receive, takeoff,approach_clear, user_text_audio, prev_text
+    global study_participant_id, sequence, study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page,rd_page,ca_page,cd_page,map_page,transmit,receive, takeoff,approach_clear, user_text_audio, prev_text,received_text
 
 
     study_participant_id = 0
@@ -1036,12 +1053,13 @@ def reset_params():
    # reseting other global variables
     user_text_audio=""
     prev_text=""
+    received_text=""
 
     return "Reset all system parameters!"
 
+
+
 # experimenter control page 
-
-
 @app.route("/control", methods=["GET"])
 def show_control():
     return render_template("ControlPanel/index.html", helipads=data)

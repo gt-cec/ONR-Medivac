@@ -23,7 +23,7 @@ study_stage=1
  # Engine initialization 
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
-currentVoice = engine.setProperty('voice', voices[0].id)
+#currentVoice = engine.setProperty('voice', voices[0].id)
 engine.setProperty('rate', 170)
 
 
@@ -40,4 +40,7 @@ def speak(text):
 
 if __name__ == "__main__":
    #main(inflight_event,status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event)
-   speak("Acknowledged")
+   for voice in voices:
+     engine.setProperty('voice', voice.id)
+     engine.say('The quick brown fox jumped over the lazy dog.')
+   engine.runAndWait()

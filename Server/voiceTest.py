@@ -25,15 +25,14 @@ global Jarvis
 
 
 # Engine initialization 
-#Radio Comms
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
+#currentVoice = engine.setProperty('voice', voices[0].id)
 engine.setProperty('rate', 170)
+
+
 #Jarvis
-jarvis_engine = pyttsx3.init()
-voices = jarvis_engine.getProperty('voices')
-jarvis_engine.setProperty('voice', voices[1].id)
-jarvis_engine.setProperty('rate', 170)
+
 
 # Flag to indicate if speech should be interrupted
 interrupt_speech = False
@@ -69,11 +68,17 @@ def speak(text):
 
 def jarvis_speak(text):
    print("Jarvis speaking")
-   if jarvis_engine.isBusy():
+   jarvis_engine = pyttsx3.init()
+   jarvis_voices = jarvis_engine.getProperty('voices')
+   print(jarvis_voices)
+   jarvis_engine.setProperty('voice', jarvis_voices[1].id)
+   jarvis_engine.setProperty('rate', 170)
+
+   #if jarvis_engine.isBusy():
        #requests.post("http://127.0.0.1:8080/state", json={"event": "stop_engine", "action": "set"}) #clearing takeoff event
        #print('sent request to clear stop_engine')
        #logging.info('stop_engine set request sent')
-       """   else:
+   """   else:
        requests.post("http://127.0.0.1:8080/state", json={"event": "stop_engine", "action": "clear"}) #clearing takeoff event
        print('sent request to clear stop_engine') """
        
