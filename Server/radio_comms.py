@@ -4,7 +4,7 @@ import pyttsx3
 import requests
 import logging
 import asyncio
-import keyboard
+#import keyboard
 
 
 
@@ -23,24 +23,20 @@ receive=0
 transmit=0
 study_stage=1
 
-global Jarvis
+Jarvis=False
 
 
-# Engine initialization 
-#Radio Comms
 
-
-#Jarvis
 # Flag to indicate if speech should be interrupted
 interrupt_speech = False
 
 
 def speak(text):
    global interrupt_speech
-   engine = pyttsx3.init()
+   engine = pyttsx3.init() # Engine initialization 
    voices = engine.getProperty('voices')
    engine.setProperty('voice', voices[0].id)
-   engine.setProperty('rate', 200)
+   engine.setProperty('rate', 170)
    print("Radio speaking")
    """ if engine.isBusy():
        requests.post("http://127.0.0.1:8080/state", json={"event": "stop_engine", "action": "set"}) #clearing takeoff event
@@ -55,15 +51,17 @@ def speak(text):
       
         
         engine.startLoop(False)
-        if keyboard.is_pressed("esc"):
-            engine.stop()
+        #if keyboard.is_pressed("esc") or 
+        if interrupt_speech:
+            engine.endLoop() #end loop if running
         engine.say(text)
         engine.iterate() # Wait until speech is complete 
 
 
 
 def jarvis_speak(text):
-   print("Jarvis speaking")
+   global  interrupt_speech   
+   print("Jarvis speaking") # Engine initialization for Jarvis
    jarvis_engine = pyttsx3.init()
    jarvis_voices = jarvis_engine.getProperty('voices')
    jarvis_engine.setProperty('voice', jarvis_voices[1].id)
@@ -82,8 +80,10 @@ def jarvis_speak(text):
             jarvis_engine.endLoop() #end loop if running
 
         jarvis_engine.startLoop(False)
-        if keyboard.is_pressed("esc"):
-            jarvis_engine.stop()
+         #if keyboard.is_pressed("esc") or 
+        if interrupt_speech:
+          jarvis_engine.stop()
+
         jarvis_engine.say(text)
         jarvis_engine.iterate() # Wait until speech is complete 
         
@@ -92,9 +92,9 @@ def stop_engine():
    interrupt_speech=True   
    #engine.stop()
    print("stopping engine")
-   requests.post("http://127.0.0.1:8080/state", json={"event": "stop_engine", "action": "clear"}) #clearing takeoff event
+   """ requests.post("http://127.0.0.1:8080/state", json={"event": "stop_engine", "action": "clear"}) #clearing stop event
    print('sent request to clear stop_engine')
-   logging.info('stop_engine clear request sent')
+   logging.info('stop_engine clear request sent') """
     
 
 async def delayForResponse(t):
@@ -244,6 +244,11 @@ def flyOldForth():
    logging.info('Reroute to Old Fourth Ward radio comm response initiated')
    with status_lock:  
       speak("MEDEVAC, Control:  Acknowledged. Under the current situation, reroute to Old Fourth Ward Hospital")
+      speak("Prepare for rapid transfer on landing")
+      speak("Ground medical support will be waiting")
+      speak("If the baby is experiencing seizures and medication is needed, administer a benzodiazepine, if time permits before landing.")
+      speak("Continue monitoring the patient's heart rate and oxygen saturation")
+      speak("Ensure that patient's airway remains clear and unobstructed")
       requests.post("http://127.0.0.1:8080/state", json={"event": "engine_event", "action":"clear"}) #clearing engine event
       print('sent request to clear engine_event')
       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
@@ -405,6 +410,13 @@ def pressure_warning_alert():
    print('sent request to clear pressure_warning_alert')
    logging.info('Pressure Warning alert given, sent request to clear pressure_warning_alert')
 
+def custom_speak(text):
+   jarvis_speak(text)
+   requests.post("http://127.0.0.1:8080/speak", json={"type": "say_text", "text":""}) #sending empty text back to reset it
+   print('sent request to clear')
+   logging.info('jarvis spoke',text,'empty string to reset it sent')
+
+
 #giving reference to the function that needs to be called depending to event set, not calling the function 
 event_handlers = {
    #"radioUpdateComplete": set_radio_update,
@@ -441,7 +453,7 @@ def main():
           toSay=str(sayText["received_text"])
           if(len(toSay)!=int(0)):
               print("receieved jarvis text")
-              jarvis_speak(toSay)
+              custom_speak(toSay)
 
         if data:
             PW=int(data["pressure-warning"])
