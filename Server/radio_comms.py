@@ -386,13 +386,11 @@ def weather_emergency():
 
 
 def altitude_warning_alert():
-  jarvis_speak( "Unfavorable Weather Conditions.")
-  jarvis_speak( "Initiating emergency procedures now.")
-  jarvis_speak( " We need to select an alternate landing site.")
-  jarvis_speak( "I suggest landing at Hilton Gardern Inn Heliport, the nearest available site")
-  jarvis_speak( " Look for the green marker on the map - that's our closest option.")
-  jarvis_speak( " Assistance from Control is available if you deem it necessary.")
-  jarvis_speak( "Time Sensitive Event Swift action is crucial for our safety.")
+  jarvis_speak( "Altitude Sensor miscalibrated.")
+  jarvis_speak( " My altitude gauge is reading wrong value")
+  jarvis_speak( " I suspect the sensor is miscalibrated.")
+  jarvis_speak( " Need your assistance is verifyng")
+  jarvis_speak( " Report the value shown by the backup altitude sensor")
   requests.post("http://127.0.0.1:8080/state", json={"event": "altitude_warning_alert", "action":"clear"}) #clearing altitude_warning_alert
   print('sent request to clear altitude_warning_alert')
   logging.info('Altitude Warning alert given, sent request to clear altitude_warning_alert')
@@ -511,6 +509,8 @@ def main():
                weather_emergency()
            elif(PW==1):
                pressure_warning_alert()    
+           elif(AA==1):
+               altitude_warning_alert()    
            else:
                 for event, is_set in states.items():    # W3school
                     if is_set and event in event_handlers:  

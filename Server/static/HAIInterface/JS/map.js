@@ -35,7 +35,9 @@ window.setInterval(async () => {
     if (mapPage == "1") {
         await fetch("/var?map-page=0")
         let currentRoute = window.location.pathname;
-        window.location.href = currentRoute+ showMap()
+        window.location.href = currentRoute+ document.getElementById("map").href
+
+        console.log("going to map")
         //document.getElementById("map").href
     }
 
