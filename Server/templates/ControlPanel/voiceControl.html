@@ -152,7 +152,8 @@
         }
         
         document.getElementById("mappage").onclick = async () => {
-            await fetch("/var?map_page=1")
+            console.log("sent map open")
+            await fetch("/var?map-page=1")
         }
 
        /* document.getElementById('regular-updates').onclick = async () => {

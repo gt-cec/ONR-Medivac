@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, make_response
-from SimConnect import *
+#from SimConnect import *
 import logging
 import datetime
 import threading
@@ -903,7 +903,7 @@ def speak():
 
 @app.route('/ws', methods=['POST'])
 def ws():
-    global user_text_audio, prev_text
+    global user_text_audio, prev_text, jarvis_event
     print("ws method ", request.method)
     
     """  if event.is_set():
