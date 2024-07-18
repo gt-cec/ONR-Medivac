@@ -1,40 +1,9 @@
-let ourText = ""
-const synth = window.speechSynthesis;
- 
- //check for browser compatibility 
-//'speechSynthesis' in window ? console.log("Web Speech API supported") : console.log("Web Speech API not supported ")
-
-//speak function
- function JarvisSpeak(ourText){
-        const utterThis = new SpeechSynthesisUtterance(ourText)
-        synth.speak(utterThis)
-    }
-    
-
- 
- // Function to show assistant indicator
- function showAssistant() {
-    console.log('showing')
-    document.body.classList.add('assistant-dull-background', 'active');
-    document.getElementById('assistant').style.display = 'block';
-    document.getElementById('userTextBox').style.display = 'block';
-    document.getElementById('userTextBox').innerHTML = "<b>Jarvis: </b>Hello, What can I help you with?<br><br>" +
-    "You could say: <i>Change Destination</i>, <i>Emergency</i>, <i>Change Altitude</i>",  "<i>ETA</i> <br><br>";
-    
-}
+let assistantActive = false;
+let activationTimer = null;
+let forceDeactivate = false;
 
 
-// Function to hide assistant indicator
-function hideAssistant() {
-    console.log('hiding')
- 
-        document.getElementById('assistant').style.display = 'none';
-        document.body.classList.remove('assistant-dull-background', 'active');
-        document.getElementById('userTextBox').style.display = 'none';
-        
-   
-    
-}
+let currentRoute = window.location.pathname;
 
 //Keywords and corresponding routes
 const keywordsRoutes = {
@@ -44,73 +13,44 @@ const keywordsRoutes = {
     "change": '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 ,
     "destination": '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 ,
     "emergency": '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 ,
-    //"map": "/hai-interface/inflight"+ showMap,
+    //"map": "/hai-interface/inflight"+  document.getElementById("map").click(),
     //"ETA": "hai-interface/map",
     //"radio":document.querySelector('.radiopanel').classList.toggle('open') +  document.querySelector('.radiopanel').classList.toggle('open'),     
     //add more keywords and routes 
 }  
 
-let currentRoute = window.location.pathname;
+function showAssistant() {
+    console.log('showing assistant');
+    document.body.classList.add('assistant-dull-background', 'active');
+    document.getElementById('assistant').style.display = 'block';
+    document.getElementById('userTextBox').style.display = 'block';
+    document.getElementById('userTextBox').innerHTML = "<b>Jarvis: </b>Hello, What can I help you with?<br><br>" +
+    "You could say: <i>Change Destination</i>, <i>Emergency</i>, <i>Open Map</i>, <i>ETA</i> <br><br>";
+}
 
-async function performAction(usertext) {
-    usertext = usertext.toLowerCase();
-    console.log("Looking");
+async function hideAssistant() {
+    console.log('hiding assistant');
+    document.getElementById('assistant').style.display = 'none';
+    document.body.classList.remove('assistant-dull-background', 'active');
+    document.getElementById('userTextBox').style.display = 'none';
+    await fetch("/ws", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: "deactivate_assistant" }),
+    });
+    // Wait for animations or transitions to complete
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    return;
+}
+
+async function handleUserText(text) {
+    console.log('Handling user text:', text);
     const userTextBox = document.getElementById('userTextBox');
     const newContent = document.createElement('div');
-
-    for (let [keyword, route] of Object.entries(keywordsRoutes)) {
-        if (usertext.includes(keyword)) {
-            if (route !== currentRoute) {
-                //send request to set acknowledge-Jarvis say acknowledge
-				const Radioresponse = await fetch("/state", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json' 
-                    },
-                    body: JSON.stringify({ event: 'acknowledge', action: 'set'}), 
-                });
-                console.log('event to say aknowledge sent')
-
-                txt = "Going to " + keyword;
-                newContent.innerHTML = txt;
-                userTextBox.appendChild(newContent);
-                userTextBox.scrollTop = userTextBox.scrollHeight;
-                
-                currentRoute = route; // Update the current route
-                routingTimeOut= setTimeout(() => {
-                window.location.href = route;
-                clearTimeout(routingTimeOut)
-                 }, 1000)  // wait 1 before going to the location
-                return;
-            } else {
-                console.log("Already on this page");
-                return;
-            }
-        }
-    }
-    
-    // If no keyword is found 
-    console.log("Sorry, didn't find " + usertext);
-    txt = "<b>Jarvis: </b> Sorry, didn't find " + usertext;
-    newContent.innerHTML = txt;
+    newContent.innerHTML = "<b>Participant: </b> " + text;
     userTextBox.appendChild(newContent);
     userTextBox.scrollTop = userTextBox.scrollHeight;
-}
-        
-
-
-// Function to handle user text
-async function handleUserText(text) {
-    console.log('text:', text)
-    
-    //document.getElementById('userTextBox').style.display = 'block';
-    const userTextBox = document.getElementById('userTextBox');
-    const newContent = document.createElement('div');
-    newContent.innerHTML = "<b>Medic: </b> " + text;
-    userTextBox.appendChild(newContent);
-    userTextBox.scrollTop = userTextBox.scrollHeight; // Auto-scroll to the bottom
-    console.log("showing user text")
-    performAction(text)
+    const actionResult = await performAction(text);
     await fetch("/ws", {
         method: 'POST',
         headers: {
@@ -119,72 +59,171 @@ async function handleUserText(text) {
         body: JSON.stringify({ type: "user_text", text: ""}), // clearing user text in server
     });
 
+    // Deactivate assistant and redirect if a keyword was found
+    if (actionResult.keywordFound) {
+        setTimeout(() => {
+            hideAssistant();
+            assistantActive = false;
+            window.location.href = actionResult.route;
+        }, 2000);  // 2-second delay before redirecting
+    } else {
+        // If no keyword was found, schedule deactivation after 2 seconds
+        setTimeout(() => {
+            if (assistantActive) {
+                hideAssistant();
+                assistantActive = false;
+            }
+        }, 2000);
+    }
+    return;
+}
+
+async function performAction(usertext) {
+    usertext = usertext.toLowerCase();
+    console.log("Looking for action for:", usertext);
+    const userTextBox = document.getElementById('userTextBox');
+    const newContent = document.createElement('div');
+
+    if (usertext.includes("deactivate") || usertext.includes("turn off")) {
+        forceDeactivate = true;
+        console.log("deactivating")
+        /* newContent.innerHTML = "<b>Jarvis: </b> Understood. Deactivating now.";
+        userTextBox.appendChild(newContent);
+        userTextBox.scrollTop = userTextBox.scrollHeight; */
+        return { keywordFound: true, route: null };
     }
 
 
-let prevTxt=""
+    for (let [keyword, route] of Object.entries(keywordsRoutes)) {
+        if (usertext.includes(keyword)) {
+            if (route !== currentRoute) {
+                //send request to set acknowledge-Jarvis say acknowledge
+				const Radioresponse = fetch("/state", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json' 
+                    },
+                    body: JSON.stringify({ event: 'acknowledge', action: 'set'}), 
+                });
+            console.log('event to say aknowledge sent')
+            newContent.innerHTML = "Going to " + keyword;
+            userTextBox.appendChild(newContent);
+            userTextBox.scrollTop = userTextBox.scrollHeight;
 
+            // Simulate some processing time
+            //await new Promise(resolve => setTimeout(resolve, 2000));
+
+            // Instead of navigating, we'll just log the action
+            console.log(`Action performed: Navigating to ${route}`);
+            currentRoute = route; // Update the current route
+            /* routingTimeOut= setTimeout(() => {
+            window.location.href = route;
+            clearTimeout(routingTimeOut)
+                }, 1000)  // wait 1 before going to the location */
+            return { keywordFound: true, route: route };
+        }else {
+            console.log("Already on this page");
+            return { keywordFound: false, route: null };
+        }
+    }
+}
+
+    console.log("No action found for:", usertext);
+    newContent.innerHTML = "<b>Jarvis: </b> Sorry, I didn't understand that.";
+    userTextBox.appendChild(newContent);
+    userTextBox.scrollTop = userTextBox.scrollHeight;
+    return { keywordFound: false, route: null };
+
+    // Simulate some processing time
+   // await new Promise(resolve => setTimeout(resolve, 2000));
+ }
+
+function startActivationTimer() {
+    clearActivationTimer();
+    activationTimer = setTimeout(async () => {
+        if (assistantActive) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            await hideAssistant();
+            assistantActive = false;
+        }
+    }, 5000);
+}
+
+function clearActivationTimer() {
+    if (activationTimer) {
+        clearTimeout(activationTimer);
+        activationTimer = null;
+    }
+}
+
+let prevTxt=""
 function initAssistant()
 {  
-    async function fetchData() {
+async function fetchData() {
 
-        // Update currentRoute if it has changed
-        if (currentRoute !== window.location.pathname) {
-            currentRoute = window.location.pathname;
-        }
+    // Update currentRoute if it has changed
+    if (currentRoute !== window.location.pathname) {
+        currentRoute = window.location.pathname;
+    }
+    
         try {
             const response = await fetch("/ws", {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
-                },
-                body: JSON.stringify({ type: 'status_check'}), // Dummy body to comply with POST others throws error 400
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: 'status_check' }),
             });
-    
+
             if (!response.ok) {
                 throw new Error(`HTTP error: ${response.status}`);
             }
-    
+
             const json = await response.json();
             console.log("Parsed JSON:", json);
 
-            // if (json.userText) {
-            if (json.userText && json.userText !== prevTxt){
-                console.log("Received new text:", json.userText);
-                try {
-                    if(json.userText!==prevTxt){
-                        console.log("new text")
-                        //showAssistant()
-                        handleUserText(json.userText);
-                        prevTxt = json.userText;
-                } 
-            } catch (error) {
-                    console.error("Error in handleUserText:", error);
-                }
-            } 
-
-            /* if (json.userText != "") {
-                console.log("Received text")
-                handleUserText(json.userText);
-            } */
-
-            if (json.assistantIsActive|| (json.userText && json.userText !== prevTxt)) {
+            if (json.assistantIsActive && !assistantActive) {
                 showAssistant();
+                assistantActive = true;
+                startActivationTimer();
+            } else if (!json.assistantIsActive|| forceDeactivate) {
+                if (assistantActive) {
+                     hideAssistant();
+                    assistantActive = false;
+                    //clearActivationTimer();
+                    forceDeactivate = false;
+                }
             }
-            else {
-                 hideAssistant();
+            /* else if (!json.assistantIsActive && ! forceDeactivate) {
+                    
+                    activationTimer = setTimeout(async () => {
+                        if (assistantActive) {
+                            await hideAssistant();
+                            assistantActive = false;
+                            clearActivationTimer();
+                        }
+                    }, 1000);
+                    assistantActive = false;
+                    //clearActivationTimer();
+                    forceDeactivate = false;
+                } */
+     
+
+            if (json.userText && json.userText !== prevTxt) {
+                clearActivationTimer();
+                await handleUserText(json.userText);
+                startActivationTimer();
+                /*if (!json.assistantIsActive || forceDeactivate) {
+                    await hideAssistant();
+                    assistantActive = false;
+                    forceDeactivate = false;
+                }*/
             }
+
         } catch (err) {
             console.error(`Fetch problem: ${err.message}`);
-            if (err.name === 'TypeError') {
-                console.error("This might be a network issue");
-            }
         }
+
+        // Wait for 1.5 seconds before the next fetch
+        //await new Promise(resolve => setTimeout(resolve, 1500));
     }
-
-    //console.log("Setting up interval for fetchData");
     setInterval(fetchData, 1500);
-
-    //console.log("Performing initial fetchData call");
-    //fetchData();
 }
