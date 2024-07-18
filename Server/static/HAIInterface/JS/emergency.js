@@ -161,7 +161,7 @@ function initEmergency() {
         if (studyStage == '1'||studyStage == '4') {
           console.log("checking")
           //if (warning_dist <= 350 || (Math.abs(time_diff - 180) <= 2.7) || (PressureWarning==1))  {
-            if (warning_dist <= 350 || (Math.abs(time_diff - 180) <= 2.75))  {
+            if (warning_dist <= 350 || (Math.abs(time_diff - 180) <= 2.8))  {
               console.log("here")
               //if((warning_satisfied==false) || (PressureWarning==1)){
                 if(studyStage == '4' && warning_satisfied==false) {
@@ -169,9 +169,11 @@ function initEmergency() {
                   warning_satisfied=true
                   PressureWarning=1
                   await fetch("/var?pressure-warning=" + PressureWarning)
+                  console.log(PressureWarning)
+                  console.log(typeof(PressureWarning))
+                  await fetch("/var?pressure-warning=1")
                   await fetch("/var?warning-satisfied=" + warning_satisfied)
                   console.log('showing pressure warning')
-                  
                   }
 
                   if(studyStage == '1' && altitude_satisfied==false) {
@@ -242,7 +244,7 @@ function initEmergency() {
          /*  audio.play()
           audio.volume=0.05 */
           activateFuelAlert()
-      }
+       }
 
         // to show pressure miscalibration warning 
        // if (PressureWarning == 1 && warning_satisfied==true) {
@@ -253,14 +255,14 @@ function initEmergency() {
             /* audio.play()
             audio.volume=0.05 */
             activateWarningAlert()
-        }
+         } 
 
         // For Engine failure emergency
         //if (EngineFailure == 1 && satisfied==true) {
         if (EngineFailure == 1 ) {
           log({"page": "emergency", "action": "show Engine Failure Alert, hide map"})
           hideMap()
-       /*    audio.play()
+         /*    audio.play()
           audio.volume=0.05 */
           activateEngineAlert()
         }
@@ -363,13 +365,13 @@ function activateWarningAlert() {
     //document.getElementById('pressureWarningcloseButton').style.display = 'block';
     // Stop the flashing animation
     document.getElementById('warningText').style.animation = 'none';
-    PressureWarning=0  
+   /*  PressureWarning=0  
     //updating the server
-    fetch("/var?pressure-warning=" + PressureWarning)
+    fetch("/var?pressure-warning=" + PressureWarning) */
   }
 
   // Function to submit pressure value
-  function submitPressureValue() {
+  async function submitPressureValue() {
     document.getElementById('warningSound').pause();
     document.getElementById('warningSound').currenTime=0;
     const pressureValue = document.getElementById('pressureValue').value;
@@ -389,6 +391,9 @@ function activateWarningAlert() {
       const pWalertBox = document.getElementById('pressureWarningalertBox');
       pWalertBox.classList.remove('expanded');
       log({"page": "Inflight", "action": "Pressure Warning- alert explaination"}); 
+      PressureWarning=0  
+      //updating the server
+      await fetch("/var?pressure-warning=" + PressureWarning)
     } 
     else {
       resultMessage.innerHTML = "Wrong value, check and submit the pressure value again.";

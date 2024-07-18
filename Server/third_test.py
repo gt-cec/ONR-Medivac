@@ -45,6 +45,7 @@ def main(jarvis_event):
             #requests.post('http://127.0.0.1:8080/ws', json={'type': "deactivate_assistant"}) 
 
         def deactivate_jarvis():
+            print("deactivating")
             if jarvis_event.is_set():
                 jarvis_event.clear()
  
@@ -84,7 +85,7 @@ def main(jarvis_event):
 
 
         with AudioToText(spinner=False, model="small.en", language="en", wake_words="jarvis", on_wakeword_detected=recording_started, on_recording_stop=recording_finished
-        , wake_word_timeout=7.0, on_wakeword_timeout=deactivate_jarvis, handle_buffer_overflow=False) as recorder:
+        , wake_word_timeout=5.0, on_wakeword_timeout=deactivate_jarvis, handle_buffer_overflow=False) as recorder:
             print('Say "Jarvis" then speak.')
             #print(recorder.text())
             user_text=recorder.text().strip()
