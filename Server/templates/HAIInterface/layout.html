@@ -328,6 +328,7 @@
             </div>
              <!-- <button class="close-button" id="weathercloseButton" onclick="closeWeatherAlert()">Close</button>  -->
             <!-- <button class="submit-button" style="display: none;" id="weatherCDButton">Emergency Landing</button>  -->
+            <button class="submit-button" style="display: none;" id="weathercloseButton" onclick="closeWeatherAlert()">Close</button> 
           </div>
         </div>        
        <audio id="weathersirenSound" >
@@ -542,7 +543,7 @@
                 setTimeout(() => {
                     radioReceive=0
                  fetch("/var?receive=" + radioReceive) 
-                }, 30000)  // wait 30 seconds to set is back to 0
+                }, 20000)  // wait 30 seconds to set is back to 0
             }
         }
 

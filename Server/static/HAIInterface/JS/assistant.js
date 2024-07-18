@@ -19,19 +19,20 @@ const synth = window.speechSynthesis;
     document.getElementById('assistant').style.display = 'block';
     document.getElementById('userTextBox').style.display = 'block';
     document.getElementById('userTextBox').innerHTML = "<b>Jarvis: </b>Hello, What can I help you with?<br><br>" +
-    "You could say: <i>Change Destination</i>, <i>Emergency</i>, <i>Open Map</i>",  "<i>ETA</i> <br><br>";
+    "You could say: <i>Change Destination</i>, <i>Emergency</i>, <i>Change Altitude</i>",  "<i>ETA</i> <br><br>";
     
 }
+
 
 // Function to hide assistant indicator
 function hideAssistant() {
     console.log('hiding')
-    hideTimeOut= setTimeout(() => {
+ 
         document.getElementById('assistant').style.display = 'none';
         document.body.classList.remove('assistant-dull-background', 'active');
         document.getElementById('userTextBox').style.display = 'none';
-        clearTimeout(hideTimeOut)
-    }, 20000)  // wait 20 seconds to hide
+        
+   
     
 }
 
@@ -40,8 +41,8 @@ const keywordsRoutes = {
     //"help": "http://127.0.0.1:8080/hai-interface/help",
     "altitude": "/hai-interface/change-altitude",
     "height": "/hai-interface/change-altitude",
-    "change": "/hai-interface/change-destination",
-    "destination": "/hai-interface/change-destination",
+    "change": '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 ,
+    "destination": '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 ,
     "emergency": '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 ,
     //"map": "/hai-interface/inflight"+ showMap,
     //"ETA": "hai-interface/map",
@@ -105,7 +106,7 @@ async function handleUserText(text) {
     //document.getElementById('userTextBox').style.display = 'block';
     const userTextBox = document.getElementById('userTextBox');
     const newContent = document.createElement('div');
-    newContent.innerHTML = "<b>Participant: </b> " + text;
+    newContent.innerHTML = "<b>Medic: </b> " + text;
     userTextBox.appendChild(newContent);
     userTextBox.scrollTop = userTextBox.scrollHeight; // Auto-scroll to the bottom
     console.log("showing user text")

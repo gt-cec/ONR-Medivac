@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, make_response
-#from SimConnect import *
+from SimConnect import *
 import logging
 import datetime
 import threading
@@ -146,7 +146,8 @@ events = {
     "weather_emergency_event":weather_emergency_event,
     "altitude_warning_alert":altitude_warning_alert,
     "pressure_warning_alert":pressure_warning_alert,
-    "stop_engine":stop_engine
+    "stop_engine":stop_engine,
+    "jarvis_event":jarvis_event
 }
 
 
@@ -275,19 +276,20 @@ data = {
         "latitude": "33.9484611",
         "longitude": "-83.4070611",
     },
-    "1": {
-        "name": "Grady Memorial Hospital",
-        "id": "1GE8",
-        "location": "80 JESSE HILL JR DR. ATLANTA, GA 30303",
-        "hasHospital": True,
-        "nearest": False,
-        "nominal": False,
-        "nominal_departure": False,
-        "image1": "../static/HAIInterface/img/Mary1.png",
-        "image2": "../static/HAIInterface/img/Ruffwood.png",
-        "latitude": "33.7525500",
-        "longitude": "-84.3820778",
-    },
+    # "1": {
+    #     "name": "Grady Memorial Hospital",
+    #     "id": "1GE8",
+    #     "location": "80 JESSE HILL JR DR. ATLANTA, GA 30303",
+    #     "hasHospital": True,
+    #     "nearest": False,
+    #     "nominal": False,
+    #     "nominal_departure": False,
+    #     "image1": "../static/HAIInterface/img/Mary1.png",
+    #     "image2": "../static/HAIInterface/img/Ruffwood.png",
+    #     "latitude": "33.7525500",
+    #     "longitude": "-84.3820778",
+    # }, 
+
     "2": {
         "name": "Ruffwood Heliport",
         "id": "73GA",
@@ -317,19 +319,20 @@ data = {
         "latitude": "33.795954485398155", #offset for visibility to Chappell Park baseball fields
         "longitude": "-84.32677430346087", #offset to chappel Park baseball fields
     },
-    "4": {
-        "name": "Emory University Hospital Midtown Heliport",
-        "id": "GA64",
-        "location": "550 PEACHTREE ST. N.E.,ATLANTA, GA 30308",
-        "hasHospital": True,
-        "nearest": False,
-        "nominal": False,
-        "nominal_departure": False,
-        "image1": "../static/HAIInterface/img/Mary1.png",
-        "image2": "../static/HAIInterface/img/Emory.png",
-        "latitude": "33.7686667",
-        "longitude": "-84.3868750",
-    },
+    # "4": {
+    #     "name": "Emory University Hospital Midtown Heliport",
+    #     "id": "GA64",
+    #     "location": "550 PEACHTREE ST. N.E.,ATLANTA, GA 30308",
+    #     "hasHospital": True,
+    #     "nearest": False,
+    #     "nominal": False,
+    #     "nominal_departure": False,
+    #     "image1": "../static/HAIInterface/img/Mary1.png",
+    #     "image2": "../static/HAIInterface/img/Emory.png",
+    #     "latitude": "33.7686667",
+    #     "longitude": "-84.3868750",
+    # }, 
+    
     "5": {
          # Nearest for high workload scenario (AI suggestion)
         "name": "Hilton Garden Inn Downtown Heliport",
@@ -410,20 +413,21 @@ data = {
         "longitude": "-84.4683361",
 
     },
+    #  "11": {
+    #     "name": "Southside Medical",
+    #     "id": "GA85",
+    #     "location": "1 MARTIN LUTHER KING DRIVE ATLANTA, GA 30334",
+    #     "hasHospital": True,
+    #     "nearest": False,
+    #     "nominal": False,
+    #     "nominal_departure": False,
+    #     "image1": "../static/HAIInterface/img/Mary1.png",
+    #     "image2": "../static/HAIInterface/img/Emory.png",
+    #     "latitude": "33.7474278",
+    #     "longitude": "-84.3882583",
+    # }, 
+
     "11": {
-        "name": "Southside Medical",
-        "id": "GA85",
-        "location": "1 MARTIN LUTHER KING DRIVE ATLANTA, GA 30334",
-        "hasHospital": True,
-        "nearest": False,
-        "nominal": False,
-        "nominal_departure": False,
-        "image1": "../static/HAIInterface/img/Mary1.png",
-        "image2": "../static/HAIInterface/img/Emory.png",
-        "latitude": "33.7474278",
-        "longitude": "-84.3882583",
-    },
-    "12": {
         "name": "Rabbit Hole Heliport",
         "id": "52GA",
         "location": "2100 SUGAR CREEK TRAIL BUCKHEAD, GA 30625",
@@ -436,7 +440,7 @@ data = {
         "latitude": "33.5380556",
         "longitude": "-84.4744444",
     },
-    "13": {
+    "12": {
         "name": "St Joseph's Hospital Heliport",
         "id": "GA52",
         "location": "11705 Mercy Blvd. Savannah, GA 31419",
@@ -758,7 +762,7 @@ def set_event():
 
 @app.route('/state', methods=['POST'])
 def get_states():
-    global takeoffEvent, engine_failure, pressure_warning, empty_tank, vitals_state, weather_emergency, altitude_alert#does var need to be called?
+    global takeoffEvent, engine_failure, pressure_warning, empty_tank, vitals_state, weather_emergency, altitude_alert,jarvis_event
     if(airspace_emergency_state==1 or vitals_state==1 or engine_failure==1 or pressure_warning==1 or empty_tank==1 or weather_emergency==1 or altitude_alert==1):
         emergency_event.set()
         print('Emergency event set')
@@ -826,7 +830,8 @@ def get_states():
         "weather_emergency_event":weather_emergency_event.is_set(),
         "altitude_warning_alert":altitude_warning_alert.is_set(),
         "pressure_warning_alert":pressure_warning_alert.is_set(),
-        "stop_engine": stop_engine.is_set()
+        "stop_engine": stop_engine.is_set(),
+        "jarvis_event":jarvis_event.is_set(),
 
     }
     

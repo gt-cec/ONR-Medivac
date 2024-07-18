@@ -52,8 +52,8 @@ def speak(text):
         
         engine.startLoop(False)
         #if keyboard.is_pressed("esc") or 
-        if interrupt_speech:
-            engine.endLoop() #end loop if running
+        """ if interrupt_speech:
+            engine.endLoop() #end loop if running """
         engine.say(text)
         engine.iterate() # Wait until speech is complete 
 
@@ -81,8 +81,8 @@ def jarvis_speak(text):
 
         jarvis_engine.startLoop(False)
          #if keyboard.is_pressed("esc") or 
-        if interrupt_speech:
-          jarvis_engine.stop()
+        """ if interrupt_speech:
+          jarvis_engine.stop() """
 
         jarvis_engine.say(text)
         jarvis_engine.iterate() # Wait until speech is complete 

@@ -43,6 +43,10 @@ def main(jarvis_event):
             print("jarvis_event cleared")
             # Send to Flask server
             #requests.post('http://127.0.0.1:8080/ws', json={'type': "deactivate_assistant"}) 
+
+        def deactivate_jarvis():
+            if jarvis_event.is_set():
+                jarvis_event.clear()
  
         
         def speak(txt):
@@ -80,7 +84,7 @@ def main(jarvis_event):
 
 
         with AudioToText(spinner=False, model="small.en", language="en", wake_words="jarvis", on_wakeword_detected=recording_started, on_recording_stop=recording_finished
-        , wake_word_timeout=10.0, enable_realtime_transcription=True, use_microphone=True) as recorder:
+        , wake_word_timeout=7.0, on_wakeword_timeout=deactivate_jarvis, handle_buffer_overflow=False) as recorder:
             print('Say "Jarvis" then speak.')
             #print(recorder.text())
             user_text=recorder.text().strip()
@@ -89,6 +93,8 @@ def main(jarvis_event):
             user_audio=dict(text=user_text)
             print("Prev_text",prev_text)
             if(user_text!=prev_text and len(user_text)!= 0):
+                if not jarvis_event.is_set():
+                    jarvis_event.set()
                 requests.post('http://127.0.0.1:8080/ws', json={'type': "user_text", 'text': user_text})
                 prev_text=user_text
 

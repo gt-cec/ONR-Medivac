@@ -140,6 +140,7 @@ function initEmergency() {
                         await fetch("/var?vitals-state=" + vitalsState)
                         EngineFailure = 1;
                         await fetch("/var?engine-failure=" + EngineFailure)
+
                        /*  const emergencyTimeout=setTimeout(async() => {
                          
                           clearTimeout(emergencyTimeout)
@@ -160,16 +161,17 @@ function initEmergency() {
         if (studyStage == '1'||studyStage == '4') {
           console.log("checking")
           //if (warning_dist <= 350 || (Math.abs(time_diff - 180) <= 2.7) || (PressureWarning==1))  {
-            if (warning_dist <= 350 || (Math.abs(time_diff - 180) <= 2.7))  {
+            if (warning_dist <= 350 || (Math.abs(time_diff - 180) <= 2.75))  {
               console.log("here")
               //if((warning_satisfied==false) || (PressureWarning==1)){
                 if(studyStage == '4' && warning_satisfied==false) {
                   console.log("WARNING LOCATION REACHED")
                   warning_satisfied=true
                   PressureWarning=1
+                  await fetch("/var?pressure-warning=" + PressureWarning)
                   await fetch("/var?warning-satisfied=" + warning_satisfied)
                   console.log('showing pressure warning')
-                  await fetch("/var?pressure-warning=" + PressureWarning)
+                  
                   }
 
                   if(studyStage == '1' && altitude_satisfied==false) {
@@ -193,7 +195,7 @@ function initEmergency() {
         }
 
         // Landing for study stage 4
-        if (studyStage == '4'||studyStage == '3' ) {
+        if (studyStage == '4'||studyStage == '3'|| studyStage == '1' ) {
             //making FTY Heliport the nearest in emergency
             helipads[20].nearest=true
 
@@ -247,6 +249,7 @@ function initEmergency() {
         if (PressureWarning == 1 ) {
             log({"page": "emergency", "action": "show Pressure Miscalibrated Warning, hide map"})
             hideMap()
+            console.log('Activating warning alert')
             /* audio.play()
             audio.volume=0.05 */
             activateWarningAlert()
@@ -342,10 +345,10 @@ function activateWarningAlert() {
   console.log("PressureWarning activated")
   document.getElementById('warningSound').play();
   log({"page": "Inflight", "action": "Pressure Warning alert activated"}); 
-    document.body.classList.add('dull-background');
-    const pWoverlay = document.getElementById('pressureWarningalertOverlay');
-    pWoverlay.style.visibility = 'visible';
-    pWoverlay.style.opacity = '1';
+  document.body.classList.add('dull-background');
+  const pWoverlay = document.getElementById('pressureWarningalertOverlay');
+  pWoverlay.style.visibility = 'visible';
+  pWoverlay.style.opacity = '1';
   }
 
   // Function to show more information
@@ -405,9 +408,9 @@ function activateWarningAlert() {
       pWoverlay.style.visibility = 'hidden';
       document.body.classList.remove('dull-background');
     }, { once: true });
-    PressureWarning=0  
+   /*  PressureWarning=0  
     //updating the server
-    await fetch("/var?pressure-warning=" + PressureWarning)
+    await fetch("/var?pressure-warning=" + PressureWarning) */
   }
 
 
@@ -586,10 +589,10 @@ function activateAltitudeAlert() {
   async function closeAltitudeAlert()  {
     console.log('pressed')
     log({"page": "Inflight", "action": "Altitude alert close button pressed"}); 
-    const pWoverlay = document.getElementById('altitudealertOverlay');
-    pWoverlay.style.opacity = '0';
-    pWoverlay.addEventListener('transitionend', () => {
-      pWoverlay.style.visibility = 'hidden';
+    const altitudeoverlay = document.getElementById('altitudealertOverlay');
+    altitudeoverlay.style.opacity = '0';
+    altitudeoverlay.addEventListener('transitionend', () => {
+      altitudeoverlay.style.visibility = 'hidden';
       document.body.classList.remove('dull-background');
     }, { once: true });
     altitudeAlert=0  
@@ -621,7 +624,7 @@ function activateAltitudeAlert() {
       //updating the server
       fetch("/var?weather-emergency=" + weatherEmergency)
       document.getElementById('weatheralertExplanation').style.display = 'block';
-      document.getElementById('weathermoreInfoButton').style.display = 'none';
+      document.getElementById('weathermoreInfoButton').style.display = 'none'; 
       document.getElementById('weathercloseButton').style.display = 'block';
       document.getElementById('weathercloseButton').onclick = () => { closeWeatherAlert(); }
       /* document.getElementById('weatherCDButton').style.display = 'block';
