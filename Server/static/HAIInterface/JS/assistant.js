@@ -13,14 +13,19 @@ const keywordsRoutes = {
     "change": '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 ,
     "destination": '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 ,
     "emergency": '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 ,
+    //"map": () => window.dispatchEvent(new CustomEvent('mapClicked')),
+     //"map": document.getElementById("map").click()
     //"map": "/hai-interface/inflight"+  document.getElementById("map").click(),
     //"ETA": "hai-interface/map",
-    //"radio":document.querySelector('.radiopanel').classList.toggle('open') +  document.querySelector('.radiopanel').classList.toggle('open'),     
+    //"radio":document.querySelector('.radiopanel').classList.toggle('open'),     
     //add more keywords and routes 
 }  
 
 function showAssistant() {
     console.log('showing assistant');
+    const activeSound = new Audio('"../static/HAIInterface/img/active.mp3');
+    activeSound.loop = false;
+    activeSound.play();
     document.body.classList.add('assistant-dull-background', 'active');
     document.getElementById('assistant').style.display = 'block';
     document.getElementById('userTextBox').style.display = 'block';
@@ -30,6 +35,10 @@ function showAssistant() {
 
 async function hideAssistant() {
     console.log('hiding assistant');
+    console.log('showing assistant');
+    const inactiveSound = new Audio('"../static/HAIInterface/img/inactive.mp3');
+    inactiveSound.loop = false;
+    inactiveSound.play();
     document.getElementById('assistant').style.display = 'none';
     document.body.classList.remove('assistant-dull-background', 'active');
     document.getElementById('userTextBox').style.display = 'none';
@@ -45,9 +54,18 @@ async function hideAssistant() {
 
 async function handleUserText(text) {
     console.log('Handling user text:', text);
+    //send request to set acknowledge-Jarvis say acknowledge
+    const Radioresponse = fetch("/state", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({ event: 'acknowledge', action: 'set'}), 
+    });
+
     const userTextBox = document.getElementById('userTextBox');
     const newContent = document.createElement('div');
-    newContent.innerHTML = "<b>Participant: </b> " + text;
+    newContent.innerHTML = "<b>Operator: </b> " + text;
     userTextBox.appendChild(newContent);
     userTextBox.scrollTop = userTextBox.scrollHeight;
     const actionResult = await performAction(text);
@@ -93,18 +111,17 @@ async function performAction(usertext) {
         return { keywordFound: true, route: null };
     }
 
-
     for (let [keyword, route] of Object.entries(keywordsRoutes)) {
         if (usertext.includes(keyword)) {
-            if (route !== currentRoute) {
-                //send request to set acknowledge-Jarvis say acknowledge
-				const Radioresponse = fetch("/state", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json' 
-                    },
-                    body: JSON.stringify({ event: 'acknowledge', action: 'set'}), 
-                });
+          if (route !== currentRoute) {
+            await fetch("/speak", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+                },
+                body: JSON.stringify({ type: "say_text", text: "Processing your request"}), 
+            });
+                
             console.log('event to say aknowledge sent')
             newContent.innerHTML = "Going to " + keyword;
             userTextBox.appendChild(newContent);
@@ -112,8 +129,6 @@ async function performAction(usertext) {
 
             // Simulate some processing time
             //await new Promise(resolve => setTimeout(resolve, 2000));
-
-            // Instead of navigating, we'll just log the action
             console.log(`Action performed: Navigating to ${route}`);
             currentRoute = route; // Update the current route
             /* routingTimeOut= setTimeout(() => {
@@ -126,14 +141,31 @@ async function performAction(usertext) {
             return { keywordFound: false, route: null };
         }
     }
-}
+  }
 
+    if (usertext.includes("help")) {
+        await fetch("/speak", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+            },
+            body: JSON.stringify({ type: "say_text", text: "what can I help you with"}), 
+        });    
+    }
+   else {
     console.log("No action found for:", usertext);
     newContent.innerHTML = "<b>Jarvis: </b> Sorry, I didn't understand that.";
     userTextBox.appendChild(newContent);
     userTextBox.scrollTop = userTextBox.scrollHeight;
+    await fetch("/speak", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+        },
+        body: JSON.stringify({ type: "say_text", text: "Unable to process your request"}), 
+    });
     return { keywordFound: false, route: null };
-
+   }
     // Simulate some processing time
    // await new Promise(resolve => setTimeout(resolve, 2000));
  }

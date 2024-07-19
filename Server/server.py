@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, make_response
-from SimConnect import *
+#from SimConnect import *
 import logging
 import datetime
 import threading
@@ -58,6 +58,7 @@ rd_page=0
 ca_page=0
 cd_page=0
 map_page=0
+radio_page=0
 transmit=0
 receive=0
 takeoff=0
@@ -993,7 +994,7 @@ def log():
 # reset server parameters
 @app.route("/reset", methods=["GET"])
 def reset_params():
-    global study_participant_id, sequence, study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page,rd_page,ca_page,cd_page,map_page,transmit,receive, takeoff,approach_clear, user_text_audio, prev_text,received_text
+    global study_participant_id, sequence, study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page,rd_page,ca_page,cd_page,map_page, radio_page,transmit,receive, takeoff,approach_clear, user_text_audio, prev_text,received_text
 
 
     study_participant_id = 0
@@ -1026,6 +1027,7 @@ def reset_params():
     ca_page=0
     cd_page=0
     map_page=0
+    radio_page=0
     transmit=0
     receive=0
     takeoff=0
@@ -1082,7 +1084,7 @@ def clean(s):
 
 @app.route("/var", methods=["GET"])
 def get_var():
-    global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude, engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page, rd_page, ca_page, cd_page, map_page, transmit, receive, takeoff, approach_clear
+    global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude, engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page, rd_page, ca_page, cd_page, map_page, radio_page, transmit, receive, takeoff, approach_clear
     if request.args.get("user-id"):
         study_participant_id = clean(request.args.get("user-id"))
         # Remove all handlers associated with the root logger object, from (https://stackoverflow.com/questions/12158048)
@@ -1169,6 +1171,8 @@ def get_var():
         rd_page =  clean(request.args.get("rd-page"))
     if request.args.get("map-page"):
         map_page =  clean(request.args.get("map-page"))
+    if request.args.get("radio-page"):
+        radio_page =  clean(request.args.get("radio-page"))
     if request.args.get("receive"):  # receive from radiopanel-- for emergency guidance
         receive = clean(request.args.get("receive")) #1=receive pressed , 0=otherwise 
     if request.args.get("transmit"):  # transmit from radiopanel-- for radio updates
@@ -1208,6 +1212,7 @@ def get_var():
                    "ca-page":ca_page,
                    "rd-page":rd_page,
                    "map-page":map_page,
+                   "radio-page":radio_page,
                    "receive":receive,
                    "transmit":transmit,
                    "takeoff":takeoff,

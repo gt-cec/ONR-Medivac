@@ -363,6 +363,7 @@
         var CDPage=0
         var RDPage=0
         var mapPage=0
+        var radioPage=0
         
 
         // this var isn't updated by the server, but can be changed on various pages
@@ -548,7 +549,10 @@
         }
 
         //updateFrequencyDisplay();
-       
+        document.getElementById("map").addEventListener('mapClicked', function(event) {
+            console.log('mapClicked event heard');
+            showMap();
+        });
 
         {% block script %}
         {% endblock %}
