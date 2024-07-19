@@ -13,12 +13,14 @@ window.setInterval(async () => {
     if (emergencyPage == "1") {
         await fetch("/var?emergency-page=0")
         window.location.href = '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1
+        showMap()
     }
 
     // if requesting change destination page
     if (CDPage == "1") {
         await fetch("/var?cd-page=0")
         window.location.href = '/hai-interface/change-destination?inflight=' + 1
+        showMap()
     }
 
     // if requesting change altitude page

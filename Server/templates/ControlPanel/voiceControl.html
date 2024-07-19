@@ -87,7 +87,6 @@
                         <div id="CApage" class="control-button" style="font-size: large;">Change Altitude Page</div>
                         <div id="RDpage" class="control-button" style="font-size: large;">Return to Departure Page</div>
                         <div id="mappage" class="control-button" style="font-size: large;">Open Map</div>
-                        <div id="radiopage" class="control-button" style="font-size: large;">Open Radio Panel</div>
                         <label for="saytext">Enter text to say:</label><br>
                         <input type="text"id="saytext" name="saytext"><br>
                         <button id="sendtxt">Send</button>
@@ -142,6 +141,7 @@
 
         document.getElementById("CApage").onclick = async () => {
             await fetch("/var?ca-page=1")
+            
         }
 
         document.getElementById("CDpage").onclick = async () => {
@@ -155,11 +155,6 @@
         document.getElementById("mappage").onclick = async () => {
             console.log("sent map open")
             await fetch("/var?map-page=1")
-        }
-
-        document.getElementById("radiopage").onclick = async () => {
-            console.log("open radio panel sent")
-            await fetch("/var?radio-page=1")
         }
 
        /* document.getElementById('regular-updates').onclick = async () => {

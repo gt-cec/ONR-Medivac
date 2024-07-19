@@ -12,7 +12,8 @@ const keywordsRoutes = {
     "height": "/hai-interface/change-altitude",
     "change": '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 ,
     "destination": '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 ,
-    "emergency": '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 ,
+    "emergency": '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1,
+    //"map": window.location.pathname,
     //"map": () => window.dispatchEvent(new CustomEvent('mapClicked')),
      //"map": document.getElementById("map").click()
     //"map": "/hai-interface/inflight"+  document.getElementById("map").click(),
@@ -54,15 +55,6 @@ async function hideAssistant() {
 
 async function handleUserText(text) {
     console.log('Handling user text:', text);
-    //send request to set acknowledge-Jarvis say acknowledge
-    const Radioresponse = fetch("/state", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json' 
-        },
-        body: JSON.stringify({ event: 'acknowledge', action: 'set'}), 
-    });
-
     const userTextBox = document.getElementById('userTextBox');
     const newContent = document.createElement('div');
     newContent.innerHTML = "<b>Operator: </b> " + text;
@@ -240,6 +232,15 @@ async function fetchData() {
      
 
             if (json.userText && json.userText !== prevTxt) {
+                
+                //send request to set acknowledge-Jarvis say acknowledge
+                fetch("/state", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json' 
+                    },
+                    body: JSON.stringify({ event: 'acknowledge', action: 'set'}), 
+                });
                 clearActivationTimer();
                 await handleUserText(json.userText);
                 startActivationTimer();
