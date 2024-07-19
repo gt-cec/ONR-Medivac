@@ -41,6 +41,16 @@ window.setInterval(async () => {
         //document.getElementById("map").href
     }
 
+    // if requesting to radio
+    if (radioPage == "1") {
+        await fetch("/var?radio-page=0")
+        console.log('opening radio panel')
+        document.getElementById('emptytankSound').pause();
+        document.querySelector('.radiopanel').classList.toggle('open');
+    }
+
+    
+
     updateMap()
     //time to destination 
     document.getElementById("dest-time").innerHTML="Time to Destination: " + Math.floor(timeToDestination)+" mins"+":"+ Math.floor((timeToDestination*60) % 60)+"s"
@@ -51,8 +61,11 @@ window.setInterval(async () => {
     }
 }, 500)
 
+
+
 function showMap() {
     log({ page: "map", action: "show map" })
+    //window.dispatchEvent(new CustomEvent('mapClicked'));
 
     // if setting the destination, flash the instruction
     document.getElementById("flightmap-instruction").style.display =
@@ -218,6 +231,8 @@ async function getSimulatorData() {
             CAPage=data["ca-page"] // change altitude page
             RDPage=data["rd-page"] // return to departure page
             mapPage=data["map-page"] //open map
+            radioPage=data["radio-page"] //open map
+
 
             if (typeof(urlParams) !== 'undefined' && (urlParams.get("emergency") == "1") && (studyStage == '1' ||studyStage == '3' || studyStage == '4')) {
                 //making Hilton Heliport the nearest in emergency

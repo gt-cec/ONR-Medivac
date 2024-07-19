@@ -176,7 +176,7 @@ function initEmergency() {
                   console.log('showing pressure warning')
                   }
 
-                  if(studyStage == '1' && altitude_satisfied==false) {
+                  else if(studyStage == '1' && altitude_satisfied==false) {
                     console.log("WARNING LOCATION REACHED")
                     altitude_satisfied=true
                     altitudeAlert=1

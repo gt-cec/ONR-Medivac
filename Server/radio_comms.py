@@ -217,7 +217,8 @@ def administer():
        print('sent request to clear administer event')
        requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) # clear emergency event
        print('sent request to clear emergency_event')
-       logging.info('Administer medication radio comm done- command to clear event sent')
+       requests.get("http://127.0.0.1:8080/var", {"receive":0}) #making the receive 0 
+       logging.info('Administer medication radio comm done- command to clear event  make the receive 0 sent ')
        
 
 def continueEmory():
@@ -233,7 +234,7 @@ def continueEmory():
       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
       print('sent request to clear emergency_event')
       requests.get("http://127.0.0.1:8080/var",  {"receive":0}) #making the receive 0 
-      logging.info('Continue flying to Emory radio comm done- command to clear event and make the emergency variables 0 sent')
+      logging.info('Continue flying to Emory radio comm done- command to clear event and make the receive 0 sent')
 
 
 def flyOldForth():
@@ -254,7 +255,7 @@ def flyOldForth():
       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
       print('sent request to clear emergency_event')
       requests.get("http://127.0.0.1:8080/var", {"receive":0}) #making the receive 0 
-      logging.info('Reroute to Old Fourth Ward radio comm done- command to clear event and make the emergency variables 0 sent' )
+      logging.info('Reroute to Old Fourth Ward radio comm done- command to clear event and make receive 0 sent' )
 
 def weatherEmer():
    global Jarvis
@@ -268,7 +269,7 @@ def weatherEmer():
       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
       print('sent request to clear emergency_event')
       requests.get("http://127.0.0.1:8080/var", {"receive":0}) #making the receive 0 
-      logging.info('Reroute to weather emergency radio comm done- command to clear event and make the emergency variables 0 sent' )
+      logging.info('Reroute to weather emergency radio comm done- command to clear event and make receive 0 sent' )
 
 def miscalibratedSensor():
    global Jarvis
@@ -282,7 +283,7 @@ def miscalibratedSensor():
       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
       print('sent request to clear emergency_event')
       requests.get("http://127.0.0.1:8080/var", {"receive":0}) #making the receive 0 
-      logging.info('Miscalibrated sensor radio comm done- command to clear event and make the emergency variables 0 sent' )
+      logging.info('Miscalibrated sensor radio comm done- command to clear event and make the receive 0 sent' )
 
 def altitudeSensor():
    global Jarvis
@@ -296,7 +297,7 @@ def altitudeSensor():
       requests.post("http://127.0.0.1:8080/state", json={"event": "emergency_event", "action":"clear"}) #clear emergency event
       print('sent request to clear emergency_event')
       requests.get("http://127.0.0.1:8080/var", {"receive":0}) #making the receive 0 
-      logging.info('altitude sensor radio comm done- command to clear event and make the emergency variables 0 sent' )
+      logging.info('altitude sensor radio comm done- command to clear event and make the receieve 0 sent' )
 
       
 
@@ -371,6 +372,7 @@ def empty_fuel_emergency():
         logging.info('Empty Fuel alert given, sent request to clear empty_fuel_emergency')
 
 def weather_emergency():
+ with status_lock:
   jarvis_speak( "Unfavorable Weather Conditions.")
   jarvis_speak( "Initiating emergency procedures now.")
   jarvis_speak( " We need to select an alternate landing site.")
@@ -386,6 +388,7 @@ def weather_emergency():
 
 
 def altitude_warning_alert():
+ with status_lock:
   jarvis_speak( "Altitude Sensor miscalibrated.")
   jarvis_speak( " My altitude gauge is reading wrong value")
   jarvis_speak( " I suspect the sensor is miscalibrated.")
@@ -397,6 +400,7 @@ def altitude_warning_alert():
 
 
 def pressure_warning_alert():
+ with status_lock:
    jarvis_speak( "Low Pressure Warning")
    jarvis_speak( "Attention, Low pressure Warning")
    jarvis_speak( " My primary gauge is detecting low hydraulic pressure.")
@@ -409,6 +413,7 @@ def pressure_warning_alert():
    logging.info('Pressure Warning alert given, sent request to clear pressure_warning_alert')
 
 def custom_speak(text):
+ with status_lock:
    jarvis_speak(text)
    requests.post("http://127.0.0.1:8080/speak", json={"type": "say_text", "text":""}) #sending empty text back to reset it
    print('sent request to clear')
