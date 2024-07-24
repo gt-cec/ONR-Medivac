@@ -89,6 +89,14 @@ async function handleUserText(text) {
 }
 
 async function performAction(usertext) {
+     //send request to set acknowledge-Jarvis say acknowledge
+     await fetch("/speak", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+        },
+        body: JSON.stringify({ type: "say_text", text: "Acknowledge"}), 
+    });
     usertext = usertext.toLowerCase();
     console.log("Looking for action for:", usertext);
     const userTextBox = document.getElementById('userTextBox');
@@ -232,15 +240,6 @@ async function fetchData() {
      
 
             if (json.userText && json.userText !== prevTxt) {
-                
-                //send request to set acknowledge-Jarvis say acknowledge
-                fetch("/state", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json' 
-                    },
-                    body: JSON.stringify({ event: 'acknowledge', action: 'set'}), 
-                });
                 clearActivationTimer();
                 await handleUserText(json.userText);
                 startActivationTimer();
