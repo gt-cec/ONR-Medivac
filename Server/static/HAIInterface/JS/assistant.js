@@ -10,10 +10,11 @@ const keywordsRoutes = {
     //"help": "http://127.0.0.1:8080/hai-interface/help",
     "altitude": "/hai-interface/change-altitude",
     "height": "/hai-interface/change-altitude",
-    "change": '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 ,
+    "change": '/hai-interface/change-destination?inflight=' + 1 ,
     "destination": '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 ,
     "emergency": '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1,
-    //"map": window.location.pathname,
+    "map": window.location.pathname,
+    "ETA": window.location.pathname,
     //"map": () => window.dispatchEvent(new CustomEvent('mapClicked')),
      //"map": document.getElementById("map").click()
     //"map": "/hai-interface/inflight"+  document.getElementById("map").click(),
@@ -89,14 +90,6 @@ async function handleUserText(text) {
 }
 
 async function performAction(usertext) {
-     //send request to set acknowledge-Jarvis say acknowledge
-     await fetch("/speak", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
-        },
-        body: JSON.stringify({ type: "say_text", text: "Acknowledge"}), 
-    });
     usertext = usertext.toLowerCase();
     console.log("Looking for action for:", usertext);
     const userTextBox = document.getElementById('userTextBox');
@@ -240,6 +233,14 @@ async function fetchData() {
      
 
             if (json.userText && json.userText !== prevTxt) {
+                  //send request to set acknowledge-Jarvis say acknowledge
+                await fetch("/speak", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+                    },
+                    body: JSON.stringify({ type: "say_text", text: "Acknowledge"}), 
+                });
                 clearActivationTimer();
                 await handleUserText(json.userText);
                 startActivationTimer();
