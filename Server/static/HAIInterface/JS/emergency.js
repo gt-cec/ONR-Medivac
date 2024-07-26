@@ -180,9 +180,10 @@ function initEmergency() {
                     console.log("WARNING LOCATION REACHED")
                     altitude_satisfied=true
                     altitudeAlert=1
+                    await fetch("/var?altitude-alert=1" + altitudeAlert)
                     await fetch("/var?altitude-satisfied=" + altitude_satisfied)
-                    console.log('showing pressure warning')
-                    await fetch("/var?altitude-alert=" + altitudeAlert)
+                    console.log('showing altiude warning')
+                    
                     }
               }
           }
