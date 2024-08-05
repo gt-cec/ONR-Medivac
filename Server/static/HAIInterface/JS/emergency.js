@@ -176,15 +176,15 @@ function initEmergency() {
                   console.log('showing pressure warning')
                   }
 
-                  if(studyStage == '1' && altitude_satisfied==false) {
-                    console.log("WARNING LOCATION REACHED")
-                    altitude_satisfied=true
-                    altitudeAlert=1
-                    await fetch("/var?altitude-alert=1" + altitudeAlert)
-                    await fetch("/var?altitude-satisfied=" + altitude_satisfied)
-                    console.log('showing altiude warning')
-                    
-                    }
+                if(studyStage == '1' && altitude_satisfied==false) {
+                  console.log("WARNING LOCATION REACHED")
+                  altitude_satisfied=true
+                  altitudeAlert=1
+                  await fetch("/var?altitude-alert=1" + altitudeAlert)
+                  await fetch("/var?altitude-satisfied=" + altitude_satisfied)
+                  console.log('showing altiude warning')
+                  
+                  }
               }
           }
 

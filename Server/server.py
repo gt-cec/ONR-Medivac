@@ -1230,7 +1230,8 @@ def get_var():
         position["compass"] = compass
         #position["altitude"] = alt
     except:
-        logging.info("SimConnect Error in /var")
+        #logging.info("SimConnect Error in /var")
+        pass
         try:
             sm = SimConnect()
             aq = AircraftRequests(sm, _time=10)
