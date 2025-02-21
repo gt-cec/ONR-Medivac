@@ -107,7 +107,6 @@
         </div>
     </div>
 
-
     <script>
         // Create a WebSocket connection to the server
         const socket = io.connect('http://localhost:8080');  
@@ -128,7 +127,7 @@
             console.log("Sending to server via WebSocket:", data);
 
             // Send the data as JSON string
-            socket.send(JSON.stringify(data));
+            socket.emit("send_text", JSON.stringify(data));
         }
 
         // Handling button clicks for predefined messages
