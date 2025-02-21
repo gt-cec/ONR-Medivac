@@ -805,8 +805,9 @@ def current_destination():
 # logging route
 @app.route("/log", methods=["POST"])
 def log():
-    logging.info(str(datetime.datetime.now().timestamp()) + ",ID:" + str(study_participant_id) +
-                 ",STAGE:" + str(study_stage) + ",SEQUENCE:" + str(sequence) + ",DATA:" + str(request.get_json()))
+    log_string = f"{datetime.datetime.now().timestamp()},ID:{study_participant_id},STAGE:{study_stage},SEQUENCE:{sequence},DATA:{request.get_json()}"
+    with open(f"logs/{study_participant_id}_{study_stage}.log", "a") as f:
+        f.write(log_string + "\n")
     return ""
 
 # reset server parameters
