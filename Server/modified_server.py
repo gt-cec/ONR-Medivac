@@ -23,6 +23,7 @@ import json
 from flask_socketio import SocketIO
 import threading
 import json
+import ast
 
 # system state variables
 study_participant_id = 0
@@ -1163,8 +1164,10 @@ def handle_disconnect():
 @socketio.on('send_text')
 def handle_send_text(data):
     """Handle incoming text from the client"""
-    text = data.get("text")
-    speaker = data.get("speaker", "Jarvis")  # Default speaker
+    print("data", data)
+    data = ast.literal_eval(data)
+    text = data["text"]
+    speaker = data["speaker"]
     print(f"Received text: {text} for speaker {speaker}")
     
     # Send the text to the Jarvis via WebSocket
