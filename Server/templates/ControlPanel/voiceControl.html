@@ -133,8 +133,7 @@
                 body: JSON.stringify({ type: "say_text", text: sendText}), 
             });
         }
-
-
+        
         document.getElementById("EMpage").onclick = async () => {
             await fetch("/var?emergency-page=1")
         }

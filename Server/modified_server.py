@@ -9,19 +9,19 @@ import time
 import asyncio
 import re
 import webbrowser
-#from flask_sockets import Sockets
+import websockets
 #from gevent import pywsgi
 #from geventwebsocket.handler import WebSocketHandler
-import third_test
-import radio_comms
+#import Jarvis
 import wave
-from  VoiceInterface import AudioToText
 import os
 import sys
+from flask_socketio import SocketIO, emit
+import subprocess
+import threading
+import json
 #from multiprocessing import Process
 #from multiprocessing import Pipe
-
-
 
 
 
@@ -165,8 +165,8 @@ position = {
 
 app = Flask(__name__)
 #websocket
+socketio = SocketIO(app, cors_allowed_origins="*")
 
-#sockets = Sockets(app)
 
 
 
@@ -645,6 +645,31 @@ keywords_routes = {
 }  
 
 
+
+active_speaker = None  # Track current speaking task
+
+async def handler(websocket, path):
+    global active_speaker
+    async for message in websocket:
+        data = json.loads(message)
+        action = data.get("action")
+        text = data.get("text")
+        speaker = data.get("speaker", "Jarvis")  # Adjust based on your TTS model
+
+        if action == "speak":
+            if active_speaker:  # Stop any ongoing speech
+                active_speaker.cancel()
+            
+            # Start new speech task
+            active_speaker = asyncio.create_task(send_to_tts(text, speaker))
+
+async def send_to_tts(text, speaker):
+    """Send the text to Jarvist.py via WebSocket"""
+    uri = "ws://localhost:8080"  # Ensure this matches 
+    async with websockets.connect(uri) as websocket:
+        await websocket.send(json.dumps({"text": text, "speaker": speaker}))
+
+
 @app.route('/voice', methods=['POST'])
 def voice():
     while True:
@@ -699,21 +724,6 @@ def voice():
             print("Done. Now we should exit. Bye!")
             
 
-""" @socketio.on('connect')
-def handle_connect():
-    print('Client connected')
-
-@socketio.on('disconnect')
-def handle_disconnect():
-    print('Client disconnected')
-
-@socketio.on('message')
-def handle_message(message):
-    print('Received message:', message) """
-
-
-
-
 @app.route('/set_event', methods=['POST'])
 def set_event():
     print("request received in /set_event: ", request.get_json())
@@ -744,20 +754,6 @@ def set_event():
     else:
         print("error: Invalid event name")
 
-    """ elif event_name in events:
-        event = events[event_name]
-        if event.is_set():
-            event.clear()
-            action = "cleared"
-        else:
-            event.set()
-            action = "set"
-        print("message: Event", event_name ,action,"successfully")
-        #return jsonify({"message": f"Event {event_name} {action} successfully"})
-    else:
-        print("error: Invalid event name")
-        #return jsonify({"error": "Invalid event name"}), 400 """
-
     return ""
 
 
@@ -771,15 +767,6 @@ def get_states():
         emergency_event.clear()
         print('Emergency event cleared')
         
-    """ if(engine_failure==1):
-        engine_event.set()
-        print("engine event set")
-    if(vitals_state==1):
-        administer_event.set()
-    if(empty_tank==1):
-        tank_event.set()
-        print('tank event set') """
-
     if request.is_json:
         received_request = request.get_json()
         print("request received in /state: ", received_request)
@@ -839,74 +826,6 @@ def get_states():
     return jsonify(response), 200
 
 
-""" @app.route('/speak', methods=['POST'])
-def speak():
-    global takeoffEvent, engine_failure, pressure_warning, empty_tank, vitals_state
-    
-    print("request received: ", request.get_json())
-    received_request= request.get_json()
-
-    if received_request["type"] == "takeoff":
-        if not takeoff_event.is_set():
-            takeoff_event.set()
-     
-    if received_request["type"] == "updates":
-        if not inflight_event.is_set():
-           inflight_event.set()
-
-    if received_request["type"] == "continue":
-        if not tank_event.is_set():
-            tank_event.set()
-            #empty_tank=1
-        
-    if received_request["type"] == "oldForth":
-        if not engine_event.is_set():
-            engine_event.set()
-            #engine_failure=1
-    
-    if received_request["type"] == "administer":
-        if not administer_event.is_set():
-            administer_event.set()
-
-    if received_request["type"] == "radioUpdate":
-        resp = { "radioUpdateComplete": radio_update_complete.is_set()}
-        return jsonify(resp), 200
-
-    if received_request["type"] == "reset":  # clear all events
-        status_report_event.clear()
-        takeoff_event.clear()
-        response_event.clear()
-        administer_event.clear()
-        engine_event.clear()
-        tank_event.clear()
-        emergency_event.clear()
-
-    if(airspace_emergency_state==1 or vitals_state==1 or engine_failure==1 or pressure_warning==1 or empty_tank==1):
-        emergency_event.set()
-    if(engine_failure==1):
-        engine_event.set()
-    if(vitals_state==1):
-        administer_event.set()
-    if(empty_tank==1):
-        tank_event.set()
-    takeoffEvent=takeoff_event.is_set()
-
-    response = {
-        "radioUpdateComplete": radio_update_complete.is_set(),
-        "status_report": status_report_event.is_set(),
-        "takeoff_event": takeoff_event.is_set(),
-        "response_event": response_event.is_set(),
-        "administer_event": administer_event.is_set(),
-        "engine_event": engine_event.is_set(),
-        "tank_event": tank_event.is_set(),
-        "emergency_event": emergency_event.is_set(),
-        "inflight_event" : inflight_event.is_set()
-    }
-    
-    return jsonify(response), 200
-        
- """
-
 @app.route('/ws', methods=['POST'])
 def ws():
     global user_text_audio, prev_text, jarvis_event
@@ -933,15 +852,6 @@ def ws():
 
          
     print("user text", user_text_audio)
-    #print("prev text", prev_text), 
-
-    """ if event.is_set() and last_time_set is not None: #Deactivate Jarvis, if it has been activated for for more than 30s
-        current_time=time.time()
-        if current_time-last_time_set >10:
-            event.clear()  
-            last_time_set= None """
-
-
     response = {
         "assistantIsActive": jarvis_event.is_set(),
         "userText": user_text_audio,
@@ -1230,8 +1140,7 @@ def get_var():
         position["compass"] = compass
         #position["altitude"] = alt
     except:
-        #logging.info("SimConnect Error in /var")
-        pass
+        logging.info("SimConnect Error in /var")
         try:
             sm = SimConnect()
             aq = AircraftRequests(sm, _time=10)
@@ -1309,60 +1218,27 @@ def hai_interface(subroute=None):
 
     return resp
 
-def start_flask_app():
-    app.run(host="0.0.0.0", port=8080)
+@socketio.on('connect')
+def handle_connect():
+    print("Client connected")
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    print("Client disconnected")
+
+@socketio.on('send_text')
+def handle_send_text(data):
+    """Handle incoming text from the client"""
+    text = data.get("text")
+    speaker = data.get("speaker", "Jarvis")  # Default speaker
+    print(f"Received text: {text} for speaker {speaker}")
+    
+    # Send the text to the Jarvis via WebSocket
+    asyncio.create_task(send_to_tts(text, speaker))  # Run asynchronously
 
 
 
-# start the webserver
+
 if __name__ == "__main__":
-    # start the destination update (for Python->MATLAB interfacing)
-    t = threading.Thread(target=matlab_destination_update, daemon=True)
-    t.start()
-
-  
-    # start the logging thread
-    werkzeug_logger = logging.getLogger('werkzeug')
-    werkzeug_logger.disabled = True 
-   
-    #starting voice assistant thread
-    va = threading.Thread(target=third_test.main, args={jarvis_event}, daemon=True)
-    va.start()
-
-
-    # setting emergency event when other emergency happens
-    if((administer_event.is_set() or tank_event.is_set() or engine_event.is_set() or sensor_event.is_set() or weather_event.is_set() or altitude_event.is_set()) and (not emergency_event.is_set())):
-      emergency_event.set() 
-
-    """ if(administer_event.is_set()):
-      radio_comms.administer(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event)
-    if(tank_event.is_set()):
-      radio_comms.continueEmory()
-    if(engine_event.is_set()):
-     radio_comms.flyOldForth()
- """
-
-    #radio comms thread
-    #radio = threading.Thread(target=radio_comms.inflight_status_check, args={inflight_event,status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event})
-    #radio = threading.Thread(target=radio_comms_new.main, args={status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event, radio_update_complete, inflight_event})
-    radio = threading.Thread(target=radio_comms.main, daemon=True)
-    radio.start()  # starting radio thread
-
-    # Run the Flask server
-    app.run(host="0.0.0.0", port=8080, threaded=True)
-   
-
-    # Run the Flask server in a separate thread
-    # flask_thread = threading.Thread(target=start_flask_app)
-    # flask_thread.start()
-
-    # Run the voice assistant in the event loop
-    #asyncio.run(voice_assistant(event, active_assistant, lock))
-    #socketio.run(app, host='0.0.0.0', port=8080) 
-   
-    #server = pywsgi.WSGIServer(('0.0.0.0', 8080), app, handler_class=WebSocketHandler)
-    #server.serve_forever()
-
-""" if __name__ == '__main__':
-    socketio.run(app, host='127.0.0.1', port=8080)
- """
+    # Run the Flask server with SocketIO
+    socketio.run(app, host="0.0.0.0", port=8080)

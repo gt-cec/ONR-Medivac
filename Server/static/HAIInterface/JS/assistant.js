@@ -233,7 +233,8 @@ async function fetchData() {
      
 
             if (json.userText && json.userText !== prevTxt) {
-                  //send request to set acknowledge-Jarvis say acknowledge
+                
+                //send request to set acknowledge-Jarvis say acknowledge
                 await fetch("/speak", {
                     method: 'POST',
                     headers: {
