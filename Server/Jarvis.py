@@ -49,5 +49,6 @@ async def handler(websocket, path):
         # Start new speech task
         current_speech_task = asyncio.create_task(generate_audio(text, speaker_name))
 
-# Start WebSocket listener
-asyncio.run(listen_for_text())
+def start_jarvis():
+    # Start WebSocket listener
+    asyncio.run(listen_for_text())

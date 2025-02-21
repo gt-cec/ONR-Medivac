@@ -13,6 +13,7 @@ from flask_socketio import SocketIO
 import threading
 import json
 import ast
+import Jarvis
 
 # system state variables
 study_participant_id = 0
@@ -64,6 +65,9 @@ last_time_set=None
 
 #lock to protect the global variable
 lock = threading.Lock()
+
+# start Jarvis
+Jarvis.start_jarvis()
 
 # create instances of event for voice assistant
 jarvis_event = threading.Event()
@@ -616,8 +620,8 @@ async def handler(websocket, path):
             active_speaker = asyncio.create_task(send_to_tts(text, speaker))
 
 async def send_to_tts(text, speaker):
-    """Send the text to Jarvist.py via WebSocket"""
-    uri = "ws://localhost:8080"  # Ensure this matches 
+    """Send the text to Jarvis.py via WebSocket"""
+    uri = "ws://localhost:1128"  # Ensure this matches 
     async with websockets.connect(uri) as websocket:
         await websocket.send(json.dumps({"text": text, "speaker": speaker}))
 
@@ -1160,7 +1164,7 @@ def handle_send_text(data):
     print(f"Received text: {text} for speaker {speaker}")
     
     # Send the text to the Jarvis via WebSocket
-    asyncio.create_task(send_to_tts(text, speaker))  # Run asynchronously
+    asyncio.run(send_to_tts(text, speaker))  # Run asynchronously
 
 if __name__ == "__main__":
     # Run the Flask server with SocketIO

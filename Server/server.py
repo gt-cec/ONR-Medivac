@@ -62,6 +62,9 @@ last_time_set=None
 #lock to protect the global variable
 lock = threading.Lock()
 
+# start Jarvis
+Jarvis.start_jarvis()
+
 # create instances of event for voice assistant
 jarvis_event = threading.Event()
 jarvis_event.clear() #not set
