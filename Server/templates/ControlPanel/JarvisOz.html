@@ -94,8 +94,8 @@
             <h3>Jarvis Control</h3>
             <div class="control-button jarvis-button" data-text="How may I assist you?" id="activate-jarvis">How may I help you</div>
             <div class="control-button jarvis-button" data-text="Confirming your request. Is that correct?" id="deactivate-jarvis">Is that correct?</div>
-            <div class="control-button jarvis-button" data-text="Got it, changing altitude." id="EMpage">Change altitude</div>
-            <div class="control-button jarvis-button" data-text="Acknowledging your command." id="CDpage">Acknowledge</div>
+            <div class="control-button jarvis-button" data-text="Got it, changing altitude." id="AltChg">Change altitude</div>
+            <div class="control-button jarvis-button" data-text="Acknowledging your command." id="Ack">Acknowledge</div>
             <div class="control-button jarvis-button" data-text="Got it, you want to change destination. Let me pull up the map to assist you with that." id="CApage">Change Destination</div>
         </div>
 
@@ -104,6 +104,18 @@
             <label for="saytext">Enter text to say:</label><br>
             <input type="text" id="saytext" name="saytext"><br>
             <button id="sendtxt">Send</button>
+        </div>
+
+       
+        <div class="subcontent-container">
+            <h3>Interface Display Control</h3>
+            <div id="activate-jarvis" class="open-button">Activate Jarvis</div>
+            <div id="deactivate-jarvis"  class="open-button">Deactivate Jarvis</div>
+            <div id="emergency-page" class="open-button" >Emergency Page</div>
+            <div id="cd-page" class="open-button" >Change Destination Page</div>
+            <div id="ca-page" class="open-button" >Change Altitude Page</div>
+            <div id="rd-page" class="open-button" >Return to Departure Page</div>
+            <div id="map-page" class="open-button" >Open Map</div>
         </div>
     </div>
 
@@ -147,5 +159,59 @@
                 document.getElementById("saytext").value = ""; // Clear input field
             }
         });
+
+        //interface display control
+        document.getElementById("activate-jarvis").onclick = async () => {
+            await fetch("/ws", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+                },
+                body: JSON.stringify({ type: "activate_assistant"}), 
+            });
+        }
+
+        document.getElementById("deactivate-jarvis").onclick = async () => {
+            await fetch("/ws", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+                },
+                body: JSON.stringify({ type: "deactivate_assistant", text:"deactivate"}), 
+            });
+        }
+       
+
+        // Handling button clicks for opening pages
+        document.querySelectorAll(".open-button").forEach(button => {
+            button.addEventListener("click", async () => {
+                page=this.getAttribute("id")
+                
+                await fetch("/var?emergency-page=1")
+            });
+        });
+        
+        document.getElementById("EMpage").onclick = async () => {
+            await fetch("/var?emergency-page=1")
+        }
+
+        document.getElementById("CApage").onclick = async () => {
+            await fetch("/var?ca-page=1")
+            
+        }
+
+        document.getElementById("CDpage").onclick = async () => {
+            await fetch("/var?cd-page=1")
+        }
+
+        document.getElementById("RDpage").onclick = async () => {
+            await fetch("/var?rd-page=1")
+        }
+        
+        document.getElementById("mappage").onclick = async () => {
+            console.log("sent map open")
+            await fetch("/var?map-page=1")
+        }
+
 
     </script>
