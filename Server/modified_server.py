@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, jsonify, make_response
-#from SimConnect import *
 import logging
 import datetime
 import threading
@@ -21,6 +20,9 @@ import json
 
 
 
+from flask_socketio import SocketIO
+import threading
+import json
 
 # system state variables
 study_participant_id = 0
@@ -60,7 +62,6 @@ receive=0
 takeoff=0
 approach_clear=0
 
-
 # Global variables
 active_assistant = 'T'
 user_text_audio = ""
@@ -70,15 +71,13 @@ message = 'deactivate_assistant'
 emergency = False
 last_radio_update = 0
 last_time_set=None
+
 #lock to protect the global variable
 lock = threading.Lock()
 
-# create instances of event
-
-#for voice assistant
+# create instances of event for voice assistant
 jarvis_event = threading.Event()
 jarvis_event.clear() #not set
-
  
 #for radio comms
 status_report_event = threading.Event()  #to be set when participant gives the radio update
@@ -122,7 +121,6 @@ pressure_warning_alert.clear()
 stop_engine=threading.Event()
 stop_engine.clear()
 
-
 events = {
     'radioUpdateComplete': radio_update_complete,
     'status_report': status_report_event,
@@ -147,10 +145,8 @@ events = {
     "jarvis_event":jarvis_event
 }
 
-
 #radio variables
 takeoffEvent=False
-
 
 position = {
     "latitude": 33.7892717,
@@ -160,11 +156,7 @@ position = {
 }
 
 app = Flask(__name__)
-#websocket
 socketio = SocketIO(app, cors_allowed_origins="*")
-
-
-
 
 # Creating simconnection
 try:
@@ -204,6 +196,7 @@ request_vertical_speed = [
     'VERTICAL_SPEED',  # Vertical speed indication
     'GPS_WP_VERTICAL_SPEED',  # Vertical speed to waypoint
 ]
+
 # Help button description
 HelpData = {
     "1": {
@@ -244,7 +237,6 @@ HelpData = {
      "9": {
         "desp": "  This page allows you to request the AI pilot to change the altitude. If you would like to know the current altitude, look for the altitude gauge in the backup flight gauges panel. For changing the altitude, select the altitude you want to request from the drop down and hit SUBMIT. If you are unsure, contact Control for assistance "
     },
-
 }
 
 # Helipad data
@@ -286,7 +278,6 @@ data = {
     #     "latitude": "33.7525500",
     #     "longitude": "-84.3820778",
     # }, 
-
     "2": {
         "name": "Ruffwood Heliport",
         "id": "73GA",
@@ -329,7 +320,6 @@ data = {
     #     "latitude": "33.7686667",
     #     "longitude": "-84.3868750",
     # }, 
-    
     "5": {
          # Nearest for high workload scenario (AI suggestion)
         "name": "Hilton Garden Inn Downtown Heliport",
@@ -423,7 +413,6 @@ data = {
     #     "latitude": "33.7474278",
     #     "longitude": "-84.3882583",
     # }, 
-
     "11": {
         "name": "Rabbit Hole Heliport",
         "id": "52GA",
@@ -532,58 +521,51 @@ data = {
         "latitude": "33.76400330983825", # offset for visibility
         "longitude": "-84.37359282618218", #offset for visibility , 
     },
-
     "20": {
-   
-    "name": "Fulton County Executive Airport ",
-    "id": "FTY",
-    "location": "3977 Aviation Cir NW, Atlanta, GA 30336",
-    "hasHospital": False,
-    "nearest": False, #to be set as true for higher workload scenario
-    "nominal": False,
-    "nominal_departure": False,
-    "image1": "../static/HAIInterface/img/Mary1.png",
-    "image2": "../static/HAIInterface/img/Emory.png",
-    "latitude": "33.7791264",
-    "longitude": "-84.5213660",
+        "name": "Fulton County Executive Airport ",
+        "id": "FTY",
+        "location": "3977 Aviation Cir NW, Atlanta, GA 30336",
+        "hasHospital": False,
+        "nearest": False, #to be set as true for higher workload scenario
+        "nominal": False,
+        "nominal_departure": False,
+        "image1": "../static/HAIInterface/img/Mary1.png",
+        "image2": "../static/HAIInterface/img/Emory.png",
+        "latitude": "33.7791264",
+        "longitude": "-84.5213660",
     },
-
-    
     "21": {
-    # Departure Location
-    "name": "Miller Farm, Airport ",
-    "id": "25GA",
-    "location": "5300 Leann Dr, Douglasville, GA 30135",
-    "hasHospital": False,
-    "nearest": False, #to be set as true for higher workload scenario
-    "nominal": False,
-    "nominal_departure": True,
-    "image1": "../static/HAIInterface/img/Mary1.png",
-    "image2": "../static/HAIInterface/img/Emory.png",
-    "latitude": "33.6595539", 
-    "longitude": "-84.6629889",
+        # Departure Location
+        "name": "Miller Farm, Airport ",
+        "id": "25GA",
+        "location": "5300 Leann Dr, Douglasville, GA 30135",
+        "hasHospital": False,
+        "nearest": False, #to be set as true for higher workload scenario
+        "nominal": False,
+        "nominal_departure": True,
+        "image1": "../static/HAIInterface/img/Mary1.png",
+        "image2": "../static/HAIInterface/img/Emory.png",
+        "latitude": "33.6595539", 
+        "longitude": "-84.6629889",
     },
-
     "22": {
-    #other scenarios- Emory University
-    # Departure for all scenario 
-    # 25GA Miller Farm, Dougsville  to old forth
-    #https://www.google.com/maps/dir/Miller+Farm+Airport-25GA,+Leann+Dr,+Douglasville,+GA/Fulton+County+Airport+-+Brown+Field+(FTY),+Aviation+Circle+Northwest,+Atlanta,+GA/Old+Fourth+Ward,+Atlanta,+GA/@33.718646,-84.6019543,30007m/data=!3m3!1e3!4b1!5s0x88f5038ebeea134f:0x78787416707158e5!4m20!4m19!1m5!1m1!1s0x88f4df6cae05f855:0xfce85469926264b5!2m2!1d-84.6629511!2d33.6598811!1m5!1m1!1s0x88f51bfd379c09f7:0xdebb7dfce7c9c439!2m2!1d-84.5216729!2d33.7771801!1m5!1m1!1s0x88f50408dbf17f1f:0x60ccf34413430e69!2m2!1d-84.3719735!2d33.7639588!3e0?entry=ttu
-    "name": "HCA Parkway Medical Center Heliport ",
-    "id": "6GA3",
-    "location": "999 Crestmark Blvd, Lithia Springs, GA 301223",
-    "hasHospital": False,
-    "nearest": False, 
-    "nominal": False,
-    "nominal_departure": False, 
-    "image1": "../static/HAIInterface/img/Mary1.png",
-    "image2": "../static/HAIInterface/img/Emory.png",
-    "latitude": "33.7780556",
-    "longitude": "-84.6113889",	
+        #other scenarios- Emory University
+        # Departure for all scenario 
+        # 25GA Miller Farm, Dougsville  to old forth
+        #https://www.google.com/maps/dir/Miller+Farm+Airport-25GA,+Leann+Dr,+Douglasville,+GA/Fulton+County+Airport+-+Brown+Field+(FTY),+Aviation+Circle+Northwest,+Atlanta,+GA/Old+Fourth+Ward,+Atlanta,+GA/@33.718646,-84.6019543,30007m/data=!3m3!1e3!4b1!5s0x88f5038ebeea134f:0x78787416707158e5!4m20!4m19!1m5!1m1!1s0x88f4df6cae05f855:0xfce85469926264b5!2m2!1d-84.6629511!2d33.6598811!1m5!1m1!1s0x88f51bfd379c09f7:0xdebb7dfce7c9c439!2m2!1d-84.5216729!2d33.7771801!1m5!1m1!1s0x88f50408dbf17f1f:0x60ccf34413430e69!2m2!1d-84.3719735!2d33.7639588!3e0?entry=ttu
+        "name": "HCA Parkway Medical Center Heliport ",
+        "id": "6GA3",
+        "location": "999 Crestmark Blvd, Lithia Springs, GA 301223",
+        "hasHospital": False,
+        "nearest": False, 
+        "nominal": False,
+        "nominal_departure": False, 
+        "image1": "../static/HAIInterface/img/Mary1.png",
+        "image2": "../static/HAIInterface/img/Emory.png",
+        "latitude": "33.7780556",
+        "longitude": "-84.6113889",	
     }
 }
-
-
 
 # UDP update for MATLAB
 def matlab_destination_update():
@@ -596,10 +578,8 @@ def matlab_destination_update():
 
     while True:
         time.sleep(1)
-
         if (destination_index is None):
             continue
-
         # parse the latitude and longitude
         latitude = float(data[str(destination_index)]["latitude"])
         longitude = float(data[str(destination_index)]["longitude"])
@@ -607,28 +587,16 @@ def matlab_destination_update():
         land_signal = int(decision_state)
         takeoff_signal = int(takeoff)
         approach_clear_signal = int(approach_clear)
-        # print("UPDATED MATLAB", latitude, longitude)
-      
 
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
         # send the location
         s.sendto(struct.pack('>f', latitude), (MATLAB_IP, MATLAB_PORT_LAT_MIN))
-        s.sendto(struct.pack('>f', longitude),
-                 (MATLAB_IP, MATLAB_PORT_LONG_MIN))
+        s.sendto(struct.pack('>f', longitude), (MATLAB_IP, MATLAB_PORT_LONG_MIN))
         # send the decision state
         s.sendto(struct.pack('>f', land_signal), (MATLAB_IP, MATLAB_PORT_LAND))
         s.sendto(struct.pack('>f', takeoff_signal), (MATLAB_IP, MATLAB_PORT_TAKEOFF))
         s.sendto(struct.pack('>f', approach_clear_signal), (MATLAB_IP, MATLAB_PORT_APPROACH_CLEAR))
-
-
-        # send the altitude
-        """ if change_altitude is None:
-            altitude= position["altitude"]
-        else:
-            altitude=change_altitude
-        s.sendto(struct.pack('>f', altitude), (MATLAB_IP, MATLAB_PORT_LAND)) """
-
 
 # Keywords and corresponding routes
 keywords_routes = {
@@ -639,8 +607,6 @@ keywords_routes = {
     "emergency": "http://127.0.0.1:8080/hai-interface/change-destination"
      # add more keywords and routes 
 }  
-
-
 
 active_speaker = None  # Track current speaking task
 
@@ -665,21 +631,15 @@ async def send_to_tts(text, speaker):
     async with websockets.connect(uri) as websocket:
         await websocket.send(json.dumps({"text": text, "speaker": speaker}))
 
-
 @app.route('/voice', methods=['POST'])
 def voice():
     while True:
         def recording_started():
             print("Listening...")
-            #socketio.emit("listening")
             # mark the event as  set
             event.set()
-            #socketio.emit("type", {"type": "activate_assistant"})
             if request.method == 'POST':
                 return jsonify({"type": "activate_assistant"}), 200 
-            # Send to Flask server
-            #requests.post('http://127.0.0.1:8080/ws', json={'type': "activate_assistant"})
-            
 
         def recording_finished():
             print("Speech end detected... transcribing...")
@@ -689,7 +649,6 @@ def voice():
             # socketio.emit("type", {"type": "deactivate_assistant"})
             if request.method == 'POST':
                  return jsonify({"type": "deactivate_assistant"}), 200 
-           
 
         # WebSocket server address
         WS_SERVER_ADDRESS = "ws://127.0.0.1:8080"
@@ -704,7 +663,6 @@ def voice():
                     break  # Exit loop after finding the first matching keyword
             txt="Sorry, didn't find" + user_text
             print(txt)
-            #socketio.emit("response", {"response": txt})
             if request.method == 'POST':
                  return jsonify({"type": "user_text", "text": txt}), 200  
 
@@ -718,15 +676,12 @@ def voice():
                  socketio.emit("response", {"response": user_text})
                  perform_action(user_text)
             print("Done. Now we should exit. Bye!")
-            
 
 @app.route('/set_event', methods=['POST'])
 def set_event():
     print("request received in /set_event: ", request.get_json())
     received_request= request.get_json()
-
     event_name = received_request["event"]
-
     if event_name == "reset":  # clear all events 
         for event in events:
           events[event].clear()
@@ -752,17 +707,18 @@ def set_event():
 
     return ""
 
-
 @app.route('/state', methods=['POST'])
 def get_states():
     global takeoffEvent, engine_failure, pressure_warning, empty_tank, vitals_state, weather_emergency, altitude_alert,jarvis_event
+    
     if(airspace_emergency_state==1 or vitals_state==1 or engine_failure==1 or pressure_warning==1 or empty_tank==1 or weather_emergency==1 or altitude_alert==1):
         emergency_event.set()
         print('Emergency event set')
+
     if(emergency_event.is_set() and airspace_emergency_state==0 and vitals_state==0 and engine_failure==0 and pressure_warning==0 and empty_tank==0 and weather_emergency==0 and altitude_alert==0):
         emergency_event.clear()
         print('Emergency event cleared')
-        
+
     if request.is_json:
         received_request = request.get_json()
         print("request received in /state: ", received_request)
@@ -816,20 +772,13 @@ def get_states():
         "pressure_warning_alert":pressure_warning_alert.is_set(),
         "stop_engine": stop_engine.is_set(),
         "jarvis_event":jarvis_event.is_set(),
-
     }
-    
     return jsonify(response), 200
-
 
 @app.route('/ws', methods=['POST'])
 def ws():
     global user_text_audio, prev_text, jarvis_event
     print("ws method ", request.method)
-    
-    """  if event.is_set():
-        last_time_set=time.time() """
-    #user_text_audio=""
     print("request received on /ws: ", request.get_json())
     received_request= request.get_json()
     
@@ -846,15 +795,12 @@ def ws():
             prev_text = str(new_text)
             print("user text", user_text_audio)
 
-         
     print("user text", user_text_audio)
     response = {
         "assistantIsActive": jarvis_event.is_set(),
         "userText": user_text_audio,
     }
     return jsonify(response), 200
-
-
 
 @app.route('/speak', methods=['POST'])
 def get_text():
@@ -876,18 +822,15 @@ def get_text():
 def index():
     return "The ONR-HAI webserver is running!"
 
-
 # favicon
 @app.route('/favicon.ico')
 def favicon():
     return app.send_static_file('favicon.ico')
 
-
 # data for MATLAB route
 @app.route("/current-destination")
 def current_destination():
     return jsonify({"destlatitude": data[str(destination_index)]["latitude"], "destlongitude": data[str(destination_index)]["longitude"]})
-
 
 # logging route
 @app.route("/log", methods=["POST"])
@@ -896,12 +839,10 @@ def log():
                  ",STAGE:" + str(study_stage) + ",SEQUENCE:" + str(sequence) + ",DATA:" + str(request.get_json()))
     return ""
 
-
 # reset server parameters
 @app.route("/reset", methods=["GET"])
 def reset_params():
     global study_participant_id, sequence, study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page,rd_page,ca_page,cd_page,map_page, radio_page,transmit,receive, takeoff,approach_clear, user_text_audio, prev_text,received_text
-
 
     study_participant_id = 0
     sequence=0
@@ -970,8 +911,6 @@ def reset_params():
 
     return "Reset all system parameters!"
 
-
-
 # experimenter control page 
 @app.route("/control", methods=["GET"])
 def show_control():
@@ -986,8 +925,6 @@ def clean(s):
     return re.sub(r'[^A-Za-z0-9]+', '', s)
 
 # set system variables
-
-
 @app.route("/var", methods=["GET"])
 def get_var():
     global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude, engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page, rd_page, ca_page, cd_page, map_page, radio_page, transmit, receive, takeoff, approach_clear
@@ -1151,7 +1088,6 @@ def get_var():
 
     return jsonify(return_dict)
 
-
 # Vitals Task
 @app.route("/vitals/")
 def vitals_index():
@@ -1164,13 +1100,11 @@ def vitals(subroute=None):
     if subroute == "post-trial":
          return render_template("VitalsTask/post-trial.html")
 
-
 # HAI Interface
 @app.route("/hai-interface/")
 def hai_interface_index():
     print("helipads", data)
     return render_template("HAIInterface/index.html", helipads=data)
-
 
 @app.route("/hai-interface/<string:subroute>",  methods=['GET'])
 def hai_interface(subroute=None):
@@ -1211,7 +1145,6 @@ def hai_interface(subroute=None):
         resp = make_response(render_template("HAIInterface/change-altitude.html", helipads=data)) # current_altitude= position["altitude"]
     else:
         resp = make_response("Route in HAI Interface not found!")
-
     return resp
 
 @socketio.on('connect')
@@ -1231,9 +1164,6 @@ def handle_send_text(data):
     
     # Send the text to the Jarvis via WebSocket
     asyncio.create_task(send_to_tts(text, speaker))  # Run asynchronously
-
-
-
 
 if __name__ == "__main__":
     # Run the Flask server with SocketIO
