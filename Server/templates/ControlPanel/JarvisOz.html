@@ -70,6 +70,20 @@
             cursor: pointer;
         }
 
+        .open-button {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .open-button:hover {
+            background-color: #0056b3;
+        }
+
         button:hover {
             background-color: #218838;
         }
@@ -107,15 +121,15 @@
         </div>
 
        
-        <div class="subcontent-container">
+        <div class="container">
             <h3>Interface Display Control</h3>
             <div id="activate-jarvis" class="open-button">Activate Jarvis</div>
             <div id="deactivate-jarvis"  class="open-button">Deactivate Jarvis</div>
-            <div id="emergency-page" class="open-button" >Emergency Page</div>
-            <div id="cd-page" class="open-button" >Change Destination Page</div>
-            <div id="ca-page" class="open-button" >Change Altitude Page</div>
-            <div id="rd-page" class="open-button" >Return to Departure Page</div>
-            <div id="map-page" class="open-button" >Open Map</div>
+            <div id="EMpage" page="emergency-page"class="open-button" >Emergency Page</div>
+            <div id="CDpage" page="cd-page" class="open-button" >Change Destination Page</div>
+            <div id="CApage"   page="ca-page" class="open-button" >Change Altitude Page</div>
+            <div id="RDpage"   page="rd-page" class="open-button" >Return to Departure Page</div>
+            <div class="open-button" page="map-page" >Open Map</div>
         </div>
     </div>
 
@@ -184,33 +198,15 @@
 
         // Handling button clicks for opening pages
         document.querySelectorAll(".open-button").forEach(button => {
-            button.addEventListener("click", async () => {
-                page=this.getAttribute("id")
-                
-                await fetch("/var?emergency-page=1")
+            button.addEventListener("click", async function () {
+                page=this.getAttribute("page")
+                route="/var?"+page+"=1"
+                await fetch(route)
             });
         });
         
-        document.getElementById("EMpage").onclick = async () => {
+        document.getElementById("emergency-page").onclick = async () => {
             await fetch("/var?emergency-page=1")
-        }
-
-        document.getElementById("CApage").onclick = async () => {
-            await fetch("/var?ca-page=1")
-            
-        }
-
-        document.getElementById("CDpage").onclick = async () => {
-            await fetch("/var?cd-page=1")
-        }
-
-        document.getElementById("RDpage").onclick = async () => {
-            await fetch("/var?rd-page=1")
-        }
-        
-        document.getElementById("mappage").onclick = async () => {
-            console.log("sent map open")
-            await fetch("/var?map-page=1")
         }
 
 
