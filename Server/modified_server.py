@@ -806,7 +806,7 @@ def current_destination():
 @app.route("/log", methods=["POST"])
 def log():
     log_string = f"{datetime.datetime.now().timestamp()},ID:{study_participant_id},STAGE:{study_stage},SEQUENCE:{sequence},DATA:{request.get_json()}"
-    with open(f"logs/{study_participant_id}_{study_stage}.log", "a") as f:
+    with open(f"../Logs/{study_participant_id}_{study_stage}.log", "a+") as f:
         f.write(log_string + "\n")
     return ""
 
