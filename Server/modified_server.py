@@ -10,9 +10,6 @@ import asyncio
 import re
 import webbrowser
 import websockets
-#from gevent import pywsgi
-#from geventwebsocket.handler import WebSocketHandler
-#import Jarvis
 import wave
 import os
 import sys
@@ -20,8 +17,7 @@ from flask_socketio import SocketIO, emit
 import subprocess
 import threading
 import json
-#from multiprocessing import Process
-#from multiprocessing import Pipe
+
 
 
 
