@@ -6,25 +6,10 @@ import threading
 import socket
 import struct
 import time
-import asyncio
 import re
 import webbrowser
-#from flask_sockets import Sockets
-#from gevent import pywsgi
-#from geventwebsocket.handler import WebSocketHandler
-import third_test
 import radio_comms
-import wave
 from  VoiceInterface import AudioToText
-import os
-import sys
-#from multiprocessing import Process
-#from multiprocessing import Pipe
-
-
-
-
-
 
 # system state variables
 study_participant_id = 0
@@ -64,7 +49,6 @@ receive=0
 takeoff=0
 approach_clear=0
 
-
 # Global variables
 active_assistant = 'T'
 user_text_audio = ""
@@ -74,16 +58,14 @@ message = 'deactivate_assistant'
 emergency = False
 last_radio_update = 0
 last_time_set=None
+
 #lock to protect the global variable
 lock = threading.Lock()
 
-# create instances of event
-
-#for voice assistant
+# create instances of event for voice assistant
 jarvis_event = threading.Event()
 jarvis_event.clear() #not set
 
- 
 #for radio comms
 status_report_event = threading.Event()  #to be set when participant gives the radio update
 status_report_event.clear()
@@ -126,7 +108,6 @@ pressure_warning_alert.clear()
 stop_engine=threading.Event()
 stop_engine.clear()
 
-
 events = {
     'radioUpdateComplete': radio_update_complete,
     'status_report': status_report_event,
@@ -151,10 +132,8 @@ events = {
     "jarvis_event":jarvis_event
 }
 
-
 #radio variables
 takeoffEvent=False
-
 
 position = {
     "latitude": 33.7892717,
@@ -162,13 +141,7 @@ position = {
     "compass": 0,
     "altitude": 0.0
 }
-
 app = Flask(__name__)
-#websocket
-
-#sockets = Sockets(app)
-
-
 
 # Creating simconnection
 try:
@@ -290,7 +263,6 @@ data = {
     #     "latitude": "33.7525500",
     #     "longitude": "-84.3820778",
     # }, 
-
     "2": {
         "name": "Ruffwood Heliport",
         "id": "73GA",
@@ -333,7 +305,6 @@ data = {
     #     "latitude": "33.7686667",
     #     "longitude": "-84.3868750",
     # }, 
-    
     "5": {
          # Nearest for high workload scenario (AI suggestion)
         "name": "Hilton Garden Inn Downtown Heliport",
@@ -427,7 +398,6 @@ data = {
     #     "latitude": "33.7474278",
     #     "longitude": "-84.3882583",
     # }, 
-
     "11": {
         "name": "Rabbit Hole Heliport",
         "id": "52GA",
@@ -551,8 +521,6 @@ data = {
     "latitude": "33.7791264",
     "longitude": "-84.5213660",
     },
-
-    
     "21": {
     # Departure Location
     "name": "Miller Farm, Airport ",
@@ -567,7 +535,6 @@ data = {
     "latitude": "33.6595539", 
     "longitude": "-84.6629889",
     },
-
     "22": {
     #other scenarios- Emory University
     # Departure for all scenario 
@@ -587,8 +554,6 @@ data = {
     }
 }
 
-
-
 # UDP update for MATLAB
 def matlab_destination_update():
     MATLAB_IP = '127.0.0.1'
@@ -600,10 +565,8 @@ def matlab_destination_update():
 
     while True:
         time.sleep(1)
-
         if (destination_index is None):
             continue
-
         # parse the latitude and longitude
         latitude = float(data[str(destination_index)]["latitude"])
         longitude = float(data[str(destination_index)]["longitude"])
@@ -611,8 +574,6 @@ def matlab_destination_update():
         land_signal = int(decision_state)
         takeoff_signal = int(takeoff)
         approach_clear_signal = int(approach_clear)
-        # print("UPDATED MATLAB", latitude, longitude)
-      
 
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
@@ -625,14 +586,12 @@ def matlab_destination_update():
         s.sendto(struct.pack('>f', takeoff_signal), (MATLAB_IP, MATLAB_PORT_TAKEOFF))
         s.sendto(struct.pack('>f', approach_clear_signal), (MATLAB_IP, MATLAB_PORT_APPROACH_CLEAR))
 
-
         # send the altitude
         """ if change_altitude is None:
             altitude= position["altitude"]
         else:
             altitude=change_altitude
         s.sendto(struct.pack('>f', altitude), (MATLAB_IP, MATLAB_PORT_LAND)) """
-
 
 # Keywords and corresponding routes
 keywords_routes = {
@@ -644,35 +603,25 @@ keywords_routes = {
      # add more keywords and routes 
 }  
 
-
 @app.route('/voice', methods=['POST'])
 def voice():
     while True:
         def recording_started():
             print("Listening...")
-            #socketio.emit("listening")
             # mark the event as  set
             event.set()
-            #socketio.emit("type", {"type": "activate_assistant"})
             if request.method == 'POST':
                 return jsonify({"type": "activate_assistant"}), 200 
-            # Send to Flask server
-            #requests.post('http://127.0.0.1:8080/ws', json={'type': "activate_assistant"})
             
-
         def recording_finished():
             print("Speech end detected... transcribing...")
-            # mark the event as not set
-            #event.clear()
-            # socketio.emit("disconnect")
-            # socketio.emit("type", {"type": "deactivate_assistant"})
             if request.method == 'POST':
                  return jsonify({"type": "deactivate_assistant"}), 200 
-           
 
         # WebSocket server address
         WS_SERVER_ADDRESS = "ws://127.0.0.1:8080"
-         # Open subroutes based on detected keywords
+
+        # Open subroutes based on detected keywords
         def perform_action(user_text):
             user_text=user_text.lower()
             print("Looking")
@@ -694,8 +643,8 @@ def voice():
             user_text=recorder.text().strip()
             print(user_text)
             if(user_text):
-                 socketio.emit("response", {"response": user_text})
-                 perform_action(user_text)
+                socketio.emit("response", {"response": user_text})
+                perform_action(user_text)
             print("Done. Now we should exit. Bye!")
             
 
@@ -1306,13 +1255,10 @@ def hai_interface(subroute=None):
         resp = make_response(render_template("HAIInterface/change-altitude.html", helipads=data)) # current_altitude= position["altitude"]
     else:
         resp = make_response("Route in HAI Interface not found!")
-
     return resp
 
 def start_flask_app():
     app.run(host="0.0.0.0", port=8080)
-
-
 
 # start the webserver
 if __name__ == "__main__":
@@ -1320,7 +1266,6 @@ if __name__ == "__main__":
     t = threading.Thread(target=matlab_destination_update, daemon=True)
     t.start()
 
-  
     # start the logging thread
     werkzeug_logger = logging.getLogger('werkzeug')
     werkzeug_logger.disabled = True 
@@ -1329,40 +1274,12 @@ if __name__ == "__main__":
     va = threading.Thread(target=third_test.main, args={jarvis_event}, daemon=True)
     va.start()
 
-
     # setting emergency event when other emergency happens
     if((administer_event.is_set() or tank_event.is_set() or engine_event.is_set() or sensor_event.is_set() or weather_event.is_set() or altitude_event.is_set()) and (not emergency_event.is_set())):
       emergency_event.set() 
 
-    """ if(administer_event.is_set()):
-      radio_comms.administer(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event)
-    if(tank_event.is_set()):
-      radio_comms.continueEmory()
-    if(engine_event.is_set()):
-     radio_comms.flyOldForth()
- """
-
-    #radio comms thread
-    #radio = threading.Thread(target=radio_comms.inflight_status_check, args={inflight_event,status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event})
-    #radio = threading.Thread(target=radio_comms_new.main, args={status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event, radio_update_complete, inflight_event})
     radio = threading.Thread(target=radio_comms.main, daemon=True)
     radio.start()  # starting radio thread
 
     # Run the Flask server
     app.run(host="0.0.0.0", port=8080, threaded=True)
-   
-
-    # Run the Flask server in a separate thread
-    # flask_thread = threading.Thread(target=start_flask_app)
-    # flask_thread.start()
-
-    # Run the voice assistant in the event loop
-    #asyncio.run(voice_assistant(event, active_assistant, lock))
-    #socketio.run(app, host='0.0.0.0', port=8080) 
-   
-    #server = pywsgi.WSGIServer(('0.0.0.0', 8080), app, handler_class=WebSocketHandler)
-    #server.serve_forever()
-
-""" if __name__ == '__main__':
-    socketio.run(app, host='127.0.0.1', port=8080)
- """
