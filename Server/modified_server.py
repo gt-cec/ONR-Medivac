@@ -8,7 +8,6 @@ import time
 import asyncio
 import re
 import webbrowser
-import websockets
 from flask_socketio import SocketIO
 import threading
 import json
@@ -67,7 +66,7 @@ last_time_set=None
 lock = threading.Lock()
 
 # start Jarvis
-Jarvis.start_jarvis()
+# Jarvis.start_jarvis()
 
 # create instances of event for voice assistant
 jarvis_event = threading.Event()
@@ -600,30 +599,7 @@ keywords_routes = {
     "destination": "http://127.0.0.1:8080/hai-interface/change-destination",
     "emergency": "http://127.0.0.1:8080/hai-interface/change-destination"
      # add more keywords and routes 
-}  
-
-active_speaker = None  # Track current speaking task
-
-async def handler(websocket, path):
-    global active_speaker
-    async for message in websocket:
-        data = json.loads(message)
-        action = data.get("action")
-        text = data.get("text")
-        speaker = data.get("speaker", "Jarvis")  # Adjust based on your TTS model
-
-        if action == "speak":
-            if active_speaker:  # Stop any ongoing speech
-                active_speaker.cancel()
-            
-            # Start new speech task
-            active_speaker = asyncio.create_task(send_to_tts(text, speaker))
-
-async def send_to_tts(text, speaker):
-    """Send the text to Jarvis.py via WebSocket"""
-    uri = "ws://localhost:1128"  # Ensure this matches 
-    async with websockets.connect(uri) as websocket:
-        await websocket.send(json.dumps({"text": text, "speaker": speaker}))
+}
 
 @app.route('/voice', methods=['POST'])
 def voice():
@@ -898,7 +874,7 @@ def reset_params():
     stop_engine.clear()
     print('All events cleared',takeoff_event.is_set())
     
-   # reseting other global variables
+    # reseting other global variables
     user_text_audio=""
     prev_text=""
     received_text=""
@@ -918,7 +894,6 @@ def show_woz():
 @app.route("/voicecontrol", methods=["GET"])   
 def voice_control():
     return render_template("ControlPanel/voiceControl.html")
-
 
 def clean(s):
     return re.sub(r'[^A-Za-z0-9]+', '', s)
@@ -1162,9 +1137,7 @@ def handle_send_text(data):
     text = data["text"]
     speaker = data["speaker"]
     print(f"Received text: {text} for speaker {speaker}")
-    
-    # Send the text to the Jarvis via WebSocket
-    asyncio.run(send_to_tts(text, speaker))  # Run asynchronously
+    Jarvis.speak(text, speaker)
 
 if __name__ == "__main__":
     # Run the Flask server with SocketIO
