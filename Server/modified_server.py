@@ -916,6 +916,11 @@ def reset_params():
 def show_control():
     return render_template("ControlPanel/index.html", helipads=data)
 
+# Wizard of Oz page
+@app.route("/woz", methods=["GET"])
+def show_woz():
+    return render_template("ControlPanel/JarvisOz.html")
+
 @app.route("/voicecontrol", methods=["GET"])   
 def voice_control():
     return render_template("ControlPanel/voiceControl.html")
