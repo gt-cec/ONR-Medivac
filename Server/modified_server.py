@@ -9,17 +9,6 @@ import asyncio
 import re
 import webbrowser
 import websockets
-import wave
-import os
-import sys
-from flask_socketio import SocketIO, emit
-import subprocess
-import threading
-import json
-
-
-
-
 from flask_socketio import SocketIO
 import threading
 import json
