@@ -107,10 +107,21 @@
         <div class="subcontent-container">
             <h3>Jarvis Control</h3>
             <div class="control-button jarvis-button" data-text="How may I assist you?" id="activate-jarvis">How may I help you</div>
-            <div class="control-button jarvis-button" data-text="Confirming your request. Is that correct?" id="deactivate-jarvis">Is that correct?</div>
-            <div class="control-button jarvis-button" data-text="Got it, changing altitude." id="AltChg">Change altitude</div>
-            <div class="control-button jarvis-button" data-text="Acknowledging your command." id="Ack">Acknowledge</div>
-            <div class="control-button jarvis-button" data-text="Got it, you want to change destination. Let me pull up the map to assist you with that." id="CApage">Change Destination</div>
+            <div class="control-button jarvis-button" data-text="Confirming your request. Is that correct?" >Is that correct?</div>
+            <div class="control-button jarvis-button" data-text="Got it, you want to change altitude." id="AckAltChg">Change altitude Acknowledge</div>
+            <div class="control-button jarvis-button" data-text="What would you like me to change the altitude to?" id="AltChg">Change altitude to?</div>
+            <div class="control-button jarvis-button" data-text="Acknowledging your request." id="Ack">Acknowledge</div>
+            <div class="control-button jarvis-button" data-text="Got it, you want to change destination. Let me pull up the map to assist you with that." id="AckCD">Change Destination Acknowledge</div>
+            <div class="control-button jarvis-button" data-text="Got it, you want to make an emergency landing. Let me pull up the map to assist you with that." id="AckEM">Emergency Landing Acknowledge</div>
+            <div class="control-button jarvis-button" data-text="Which Helipad would you want be to land on?" id="helipad">Which Helipad</div>
+            <div class="control-button jarvis-button" data-text="In the given conditions, it is not possible to land at this helipad. Please suggest an alternate helipad" id="CL">Can't Land</div>
+            <div class="control-button jarvis-button" data-text="I recommend landing at " id="RH">Recommend Helipad</div>
+            <div class="control-button jarvis-button" data-text="It seems you are trying to change the landing site. May I help you with that? " id="CHhelp">Help Change landing site?</div>
+            <div class="control-button jarvis-button" data-text="The altitude has been changed" >Altitude changed!</div>
+            <div class="control-button jarvis-button" data-text="I recommend landing at " id="RH">Recommend Helipad</div>
+
+
+
         </div>
 
         <!-- User Input Section -->
@@ -131,6 +142,23 @@
             <div id="RDpage"   page="rd-page" class="open-button" >Return to Departure Page</div>
             <div class="open-button" page="map-page" >Open Map</div>
         </div>
+
+        <div class="subcontent-container">
+            <label for="altchange">Change Altitude to:</label><br>
+            <input type="text" id="altchange" name="1000"><br>
+            <button id="chgAlt">Change</button>
+
+            <label for="destchange">Change Destination to:</label><br>
+            <input type="text" id="destchange" name="1000"><br>
+            <button id="chgDst">Change</button>
+
+            <label for="sensorReading">Sensor Reading</label><br>
+            <input type="text" id="sensorReading" name="1000"><br>
+            <button id="send">Submit</button>
+
+            
+        </div>
+
     </div>
 
     <script>
@@ -162,6 +190,11 @@
                 const text = this.getAttribute("data-text");
                 const speaker = this.classList.contains("radio-button") ? "Radio" : "Jarvis";
                 sendToServer(text, speaker);
+                // var u = new SpeechSynthesisUtterance();
+                // u.text = text;
+                // u.lang = 'en-US';
+                // u.rate = 1.2;
+                // speechSynthesis.speak(u);
             });
         });
 
@@ -204,10 +237,44 @@
                 await fetch(route)
             });
         });
+
+
+        document.getElementById("chgAlt").onclick = () => {
+            const selectedValue = document.getElementById('altchange').value;
+            console.log("Controller selected altitude:", selectedValue);
+
+            if (selectedValue === "") {
+                alert("Please enter an altitude.");
+            } else {
+                // Send altitude change to the server
+                socket.emit("change_altitude", { altitude: selectedValue });
+            }
+        };
+
+        document.getElementById("chgDst").onclick = () => {
+            const selectedDestination = document.getElementById('destchange').value;
+            console.log("Controller selected altitude:", selectedDestination);
+
+            if (selectedDestination === "") {
+                alert("Please enter an destination.");
+            } else {
+                // Send altitude change to the server
+                socket.emit("change_destination", { destination: selectedDestination });
+            }
+        };
+
+        document.getElementById("chgAlt").onclick = () => {
+            const selectedValue = document.getElementById('altchange').value;
+            console.log("Controller selected altitude:", selectedValue);
+
+            if (selectedValue === "") {
+                alert("Please enter an altitude.");
+            } else {
+                // Send altitude change to the server
+                socket.emit("change_altitude", { altitude: selectedValue });
+            }
+        };
         
-        document.getElementById("emergency-page").onclick = async () => {
-            await fetch("/var?emergency-page=1")
-        }
 
 
     </script>

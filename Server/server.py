@@ -10,9 +10,20 @@ import re
 import webbrowser
 from flask_socketio import SocketIO
 import threading
+import websockets
 import json
 import ast
 import Jarvis
+from TTS.api import TTS
+import sounddevice as sd
+import numpy as np
+
+app = Flask(__name__)
+socketio = SocketIO(app, async_mode="threading", logger=False, cors_allowed_origins="*")  # Ensure Flask remains non-blocking
+
+# Initialize TTS
+tts = TTS("tts_models/multilingual/multi-dataset/your_tts", progress_bar=False).to("cpu")
+
 
 # system state variables
 study_participant_id = 0
@@ -148,8 +159,7 @@ position = {
     "altitude": 0.0
 }
 
-app = Flask(__name__)
-socketio = SocketIO(app, cors_allowed_origins="*")
+
 
 # Creating simconnection
 try:
@@ -643,7 +653,7 @@ def voice():
             user_text=recorder.text().strip()
             print(user_text)
             if(user_text):
-                 socketio.emit("response", {"response": user_text})
+                 #socketio.emit("response", {"response": user_text})
                  perform_action(user_text)
             print("Done. Now we should exit. Bye!")
 
@@ -748,8 +758,7 @@ def get_states():
 @app.route('/ws', methods=['POST'])
 def ws():
     global user_text_audio, prev_text, jarvis_event
-    print("ws method ", request.method)
-    print("request received on /ws: ", request.get_json())
+    #print("request received on /ws: ", request.get_json())
     received_request= request.get_json()
     
     if received_request["type"] == "activate_assistant":
@@ -765,7 +774,7 @@ def ws():
             prev_text = str(new_text)
             print("user text", user_text_audio)
 
-    print("user text", user_text_audio)
+    #print("user text", user_text_audio)
     response = {
         "assistantIsActive": jarvis_event.is_set(),
         "userText": user_text_audio,
@@ -890,7 +899,7 @@ def show_control():
 # Wizard of Oz page
 @app.route("/woz", methods=["GET"])
 def show_woz():
-    return render_template("ControlPanel/JarvisOz.html")
+    return render_template("ControlPanel/WizardOz.html")
 
 @app.route("/voicecontrol", methods=["GET"])   
 def voice_control():
@@ -905,28 +914,10 @@ def get_var():
     global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude, engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page, rd_page, ca_page, cd_page, map_page, radio_page, transmit, receive, takeoff, approach_clear
     if request.args.get("user-id"):
         study_participant_id = clean(request.args.get("user-id"))
-        # Remove all handlers associated with the root logger object, from (https://stackoverflow.com/questions/12158048)
-        for handler in logging.root.handlers[:]:
-            logging.root.removeHandler(handler)
-        # set up logging
-        logging.basicConfig(filename="c:\\Users\\ae-dagbeyibor3\\Desktop\\MedevacII_userStudy\\Logs\\" + str(study_participant_id) + '_' + str(
-            study_stage) + '.log', level=logging.INFO)  # output logs to the logs file
     if request.args.get("study-stage"):
         study_stage = clean(request.args.get("study-stage"))
-        # Remove all handlers associated with the root logger object, from (https://stackoverflow.com/questions/12158048)
-        for handler in logging.root.handlers[:]:
-            logging.root.removeHandler(handler)
-        # set up logging
-        logging.basicConfig(filename="c:\\Users\\ae-dagbeyibor3\\Desktop\\MedevacII_userStudy\\Logs\\" + str(study_participant_id) + '_' + str(
-            study_stage) + '.log', level=logging.INFO)  # output logs to the logs file
     if request.args.get("sequence"):
         sequence = clean(request.args.get("sequence"))
-        # Remove all handlers associated with the root logger object, from (https://stackoverflow.com/questions/12158048)
-        for handler in logging.root.handlers[:]:
-            logging.root.removeHandler(handler)
-        # set up logging
-        logging.basicConfig(filename="c:\\Users\\ae-dagbeyibor3\\Desktop\\MedevacII_userStudy\\Logs\\" + str(study_participant_id) + '_' + str(
-            study_stage)+ '_' + str(sequence) + '.log', level=logging.INFO)  # output logs to the logs file
     if request.args.get("destination-index"):
         destination_index = clean(request.args.get("destination-index"))
     if request.args.get("departure-index"):
@@ -1122,24 +1113,63 @@ def hai_interface(subroute=None):
         resp = make_response("Route in HAI Interface not found!")
     return resp
 
-@socketio.on('connect')
-def handle_connect():
-    print("Client connected")
+# Global asyncio event loop
+loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
 
-@socketio.on('disconnect')
-def handle_disconnect():
-    print("Client disconnected")
+# Function to start event loop in a separate thread
+def start_event_loop(loop):
+    asyncio.set_event_loop(loop)
+    loop.run_forever()
 
-@socketio.on('send_text')
+# Start event loop in a background thread
+threading.Thread(target=start_event_loop, args=(loop,), daemon=True).start()
+
+async def generate_audio(text):
+    """Generate and play speech asynchronously"""
+    print(f"Speaking: {text}")
+    audio_output = tts.tts(text, speaker=tts.speakers[3], language="en", speed=0.7)
+    audio_data = np.array(audio_output, dtype=np.float32)
+
+    sd.play(audio_data, samplerate=22050)  # Play at 22.05 kHz
+    while sd.get_stream().active:
+        await asyncio.sleep(0.1)  # Check every 100ms
+
+@socketio.on("send_text")
 def handle_send_text(data):
-    """Handle incoming text from the client"""
-    print("data", data)
-    data = ast.literal_eval(data)
-    text = data["text"]
-    speaker = data["speaker"]
-    print(f"Received text: {text} for speaker {speaker}")
-    Jarvis.speak(text, speaker)
+    """Handle text received from WebSocket"""
+    data = json.loads(data)
+    text = data.get("text", "")
+
+    print(f"Received text: {text}")
+    future = asyncio.run_coroutine_threadsafe(generate_audio(text), loop)  # Run TTS in event loop
+
+    try:
+        future.result()  # Ensure execution
+    except Exception as e:
+        print(f"Error in TTS execution: {e}")
+
+@socketio.on("change_altitude")
+def handle_altitude(data):
+    """Receive altitude change and update all clients"""
+    altitude = data["altitude"]
+    print(f"New altitude received: {altitude}")
+
+    # Send update to ALL connected clients
+    socketio.emit("update_altitude", {"altitude": altitude})
+
+
+@socketio.on("change_destination")
+def handle_destination(data):
+    """Receive destination change and update all clients"""
+    destination = data["destination"]
+    print(f"New destination received: {destination}")
+
+    # Send update to ALL connected clients
+    socketio.emit("update_destination", {"destination": destination})
+
 
 if __name__ == "__main__":
-    # Run the Flask server with SocketIO
-    socketio.run(app, host="0.0.0.0", port=8080)
+    """   Jarvis.start_jarvis()  # Start listening before running Flask app
+    socketio.run(app, host="0.0.0.0", port=8080) """
+    socketio.run(app, host="0.0.0.0", port=8080, debug=False, log_output=False,allow_unsafe_werkzeug=True)
