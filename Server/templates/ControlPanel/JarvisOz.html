@@ -70,10 +70,25 @@
             cursor: pointer;
         }
 
+        .open-button {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .open-button:hover {
+            background-color: #0056b3;
+        }
+
         button:hover {
             background-color: #218838;
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js" integrity="sha512-HTENHrkQ/P0NGDFd5nk6ibVtCkcM7jhr2c7GyvXp5O+4X6O5cQO9AhqFzM+MdeBivsX7Hoys2J7pp2wdgMpCvw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
 
@@ -92,10 +107,21 @@
         <div class="subcontent-container">
             <h3>Jarvis Control</h3>
             <div class="control-button jarvis-button" data-text="How may I assist you?" id="activate-jarvis">How may I help you</div>
-            <div class="control-button jarvis-button" data-text="Confirming your request. Is that correct?" id="deactivate-jarvis">Is that correct?</div>
-            <div class="control-button jarvis-button" data-text="Got it, changing altitude." id="EMpage">Change altitude</div>
-            <div class="control-button jarvis-button" data-text="Acknowledging your command." id="CDpage">Acknowledge</div>
-            <div class="control-button jarvis-button" data-text="Got it, you want to change destination. Let me pull up the map to assist you with that." id="CApage">Change Destination</div>
+            <div class="control-button jarvis-button" data-text="Confirming your request. Is that correct?" >Is that correct?</div>
+            <div class="control-button jarvis-button" data-text="Got it, you want to change altitude." id="AckAltChg">Change altitude Acknowledge</div>
+            <div class="control-button jarvis-button" data-text="What would you like me to change the altitude to?" id="AltChg">Change altitude to?</div>
+            <div class="control-button jarvis-button" data-text="Acknowledging your request." id="Ack">Acknowledge</div>
+            <div class="control-button jarvis-button" data-text="Got it, you want to change destination. Let me pull up the map to assist you with that." id="AckCD">Change Destination Acknowledge</div>
+            <div class="control-button jarvis-button" data-text="Got it, you want to make an emergency landing. Let me pull up the map to assist you with that." id="AckEM">Emergency Landing Acknowledge</div>
+            <div class="control-button jarvis-button" data-text="Which Helipad would you want be to land on?" id="helipad">Which Helipad</div>
+            <div class="control-button jarvis-button" data-text="In the given conditions, it is not possible to land at this helipad. Please suggest an alternate helipad" id="CL">Can't Land</div>
+            <div class="control-button jarvis-button" data-text="I recommend landing at " id="RH">Recommend Helipad</div>
+            <div class="control-button jarvis-button" data-text="It seems you are trying to change the landing site. May I help you with that? " id="CHhelp">Help Change landing site?</div>
+            <div class="control-button jarvis-button" data-text="The altitude has been changed" >Altitude changed!</div>
+            <div class="control-button jarvis-button" data-text="I recommend landing at " id="RH">Recommend Helipad</div>
+
+
+
         </div>
 
         <!-- User Input Section -->
@@ -104,8 +130,36 @@
             <input type="text" id="saytext" name="saytext"><br>
             <button id="sendtxt">Send</button>
         </div>
-    </div>
 
+       
+        <div class="container">
+            <h3>Interface Display Control</h3>
+            <div id="activate-jarvis" class="open-button">Activate Jarvis</div>
+            <div id="deactivate-jarvis"  class="open-button">Deactivate Jarvis</div>
+            <div id="EMpage" page="emergency-page"class="open-button" >Emergency Page</div>
+            <div id="CDpage" page="cd-page" class="open-button" >Change Destination Page</div>
+            <div id="CApage"   page="ca-page" class="open-button" >Change Altitude Page</div>
+            <div id="RDpage"   page="rd-page" class="open-button" >Return to Departure Page</div>
+            <div class="open-button" page="map-page" >Open Map</div>
+        </div>
+
+        <div class="subcontent-container">
+            <label for="altchange">Change Altitude to:</label><br>
+            <input type="text" id="altchange" name="1000"><br>
+            <button id="chgAlt">Change</button>
+
+            <label for="destchange">Change Destination to:</label><br>
+            <input type="text" id="destchange" name="1000"><br>
+            <button id="chgDst">Change</button>
+
+            <label for="sensorReading">Sensor Reading</label><br>
+            <input type="text" id="sensorReading" name="1000"><br>
+            <button id="send">Submit</button>
+
+            
+        </div>
+
+    </div>
 
     <script>
         // Create a WebSocket connection to the server
@@ -127,7 +181,7 @@
             console.log("Sending to server via WebSocket:", data);
 
             // Send the data as JSON string
-            socket.send(JSON.stringify(data));
+            socket.emit("send_text", JSON.stringify(data));
         }
 
         // Handling button clicks for predefined messages
@@ -136,6 +190,11 @@
                 const text = this.getAttribute("data-text");
                 const speaker = this.classList.contains("radio-button") ? "Radio" : "Jarvis";
                 sendToServer(text, speaker);
+                // var u = new SpeechSynthesisUtterance();
+                // u.text = text;
+                // u.lang = 'en-US';
+                // u.rate = 1.2;
+                // speechSynthesis.speak(u);
             });
         });
 
@@ -147,5 +206,75 @@
                 document.getElementById("saytext").value = ""; // Clear input field
             }
         });
+
+        //interface display control
+        document.getElementById("activate-jarvis").onclick = async () => {
+            await fetch("/ws", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+                },
+                body: JSON.stringify({ type: "activate_assistant"}), 
+            });
+        }
+
+        document.getElementById("deactivate-jarvis").onclick = async () => {
+            await fetch("/ws", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+                },
+                body: JSON.stringify({ type: "deactivate_assistant", text:"deactivate"}), 
+            });
+        }
+       
+
+        // Handling button clicks for opening pages
+        document.querySelectorAll(".open-button").forEach(button => {
+            button.addEventListener("click", async function () {
+                page=this.getAttribute("page")
+                route="/var?"+page+"=1"
+                await fetch(route)
+            });
+        });
+
+
+        document.getElementById("chgAlt").onclick = () => {
+            const selectedValue = document.getElementById('altchange').value;
+            console.log("Controller selected altitude:", selectedValue);
+
+            if (selectedValue === "") {
+                alert("Please enter an altitude.");
+            } else {
+                // Send altitude change to the server
+                socket.emit("change_altitude", { altitude: selectedValue });
+            }
+        };
+
+        document.getElementById("chgDst").onclick = () => {
+            const selectedDestination = document.getElementById('destchange').value;
+            console.log("Controller selected altitude:", selectedDestination);
+
+            if (selectedDestination === "") {
+                alert("Please enter an destination.");
+            } else {
+                // Send altitude change to the server
+                socket.emit("change_destination", { destination: selectedDestination });
+            }
+        };
+
+        document.getElementById("chgAlt").onclick = () => {
+            const selectedValue = document.getElementById('altchange').value;
+            console.log("Controller selected altitude:", selectedValue);
+
+            if (selectedValue === "") {
+                alert("Please enter an altitude.");
+            } else {
+                // Send altitude change to the server
+                socket.emit("change_altitude", { altitude: selectedValue });
+            }
+        };
+        
+
 
     </script>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Control Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+            display: flex;
+            justify-content: space-around;
+        }
+        .main-container {
+            display: flex;
+            width: 90%;
+            gap: 20px;
+        }
+        .panel {
+            flex: 1;
+            border: 2px solid #444;
+            border-radius: 10px;
+            padding: 15px;
+            background-color: #ffffff;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .subcontent-container {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #e9ecef;
+        }
+        h2, h3 {
+            text-align: center;
+            color: #333;
+        }
+        .control-button, .open-button, button {
+            padding: 10px;
+            margin: 5px 0;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .control-button { background-color: #007bff; color: white; }
+        .control-button:hover { background-color: #0056b3; }
+        .open-button { background-color: #17a2b8; color: white; }
+        .open-button:hover { background-color: #138496; }
+        button { background-color: #28a745; color: white; border: none; }
+        button:hover { background-color: #218838; }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js" integrity="sha512-HTENHrkQ/P0NGDFd5nk6ibVtCkcM7jhr2c7GyvXp5O+4X6O5cQO9AhqFzM+MdeBivsX7Hoys2J7pp2wdgMpCvw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Voice Control Section -->
+        <div class="panel">
+            <h2>Voice Control</h2>
+            <div class="subcontent-container">
+                <h3>Ground Control</h3>
+                <div class="control-button" data-text="Calling ground control for assistance." id="Ground">Call Ground</div>
+                <div class="control-button" data-text="Opening the map as requested." id="mappage">Open Map</div>
+                <div class="control-button" data-text="ETA request received." id="RDpage">ETA</div>
+            </div>
+            <div class="subcontent-container">
+                <h3>Jarvis Control</h3>
+                <div class="control-button" data-text="How may I assist you?" id="activate-jarvis">How may I help you</div>
+                <div class="control-button" data-text="Confirming your request. Is that correct?">Is that correct?</div>
+                <div class="control-button" data-text="Got it, you want to change altitude." id="AckAltChg">Change altitude Acknowledge</div>
+                <div class="control-button" data-text="What would you like me to change the altitude to?" id="AltChg">Change altitude to?</div>
+            </div>
+            <div class="subcontent-container">
+                <label for="saytext">Enter text to say:</label>
+                <input type="text" id="saytext" name="saytext">
+                <button id="sendtxt">Send</button>
+            </div>
+        </div>
+
+        <!-- Interface Control Section -->
+        <div class="panel">
+            <h2>Interface Control</h2>
+            <div class="subcontent-container">
+                <h3>Page Control</h3>
+                <div class="open-button" id="activate-jarvis">Activate Jarvis</div>
+                <div class="open-button" id="deactivate-jarvis">Deactivate Jarvis</div>
+                <div class="open-button" id="emergency-page">Emergency Page</div>
+                <div class="open-button" id="cd-page">Change Destination Page</div>
+                <div class="open-button" id="ca-page">Change Altitude Page</div>
+                <div class="open-button" id="rd-page">Return to Departure Page</div>
+                <div class="open-button" id="map-page">Open Map</div>
+            </div>
+            <div class="subcontent-container">
+                <h3>Variable Change</h3>
+                <label for="altchange">Change Altitude to:</label>
+                <input type="text" id="altchange">
+                <button id="chgAlt">Change</button>
+                <label for="destchange">Change Destination to:</label>
+                <input type="text" id="destchange">
+                <button id="chgDst">Change</button>
+                <label for="sensorReading">Sensor Reading</label>
+                <input type="text" id="sensorReading">
+                <button id="send">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const socket = io.connect('http://localhost:8080');
+
+        function sendToServer(text, speaker) {
+            socket.emit("send_text", JSON.stringify({ text, speaker }));
+        }
+
+        document.querySelectorAll(".control-button").forEach(button => {
+            button.addEventListener("click", function () {
+                sendToServer(this.getAttribute("data-text"), "Jarvis");
+            });
+        });
+
+        document.getElementById("sendtxt").addEventListener("click", function () {
+            const textInput = document.getElementById("saytext").value.trim();
+            if (textInput) {
+                sendToServer(textInput, "Jarvis");
+                document.getElementById("saytext").value = "";
+            }
+        });
+
+        document.querySelectorAll(".open-button").forEach(button => {
+            button.addEventListener("click", async function () {
+                await fetch(`/var?${this.id}=1`);
+            });
+        });
+
+        document.getElementById("chgAlt").onclick = () => {
+            console.log("changing altitude")
+            const selectedValue = document.getElementById('altchange').value;
+            if (selectedValue) {
+                socket.emit("change_altitude", { altitude: selectedValue });
+            }
+        };
+
+        document.getElementById("chgDst").onclick = () => {
+            const selectedDestination = document.getElementById('destchange').value;
+            if (selectedDestination) {
+                socket.emit("change_destination", { destination: selectedDestination });
+            }
+        };
+    </script>
+</body>
+</html>

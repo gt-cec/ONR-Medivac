@@ -25,6 +25,7 @@
   align-self: center;
   text-align: center;
 }
+
 </style>
 
 
@@ -58,6 +59,7 @@
 
 <script>
 {% block script %}
+    const socket = io.connect("http://localhost:8080");
     var HelpId=4;
     document.getElementById('help').onclick = () => { log({"page": "Change altitude", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
    // Get current altitude. 
@@ -100,7 +102,30 @@
             }, 1500) 
             
             }
-        } 
+        }
+        
+        // Listen for altitude updates from control panel
+        socket.on("update_altitude", (data) => {
+            console.log("Altitude update received from controller:", data.altitude);
+            log({"page": "change-altitude", "action": "altitude changed by controller" + data.altitude })
+            //alert("Altitude successfully changed to:"+ selectedValue)
+            const dialog = document.createElement('dialog');
+            dialog.innerHTML = `
+            <p>Altitude successfully changed to ${data.altitude} feet</p>
+            <br>
+            <centre><button onclick="this.closest('dialog').close()">OK</button></centre>
+            `;
+            document.body.appendChild(dialog);
+            dialog.showModal();
+            fetch("/var?change-altitude"+ data.altitude)
+            fetch("/var?vitals-state=" + 0)  //removing vitals emergency
+            
+            setTimeout(() => {
+                window.location.href ='/hai-interface/inflight?change-altitude=' +  data.altitude;
+            }, 1500) 
+            
+        });
+    
 
     
    

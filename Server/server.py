@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, jsonify, make_response
-#from SimConnect import *
 import logging
 import datetime
 import threading
@@ -9,21 +8,21 @@ import time
 import asyncio
 import re
 import webbrowser
-#from flask_sockets import Sockets
-#from gevent import pywsgi
-#from geventwebsocket.handler import WebSocketHandler
-import third_test
-import radio_comms
-import wave
-from  VoiceInterface import AudioToText
-import os
-import sys
-#from multiprocessing import Process
-#from multiprocessing import Pipe
+from flask_socketio import SocketIO
+import threading
+import websockets
+import json
+import ast
+import Jarvis
+from TTS.api import TTS
+import sounddevice as sd
+import numpy as np
 
+app = Flask(__name__)
+socketio = SocketIO(app, async_mode="threading", logger=False, cors_allowed_origins="*")  # Ensure Flask remains non-blocking
 
-
-
+# Initialize TTS
+tts = TTS("tts_models/multilingual/multi-dataset/your_tts", progress_bar=False).to("cpu")
 
 
 # system state variables
@@ -64,7 +63,6 @@ receive=0
 takeoff=0
 approach_clear=0
 
-
 # Global variables
 active_assistant = 'T'
 user_text_audio = ""
@@ -74,15 +72,16 @@ message = 'deactivate_assistant'
 emergency = False
 last_radio_update = 0
 last_time_set=None
+
 #lock to protect the global variable
 lock = threading.Lock()
 
-# create instances of event
+# start Jarvis
+# Jarvis.start_jarvis()
 
-#for voice assistant
+# create instances of event for voice assistant
 jarvis_event = threading.Event()
 jarvis_event.clear() #not set
-
  
 #for radio comms
 status_report_event = threading.Event()  #to be set when participant gives the radio update
@@ -126,7 +125,6 @@ pressure_warning_alert.clear()
 stop_engine=threading.Event()
 stop_engine.clear()
 
-
 events = {
     'radioUpdateComplete': radio_update_complete,
     'status_report': status_report_event,
@@ -151,10 +149,8 @@ events = {
     "jarvis_event":jarvis_event
 }
 
-
 #radio variables
 takeoffEvent=False
-
 
 position = {
     "latitude": 33.7892717,
@@ -162,11 +158,6 @@ position = {
     "compass": 0,
     "altitude": 0.0
 }
-
-app = Flask(__name__)
-#websocket
-
-#sockets = Sockets(app)
 
 
 
@@ -208,6 +199,7 @@ request_vertical_speed = [
     'VERTICAL_SPEED',  # Vertical speed indication
     'GPS_WP_VERTICAL_SPEED',  # Vertical speed to waypoint
 ]
+
 # Help button description
 HelpData = {
     "1": {
@@ -248,7 +240,6 @@ HelpData = {
      "9": {
         "desp": "  This page allows you to request the AI pilot to change the altitude. If you would like to know the current altitude, look for the altitude gauge in the backup flight gauges panel. For changing the altitude, select the altitude you want to request from the drop down and hit SUBMIT. If you are unsure, contact Control for assistance "
     },
-
 }
 
 # Helipad data
@@ -290,7 +281,6 @@ data = {
     #     "latitude": "33.7525500",
     #     "longitude": "-84.3820778",
     # }, 
-
     "2": {
         "name": "Ruffwood Heliport",
         "id": "73GA",
@@ -333,7 +323,6 @@ data = {
     #     "latitude": "33.7686667",
     #     "longitude": "-84.3868750",
     # }, 
-    
     "5": {
          # Nearest for high workload scenario (AI suggestion)
         "name": "Hilton Garden Inn Downtown Heliport",
@@ -427,7 +416,6 @@ data = {
     #     "latitude": "33.7474278",
     #     "longitude": "-84.3882583",
     # }, 
-
     "11": {
         "name": "Rabbit Hole Heliport",
         "id": "52GA",
@@ -536,58 +524,51 @@ data = {
         "latitude": "33.76400330983825", # offset for visibility
         "longitude": "-84.37359282618218", #offset for visibility , 
     },
-
     "20": {
-   
-    "name": "Fulton County Executive Airport ",
-    "id": "FTY",
-    "location": "3977 Aviation Cir NW, Atlanta, GA 30336",
-    "hasHospital": False,
-    "nearest": False, #to be set as true for higher workload scenario
-    "nominal": False,
-    "nominal_departure": False,
-    "image1": "../static/HAIInterface/img/Mary1.png",
-    "image2": "../static/HAIInterface/img/Emory.png",
-    "latitude": "33.7791264",
-    "longitude": "-84.5213660",
+        "name": "Fulton County Executive Airport ",
+        "id": "FTY",
+        "location": "3977 Aviation Cir NW, Atlanta, GA 30336",
+        "hasHospital": False,
+        "nearest": False, #to be set as true for higher workload scenario
+        "nominal": False,
+        "nominal_departure": False,
+        "image1": "../static/HAIInterface/img/Mary1.png",
+        "image2": "../static/HAIInterface/img/Emory.png",
+        "latitude": "33.7791264",
+        "longitude": "-84.5213660",
     },
-
-    
     "21": {
-    # Departure Location
-    "name": "Miller Farm, Airport ",
-    "id": "25GA",
-    "location": "5300 Leann Dr, Douglasville, GA 30135",
-    "hasHospital": False,
-    "nearest": False, #to be set as true for higher workload scenario
-    "nominal": False,
-    "nominal_departure": True,
-    "image1": "../static/HAIInterface/img/Mary1.png",
-    "image2": "../static/HAIInterface/img/Emory.png",
-    "latitude": "33.6595539", 
-    "longitude": "-84.6629889",
+        # Departure Location
+        "name": "Miller Farm, Airport ",
+        "id": "25GA",
+        "location": "5300 Leann Dr, Douglasville, GA 30135",
+        "hasHospital": False,
+        "nearest": False, #to be set as true for higher workload scenario
+        "nominal": False,
+        "nominal_departure": True,
+        "image1": "../static/HAIInterface/img/Mary1.png",
+        "image2": "../static/HAIInterface/img/Emory.png",
+        "latitude": "33.6595539", 
+        "longitude": "-84.6629889",
     },
-
     "22": {
-    #other scenarios- Emory University
-    # Departure for all scenario 
-    # 25GA Miller Farm, Dougsville  to old forth
-    #https://www.google.com/maps/dir/Miller+Farm+Airport-25GA,+Leann+Dr,+Douglasville,+GA/Fulton+County+Airport+-+Brown+Field+(FTY),+Aviation+Circle+Northwest,+Atlanta,+GA/Old+Fourth+Ward,+Atlanta,+GA/@33.718646,-84.6019543,30007m/data=!3m3!1e3!4b1!5s0x88f5038ebeea134f:0x78787416707158e5!4m20!4m19!1m5!1m1!1s0x88f4df6cae05f855:0xfce85469926264b5!2m2!1d-84.6629511!2d33.6598811!1m5!1m1!1s0x88f51bfd379c09f7:0xdebb7dfce7c9c439!2m2!1d-84.5216729!2d33.7771801!1m5!1m1!1s0x88f50408dbf17f1f:0x60ccf34413430e69!2m2!1d-84.3719735!2d33.7639588!3e0?entry=ttu
-    "name": "HCA Parkway Medical Center Heliport ",
-    "id": "6GA3",
-    "location": "999 Crestmark Blvd, Lithia Springs, GA 301223",
-    "hasHospital": False,
-    "nearest": False, 
-    "nominal": False,
-    "nominal_departure": False, 
-    "image1": "../static/HAIInterface/img/Mary1.png",
-    "image2": "../static/HAIInterface/img/Emory.png",
-    "latitude": "33.7780556",
-    "longitude": "-84.6113889",	
+        #other scenarios- Emory University
+        # Departure for all scenario 
+        # 25GA Miller Farm, Dougsville  to old forth
+        #https://www.google.com/maps/dir/Miller+Farm+Airport-25GA,+Leann+Dr,+Douglasville,+GA/Fulton+County+Airport+-+Brown+Field+(FTY),+Aviation+Circle+Northwest,+Atlanta,+GA/Old+Fourth+Ward,+Atlanta,+GA/@33.718646,-84.6019543,30007m/data=!3m3!1e3!4b1!5s0x88f5038ebeea134f:0x78787416707158e5!4m20!4m19!1m5!1m1!1s0x88f4df6cae05f855:0xfce85469926264b5!2m2!1d-84.6629511!2d33.6598811!1m5!1m1!1s0x88f51bfd379c09f7:0xdebb7dfce7c9c439!2m2!1d-84.5216729!2d33.7771801!1m5!1m1!1s0x88f50408dbf17f1f:0x60ccf34413430e69!2m2!1d-84.3719735!2d33.7639588!3e0?entry=ttu
+        "name": "HCA Parkway Medical Center Heliport ",
+        "id": "6GA3",
+        "location": "999 Crestmark Blvd, Lithia Springs, GA 301223",
+        "hasHospital": False,
+        "nearest": False, 
+        "nominal": False,
+        "nominal_departure": False, 
+        "image1": "../static/HAIInterface/img/Mary1.png",
+        "image2": "../static/HAIInterface/img/Emory.png",
+        "latitude": "33.7780556",
+        "longitude": "-84.6113889",	
     }
 }
-
-
 
 # UDP update for MATLAB
 def matlab_destination_update():
@@ -600,10 +581,8 @@ def matlab_destination_update():
 
     while True:
         time.sleep(1)
-
         if (destination_index is None):
             continue
-
         # parse the latitude and longitude
         latitude = float(data[str(destination_index)]["latitude"])
         longitude = float(data[str(destination_index)]["longitude"])
@@ -611,28 +590,16 @@ def matlab_destination_update():
         land_signal = int(decision_state)
         takeoff_signal = int(takeoff)
         approach_clear_signal = int(approach_clear)
-        # print("UPDATED MATLAB", latitude, longitude)
-      
 
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
         # send the location
         s.sendto(struct.pack('>f', latitude), (MATLAB_IP, MATLAB_PORT_LAT_MIN))
-        s.sendto(struct.pack('>f', longitude),
-                 (MATLAB_IP, MATLAB_PORT_LONG_MIN))
+        s.sendto(struct.pack('>f', longitude), (MATLAB_IP, MATLAB_PORT_LONG_MIN))
         # send the decision state
         s.sendto(struct.pack('>f', land_signal), (MATLAB_IP, MATLAB_PORT_LAND))
         s.sendto(struct.pack('>f', takeoff_signal), (MATLAB_IP, MATLAB_PORT_TAKEOFF))
         s.sendto(struct.pack('>f', approach_clear_signal), (MATLAB_IP, MATLAB_PORT_APPROACH_CLEAR))
-
-
-        # send the altitude
-        """ if change_altitude is None:
-            altitude= position["altitude"]
-        else:
-            altitude=change_altitude
-        s.sendto(struct.pack('>f', altitude), (MATLAB_IP, MATLAB_PORT_LAND)) """
-
 
 # Keywords and corresponding routes
 keywords_routes = {
@@ -642,23 +609,17 @@ keywords_routes = {
     "destination": "http://127.0.0.1:8080/hai-interface/change-destination",
     "emergency": "http://127.0.0.1:8080/hai-interface/change-destination"
      # add more keywords and routes 
-}  
-
+}
 
 @app.route('/voice', methods=['POST'])
 def voice():
     while True:
         def recording_started():
             print("Listening...")
-            #socketio.emit("listening")
             # mark the event as  set
             event.set()
-            #socketio.emit("type", {"type": "activate_assistant"})
             if request.method == 'POST':
                 return jsonify({"type": "activate_assistant"}), 200 
-            # Send to Flask server
-            #requests.post('http://127.0.0.1:8080/ws', json={'type': "activate_assistant"})
-            
 
         def recording_finished():
             print("Speech end detected... transcribing...")
@@ -668,7 +629,6 @@ def voice():
             # socketio.emit("type", {"type": "deactivate_assistant"})
             if request.method == 'POST':
                  return jsonify({"type": "deactivate_assistant"}), 200 
-           
 
         # WebSocket server address
         WS_SERVER_ADDRESS = "ws://127.0.0.1:8080"
@@ -683,7 +643,6 @@ def voice():
                     break  # Exit loop after finding the first matching keyword
             txt="Sorry, didn't find" + user_text
             print(txt)
-            #socketio.emit("response", {"response": txt})
             if request.method == 'POST':
                  return jsonify({"type": "user_text", "text": txt}), 200  
 
@@ -694,33 +653,15 @@ def voice():
             user_text=recorder.text().strip()
             print(user_text)
             if(user_text):
-                 socketio.emit("response", {"response": user_text})
+                 #socketio.emit("response", {"response": user_text})
                  perform_action(user_text)
             print("Done. Now we should exit. Bye!")
-            
-
-""" @socketio.on('connect')
-def handle_connect():
-    print('Client connected')
-
-@socketio.on('disconnect')
-def handle_disconnect():
-    print('Client disconnected')
-
-@socketio.on('message')
-def handle_message(message):
-    print('Received message:', message) """
-
-
-
 
 @app.route('/set_event', methods=['POST'])
 def set_event():
     print("request received in /set_event: ", request.get_json())
     received_request= request.get_json()
-
     event_name = received_request["event"]
-
     if event_name == "reset":  # clear all events 
         for event in events:
           events[event].clear()
@@ -744,41 +685,19 @@ def set_event():
     else:
         print("error: Invalid event name")
 
-    """ elif event_name in events:
-        event = events[event_name]
-        if event.is_set():
-            event.clear()
-            action = "cleared"
-        else:
-            event.set()
-            action = "set"
-        print("message: Event", event_name ,action,"successfully")
-        #return jsonify({"message": f"Event {event_name} {action} successfully"})
-    else:
-        print("error: Invalid event name")
-        #return jsonify({"error": "Invalid event name"}), 400 """
-
     return ""
-
 
 @app.route('/state', methods=['POST'])
 def get_states():
     global takeoffEvent, engine_failure, pressure_warning, empty_tank, vitals_state, weather_emergency, altitude_alert,jarvis_event
+    
     if(airspace_emergency_state==1 or vitals_state==1 or engine_failure==1 or pressure_warning==1 or empty_tank==1 or weather_emergency==1 or altitude_alert==1):
         emergency_event.set()
         print('Emergency event set')
+
     if(emergency_event.is_set() and airspace_emergency_state==0 and vitals_state==0 and engine_failure==0 and pressure_warning==0 and empty_tank==0 and weather_emergency==0 and altitude_alert==0):
         emergency_event.clear()
         print('Emergency event cleared')
-        
-    """ if(engine_failure==1):
-        engine_event.set()
-        print("engine event set")
-    if(vitals_state==1):
-        administer_event.set()
-    if(empty_tank==1):
-        tank_event.set()
-        print('tank event set') """
 
     if request.is_json:
         received_request = request.get_json()
@@ -833,89 +752,13 @@ def get_states():
         "pressure_warning_alert":pressure_warning_alert.is_set(),
         "stop_engine": stop_engine.is_set(),
         "jarvis_event":jarvis_event.is_set(),
-
     }
-    
     return jsonify(response), 200
-
-
-""" @app.route('/speak', methods=['POST'])
-def speak():
-    global takeoffEvent, engine_failure, pressure_warning, empty_tank, vitals_state
-    
-    print("request received: ", request.get_json())
-    received_request= request.get_json()
-
-    if received_request["type"] == "takeoff":
-        if not takeoff_event.is_set():
-            takeoff_event.set()
-     
-    if received_request["type"] == "updates":
-        if not inflight_event.is_set():
-           inflight_event.set()
-
-    if received_request["type"] == "continue":
-        if not tank_event.is_set():
-            tank_event.set()
-            #empty_tank=1
-        
-    if received_request["type"] == "oldForth":
-        if not engine_event.is_set():
-            engine_event.set()
-            #engine_failure=1
-    
-    if received_request["type"] == "administer":
-        if not administer_event.is_set():
-            administer_event.set()
-
-    if received_request["type"] == "radioUpdate":
-        resp = { "radioUpdateComplete": radio_update_complete.is_set()}
-        return jsonify(resp), 200
-
-    if received_request["type"] == "reset":  # clear all events
-        status_report_event.clear()
-        takeoff_event.clear()
-        response_event.clear()
-        administer_event.clear()
-        engine_event.clear()
-        tank_event.clear()
-        emergency_event.clear()
-
-    if(airspace_emergency_state==1 or vitals_state==1 or engine_failure==1 or pressure_warning==1 or empty_tank==1):
-        emergency_event.set()
-    if(engine_failure==1):
-        engine_event.set()
-    if(vitals_state==1):
-        administer_event.set()
-    if(empty_tank==1):
-        tank_event.set()
-    takeoffEvent=takeoff_event.is_set()
-
-    response = {
-        "radioUpdateComplete": radio_update_complete.is_set(),
-        "status_report": status_report_event.is_set(),
-        "takeoff_event": takeoff_event.is_set(),
-        "response_event": response_event.is_set(),
-        "administer_event": administer_event.is_set(),
-        "engine_event": engine_event.is_set(),
-        "tank_event": tank_event.is_set(),
-        "emergency_event": emergency_event.is_set(),
-        "inflight_event" : inflight_event.is_set()
-    }
-    
-    return jsonify(response), 200
-        
- """
 
 @app.route('/ws', methods=['POST'])
 def ws():
     global user_text_audio, prev_text, jarvis_event
-    print("ws method ", request.method)
-    
-    """  if event.is_set():
-        last_time_set=time.time() """
-    #user_text_audio=""
-    print("request received on /ws: ", request.get_json())
+    #print("request received on /ws: ", request.get_json())
     received_request= request.get_json()
     
     if received_request["type"] == "activate_assistant":
@@ -931,24 +774,12 @@ def ws():
             prev_text = str(new_text)
             print("user text", user_text_audio)
 
-         
-    print("user text", user_text_audio)
-    #print("prev text", prev_text), 
-
-    """ if event.is_set() and last_time_set is not None: #Deactivate Jarvis, if it has been activated for for more than 30s
-        current_time=time.time()
-        if current_time-last_time_set >10:
-            event.clear()  
-            last_time_set= None """
-
-
+    #print("user text", user_text_audio)
     response = {
         "assistantIsActive": jarvis_event.is_set(),
         "userText": user_text_audio,
     }
     return jsonify(response), 200
-
-
 
 @app.route('/speak', methods=['POST'])
 def get_text():
@@ -970,32 +801,28 @@ def get_text():
 def index():
     return "The ONR-HAI webserver is running!"
 
-
 # favicon
 @app.route('/favicon.ico')
 def favicon():
     return app.send_static_file('favicon.ico')
-
 
 # data for MATLAB route
 @app.route("/current-destination")
 def current_destination():
     return jsonify({"destlatitude": data[str(destination_index)]["latitude"], "destlongitude": data[str(destination_index)]["longitude"]})
 
-
 # logging route
 @app.route("/log", methods=["POST"])
 def log():
-    logging.info(str(datetime.datetime.now().timestamp()) + ",ID:" + str(study_participant_id) +
-                 ",STAGE:" + str(study_stage) + ",SEQUENCE:" + str(sequence) + ",DATA:" + str(request.get_json()))
+    log_string = f"{datetime.datetime.now().timestamp()},ID:{study_participant_id},STAGE:{study_stage},SEQUENCE:{sequence},DATA:{request.get_json()}"
+    with open(f"../Logs/{study_participant_id}_{study_stage}.log", "a+") as f:
+        f.write(log_string + "\n")
     return ""
-
 
 # reset server parameters
 @app.route("/reset", methods=["GET"])
 def reset_params():
     global study_participant_id, sequence, study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page,rd_page,ca_page,cd_page,map_page, radio_page,transmit,receive, takeoff,approach_clear, user_text_audio, prev_text,received_text
-
 
     study_participant_id = 0
     sequence=0
@@ -1057,58 +884,40 @@ def reset_params():
     stop_engine.clear()
     print('All events cleared',takeoff_event.is_set())
     
-   # reseting other global variables
+    # reseting other global variables
     user_text_audio=""
     prev_text=""
     received_text=""
 
     return "Reset all system parameters!"
 
-
-
 # experimenter control page 
 @app.route("/control", methods=["GET"])
 def show_control():
     return render_template("ControlPanel/index.html", helipads=data)
 
+# Wizard of Oz page
+@app.route("/woz", methods=["GET"])
+def show_woz():
+    return render_template("ControlPanel/WizardOz.html")
+
 @app.route("/voicecontrol", methods=["GET"])   
 def voice_control():
     return render_template("ControlPanel/voiceControl.html")
-
 
 def clean(s):
     return re.sub(r'[^A-Za-z0-9]+', '', s)
 
 # set system variables
-
-
 @app.route("/var", methods=["GET"])
 def get_var():
     global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude, engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page, rd_page, ca_page, cd_page, map_page, radio_page, transmit, receive, takeoff, approach_clear
     if request.args.get("user-id"):
         study_participant_id = clean(request.args.get("user-id"))
-        # Remove all handlers associated with the root logger object, from (https://stackoverflow.com/questions/12158048)
-        for handler in logging.root.handlers[:]:
-            logging.root.removeHandler(handler)
-        # set up logging
-        logging.basicConfig(filename="c:\\Users\\ae-dagbeyibor3\\Desktop\\MedevacII_userStudy\\Logs\\" + str(study_participant_id) + '_' + str(
-            study_stage) + '.log', level=logging.INFO)  # output logs to the logs file
     if request.args.get("study-stage"):
         study_stage = clean(request.args.get("study-stage"))
-        # Remove all handlers associated with the root logger object, from (https://stackoverflow.com/questions/12158048)
-        for handler in logging.root.handlers[:]:
-            logging.root.removeHandler(handler)
-        # set up logging
-        logging.basicConfig(filename="c:\\Users\\ae-dagbeyibor3\\Desktop\\MedevacII_userStudy\\Logs\\" + str(study_participant_id) + '_' + str(
-            study_stage) + '.log', level=logging.INFO)  # output logs to the logs file
     if request.args.get("sequence"):
         sequence = clean(request.args.get("sequence"))
-        # Remove all handlers associated with the root logger object, from (https://stackoverflow.com/questions/12158048)
-        for handler in logging.root.handlers[:]:
-            logging.root.removeHandler(handler)
-        # set up logging
-        logging.basicConfig(filename="c:\\Users\\ae-dagbeyibor3\\Desktop\\MedevacII_userStudy\\Logs\\" + str(study_participant_id) + '_' + str(
-            study_stage)+ '_' + str(sequence) + '.log', level=logging.INFO)  # output logs to the logs file
     if request.args.get("destination-index"):
         destination_index = clean(request.args.get("destination-index"))
     if request.args.get("departure-index"):
@@ -1230,8 +1039,7 @@ def get_var():
         position["compass"] = compass
         #position["altitude"] = alt
     except:
-        #logging.info("SimConnect Error in /var")
-        pass
+        logging.info("SimConnect Error in /var")
         try:
             sm = SimConnect()
             aq = AircraftRequests(sm, _time=10)
@@ -1246,7 +1054,6 @@ def get_var():
 
     return jsonify(return_dict)
 
-
 # Vitals Task
 @app.route("/vitals/")
 def vitals_index():
@@ -1259,13 +1066,11 @@ def vitals(subroute=None):
     if subroute == "post-trial":
          return render_template("VitalsTask/post-trial.html")
 
-
 # HAI Interface
 @app.route("/hai-interface/")
 def hai_interface_index():
     print("helipads", data)
     return render_template("HAIInterface/index.html", helipads=data)
-
 
 @app.route("/hai-interface/<string:subroute>",  methods=['GET'])
 def hai_interface(subroute=None):
@@ -1306,63 +1111,65 @@ def hai_interface(subroute=None):
         resp = make_response(render_template("HAIInterface/change-altitude.html", helipads=data)) # current_altitude= position["altitude"]
     else:
         resp = make_response("Route in HAI Interface not found!")
-
     return resp
 
-def start_flask_app():
-    app.run(host="0.0.0.0", port=8080)
+# Global asyncio event loop
+loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
+
+# Function to start event loop in a separate thread
+def start_event_loop(loop):
+    asyncio.set_event_loop(loop)
+    loop.run_forever()
+
+# Start event loop in a background thread
+threading.Thread(target=start_event_loop, args=(loop,), daemon=True).start()
+
+async def generate_audio(text):
+    """Generate and play speech asynchronously"""
+    print(f"Speaking: {text}")
+    audio_output = tts.tts(text, speaker=tts.speakers[3], language="en", speed=0.7)
+    audio_data = np.array(audio_output, dtype=np.float32)
+
+    sd.play(audio_data, samplerate=22050)  # Play at 22.05 kHz
+    while sd.get_stream().active:
+        await asyncio.sleep(0.1)  # Check every 100ms
+
+@socketio.on("send_text")
+def handle_send_text(data):
+    """Handle text received from WebSocket"""
+    data = json.loads(data)
+    text = data.get("text", "")
+
+    print(f"Received text: {text}")
+    future = asyncio.run_coroutine_threadsafe(generate_audio(text), loop)  # Run TTS in event loop
+
+    try:
+        future.result()  # Ensure execution
+    except Exception as e:
+        print(f"Error in TTS execution: {e}")
+
+@socketio.on("change_altitude")
+def handle_altitude(data):
+    """Receive altitude change and update all clients"""
+    altitude = data["altitude"]
+    print(f"New altitude received: {altitude}")
+
+    # Send update to ALL connected clients
+    socketio.emit("update_altitude", {"altitude": altitude})
 
 
+@socketio.on("change_destination")
+def handle_destination(data):
+    """Receive destination change and update all clients"""
+    destination = data["destination"]
+    print(f"New destination received: {destination}")
 
-# start the webserver
+    # Send update to ALL connected clients
+    socketio.emit("update_destination", {"destination": destination})
+
+
 if __name__ == "__main__":
-    # start the destination update (for Python->MATLAB interfacing)
-    t = threading.Thread(target=matlab_destination_update, daemon=True)
-    t.start()
-
-  
-    # start the logging thread
-    werkzeug_logger = logging.getLogger('werkzeug')
-    werkzeug_logger.disabled = True 
-   
-    #starting voice assistant thread
-    va = threading.Thread(target=third_test.main, args={jarvis_event}, daemon=True)
-    va.start()
-
-
-    # setting emergency event when other emergency happens
-    if((administer_event.is_set() or tank_event.is_set() or engine_event.is_set() or sensor_event.is_set() or weather_event.is_set() or altitude_event.is_set()) and (not emergency_event.is_set())):
-      emergency_event.set() 
-
-    """ if(administer_event.is_set()):
-      radio_comms.administer(status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event)
-    if(tank_event.is_set()):
-      radio_comms.continueEmory()
-    if(engine_event.is_set()):
-     radio_comms.flyOldForth()
- """
-
-    #radio comms thread
-    #radio = threading.Thread(target=radio_comms.inflight_status_check, args={inflight_event,status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event})
-    #radio = threading.Thread(target=radio_comms_new.main, args={status_report_event,emergency_event,administer_event,response_event,takeoff_event,tank_event, engine_event, radio_update_complete, inflight_event})
-    radio = threading.Thread(target=radio_comms.main, daemon=True)
-    radio.start()  # starting radio thread
-
-    # Run the Flask server
-    app.run(host="0.0.0.0", port=8080, threaded=True)
-   
-
-    # Run the Flask server in a separate thread
-    # flask_thread = threading.Thread(target=start_flask_app)
-    # flask_thread.start()
-
-    # Run the voice assistant in the event loop
-    #asyncio.run(voice_assistant(event, active_assistant, lock))
-    #socketio.run(app, host='0.0.0.0', port=8080) 
-   
-    #server = pywsgi.WSGIServer(('0.0.0.0', 8080), app, handler_class=WebSocketHandler)
-    #server.serve_forever()
-
-""" if __name__ == '__main__':
-    socketio.run(app, host='127.0.0.1', port=8080)
- """
+    """   Jarvis.start_jarvis()  # Start listening before running Flask app
+    socketio.run(app, host="0.0.0.0", port=8080) """
+    socketio.run(app, host="0.0.0.0", port=8080, debug=False, log_output=False,allow_unsafe_werkzeug=True)

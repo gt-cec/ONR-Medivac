@@ -8,3 +8,5 @@
 *.numbers
 *.log
 R_analysis/*
+*.pyc
+speech.wav
