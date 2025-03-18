@@ -1143,7 +1143,6 @@ def handle_send_text(data):
 
     print(f"Received text: {text}")
     future = asyncio.run_coroutine_threadsafe(generate_audio(text), loop)  # Run TTS in event loop
-
     try:
         future.result()  # Ensure execution
     except Exception as e:
@@ -1164,10 +1163,47 @@ def handle_destination(data):
     """Receive destination change and update all clients"""
     destination = data["destination"]
     print(f"New destination received: {destination}")
-
+    
     # Send update to ALL connected clients
     socketio.emit("update_destination", {"destination": destination})
 
+
+
+@socketio.on("change_variable")
+def change_variable(data):
+    """Receive a variable name and its changed value, and emit the update to all clients based on the variable."""
+    # variable name and value from the data received
+    var_name = data["variable"]
+    var_value = data["value"]
+    
+    print(f"Received update: {var_name} = {var_value}")
+    
+    #  Send update to ALL connected clients based on the variable
+    if var_name == "altitude":
+        print(f"Altitude updated to: {var_value}")
+        socketio.emit("update_altitude", {"altitude": var_value})
+    
+    elif var_name == "destination":
+        print(f"Destination updated to: {var_value}")
+        socketio.emit("update_destination", {"destination": var_value})
+    
+    elif var_name == "callsign":
+        print(f"Callsign updated to: {var_value}")
+        socketio.emit("update_callsign", {"callsign": var_value})
+    
+    elif var_name == "channel":
+        print(f"Channel updated to: {var_value}")
+        socketio.emit("update_channel", {"channel": var_value})
+    
+    elif var_name == "transmit":
+        print(f"Transmit updated to: {var_value}")
+        socketio.emit("update_transmit", {"transmit": var_value})
+    
+    else:
+        print(f"Unknown variable: {var_name}")
+   
+
+    
 
 if __name__ == "__main__":
     """   Jarvis.start_jarvis()  # Start listening before running Flask app

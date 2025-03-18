@@ -344,6 +344,8 @@
     </body>
 
     <script>
+        const socket = io.connect("http://localhost:8080");
+
         var userId = "none"
         var studyStage = -1
         var decisionState = 0
@@ -409,6 +411,12 @@
             log({"action": "radio panel closed"})
             document.querySelector('.radiopanel').classList.remove('open');
             });
+
+        if (radioPage==1){
+            log({"Controller action": "radio panel opened by controller"})
+            console.log('clicked by controller')
+            document.querySelector('.radiopanel').classList.toggle('open');
+        }
 
 
         function changeFrequency(step) {
@@ -486,6 +494,7 @@
         }
 
 
+        
         function receive() {
             const callsign = document.getElementById('callsign').value;
             log({"action": "receive button pressed"})
@@ -556,6 +565,41 @@
         document.getElementById("map").addEventListener('mapClicked', function(event) {
             console.log('mapClicked event heard');
             showMap();
+        });
+
+
+        //Listen to the socket for any changes from the controller:
+
+        // Listen for callsign updates from the control panel
+        socket.on("update_callsign", (data) => {
+            console.log("Callsign update received:", data.callsign);
+            log({ "page": "radio-panel", "action": "callsign changed to " + data.callsign });
+            document.getElementById("callsign").value = data.callsign;
+        });
+        
+        // Listen for channel updates from the control panel
+        socket.on("update_channel", (data) => {
+            console.log("Channel update received:", data.channel);
+            log({ "page": "radio-panel", "action": "channel changed to " + data.channel });
+
+            let radioOptions = document.querySelectorAll("input[name='radio-select']");
+            radioOptions.forEach(radio => {
+                if (radio.value === data.channel) {
+                    radio.checked = true;
+                }
+            });
+        });
+
+        // Listen for transmit updates from the control panel
+        socket.on("update_transmit", (data) => {
+            console.log("Transmit update received:", data.transmit);
+            log({ "page": "radio-panel", "action": "transmit command received: " + data.transmit });
+
+            if (data.transmit === 1) {
+                transmit(); // Calls the transmit function
+            } else if (data.transmit === 2) {
+                receive(); // Calls the receive function
+            }
         });
 
         {% block script %}

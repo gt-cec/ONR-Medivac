@@ -90,6 +90,18 @@ log({"page": "location", "action": "opened page"});
             window.location.href = '/hai-interface/inflight'
         }
     }
+    socket.on("update_destination", (data) => {
+        console.log("destination confirmation received from controller:");
+        log({"page": "change-destination", "action": "confirmed by controller"})
+        fetch("/var?destination-index=" + targetIndex)
+        if (inflight == 0) {
+            window.location.href = "/hai-interface/checklist?inflight=" + inflight + "&target-index=" + targetIndex
+        }          
+        else if (inflight == 1) {
+            window.location.href = '/hai-interface/inflight'
+        }
+        
+    });
 
     document.getElementById("cancel-button").onclick = () => { log({"page": "location", "action": "cancel button pressed"}); history.back() }
     document.getElementById('help').onclick = () => { log({"page": "location", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }

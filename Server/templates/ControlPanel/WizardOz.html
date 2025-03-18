@@ -35,7 +35,7 @@
             text-align: center;
             color: #333;
         }
-        .control-button, .open-button, button {
+        .control-button, .open-button, .change-button, button {
             padding: 10px;
             margin: 5px 0;
             text-align: center;
@@ -66,16 +66,30 @@
             <h2>Voice Control</h2>
             <div class="subcontent-container">
                 <h3>Ground Control</h3>
-                <div class="control-button" data-text="Calling ground control for assistance." id="Ground">Call Ground</div>
-                <div class="control-button" data-text="Opening the map as requested." id="mappage">Open Map</div>
-                <div class="control-button" data-text="ETA request received." id="RDpage">ETA</div>
+                <div class="control-button radio-button" data-text="Calling ground control for assistance." id="Ground">Ask for Radio Update</div>
+                <div class="control-button radio-button" data-text="Opening the map as requested." id="mappage">Emergency Response</div>
+                <div class="control-button radio-button" data-text="ETA request received. Calculating estimated time of arrival." id="RDpage">ETA</div>
             </div>
             <div class="subcontent-container">
                 <h3>Jarvis Control</h3>
-                <div class="control-button" data-text="How may I assist you?" id="activate-jarvis">How may I help you</div>
-                <div class="control-button" data-text="Confirming your request. Is that correct?">Is that correct?</div>
-                <div class="control-button" data-text="Got it, you want to change altitude." id="AckAltChg">Change altitude Acknowledge</div>
-                <div class="control-button" data-text="What would you like me to change the altitude to?" id="AltChg">Change altitude to?</div>
+                <div class="control-button jarvis-button" data-text="How may I assist you?" id="activate-jarvis">How may I help you</div>
+                <div class="control-button jarvis-button" data-text="Confirming your request. Is that correct?" >Is that correct?</div>
+                <div class="control-button jarvis-button" data-text="Got it, you want to change altitude." id="AckAltChg">Change altitude Acknowledge</div>
+                <div class="control-button jarvis-button" data-text="What would you like me to change the altitude to?" id="AltChg">Change altitude to?</div>
+                <div class="control-button jarvis-button" data-text="Acknowledging your request." id="Ack">Acknowledge</div>
+                <div class="control-button jarvis-button" data-text="Got it, you want to change destination. Let me pull up the map to assist you with that." id="AckCD">Change Destination Acknowledge</div>
+                <div class="control-button jarvis-button" data-text="Got it, you want to make an emergency landing. Let me pull up the map to assist you with that." id="AckEM">Emergency Landing Acknowledge</div>
+                <div class="control-button jarvis-button" data-text="Which Helipad would you want be to land on?" id="helipad">Which Helipad</div>
+                <div class="control-button jarvis-button" data-text="In the given conditions, it is not possible to land at this helipad. Please suggest an alternate helipad" id="CL">Can't Land</div>
+                <div class="control-button jarvis-button" data-text="I recommend landing at " id="RH">Recommend Helipad</div>
+                <div class="control-button jarvis-button" data-text="It seems you are trying to change the landing site. May I help you with that? " id="CHhelp">Help Change landing site?</div>
+                <div class="control-button jarvis-button" data-text="The altitude has been changed" >Altitude changed!</div>
+                <div class="control-button jarvis-button" data-text="I recommend landing at " id="RH">Recommend Helipad</div>
+                <div class="control-button jarvis-button" data-text="Calling ground control for assistance." id="Ground">Call Ground</div>
+                <div class="control-button jarvis-button" data-text="Opening the map as requested." id="mappage">Open Map</div>
+                <div class="control-button jarvis-button" data-text="ETA request received. The current time to destination is" id="RDpage">ETA</div>
+
+                <!-- automate the actions that follow the text?, how to get the variables-->
             </div>
             <div class="subcontent-container">
                 <label for="saytext">Enter text to say:</label>
@@ -96,17 +110,37 @@
                 <div class="open-button" id="ca-page">Change Altitude Page</div>
                 <div class="open-button" id="rd-page">Return to Departure Page</div>
                 <div class="open-button" id="map-page">Open Map</div>
+                <div class="open-button" id="radio-page">Open Radio Panel</div>
             </div>
+            
             <div class="subcontent-container">
                 <h3>Variable Change</h3>
-                <label for="altchange">Change Altitude to:</label>
-                <input type="text" id="altchange">
-                <button id="chgAlt">Change</button>
-                <label for="destchange">Change Destination to:</label>
-                <input type="text" id="destchange">
-                <button id="chgDst">Change</button>
-                <label for="sensorReading">Sensor Reading</label>
-                <input type="text" id="sensorReading">
+            
+                <label for="altitude">Change Altitude to (above 1000):</label>
+                <input type="text" id="altitude">
+                <button class="change-button" id="altitude">Change</button>
+            
+                <label for="destination">Change Destination to(Target Index):</label>
+                <input type="text" id="destination">
+                <button class="change-button" id="destination">Change</button>
+            
+                <label for="callsign">Change Callsign:</label>
+                <input type="text" id="callsign">
+                <button class="change-button" id="callsign">Change</button>
+            
+                <label for="channel">Change Radio Channel:</label>
+                <input type="text" id="channel">
+                <button class="change-button" id="channel">Change</button>
+            
+                <label for="transmit">Transmit Comm 1 or 2?(enter int only):</label>
+                <input type="text" id="transmit">
+                <button class="change-button" id="transmit">Submit</button>
+            
+                <div id="error-message" style="color: red; display: none;">Please fill out the field before submitting!</div>
+            </div>
+                
+                <!-- make gauges dynamic -->
+                <input type="text" id="sensorReading">  
                 <button id="send">Submit</button>
             </div>
         </div>
@@ -133,9 +167,46 @@
             }
         });
 
+        document.getElementById("activate-jarvis").onclick = async () => {
+            await fetch("/ws", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+                },
+                body: JSON.stringify({ type: "activate_assistant"}), 
+            });
+        }
+
+        document.getElementById("deactivate-jarvis").onclick = async () => {
+            await fetch("/ws", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Inform the server that the request body contains JSON data
+                },
+                body: JSON.stringify({ type: "deactivate_assistant", text:"deactivate"}), 
+            });
+        }
+
         document.querySelectorAll(".open-button").forEach(button => {
             button.addEventListener("click", async function () {
                 await fetch(`/var?${this.id}=1`);
+            });
+        });
+
+        document.querySelectorAll(".change-button").forEach(button => {
+            button.addEventListener("click", function () {
+                var inputField = document.getElementById(button.id); // Get the corresponding input field by ID
+                var selectedValue = inputField.value;  // Get the value from the input field
+
+                if (!selectedValue) {
+                    document.getElementById("error-message").style.display = "block"; //  error  if input field is empty
+                } 
+                else {
+                    document.getElementById("error-message").style.display = "none";  // Hide the error message
+                    var key = button.id; //  variable name 
+                    socket.emit("change_variable", { variable: key, value: selectedValue });  // Emit the change to the server 
+                    inputField.value = ""; // Clear the input field after sending the value
+                }
             });
         });
 
@@ -145,9 +216,10 @@
             if (selectedValue) {
                 socket.emit("change_altitude", { altitude: selectedValue });
             }
-        };
+        }; 
 
         document.getElementById("chgDst").onclick = () => {
+            console.log("changing destination")
             const selectedDestination = document.getElementById('destchange').value;
             if (selectedDestination) {
                 socket.emit("change_destination", { destination: selectedDestination });
