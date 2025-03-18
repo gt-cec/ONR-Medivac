@@ -233,7 +233,7 @@ async function getSimulatorData() {
             CAPage=data["ca-page"] // change altitude page
             RDPage=data["rd-page"] // return to departure page
             mapPage=data["map-page"] //open map
-            radioPage=data["radio-page"] //open map
+            radioPage=data["radio-page"] //open panel
 
 
             if (typeof(urlParams) !== 'undefined' && (urlParams.get("emergency") == "1") && (studyStage == '1' ||studyStage == '3' || studyStage == '4')) {

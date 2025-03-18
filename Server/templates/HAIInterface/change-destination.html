@@ -125,6 +125,21 @@
         fetch("/var?dest-changed=" + true)  //destination has been changed
     }
 
+    // Listen for destination change updates from control panel
+    socket.on("update_destination", (data) => {
+            console.log("destination update received from controller:", data.destination);
+            log({"page": "change-destination", "action": "destination changed by controller" + data.destination })
+            window.location.href = '/hai-interface/location?inflight=' + urlParams.get("inflight") + '&dest=' + data.destination
+            //Reseting the time to be 0 at takeoff
+            var currentDateTime = new Date();
+            var TimeSeconds=currentDateTime.getTime() / 1000;
+            fetch("/var?curr-time=" + TimeSeconds)
+            fetch("/var?destination-index=" + data.destination)  //updating the /var with the new destination-index
+            fetch("/var?dest-changed=" + true)  //destination has been changed
+           
+        
+    });
+            
     // set the content
     document.getElementById("title").innerHTML = emergency ? "Emergency Landing" : "Change Destination"
     document.getElementById("prompt").innerHTML = emergency ? "Select an emergency landing location using the map." : "Select a destination using the map."
