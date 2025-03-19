@@ -125,17 +125,31 @@
                 <button class="change-button" id="destination">Change</button>
             
                 <label for="callsign">Change Callsign:</label>
-                <input type="text" id="callsign">
+                <select id="callsign-select">
+                    <option value="" disabled selected>Select Callsign</option>
+                    <option value="NASXGS">NASXGS</option>
+                    <option value="MEDEVAC">MEDEVAC</option>
+                </select>
                 <button class="change-button" id="callsign">Change</button>
-            
+
                 <label for="channel">Change Radio Channel:</label>
-                <input type="text" id="channel">
+                <select id="channel-select">
+                    <option value="" disabled selected>Select Channel</option>
+                    <option value="Nav1">Nav1</option>
+                    <option value="Nav2">Nav2</option>
+                    <option value="Comm1">Comm1</option>
+                    <option value="Comm2">Comm2</option>
+                </select>
                 <button class="change-button" id="channel">Change</button>
-            
-                <label for="transmit">Transmit Comm 1 or 2?(enter int only):</label>
-                <input type="text" id="transmit">
+
+                <label for="transmit">Transmit:</label>
+                <select id="transmit-select">
+                    <option value="" disabled selected>Select Transmission</option>
+                    <option value="1">Transmit Comm 1</option>
+                    <option value="2">Transmit Comm 2</option>
+                </select>
                 <button class="change-button" id="transmit">Submit</button>
-            
+
                 <div id="error-message" style="color: red; display: none;">Please fill out the field before submitting!</div>
             </div>
                 
@@ -195,36 +209,40 @@
 
         document.querySelectorAll(".change-button").forEach(button => {
             button.addEventListener("click", function () {
-                var inputField = document.getElementById(button.id); // Get the corresponding input field by ID
-                var selectedValue = inputField.value;  // Get the value from the input field
+                var inputField;
+
+                // Handle dropdowns separately
+                if (button.id === "callsign") {
+                    inputField = document.getElementById("callsign-select");
+                } else if (button.id === "channel") {
+                    inputField = document.getElementById("channel-select");
+                } else if (button.id === "transmit") {
+                    inputField = document.getElementById("transmit-select");
+                } else {
+                    inputField = document.getElementById(button.id); // Default case for text inputs
+                }
+
+                var selectedValue = inputField.value; // Get selected value
 
                 if (!selectedValue) {
-                    document.getElementById("error-message").style.display = "block"; //  error  if input field is empty
-                } 
-                else {
-                    document.getElementById("error-message").style.display = "none";  // Hide the error message
-                    var key = button.id; //  variable name 
-                    socket.emit("change_variable", { variable: key, value: selectedValue });  // Emit the change to the server 
-                    inputField.value = ""; // Clear the input field after sending the value
+                    document.getElementById("error-message").style.display = "block"; // Show error if empty
+                } else {
+                    document.getElementById("error-message").style.display = "none"; // Hide error message
+                    var key = button.id; // Variable name
+                    socket.emit("change_variable", { variable: key, value: selectedValue }); // Emit update to server
+
+                    // Reset dropdowns to the placeholder option
+                    if (inputField.tagName === "SELECT") {
+                        inputField.selectedIndex = 0; 
+                    } else {
+                        inputField.value = ""; // Clear text input
+                    }
+
+                    console.log(key, selectedValue);
                 }
             });
         });
 
-        document.getElementById("chgAlt").onclick = () => {
-            console.log("changing altitude")
-            const selectedValue = document.getElementById('altchange').value;
-            if (selectedValue) {
-                socket.emit("change_altitude", { altitude: selectedValue });
-            }
-        }; 
-
-        document.getElementById("chgDst").onclick = () => {
-            console.log("changing destination")
-            const selectedDestination = document.getElementById('destchange').value;
-            if (selectedDestination) {
-                socket.emit("change_destination", { destination: selectedDestination });
-            }
-        };
     </script>
 </body>
 </html>
