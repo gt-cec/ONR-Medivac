@@ -37,7 +37,7 @@
         <!-- <div class="general-text" id="current-altitude" >Current Altitude:</div> -->
         <div class="input-container" >
             <label for=" altChange:" class="general-text">Change altitute to:  &nbsp; &nbsp;  </label>
-            <select id="altitude" class="altitudeDropdown" >
+            <select id="chgdAlt" class="altitudeDropdown" >
                 <option value="" selected disabled>select altitude</option>
                 <option value="1000">1000</option>
                 <option value="1100">1100</option>
@@ -49,7 +49,7 @@
         </div>
         <br><br>
         <!-- <input class="button" type="submit" value="Change"> -->
-        <div class="button" id="change-button" >Change</div>
+        <div class="button" id="change-alt-button" >Change</div>
     </div>
 </div>
 
@@ -59,7 +59,6 @@
 
 <script>
 {% block script %}
-    const socket = io.connect("http://localhost:8080");
     var HelpId=4;
     document.getElementById('help').onclick = () => { log({"page": "Change altitude", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
    // Get current altitude. 
@@ -70,9 +69,9 @@
 
 
     // Change altitude when "change" button clicked
-    document.getElementById("change-button").onclick = () => {
+    document.getElementById("change-alt-button").onclick = () => {
         console.log('Clicked')
-        const selectedValue = document.getElementById('altitude').value
+        const selectedValue = document.getElementById('chgdAlt').value
         console.log(selectedValue)
         if (selectedValue == "") {
             const dialog = document.createElement('dialog');
@@ -108,7 +107,6 @@
         socket.on("update_altitude", (data) => {
             console.log("Altitude update received from controller:", data.altitude);
             log({"page": "change-altitude", "action": "altitude changed by controller" + data.altitude })
-            //alert("Altitude successfully changed to:"+ selectedValue)
             const dialog = document.createElement('dialog');
             dialog.innerHTML = `
             <p>Altitude successfully changed to ${data.altitude} feet</p>
@@ -119,7 +117,6 @@
             dialog.showModal();
             fetch("/var?change-altitude"+ data.altitude)
             fetch("/var?vitals-state=" + 0)  //removing vitals emergency
-            
             setTimeout(() => {
                 window.location.href ='/hai-interface/inflight?change-altitude=' +  data.altitude;
             }, 1500) 
