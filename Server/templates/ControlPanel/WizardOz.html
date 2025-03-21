@@ -7,6 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            font-size: 18px;
             background-color: #f8f9fa;
             padding: 20px;
             display: flex;
@@ -36,12 +37,13 @@
             color: #333;
         }
         .control-button, .open-button, .change-button, button {
-            padding: 10px;
+            padding: 12px;
             margin: 5px 0;
             text-align: center;
             border-radius: 5px;
             cursor: pointer;
             width: 100%;
+            font-size: 18px;
         }
         .control-button { background-color: #007bff; color: white; }
         .control-button:hover { background-color: #0056b3; }
@@ -51,12 +53,23 @@
         button:hover { background-color: #218838; }
         input[type="text"] {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             margin-top: 5px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            font-size: 18px;
+        }
+
+        select {
+            font-size: 18px;
+            padding: 10px;
+            height: 45px;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
     </style>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js" integrity="sha512-HTENHrkQ/P0NGDFd5nk6ibVtCkcM7jhr2c7GyvXp5O+4X6O5cQO9AhqFzM+MdeBivsX7Hoys2J7pp2wdgMpCvw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
@@ -72,22 +85,28 @@
             </div>
             <div class="subcontent-container">
                 <h3>Jarvis Control</h3>
+                <h4>Ask</h4>
                 <div class="control-button jarvis-button" data-text="How may I assist you?" id="activate-jarvis">How may I help you</div>
-                <div class="control-button jarvis-button" data-text="Confirming your request. Is that correct?" >Is that correct?</div>
-                <div class="control-button jarvis-button" data-text="Got it, you want to change altitude." id="AckAltChg">Change altitude Acknowledge</div>
+                <div class="control-button jarvis-button" data-text="Is that correct?" >Is that correct?</div>
                 <div class="control-button jarvis-button" data-text="What would you like me to change the altitude to?" id="AltChg">Change altitude to?</div>
+                <div class="control-button jarvis-button" data-text="Which Helipad would you want be to land on?" id="helipad">Which Helipad</div>
+                <div class="control-button jarvis-button" data-text="It seems you are trying to change the landing site. May I help you with that? " id="CHhelp">Help Change landing site?</div>
+                <div class="control-button jarvis-button" data-text="All Passengers and Equipments on board are secured?", id="secured?"></div>
+                <div class="control-button jarvis-button" data-text="Ready for takeoff?", id="check2">Takeoff?</div>
+
+
+                <h4>Say</h4>
+                <div class="control-button jarvis-button" data-text="Got it, you want to change altitude." id="AckAltChg">Change altitude Acknowledge</div>
                 <div class="control-button jarvis-button" data-text="Acknowledging your request." id="Ack">Acknowledge</div>
                 <div class="control-button jarvis-button" data-text="Got it, you want to change destination. Let me pull up the map to assist you with that." id="AckCD">Change Destination Acknowledge</div>
                 <div class="control-button jarvis-button" data-text="Got it, you want to make an emergency landing. Let me pull up the map to assist you with that." id="AckEM">Emergency Landing Acknowledge</div>
-                <div class="control-button jarvis-button" data-text="Which Helipad would you want be to land on?" id="helipad">Which Helipad</div>
                 <div class="control-button jarvis-button" data-text="In the given conditions, it is not possible to land at this helipad. Please suggest an alternate helipad" id="CL">Can't Land</div>
                 <div class="control-button jarvis-button" data-text="I recommend landing at " id="RH">Recommend Helipad</div>
-                <div class="control-button jarvis-button" data-text="It seems you are trying to change the landing site. May I help you with that? " id="CHhelp">Help Change landing site?</div>
                 <div class="control-button jarvis-button" data-text="The altitude has been changed" >Altitude changed!</div>
                 <div class="control-button jarvis-button" data-text="I recommend landing at " id="RH">Recommend Helipad</div>
                 <div class="control-button jarvis-button" data-text="Calling ground control for assistance." id="Ground">Call Ground</div>
                 <div class="control-button jarvis-button" data-text="Opening the map as requested." id="mappage">Open Map</div>
-                <div class="control-button jarvis-button" data-text="ETA request received. The current time to destination is" id="RDpage">ETA</div>
+                <div class="control-button jarvis-button" data-text="The current time to destination is" id="RDpage">ETA</div>
 
                 <!-- automate the actions that follow the text?, how to get the variables-->
             </div>
@@ -242,6 +261,11 @@
                 }
             });
         });
+
+        function sendControlCommand(action, elementId, value = null) {
+            socket.emit("control_command", { action, elementId, value });
+            console.log(`Sent command: ${action} on ${elementId} with value: ${value}`);
+        }
 
     </script>
 </body>

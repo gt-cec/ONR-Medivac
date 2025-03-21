@@ -1201,6 +1201,12 @@ def change_variable(data):
     
     else:
         print(f"Unknown variable: {var_name}")
+
+@socketio.on("control_command")
+def control_command(data):
+    #Forwards control commands from the controller panel to the user's screen
+    print(f"Control Command: {data}")
+    socketio.emit("execute_command", data)
    
 
     
