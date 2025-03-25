@@ -36,7 +36,7 @@
             text-align: center;
             color: #333;
         }
-        .control-button, .open-button, .change-button, button {
+        .control-button, .open-button, .change-button, .actbutton, button{
             padding: 12px;
             margin: 5px 0;
             text-align: center;
@@ -47,6 +47,8 @@
         }
         .control-button { background-color: #007bff; color: white; }
         .control-button:hover { background-color: #0056b3; }
+        .actbutton { background-color: #ff4400; color: white; }
+        .actbutton:hover { background-color: #b30900; }
         .open-button { background-color: #17a2b8; color: white; }
         .open-button:hover { background-color: #138496; }
         button { background-color: #28a745; color: white; border: none; }
@@ -86,7 +88,7 @@
             <div class="subcontent-container">
                 <h3>Jarvis Control</h3>
                 <h4>Ask</h4>
-                <div class="control-button jarvis-button" data-text="How may I assist you?" id="activate-jarvis">How may I help you</div>
+                <div class="control-button jarvis-button" data-text="How may I assist you?" id="jarvis">How may I help you</div>
                 <div class="control-button jarvis-button" data-text="Is that correct?" >Is that correct?</div>
                 <div class="control-button jarvis-button" data-text="What would you like me to change the altitude to?" id="AltChg">Change altitude to?</div>
                 <div class="control-button jarvis-button" data-text="Which Helipad would you want be to land on?" id="helipad">Which Helipad</div>
@@ -102,6 +104,7 @@
                 <div class="control-button jarvis-button" data-text="Got it, you want to make an emergency landing. Let me pull up the map to assist you with that." id="AckEM">Emergency Landing Acknowledge</div>
                 <div class="control-button jarvis-button" data-text="In the given conditions, it is not possible to land at this helipad. Please suggest an alternate helipad" id="CL">Can't Land</div>
                 <div class="control-button jarvis-button" data-text="I recommend landing at " id="RH">Recommend Helipad</div>
+                <div class="control-button jarvis-button" data-text="The altitude has been changed" >Altitude changed!</div>
                 <div class="control-button jarvis-button" data-text="The altitude has been changed" >Altitude changed!</div>
                 <div class="control-button jarvis-button" data-text="I recommend landing at " id="RH">Recommend Helipad</div>
                 <div class="control-button jarvis-button" data-text="Calling ground control for assistance." id="Ground">Call Ground</div>
@@ -122,8 +125,8 @@
             <h2>Interface Control</h2>
             <div class="subcontent-container">
                 <h3>Page Control</h3>
-                <div class="open-button" id="activate-jarvis">Activate Jarvis</div>
-                <div class="open-button" id="deactivate-jarvis">Deactivate Jarvis</div>
+                <div class="actbutton" id="activate-jarvis">Activate Jarvis</div>
+                <div class="actbutton" id="deactivate-jarvis">Deactivate Jarvis</div>
                 <div class="open-button" id="emergency-page">Emergency Page</div>
                 <div class="open-button" id="cd-page">Change Destination Page</div>
                 <div class="open-button" id="ca-page">Change Altitude Page</div>
@@ -173,6 +176,7 @@
             </div>
                 
                 <!-- make gauges dynamic -->
+                <label for="sensor">Sensor Reading:</label>
                 <input type="text" id="sensorReading">  
                 <button id="send">Submit</button>
             </div>
@@ -222,7 +226,7 @@
 
         document.querySelectorAll(".open-button").forEach(button => {
             button.addEventListener("click", async function () {
-                await fetch(`/var?${this.id}=1`);
+                await fetch("/var?"+`${this.id}`+"=1");
             });
         });
 
@@ -256,7 +260,6 @@
                     } else {
                         inputField.value = ""; // Clear text input
                     }
-
                     console.log(key, selectedValue);
                 }
             });
