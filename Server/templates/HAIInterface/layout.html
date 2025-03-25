@@ -168,8 +168,8 @@
                 <br><br>
 
                 <div class="controls">
-                    <button onclick="transmit()" class="transmit-btn">Transmit COMM1</button>
-                    <button onclick="receive()" class="receive-btn">Transmit COMM2</button>
+                    <button onclick="grdupdate()" class="transmit-btn">Transmit COMM1</button>
+                    <button onclick="grdcontact()" class="receive-btn">Transmit COMM2</button>
                 </div>
 
 
@@ -429,7 +429,7 @@
         }
         
 
-        function transmit() {
+        function grdupdate() {
             const callsign = document.getElementById('callsign').value;
             log({"action": "transmit button pressed"})
             log({"action": `callsign set to: + ${callsign}`})
@@ -466,7 +466,7 @@
                     const dialog = document.createElement('dialog');
                     dialog.innerHTML = `
                     <p>${callsign} transmitting updates on ${radio.value} ${currentFrequency.toFixed(2)} MHz</p>
-                    <button onclick="this.closest('dialog').close() ,  hideMap()">Close</button>
+                    <button onclick="this.closest('dialog').close(), hideMap()">Close</button>
                     `;
                     document.body.appendChild(dialog);
                     dialog.showModal();
@@ -495,7 +495,7 @@
 
 
         
-        function receive() {
+        function grdcontact() {
             const callsign = document.getElementById('callsign').value;
             log({"action": "receive button pressed"})
             log({"action": "callsign set to:"+{callsign}})
@@ -569,16 +569,13 @@
 
 
         //Listen to the socket for any changes from the controller:
-
-        // Listen for callsign updates from the control panel
-        socket.on("update_callsign", (data) => {
+        socket.on("update_callsign", (data) => {   // Callsign updates from the control panel
             console.log("Callsign update received:", data.callsign);
             log({ "page": "radio-panel", "action": "callsign changed to " + data.callsign });
             document.getElementById("callsign").value = data.callsign;
         });
         
-        // Listen for channel updates from the control panel
-        socket.on("update_channel", (data) => {
+        socket.on("update_channel", (data) => {    // Channel updates from the control panel
             console.log("Channel update received:", data.channel);
             log({ "page": "radio-panel", "action": "channel changed to " + data.channel });
 
@@ -590,15 +587,44 @@
             });
         });
 
-        // Listen for transmit updates from the control panel
-        socket.on("update_transmit", (data) => {
+        socket.on("update_transmit", (data) => {   // Transmit updates from the control panel
             console.log("Transmit update received:", data.transmit);
             log({ "page": "radio-panel", "action": "transmit command received: " + data.transmit });
+            if (data.transmit == "1") {
+                grdupdate(); //  for Transmit Comm1
+            } else if (data.transmit == "2") {
+                grdcontact(); // Calls the receive function for Transmit Comm2
+            }
+        });
 
-            if (data.transmit === 1) {
-                transmit(); // Calls the transmit function
-            } else if (data.transmit === 2) {
-                receive(); // Calls the receive function
+ 
+        socket.on("execute_command", (data) => {
+            const {action, elementId, value } = data;
+            console.log(`Executing: ${action} on ${elementId} with value: ${value}`);
+
+            const element = document.getElementById(elementId) || document.querySelector(`[name='${elementId}']`);
+
+            if (!element) {
+                console.warn(`Element ${elementId} not found.`);
+                return;
+            }
+
+            switch (action) {
+                case "click":
+                    element.click();
+                    break;
+                case "check":
+                    if (element.type === "checkbox" || element.type === "radio") {
+                        element.checked = true;
+                    }
+                    break;
+                case "set-value":
+                    if (["INPUT", "TEXTAREA", "SELECT"].includes(element.tagName)) {
+                        element.value = value;
+                    }
+                    break;
+                default:
+                    console.warn(`Unknown action: ${action}`);
             }
         });
 

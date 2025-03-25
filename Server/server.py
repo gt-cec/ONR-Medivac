@@ -22,8 +22,9 @@ app = Flask(__name__)
 socketio = SocketIO(app, async_mode="threading", logger=False, cors_allowed_origins="*")  # Ensure Flask remains non-blocking
 
 # Initialize TTS
-tts = TTS("tts_models/multilingual/multi-dataset/your_tts", progress_bar=False).to("cpu")
+#tts = TTS("tts_models/multilingual/multi-dataset/your_tts", progress_bar=False).to("cpu")
 
+tts = TTS("tts_models/en/ljspeech/tacotron2-DDC", progress_bar=False).to("cpu")
 
 # system state variables
 study_participant_id = 0
@@ -1128,7 +1129,7 @@ threading.Thread(target=start_event_loop, args=(loop,), daemon=True).start()
 async def generate_audio(text):
     """Generate and play speech asynchronously"""
     print(f"Speaking: {text}")
-    audio_output = tts.tts(text, speaker=tts.speakers[3], language="en", speed=0.7)
+    audio_output = tts.tts(text, speed=1.2)
     audio_data = np.array(audio_output, dtype=np.float32)
 
     sd.play(audio_data, samplerate=22050)  # Play at 22.05 kHz
