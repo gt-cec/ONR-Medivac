@@ -27,6 +27,75 @@
     {% endblock %}
     
     <style>
+
+        .ai-button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            transition: transform 0.3s;
+            z-index: 9999;
+            margin-top: 3vh;
+            padding: 2vh 2vw 2vh 2vw;
+        }
+
+        .ai-button img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+        }
+
+        .ai-button:active {
+            transform: scale(0.5);
+        }
+
+        /* Radio Panel */
+        .radio-panel {
+            background: #0f3460;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            width: 300px;
+        }
+
+        .radio-panel h2 {
+            text-align: center;
+        }
+
+        .radio-button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 8px;
+            background: #e94560;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .radio-button:hover {
+            background: #d13450;
+        }
+
+        .toggle-btn {
+            background: #e94560;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background 0.3s;
+            width: 100%;
+        }
+
+        .toggle-btn:hover {
+            background: #d13450;
+        }
+
         {% block styling %}
         {% endblock %}        
     </style>
@@ -56,6 +125,13 @@
         </div>
         
        <!-- Voice Assistant -->
+        <div class="voice-assistant">
+            <button id="aiToggle" class="ai-button">
+                <img id="aiImage" src="../static/HAIInterface/img/robotic_bgrm.png" alt="AI Assistant">
+            </button>
+        </div>
+
+
        <div class="assistant-overlay">
         <div class="user-text-box" id="userTextBox" style="display: none;" >User Text Will Appear Here</div>
       </div>
@@ -126,6 +202,8 @@
             <div></div>
             <div id="emergency-acknowledge-button" class="button">CONTINUE</div>
         </div>
+
+        
 
         <!-- Radio Comms  -->
         <div id="radiopanel"  class="radiopanel">
@@ -223,19 +301,19 @@
              <div class="warning-sign">
                 <img src="../static/HAIInterface/img/siren.gif" class="siren-gif" alt="Siren">
              </div>
-             <button class="alert-button" id="moreInfoButton" onclick="showMoreInfo()">Click for more info</button>
-             <!-- <button class="close-button" id="closeButton" onclick="closeAlert()">X</button> -->
-             <div id="alertExplanation" style="display: none;">
-                 <ul style="list-style-type:circle; padding: 15px; text-align: justify; ">
-                    <li><b>Alert:</b> Engine failure detected. This is not a drill.</li>
-                     <li><b>Action Required:</b> Initiating emergency procedures now.</li> 
-                     <li><b>Immediate Task:</b> We need to select an alternate landing site.</li>
-                      <li><b>Your Input Needed: </b>Use the button below to choose an emergency landing location.</li> 
-                      <li><b>Recommendation: </b>I suggest landing at Hilton Gardern Inn Heliport, the nearest available site.</li> 
-                      <li><b>Map Guide:</b> Look for the green marker on the map - that's our closest option.</li> 
-                      <li><b>Additional Support:</b>  Assistance from Control is available if you deem it necessary.</li> 
-                      <li><b>Time Sensitive:</b> Swift action is crucial for our safety.</li>
-                 </ul>
+            <!--  <button class="alert-button" id="moreInfoButton" onclick="showMoreInfo()">Click for more info</button>
+              <button class="close-button" id="closeButton" onclick="closeAlert()">X</button> 
+             <div id="alertExplanation" style="display: none;"> -->
+            <ul style="list-style-type:circle; padding: 15px; text-align: justify; ">
+            <li><b>Alert:</b> Engine failure detected. This is not a drill.</li>
+                <li><b>Action Required:</b> Initiating emergency procedures now.</li> 
+                <li><b>Immediate Task:</b> We need to select an alternate landing site.</li>
+                <li><b>Your Input Needed: </b>Use the button below to choose an emergency landing location.</li> 
+                <li><b>Recommendation: </b>I suggest landing at Hilton Gardern Inn Heliport, the nearest available site.</li> 
+                <li><b>Map Guide:</b> Look for the green marker on the map - that's our closest option.</li> 
+                <li><b>Additional Support:</b>  Assistance from Control is available if you deem it necessary.</li> 
+                <li><b>Time Sensitive:</b> Swift action is crucial for our safety.</li>
+            </ul>
 
             </div>
             <button class="submit-button" style="display: none;" id="CDButton">Emergency Landing</button>
@@ -307,6 +385,22 @@
              </audio> 
           </div>
 
+
+        <div class="alert warning">
+            <p>⚠️ <strong>Weather Alert:</strong> Turbulence ahead!</p>
+            <p>Suggested Change: Increase altitude (+5 min travel time)</p>
+            <button onclick="acceptChange()">✅ Accept Route Change</button>
+            <button onclick="ignoreChange()">❌ Ignore</button>
+        </div>
+
+
+        <div class="alert critical">
+            <p>🚨 <strong>ENGINE FAILURE!</strong> Emergency landing required.</p>
+            <p>Landing Site Options:</p>
+            <button onclick="landNow()">🛬 Land (15 min, limited care)</button>
+            <button onclick="continueFlight()">✈️ Continue (25 min, full care)</button>
+        </div>
+
         <!-- Weather Emergency    -->  
        <div class="alertbody">
         <div class="alertoverlay" id="weatheralertOverlay">
@@ -319,7 +413,7 @@
             
              <div id="weatheralertExplanation" style="display: none;">
                  <ul style="list-style-type:circle; padding: 15px; text-align: justify; ">
-                    <li><b>Alert:</b> Unfavorable Weather Conditions.</li>
+                    <li><b>Alert:</b> Bad Weather Conditions.</li>
                      <li><b>Action Required:</b> Initiating emergency procedures now.</li> 
                      <li><b>Immediate Task:</b> We need to select an alternate landing site.</li>
                       <li><b>Recommendation: </b>I suggest landing at Hilton Gardern Inn Heliport, the nearest available site.</li> 
@@ -565,6 +659,23 @@
         document.getElementById("map").addEventListener('mapClicked', function(event) {
             console.log('mapClicked event heard');
             showMap();
+        });
+
+
+        // Toggle AI Assistant Activation
+        const aiToggle = document.getElementById("aiToggle");
+        const aiImage = document.getElementById("aiImage");
+        //const aiStatus = document.getElementById("aiStatus");
+
+        const aiInactiveImage = "../static/HAIInterface/img/robotic_bgrm.png"; 
+        const aiActiveGif = "../static/HAIInterface/img/robotic_bgrm.gif"; 
+
+        let aiActive = false;
+
+        aiToggle.addEventListener("click", function () {
+            aiActive = !aiActive;
+            aiImage.src = aiActive ? aiActiveGif : aiInactiveImage;
+            // aiStatus.textContent = aiActive ? "AI Assistant Activated" : "AI Assistant Deactivated";
         });
 
 

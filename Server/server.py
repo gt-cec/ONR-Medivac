@@ -1,4 +1,7 @@
 from flask import Flask, render_template, request, jsonify, make_response
+import os
+import requests
+import zipfile
 import logging
 import datetime
 import threading
@@ -25,6 +28,28 @@ socketio = SocketIO(app, async_mode="threading", logger=False, cors_allowed_orig
 #tts = TTS("tts_models/multilingual/multi-dataset/your_tts", progress_bar=False).to("cpu")
 
 tts = TTS("tts_models/en/ljspeech/tacotron2-DDC", progress_bar=False).to("cpu")
+#Define the model URL and path
+""" model_url = "https://huggingface.co/BegoneDamen/DamensRVCModels/resolve/main/EAS.zip"
+#model_path = "EAS_model"
+zip_path = "EAS.zip"
+
+# Download and extract the model if it doesn't exist
+if not os.path.exists(model_path):
+    # Download the ZIP file
+    response = requests.get(model_url)
+    with open(zip_path, "wb") as f:
+        f.write(response.content)
+
+    # Extract the ZIP file
+    with zipfile.ZipFile(zip_path, "r") as zip_ref:
+        zip_ref.extractall(model_path)
+
+    # Remove ZIP file after extraction
+    os.remove(zip_path) 
+
+# Initialize TTS with the extracted model
+tts = TTS(model_path="/Users/sanyadoda/ONR-Medivac/Server/EAS/EAS.pth", progress_bar=False).to("cpu")"""
+
 
 # system state variables
 study_participant_id = 0
@@ -1126,11 +1151,19 @@ def start_event_loop(loop):
 # Start event loop in a background thread
 threading.Thread(target=start_event_loop, args=(loop,), daemon=True).start()
 
-async def generate_audio(text):
-    """Generate and play speech asynchronously"""
+async def generate_audio(text, stress_level):
+    """Generate based on stress level and play speech asynchronously"""
     print(f"Speaking: {text}")
-    audio_output = tts.tts(text, speed=1.2)
-    audio_data = np.array(audio_output, dtype=np.float32)
+    
+    if stress_level == "high":
+        params = {"speed": 1.7, "pitch": 1.2, "emotion": "angry"}  # Emergency
+    elif stress_level == "mild":
+        params = {"speed": 1.5, "pitch": 1.1, "emotion": "serious"}  # Warning
+    else:
+        params = {"speed": 1.2, "pitch": 1.0, "emotion": "neutral"}  # Normal
+    
+    audio_output = tts.tts(text,)
+    audio_data = np.array(audio_output, dtype=np.float32, **params)
 
     sd.play(audio_data, samplerate=22050)  # Play at 22.05 kHz
     while sd.get_stream().active:
@@ -1141,9 +1174,10 @@ def handle_send_text(data):
     """Handle text received from WebSocket"""
     data = json.loads(data)
     text = data.get("text", "")
+    stress_level = data.get("stress_level", "normal")
 
     print(f"Received text: {text}")
-    future = asyncio.run_coroutine_threadsafe(generate_audio(text), loop)  # Run TTS in event loop
+    future = asyncio.run_coroutine_threadsafe(generate_audio(text,stress_level), loop)  # Run TTS in event loop
     try:
         future.result()  # Ensure execution
     except Exception as e:
