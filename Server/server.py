@@ -1162,8 +1162,8 @@ async def generate_audio(text, stress_level):
     else:
         params = {"speed": 1.2, "pitch": 1.0, "emotion": "neutral"}  # Normal
     
-    audio_output = tts.tts(text,)
-    audio_data = np.array(audio_output, dtype=np.float32, **params)
+    audio_output = tts.tts(text,speed=1.7)
+    audio_data = np.array(audio_output, dtype=np.float32)
 
     sd.play(audio_data, samplerate=22050)  # Play at 22.05 kHz
     while sd.get_stream().active:

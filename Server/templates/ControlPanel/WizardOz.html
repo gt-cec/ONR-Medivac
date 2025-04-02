@@ -281,7 +281,7 @@
         const socket = io.connect('http://localhost:8080');
 
         function sendToServer(text, stress_level) {
-            socket.emit("send_text", JSON.stringify({ text, stress_level: level}));
+            socket.emit("send_text", JSON.stringify({ text, stress_level}));
         }
 
         // Add event listeners to buttons
@@ -312,7 +312,7 @@
             const textInput = document.getElementById("saytext").value.trim();
             if (textInput) {
                 //document.getElementById("activate-jarvis").click();  //automatically activate Jarvis when Jarvis needs to speak
-                sendToServer(textInput, "Jarvis");
+                sendToServer(textInput, "normal");
                 document.getElementById("saytext").value = "";
             }
         });
@@ -342,10 +342,11 @@
                 //automate Jarvis to speak:
                 // Find the corresponding button in the .control-button class with the same ID and trigger its click
                 const matchingButton = document.querySelector(`.control-button#${this.id}`);
+                await fetch(`/var?"${this.id}=1`);
                 if (matchingButton) {
                     matchingButton.click();
                 }
-                await fetch(`/var?"${this.id}=1`);
+               
             });
         });
 
