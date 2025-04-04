@@ -15,10 +15,10 @@ from flask_socketio import SocketIO
 import threading
 import websockets
 import json
-import ast
-import Jarvis
 from TTS.api import TTS
+import multiprocessing
 import sounddevice as sd
+import soundfile as sf
 import numpy as np
 
 app = Flask(__name__)
@@ -26,29 +26,9 @@ socketio = SocketIO(app, async_mode="threading", logger=False, cors_allowed_orig
 
 # Initialize TTS
 #tts = TTS("tts_models/multilingual/multi-dataset/your_tts", progress_bar=False).to("cpu")
+tts = TTS("tts_models/en/ljspeech/tacotron2-DDC", progress_bar=False).to("cpu") 
 
-tts = TTS("tts_models/en/ljspeech/tacotron2-DDC", progress_bar=False).to("cpu")
-#Define the model URL and path
-""" model_url = "https://huggingface.co/BegoneDamen/DamensRVCModels/resolve/main/EAS.zip"
-#model_path = "EAS_model"
-zip_path = "EAS.zip"
 
-# Download and extract the model if it doesn't exist
-if not os.path.exists(model_path):
-    # Download the ZIP file
-    response = requests.get(model_url)
-    with open(zip_path, "wb") as f:
-        f.write(response.content)
-
-    # Extract the ZIP file
-    with zipfile.ZipFile(zip_path, "r") as zip_ref:
-        zip_ref.extractall(model_path)
-
-    # Remove ZIP file after extraction
-    os.remove(zip_path) 
-
-# Initialize TTS with the extracted model
-tts = TTS(model_path="/Users/sanyadoda/ONR-Medivac/Server/EAS/EAS.pth", progress_bar=False).to("cpu")"""
 
 
 # system state variables
@@ -1150,9 +1130,73 @@ def start_event_loop(loop):
 
 # Start event loop in a background thread
 threading.Thread(target=start_event_loop, args=(loop,), daemon=True).start()
+""" 
+# Shared flag to stop playback
+stop_playback_flag = multiprocessing.Event()
 
-async def generate_audio(text, stress_level):
-    """Generate based on stress level and play speech asynchronously"""
+def process_tts(text, stress_level):
+    output_path = f"output_{text[:5]}.wav"
+    tts.tts_to_file(text=text, file_path=output_path)
+    return output_path
+
+ #Plays audio and allow interruption using stop_flag.
+def play_audio(file_path, stop_flag):
+    data, samplerate = sf.read(file_path)  # Load audio file
+    print('playing')
+    sd.play(data,samplerate)
+
+     # Handle mono vs stereo audio
+    channels = 1 if len(data.shape) == 1 else data.shape[1]
+
+    #Callback function to stream audio and check for stop
+    def callback(outdata, frames, time, status):
+        if status:
+            print(status)
+        if stop_flag.is_set():  # Stop playback if flag is set
+            raise sd.CallbackStop
+        outdata[:] = data[:frames].reshape(-1, channels)  # Fill buffer (resphaping to allow mono and stereo both)
+
+    try:
+        with sd.OutputStream(samplerate=samplerate, channels=channels, callback=callback):
+            sd.sleep(int(len(data) / samplerate * 1000))  # Wait for playback to finish
+        print("Playback finished.")
+    except sd.CallbackStop:
+        print("Playback interrupted.")
+
+#Handle TTS request, generate audio, and plays it
+def handle_request(text, stress_level):
+    #output_path = process_tts(text, stress_level)  # Blocking TTS generation
+
+    # Start playback in a separate process
+    #play_process = multiprocessing.Process(target=play_audio, args=(output_path, stop_playback_flag))
+    play_process = multiprocessing.Process(target=generate_audio, args=(text,stress_level))
+    play_process.start()
+
+    #return output_path, play_process
+
+def stop_audio(play_process):
+    stop_playback_flag.set()  # Signal to stop playback
+    play_process.join()  # Ensure process stops
+    stop_playback_flag.clear()  # Reset flag for next playback
+
+ #Handle text received from WebSocket and play TTS audio
+@socketio.on("send_text")
+def handle_send_text(data):
+    data = json.loads(data)
+    text = data.get("text", "")
+    stress_level = data.get("stress_level", "normal")
+
+    print(f"Received text: {text}")
+
+    # Process TTS & Start playback
+    play_process = multiprocessing.Process(target=generate_audio, args=(text,stress_level))
+    play_process.start()
+    #output_file, playback_process = handle_request(text, stress_level)
+
+    #return playback_process  # Return process handle in case you want to stop it later """
+
+
+""" def generate_audio(text, stress_level):
     print(f"Speaking: {text}")
     
     if stress_level == "high":
@@ -1162,22 +1206,47 @@ async def generate_audio(text, stress_level):
     else:
         params = {"speed": 1.2, "pitch": 1.0, "emotion": "neutral"}  # Normal
     
-    audio_output = tts.tts(text,speed=1.7)
+    audio_output = tts.tts(text, pitch=1.4)
     audio_data = np.array(audio_output, dtype=np.float32)
 
     sd.play(audio_data, samplerate=22050)  # Play at 22.05 kHz
     while sd.get_stream().active:
-        await asyncio.sleep(0.1)  # Check every 100ms
+         asyncio.sleep(0.1)  # Check every 100ms """
+
+
+#Generate speech and play it asynchronously
+async def generate_audio(text):
+    audio_output = tts.tts(text, pitch=1.4)
+    audio_data = np.array(audio_output, dtype=np.float32) 
+    # Load audio and play asynchronously
+    #data, samplerate = sf.read(audio_file, dtype="float32")
+
+    # Play audio in a separate thread to avoid blocking
+    def play_audio():
+        #sd.play(data, samplerate)
+        sd.play(audio_data, samplerate=22050)  # Play at 22.05 kHz
+        sd.wait()
+
+    audio_thread = threading.Thread(target=play_audio, daemon=True)
+    audio_thread.start()
+
+    # Cleanup temp file
+    #os.remove(audio_file)
 
 @socketio.on("send_text")
 def handle_send_text(data):
-    """Handle text received from WebSocket"""
     data = json.loads(data)
     text = data.get("text", "")
     stress_level = data.get("stress_level", "normal")
 
     print(f"Received text: {text}")
-    future = asyncio.run_coroutine_threadsafe(generate_audio(text,stress_level), loop)  # Run TTS in event loop
+    if not text.strip():
+        return
+    else:
+        text=text.strip()
+        text=re.sub(r"[^a-zA-Z0-9.,'?! ]", "", text)
+        
+    future = asyncio.run_coroutine_threadsafe(generate_audio(text), loop)  # Run TTS in event loop
     try:
         future.result()  # Ensure execution
     except Exception as e:
@@ -1239,6 +1308,9 @@ def change_variable(data):
 
 @socketio.on("control_command")
 def control_command(data):
+    action=data['action']
+    elementId=data['whichbtn']
+    value=data['value']
     #Forwards control commands from the controller panel to the user's screen
     print(f"Control Command: {data}")
     socketio.emit("execute_command", data)

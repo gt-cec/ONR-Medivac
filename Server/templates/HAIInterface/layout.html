@@ -710,13 +710,15 @@
 
  
         socket.on("execute_command", (data) => {
-            const {action, elementId, value } = data;
-            console.log(`Executing: ${action} on ${elementId} with value: ${value}`);
+            //const {action, elementId, value} = data;
+            console;log(data)
+            console.log(`Executing: ${data.action} on ${data.whichbtn} with value: ${data.value}`);
+            const action=data.action
 
-            const element = document.getElementById(elementId) || document.querySelector(`[name='${elementId}']`);
+            const element = document.getElementById(data.whichbtn) || document.querySelector(`[name='${data.elementId}']`);
 
             if (!element) {
-                console.warn(`Element ${elementId} not found.`);
+                console.warn(`Element ${data.elementId} not found.`);
                 return;
             }
 
@@ -735,7 +737,7 @@
                     }
                     break;
                 default:
-                    console.warn(`Unknown action: ${action}`);
+                    console.warn(`Unknown action: ${data.elementId}`);
             }
         });
 
