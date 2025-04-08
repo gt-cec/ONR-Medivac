@@ -347,6 +347,13 @@ function TimeToDestination() {
 function activateWarningAlert() {
   console.log("PressureWarning activated")
   document.getElementById('warningSound').play();
+
+  setTimeout(() => {
+    document.getElementById('warningSound').pause();
+    document.getElementById('warningSound').currentTime = 0; // Reset to the beginning
+  }, 2000); //  2 seconds
+
+  
   log({"page": "Inflight", "action": "Pressure Warning alert activated"}); 
   document.body.classList.add('dull-background');
   const pWoverlay = document.getElementById('pressureWarningalertOverlay');
@@ -378,7 +385,7 @@ function activateWarningAlert() {
     const pressureValue = document.getElementById('pressureValue').value;
     const resultMessage = document.getElementById('resultMessage');
     const finalMessage = document.getElementById('finalMessage');
-    const okButton = document.getElementById('okButton');
+    const okButton = document.getElementById('ok-Button');
     log({"page": "Inflight", "action": "Pressure Warning- submit button pressed with pressure value as:"+ pressureValue}); 
     const correctValue = "75"; // The correct pressure value
 
@@ -426,10 +433,18 @@ function activateEngineAlert() {
   log({"page": "Inflight", "action": "Engine failure emergency- emergnecy propmt displayed"}); 
   console.log(EngineFailure)
   document.getElementById('sirenSound').play();
+
+  setTimeout(() => {
+    document.getElementById('sirenSound').pause();
+    document.getElementById('sirenSound').currentTime = 0; // Reset to the beginning
+  }, 2000); //  2 seconds
+
   const overlay = document.getElementById('alertOverlay');
   document.body.classList.add('dull-background');
   overlay.style.visibility = 'visible';
   overlay.style.opacity = '1';
+  //updating the server
+  fetch("/var?engine-failure=" + EngineFailure)
 }
 
   // Function to show more information about engine failure and stop the siren
@@ -484,6 +499,12 @@ function activateFuelAlert() {
   document.body.classList.add('dull-background');
   fAoverlay.style.visibility = 'visible';
   fAoverlay.style.opacity = '1';
+  document.getElementById('okFuel-Button').style.display = 'block';
+  document.getElementById("okFuel-Button").onclick = () => {
+  closeFuelAlert();
+  log({ "page": "Inflight", "action": "Continue button on Fuel tank emergency pressed" });
+  document.getElementById('emptytankSound').pause();
+}
 }
 
   // Function to show more information regarding fuel tank and stop the siren
@@ -500,13 +521,13 @@ function activateFuelAlert() {
     fetch("/var?empty-tank=" + EmptyTank)
     document.getElementById('fuelAlertExplanation').style.display = 'block';
     document.getElementById('fuelInfoButton').style.display = 'none';
-    document.getElementById('okButtonFuel').style.display = 'block';
-    document.getElementById("okButtonFuel").onclick =  () => { closeFuelAlert(); 
+    document.getElementById('okFuel-Button').style.display = 'block';
+    document.getElementById("okFuel-Button").onclick =  () => { closeFuelAlert(); 
     log({"page": "Inflight", "action": "Continue button on Fuel tank emergency pressed"}); 
     document.getElementById('emptytankSound').pause();
     }
 
-    document.getElementById("elButtonFuel").onclick =  () => { closeFuelAlert(); 
+    document.getElementById("elFuel-Button").onclick =  () => { closeFuelAlert(); 
       log({"page": "Inflight", "action": "Change destination button on Fuel tank emergency pressed"}); 
       document.getElementById('emptytankSound').pause();
       window.location.href = '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 ;
@@ -562,7 +583,7 @@ function activateAltitudeAlert() {
     const altitudealertBox = document.getElementById('altitudealertBox');
     altitudealertBox.classList.add('expanded');
     document.getElementById('altitudealertExplanation').style.display = 'block';
-    document.getElementById('altitudemoreInfoButton').style.display = 'none';
+    document.getElementById('altitudemoreInfo-Button').style.display = 'none';
     //document.getElementById('pressureWarningcloseButton').style.display = 'block';
     // Stop the flashing animation
     document.getElementById('altitudeText').style.animation = 'none';

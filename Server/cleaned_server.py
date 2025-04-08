@@ -1,8 +1,4 @@
 from flask import Flask, render_template, request, jsonify, make_response
-import os
-import requests
-import zipfile
-import logging
 import datetime
 import threading
 import socket
@@ -16,19 +12,22 @@ import threading
 import websockets
 import json
 from TTS.api import TTS
-import multiprocessing
 import sounddevice as sd
-import soundfile as sf
 import numpy as np
 
 app = Flask(__name__)
 socketio = SocketIO(app, async_mode="threading", logger=False, cors_allowed_origins="*")  # Ensure Flask remains non-blocking
 
-# Initialize TTS
-#tts = TTS("tts_models/multilingual/multi-dataset/your_tts", progress_bar=False).to("cpu")
-tts = TTS("tts_models/en/ljspeech/tacotron2-DDC", progress_bar=False).to("cpu") 
+tts = TTS("tts_models/en/ljspeech/tacotron2-DDC", progress_bar=False).to("cpu") # Initialize TTS Model
 
+# Global variable to track the currently playing speech
+current_audio_task = None
+stop_speech_event = asyncio.Event()
+stop_speech_event.clear()
 
+# create instances of event for voice assistant
+jarvis_event = threading.Event()
+jarvis_event.clear() #not set
 
 
 # system state variables
@@ -79,84 +78,6 @@ emergency = False
 last_radio_update = 0
 last_time_set=None
 
-#lock to protect the global variable
-lock = threading.Lock()
-
-# start Jarvis
-# Jarvis.start_jarvis()
-
-# create instances of event for voice assistant
-jarvis_event = threading.Event()
-jarvis_event.clear() #not set
- 
-#for radio comms
-status_report_event = threading.Event()  #to be set when participant gives the radio update
-status_report_event.clear()
-administer_event = threading.Event()
-administer_event.clear()
-response_event = threading.Event() #to be set when user responds with vitals during vitals emergency or should assumes gives answer?
-response_event.clear()
-takeoff_event= threading.Event() #to be set when ready for takeoff
-takeoff_event.clear()
-tank_event = threading.Event() #to be set when user responds with vitals for sceanrio 2 altitude emergency
-tank_event.clear()
-engine_event = threading.Event() #to be set when engine failure 
-engine_event.clear()
-emergency_event= threading.Event() #to be set when any of the emergency occurs
-emergency_event.clear()
-inflight_event=threading.Event() #when inflight
-inflight_event.clear()
-radio_update_complete = threading.Event() # for ensuring regular radio updates and vitals don't overlap
-radio_update_complete.clear()
-sensor_event= threading.Event() # to be set when pressure waning (miscalbirated sensor) comes up
-sensor_event.clear()
-weather_event= threading.Event() # to be set when weather emergency occurs
-weather_event.clear()
-altitude_event= threading.Event() # to be set when altitude alert comes up
-altitude_event.clear()
-acknowledge= threading.Event()
-acknowledge.clear()
-jarvis_emergency= threading.Event()
-jarvis_emergency.clear()
-engine_failure_emergency= threading.Event()
-engine_failure_emergency.clear()
-empty_fuel_emergency= threading.Event()
-empty_fuel_emergency.clear()
-weather_emergency_event= threading.Event()
-weather_emergency_event.clear()
-altitude_warning_alert=threading.Event()
-altitude_warning_alert.clear()
-pressure_warning_alert= threading.Event()
-pressure_warning_alert.clear()
-stop_engine=threading.Event()
-stop_engine.clear()
-
-events = {
-    'radioUpdateComplete': radio_update_complete,
-    'status_report': status_report_event,
-    'takeoff_event': takeoff_event,
-    'response_event': response_event,
-    'administer_event': administer_event,
-    'engine_event': engine_event,
-    'tank_event': tank_event,
-    'emergency_event': emergency_event,
-    'inflight_event': inflight_event,
-    'sensor_event': sensor_event,
-    'weather_event': weather_event,
-    'altitude_event': altitude_event,
-    "acknowledge":acknowledge,
-    "jarvis_emergency":jarvis_emergency,
-    "engine_failure_emergency":engine_failure_emergency,
-    "empty_fuel_emergency":empty_fuel_emergency,
-    "weather_emergency_event":weather_emergency_event,
-    "altitude_warning_alert":altitude_warning_alert,
-    "pressure_warning_alert":pressure_warning_alert,
-    "stop_engine":stop_engine,
-    "jarvis_event":jarvis_event
-}
-
-#radio variables
-takeoffEvent=False
 
 position = {
     "latitude": 33.7892717,
@@ -617,153 +538,10 @@ keywords_routes = {
      # add more keywords and routes 
 }
 
-@app.route('/voice', methods=['POST'])
-def voice():
-    while True:
-        def recording_started():
-            print("Listening...")
-            # mark the event as  set
-            event.set()
-            if request.method == 'POST':
-                return jsonify({"type": "activate_assistant"}), 200 
-
-        def recording_finished():
-            print("Speech end detected... transcribing...")
-            # mark the event as not set
-            #event.clear()
-            # socketio.emit("disconnect")
-            # socketio.emit("type", {"type": "deactivate_assistant"})
-            if request.method == 'POST':
-                 return jsonify({"type": "deactivate_assistant"}), 200 
-
-        # WebSocket server address
-        WS_SERVER_ADDRESS = "ws://127.0.0.1:8080"
-         # Open subroutes based on detected keywords
-        def perform_action(user_text):
-            user_text=user_text.lower()
-            print("Looking")
-            for keyword, route in keywords_routes.items():
-                if keyword in user_text:
-                    # Open the route in the default browser
-                    webbrowser.open(route)
-                    break  # Exit loop after finding the first matching keyword
-            txt="Sorry, didn't find" + user_text
-            print(txt)
-            if request.method == 'POST':
-                 return jsonify({"type": "user_text", "text": txt}), 200  
-
-        with AudioToText(spinner=False, model="small.en", language="en", wake_words="jarvis", on_wakeword_detected=recording_started, on_recording_stop=recording_finished
-        , wake_word_timeout=7.0 ) as recorder:
-            print('Say "Jarvis" then speak.')
-            #print(recorder.text())
-            user_text=recorder.text().strip()
-            print(user_text)
-            if(user_text):
-                 #socketio.emit("response", {"response": user_text})
-                 perform_action(user_text)
-            print("Done. Now we should exit. Bye!")
-
-@app.route('/set_event', methods=['POST'])
-def set_event():
-    print("request received in /set_event: ", request.get_json())
-    received_request= request.get_json()
-    event_name = received_request["event"]
-    if event_name == "reset":  # clear all events 
-        for event in events:
-          events[event].clear()
-    elif event_name in events:
-        action= received_request["action"]
-        event = events[event_name]
-        if action=="clear":
-            event.clear()
-        elif action=="set":
-            event.set()
-        elif action=="toggle":
-            if event.is_set():
-                event.clear()
-                action = "cleared"
-            else:
-                event.set()
-                action = "set"
-        else:
-            action= "action not found"
-        print("message: Event", event_name ,action)
-    else:
-        print("error: Invalid event name")
-
-    return ""
-
-@app.route('/state', methods=['POST'])
-def get_states():
-    global takeoffEvent, engine_failure, pressure_warning, empty_tank, vitals_state, weather_emergency, altitude_alert,jarvis_event
-    
-    if(airspace_emergency_state==1 or vitals_state==1 or engine_failure==1 or pressure_warning==1 or empty_tank==1 or weather_emergency==1 or altitude_alert==1):
-        emergency_event.set()
-        print('Emergency event set')
-
-    if(emergency_event.is_set() and airspace_emergency_state==0 and vitals_state==0 and engine_failure==0 and pressure_warning==0 and empty_tank==0 and weather_emergency==0 and altitude_alert==0):
-        emergency_event.clear()
-        print('Emergency event cleared')
-
-    if request.is_json:
-        received_request = request.get_json()
-        print("request received in /state: ", received_request)
-        event_name = received_request["event"]
-        if event_name == "reset":  # clear all events 
-            for event in events:
-                events[event].clear()
-        if event_name == "Radio-Update-status":  # for vitals logging
-            response = {"radioUpdateComplete": radio_update_complete.is_set()}
-            return jsonify(response),200
-        elif event_name in events:
-            action= received_request["action"]
-            event = events[event_name]
-            if action=="clear":
-                event.clear()
-            elif action=="set":
-                event.set()
-            elif action=="toggle":
-                if event.is_set():
-                    event.clear()
-                    action = "cleared"
-                else:
-                    event.set()
-                    action = "set"
-            else:
-                action= "action not found"
-            print("message: Event", event_name ,action)
-        else:
-            print("error: Invalid event name")
-        
-    takeoffEvent=takeoff_event.is_set()
-    response = {
-        "radioUpdateComplete": radio_update_complete.is_set(),
-        "status_report": status_report_event.is_set(),
-        "takeoff_event": takeoff_event.is_set(),
-        "response_event": response_event.is_set(),
-        "administer_event": administer_event.is_set(),
-        "engine_event": engine_event.is_set(),
-        "tank_event": tank_event.is_set(),
-        "emergency_event": emergency_event.is_set(),
-        "inflight_event": inflight_event.is_set(),
-        "sensor_event":sensor_event.is_set(),
-        "weather_event":weather_event.is_set(),
-        "altitude_event":altitude_event.is_set(),
-        "acknowledge": acknowledge.is_set(),
-        "jarvis_emergency":jarvis_emergency.is_set(),
-        "engine_failure_emergency":engine_failure_emergency.is_set(),
-        "empty_fuel_emergency":empty_fuel_emergency.is_set(),
-        "weather_emergency_event":weather_emergency_event.is_set(),
-        "altitude_warning_alert":altitude_warning_alert.is_set(),
-        "pressure_warning_alert":pressure_warning_alert.is_set(),
-        "stop_engine": stop_engine.is_set(),
-        "jarvis_event":jarvis_event.is_set(),
-    }
-    return jsonify(response), 200
 
 @app.route('/ws', methods=['POST'])
 def ws():
-    global user_text_audio, prev_text, jarvis_event
+    global user_text_audio, prev_text
     #print("request received on /ws: ", request.get_json())
     received_request= request.get_json()
     
@@ -784,21 +562,6 @@ def ws():
     response = {
         "assistantIsActive": jarvis_event.is_set(),
         "userText": user_text_audio,
-    }
-    return jsonify(response), 200
-
-@app.route('/speak', methods=['POST'])
-def get_text():
-    global received_text
-    if request.is_json:
-        print("request received on speak: ", request.get_json())
-        received_text_request= request.get_json()
-        
-        if received_text_request["type"] == "say_text":
-           received_text = str(received_text_request["text"])
-   
-    response = {
-        "received_text": received_text
     }
     return jsonify(response), 200
 
@@ -866,29 +629,6 @@ def reset_params():
     takeoff=0
     approach_clear=0
 
-    #clearing all events on reset 
-    status_report_event.clear()
-    takeoff_event.clear()
-    response_event.clear()
-    administer_event.clear()
-    radio_update_complete.clear()
-    engine_event.clear()
-    tank_event.clear()
-    emergency_event.clear()
-    inflight_event.clear()
-    sensor_event.clear()
-    weather_event.clear()
-    altitude_event.clear()
-    jarvis_event.clear()
-    acknowledge.clear()
-    jarvis_emergency.clear()
-    engine_failure_emergency.clear()
-    empty_fuel_emergency.clear()
-    weather_emergency_event.clear()
-    altitude_warning_alert.clear()
-    pressure_warning_alert.clear()
-    stop_engine.clear()
-    print('All events cleared',takeoff_event.is_set())
     
     # reseting other global variables
     user_text_audio=""
@@ -1045,7 +785,7 @@ def get_var():
         position["compass"] = compass
         #position["altitude"] = alt
     except:
-        logging.info("SimConnect Error in /var")
+        #logging.info("SimConnect Error in /var")
         try:
             sm = SimConnect()
             aq = AircraftRequests(sm, _time=10)
@@ -1083,10 +823,6 @@ def hai_interface(subroute=None):
     if subroute is None or subroute == "":
         resp = make_response(render_template("HAIInterface/index.html", helipads=data))
     elif subroute == "location":
-        if(not inflight_event.is_set()): #so doesn't get set when landing
-            takeoff_event.set()
-            print("TOES",takeoff_event.is_set())
-            print(takeoffEvent)
         resp = make_response(render_template("HAIInterface/location.html", helipads=data, data=HelpData))
     elif subroute == "checklist":
         resp = make_response(render_template("HAIInterface/checklist.html", helipads=data))
@@ -1095,8 +831,6 @@ def hai_interface(subroute=None):
     elif subroute == "takeoff":
         resp = make_response(render_template("HAIInterface/takeoff_gif.html", helipads=data))
     elif subroute == "inflight":
-        inflight_event.set()
-        print('inflight',inflight_event.is_set())
         resp = make_response(render_template("HAIInterface/inflight.html", helipads=data))
     elif subroute == "change-destination":
         resp = make_response(render_template("HAIInterface/change-destination.html", helipads=data))
@@ -1107,8 +841,6 @@ def hai_interface(subroute=None):
     elif subroute == "landing-gif":
         resp = make_response(render_template("HAIInterface/landing-gif.html", helipads=data))
     elif subroute == "landed":
-        inflight_event.clear() # clearing inflight event on landing
-        print("Landed",inflight_event.is_set())
         resp = make_response(render_template("HAIInterface/landed.html", helipads=data))
     elif subroute == "help":
         num = request.args.get("num")
@@ -1129,128 +861,54 @@ def start_event_loop(loop):
     loop.run_forever()
 
 # Start event loop in a background thread
-threading.Thread(target=start_event_loop, args=(loop,), daemon=True).start()
-""" 
-# Shared flag to stop playback
-stop_playback_flag = multiprocessing.Event()
+#threading.Thread(target=start_event_loop, args=(loop,), daemon=True).start()
 
-def process_tts(text, stress_level):
-    output_path = f"output_{text[:5]}.wav"
-    tts.tts_to_file(text=text, file_path=output_path)
-    return output_path
-
- #Plays audio and allow interruption using stop_flag.
-def play_audio(file_path, stop_flag):
-    data, samplerate = sf.read(file_path)  # Load audio file
-    print('playing')
-    sd.play(data,samplerate)
-
-     # Handle mono vs stereo audio
-    channels = 1 if len(data.shape) == 1 else data.shape[1]
-
-    #Callback function to stream audio and check for stop
-    def callback(outdata, frames, time, status):
-        if status:
-            print(status)
-        if stop_flag.is_set():  # Stop playback if flag is set
-            raise sd.CallbackStop
-        outdata[:] = data[:frames].reshape(-1, channels)  # Fill buffer (resphaping to allow mono and stereo both)
-
-    try:
-        with sd.OutputStream(samplerate=samplerate, channels=channels, callback=callback):
-            sd.sleep(int(len(data) / samplerate * 1000))  # Wait for playback to finish
-        print("Playback finished.")
-    except sd.CallbackStop:
-        print("Playback interrupted.")
-
-#Handle TTS request, generate audio, and plays it
-def handle_request(text, stress_level):
-    #output_path = process_tts(text, stress_level)  # Blocking TTS generation
-
-    # Start playback in a separate process
-    #play_process = multiprocessing.Process(target=play_audio, args=(output_path, stop_playback_flag))
-    play_process = multiprocessing.Process(target=generate_audio, args=(text,stress_level))
-    play_process.start()
-
-    #return output_path, play_process
-
-def stop_audio(play_process):
-    stop_playback_flag.set()  # Signal to stop playback
-    play_process.join()  # Ensure process stops
-    stop_playback_flag.clear()  # Reset flag for next playback
-
- #Handle text received from WebSocket and play TTS audio
-@socketio.on("send_text")
-def handle_send_text(data):
-    data = json.loads(data)
-    text = data.get("text", "")
-    stress_level = data.get("stress_level", "normal")
-
-    print(f"Received text: {text}")
-
-    # Process TTS & Start playback
-    play_process = multiprocessing.Process(target=generate_audio, args=(text,stress_level))
-    play_process.start()
-    #output_file, playback_process = handle_request(text, stress_level)
-
-    #return playback_process  # Return process handle in case you want to stop it later """
-
-
-""" def generate_audio(text, stress_level):
-    print(f"Speaking: {text}")
+async def generate_audio(text, stress_level):
+    """Generate and play speech asynchronously with stress modifications."""
+    global current_audio_task, stop_speech_event
     
-    if stress_level == "high":
-        params = {"speed": 1.7, "pitch": 1.2, "emotion": "angry"}  # Emergency
-    elif stress_level == "mild":
-        params = {"speed": 1.5, "pitch": 1.1, "emotion": "serious"}  # Warning
-    else:
-        params = {"speed": 1.2, "pitch": 1.0, "emotion": "neutral"}  # Normal
+    # Adjust parameters based on stress level
+    params = {
+        "high": {"speed": 1.7, "pitch": 1.2, "emotion": "angry"},
+        "mild": {"speed": 1.5, "pitch": 1.1, "emotion": "serious"},
+        "normal": {"speed": 1.2, "pitch": 1.0, "emotion": "neutral"}
+    }.get(stress_level, {"speed": 1.2, "pitch": 1.0, "emotion": "neutral"})
     
-    audio_output = tts.tts(text, pitch=1.4)
+    # Stop any ongoing speech
+    stop_speech_event.set()
+    await asyncio.sleep(0.1)  # Small delay to allow previous speech to stop
+    stop_speech_event.clear()
+    
+    # Generate speech
+    audio_output = await asyncio.to_thread(tts.tts, text, **params)
     audio_data = np.array(audio_output, dtype=np.float32)
-
-    sd.play(audio_data, samplerate=22050)  # Play at 22.05 kHz
+    
+    # Play speech while checking for interruptions
+    sd.play(audio_data, samplerate=22050)
     while sd.get_stream().active:
-         asyncio.sleep(0.1)  # Check every 100ms """
-
-
-#Generate speech and play it asynchronously
-async def generate_audio(text):
-    audio_output = tts.tts(text, pitch=1.4)
-    audio_data = np.array(audio_output, dtype=np.float32) 
-    # Load audio and play asynchronously
-    #data, samplerate = sf.read(audio_file, dtype="float32")
-
-    # Play audio in a separate thread to avoid blocking
-    def play_audio():
-        #sd.play(data, samplerate)
-        sd.play(audio_data, samplerate=22050)  # Play at 22.05 kHz
-        sd.wait()
-
-    audio_thread = threading.Thread(target=play_audio, daemon=True)
-    audio_thread.start()
-
-    # Cleanup temp file
-    #os.remove(audio_file)
+        if stop_speech_event.is_set():
+            sd.stop()
+            break
+        await asyncio.sleep(0.1)
 
 @socketio.on("send_text")
-def handle_send_text(data):
+def handle_text(data):
+    """Handle text input from the frontend and trigger speech generation."""
+    global current_audio_task
+
+    """Handle text received from WebSocket"""
     data = json.loads(data)
     text = data.get("text", "")
     stress_level = data.get("stress_level", "normal")
 
     print(f"Received text: {text}")
-    if not text.strip():
-        return
-    else:
-        text=text.strip()
-        text=re.sub(r"[^a-zA-Z0-9.,'?! ]", "", text)
-        
-    future = asyncio.run_coroutine_threadsafe(generate_audio(text), loop)  # Run TTS in event loop
-    try:
-        future.result()  # Ensure execution
-    except Exception as e:
-        print(f"Error in TTS execution: {e}")
+    
+    # Cancel previous speech and start new one
+    if current_audio_task:
+        current_audio_task.cancel()
+    
+    current_audio_task = asyncio.create_task(generate_audio(text, stress_level))
+
 
 @socketio.on("change_altitude")
 def handle_altitude(data):
@@ -1308,20 +966,12 @@ def change_variable(data):
 
 @socketio.on("control_command")
 def control_command(data):
-    action=data['action']
-    elementId=data['whichbtn']
-    value=data['value']
     #Forwards control commands from the controller panel to the user's screen
     print(f"Control Command: {data}")
-    if (action=="check"):
-         socketio.emit("check_command", data)
-    else:
-        socketio.emit("execute_command", data)
+    socketio.emit("execute_command", data)
    
 
     
 
 if __name__ == "__main__":
-    """   Jarvis.start_jarvis()  # Start listening before running Flask app
-    socketio.run(app, host="0.0.0.0", port=8080) """
     socketio.run(app, host="0.0.0.0", port=8080, debug=False, log_output=False,allow_unsafe_werkzeug=True)

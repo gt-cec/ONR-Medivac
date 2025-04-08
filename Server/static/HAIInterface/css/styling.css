@@ -822,25 +822,24 @@ div.vitals-popup {
 }
 
 .voice-assistant {
-    position: fixed;
-    top: 175px;
-    right: 15%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 60px;
-    /* background: #FF5722; */
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 0 0 rgba(253, 240, 0, 0.68);
-    animation: pulse 2s infinite;
-    /* visibility: hidden; */
-    padding-top: 3px;
-    /* opacity: 0;
-    transition: visibility 0s, opacity 0.5s ease; */
-    z-index: 1001;
-    visibility: visible;
+  position: fixed;
+  top: 175px;
+  right: 15%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 0 rgba(253, 198, 0, 0.873);
+  z-index: 1001;
+  padding-top: 3px;
+  transition: box-shadow 0.3s ease;
+}
+
+.voice-assistant:hover {
+  box-shadow: 0 0 15px 6px rgba(255, 111, 0, 0.7);
 }
 
 
@@ -883,18 +882,24 @@ div.vitals-popup {
     transition: visibility 0s, opacity 0.5s ease;
   }*/
 
-  .voice-assistant:before {
-    content: '';
-    position: absolute;
-    top: -10px;
-    left: -10px;
-    right: -10px;
-    bottom: -10px;
-    border-radius: 50%;
-    border: 5px solid rgba(255, 87, 34, 0.4); 
-    animation: pulse 2s ease-out; 
-    visibility: hidden;
-  }
+    .voice-assistant:after {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      border-radius: 50%;
+      border: 5px solid rgba(244, 180, 16, 0.967);
+      opacity: 0;
+      pointer-events: none;
+    }
+  
+    .voice-assistant.active:after {
+      animation: pulse 2s infinite;
+      opacity: 1;
+    }
+
 
   @keyframes pulse {
     0% {

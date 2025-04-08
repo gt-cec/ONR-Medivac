@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            font-size: 18px;
+            font-size: 17px;
             background-color: #f8f9fa;
             padding: 20px;
             display: flex;
@@ -16,7 +16,7 @@
         .main-container {
             display: flex;
             width: 90%;
-            gap: 20px;
+            gap: 18px;
         }
         .panel {
             flex: 1;
@@ -43,9 +43,9 @@
             border-radius: 5px;
             cursor: pointer;
             width: 100%;
-            font-size: 18px;
+            font-size: 17px;
         }
-        .control-button { background-color: #007bff; color: white; }
+        .control-button { background-color: #f94ae1; color: white; }
         .control-button:hover { background-color: #0056b3; }
         .actbutton { background-color: #ff4400; color: white; }
         .actbutton:hover { background-color: #b30900; }
@@ -59,11 +59,11 @@
             margin-top: 5px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            font-size: 18px;
+            font-size: 17px;
         }
 
         select {
-            font-size: 18px;
+            font-size: 17px;
             padding: 10px;
             height: 45px;
             width: 100%;
@@ -95,7 +95,7 @@
         .click-buttons{
             flex: 1;
             padding: 8px;
-            font-size: 16px;
+            font-size: 17px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -103,24 +103,24 @@
 
         }
 
-        #start, #submit {
-            background-color: #007BFF;
+        #start, #submit  {
+            background-color: #29c6f1ea;
             color: white;
             margin-right: 5px;
         }
 
-        #confirm {
+        #confirm, #acceptChange, #okFuel {
             background-color: #28a745;
             color: white;
             margin-right: 5px;
         }
 
-        #abort {
+        #abort, #ignoreChange {
             background-color: #dc3545;
             color: white;
         }
 
-        .check {
+        .check, #showAlert, #elFuel {
             background-color: #ffcc00;
             color: black;
         }
@@ -161,7 +161,9 @@
 
 
                 <h4>Say</h4>
-                <div class="control-button jarvis-button" data-text="You want to change altitude" id="ca-page">Change altitude Acknowledge</div>
+                <div class="control-button jarvis-button" data-text="Are you ready to start?" id="Start">Start</div>
+                <div class="control-button jarvis-button" data-text="Please confirm the destination: Emory University Hospital"id="Confimdest">Confirm Dest</div>
+                <div class="control-button jarvis-button" data-text="Acknowledged, proceeding to change altitude" id="ca-page">Change altitude Acknowledge</div>
                 <div class="control-button jarvis-button" data-text="Acknowledging your request" id="Ack">Acknowledge</div>
                 <div class="control-button jarvis-button" data-text="Got it, you want to change destination. Let me pull up the map to assist you with that" id="cd-page">Change Destination Acknowledge</div>
                 <div class="control-button jarvis-button" data-text="Got it, you want to make an emergency landing. Let me pull up the map to assist you with that" id="emergency-page">Emergency Landing Acknowledge</div>
@@ -176,6 +178,7 @@
                 <div class="control-button jarvis-button" data-text="EMERGENCY DETECTED NEED TO LAND IMMEDIATELY" id="emergency">Emergency detected</div>
                 <div class="control-button jarvis-button" data-text="Sensor Miscalibrated. Report backup sensor reading" id="sensor">Sensor Miscalibrated</div>
                 <div class="control-button jarvis-button" data-text="Engine Failure has occured" id="emergency">Engine Failure</div>
+
 
 
                 <!-- automate the actions that follow the text?, how to get the variables-->
@@ -245,27 +248,18 @@
                 
                         <!-- Main Action Buttons -->
                         
-                            <div class="click-buttons-panel">
-                             <div class="click-buttons" id="start">Start</button>
-                            <div class="click-buttons" id="submit">Submit</button>
-                            </div>
+                        <div class="click-buttons-panel">
+                            <div class="click-buttons" id="start">Start</div>
+                            <div class="click-buttons" id="submit">Submit</div>
+                        </div>
                       
                         <div class="click-buttons-panel">
-                            <div class="click-buttons" id="confirm">Confirm</button>
-                            <div class="click-buttons" id="abort">Abort</button>
+                            <div class="click-buttons" id="confirm">Confirm</div>
+                            <div class="click-buttons" id="abort">Abort</div>
                         </div>
                 
                         <!-- Check and Uncheck Buttons -->
-                        <div class="check-buttons small-action">
-                            <button class="check" id="check1">Check 1</button>
-                            <button class="check" id="check2">Check 2</button>
-                            <button class="check" id="check3">Check 3</button>
-                        </div>
-                        <div class="check-buttons small-action">
-                            <button class="uncheck" id="uncheck1">Uncheck 1</button>
-                            <button class="uncheck" id="uncheck2">Uncheck 2</button>
-                            <button class="uncheck" id="uncheck3">Uncheck 3</button>
-                        </div>
+                        
                     </div>
 
 
@@ -279,6 +273,68 @@
                     <label for="sensor">Sensor Reading:</label>
                     <input type="text" id="sensorReading">  
                     <button id="send">Submit</button>
+                </div>
+
+                <div class="subcontent-container">
+                    <h3>Start</h3>
+                    <div class="click-buttons-panel">
+                        <div class="control-button jarvis-button" data-text="Are you ready to start?" id="Start">Speak: Start</div>
+                        <div class="control-button jarvis-button" data-text="Please confirm the destination: Emory University Hospital" id="Confimdest">Speak: Confirm Dest</div>
+                    </div>
+                    <div class="click-buttons-panel">
+                        <div class="click-buttons" id="start">Start</div>
+                        <div class="click-buttons" id="confirm">Confirm</div>
+                    </div>
+                    <div class="click-buttons-panel">
+                        <div class="control-button jarvis-button" data-text="Put on your seatbelts and ensure that all equipments are secure", id="secure"> Speak: Secure</div>
+                        <div class="control-button jarvis-button" data-text="Are you ready for takeoff" , id="check2"> Speak: Takeoff?</div>
+                    </div>
+                    <div class="check-buttons">
+                        <button class="check" id="check0">Check 1</button>
+                        <button class="check" id="check1">Check 2</button>
+                        <button class="check" id="check2">Check 3</button>
+                    </div>
+                    <div class="check-buttons">
+                        <button class="uncheck" id="uncheck0">Uncheck 1</button>
+                        <button class="uncheck" id="uncheck1">Uncheck 2</button>
+                        <button class="uncheck" id="uncheck2">Uncheck 3</button>
+                    </div>
+                    
+                    <h3>Scenario 1</h3>
+                    <div class="click-buttons-panel">
+                        <div class="control-button jarvis-button" data-text="Acknowledging your request" id="Ack">Speak: Acknowledge</div>
+                    </div>
+
+                    <h3>Scenario 2</h3>
+                    <div class="control-button jarvis-button" data-text="You want to change altitude. However, that will increase the time to destination. Will you like to proceed" id="altChange"> Speak:Alt change time increase </div>
+                    <div class="click-buttons-panel">
+                        <div class="click-buttons" id="showAlert">Show Alert</div>
+                        <div class="click-buttons" id="acceptChange">Accept Change</div>
+                        <div class="click-buttons" id="ignoreChange">Ignore Change</div>
+                    </div>
+                    <div class="open-button" id="ca-page">Change Altitude Page</div>
+                    <div class="control-button jarvis-button" data-text="Acknowledged, proceeding to change altitude" id="ca-page">Speak: Change altitude Acknowledge</div>
+                    <label for="altitude">Change Altitude to (above 1000):</label>
+                    <input type="text" id="altitude">
+                    <button class="change-button" id="altitude">Change</button>
+                    <div class="control-button jarvis-button" data-text="Acknowledging your request" id="Ack">Speak: Acknowledge</div>
+
+                    <h3>Scenario 3</h3>
+                    <div class="control-button jarvis-button" data-text="Primary Fuel gauge is indicating empty, but system diagnostics confirm normal fuel flow and engine performance. This appears to be a sensor malfunction. No immediate action is required. I will keep monitoring the situation closely while continuing the mission as planned unless instructed otherwise." id="fuelTank">Speak: Empty Fuel Tank </div>
+                    <div class="click-buttons-panel">
+                        <div class="click-buttons" id="okFuel">OK Button(fuel)</div>
+                        <div class="click-buttons" id="elFuel">Emergency Landing(fuel)</div>
+                    </div>
+                    <div class="control-button jarvis-button" data-text="Acknowledging your request" id="Ack">Speak: Acknowledge</div>
+                    <div class="open-button" id="cd-page">Change Destination Page</div>
+                    <div class="open-button" id="map-page">Open Map</div>
+
+                    <h3>Scenario 4</h3>
+                    <div class="control-button jarvis-button" data-text="EMERGENCY DETECTED NEED TO LAND IMMEDIATELY" id="emergency"> Speak: Emergency detected</div>
+                    <div class="control-button jarvis-button" data-text="Engine Failure has occured" id="emergency"> Speak: Engine Failure</div>
+                    <div class="open-button" id="emergency-page">Emergency Page</div>
+                    <div class="open-button" id="map-page">Open Map</div>
+                    
                 </div>
         </div>
     </div>
@@ -420,11 +476,25 @@
                 button.addEventListener("click", async function () {
                     let whichbtn= `${button.id}-button`;  // Append "-button"
                     let action = "click"
+
+                    if (button.id.includes("showAlert")) {
+                        action = "show";
+                    }
                     let value = null
                     socket.emit("control_command", { action, whichbtn, value });
                     console.log(`Sent command: ${action} on ${whichbtn} with value: ${value}`);
                  });
         });
+
+        document.querySelectorAll(".check, .uncheck").forEach(button => {
+                button.addEventListener("click", async function () {
+                    let whichbtn = button.id.replace(/\D/g, "")  // Extract numbers (0,1,2) from check/uncheck
+                    let action = "check"
+                    let value = null
+                    socket.emit("control_command", { action, whichbtn, value });
+                    console.log(`Sent command: ${action} on ${whichbtn} with value: ${value}`);
+                });
+            });
 
         // Function to control user screen buttons
         function sendControlCommand(button = null, action = "click", value = null) {
