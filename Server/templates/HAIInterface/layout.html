@@ -125,7 +125,7 @@
         </div>
         
        <!-- Voice Assistant -->
-        <div class="voice-assistant">
+        <div class="voice-assistant" id="assistant">
             <button id="aiToggle" class="ai-button">
                 <img id="aiImage" src="../static/HAIInterface/img/robotic_bgrm.png" alt="AI Assistant">
             </button>
@@ -396,7 +396,7 @@
           </div>
 
 
-        <div class="alertoverlay" id="altitudeTimeOverlay">
+       <div class="alertoverlay" id="showAlert-Button">
             <div class="alert-box" id="altitudeTimeBox">
                 <div class="warning-sign">
                 <p>⚠️ <strong> Alert:</strong> Altitude Change </p>
@@ -684,7 +684,7 @@
             const aiInactiveImage = "../static/HAIInterface/img/robotic_bgrm.png";
             const aiActiveGif = "../static/HAIInterface/img/robotic_bgrm.gif";
 
-            const toggleSound = new Audio("../static/HAIInterface/sound/activate.mp3");
+            //const toggleSound = new Audio("../static/HAIInterface/sound/activate.mp3");
 
 
             let aiActive = false;
@@ -696,19 +696,19 @@
             // Toggle pulsating effect
             if (aiActive) {
                     aiButton.classList.add("active");
-                    toggleSound.currentTime = 0;  // reset in case it's still playing
+                    //toggleSound.currentTime = 0;  // reset in case it's still playing
                     //toggleSound.play();
-                    document.body.classList.add('assistant-dull-background', 'active');
+                    //document.body.classList.add('assistant-dull-background', 'active');
                 } else {
                     aiButton.classList.remove("active");
-                    document.body.classList.remove('assistant-dull-background', 'active');
+                    //document.body.classList.remove('assistant-dull-background', 'active');
 
                 }
             });
 
 
 
-        function acceptChange(){
+        /* function acceptChange(){
             console.log('change accepted-changing altitude')
                 const altitudeTimeOverlay = document.getElementById('altitudeTimeOverlay');
                 altitudeTimeOverlay.style.opacity = '0';
@@ -739,7 +739,7 @@
                 await fetch("/var?vitals-state=" + vitalsState)  
                 log({ "page": "Inflight", "action": "Ignore change button on vitals emergency pressed" });
             }
-
+ */
         
 
         //Listen to the socket for any changes from the controller:
@@ -771,7 +771,7 @@
             }
         });
 
-        socket.on("show_overlay", (data) => {   // Transmit updates from the control panel
+      /*   socket.on("show_overlay", (data) => {   // Transmit updates from the control panel
                 console.log("Showing Overlay");
                 log({ "page": "emergency", "action": "transmit command received: "  });
                 if (data.transmit == "1") {
@@ -780,17 +780,17 @@
                     grdcontact(); // Calls the receive function for Transmit Comm2
                 }
             });
- 
+  */
         socket.on("execute_command", (data) => {
             //const {action, elementId, value} = data;
-            console;log(data)
+            console.log(data)
             console.log(`Executing: ${data.action} on ${data.whichbtn} with value: ${data.value}`);
             const action=data.action
 
-            const element = document.getElementById(data.whichbtn) || document.querySelector(`[name='${data.elementId}']`);
+            const element = document.getElementById(data.whichbtn) || document.querySelector(`[name='${data.whichbtn}']`);
 
             if (!element) {
-                console.warn(`Element ${data.elementId} not found.`);
+                console.warn(`Element ${data.whichbtn} not found.`);
                 return;
             }
 
@@ -799,7 +799,7 @@
                     element.click();
                     break;
                 case "show":
-                    const altitudeTimeOverlay = document.getElementById('altitudeTimeOverlay');
+                    const altitudeTimeOverlay = document.getElementById('showAlert-Button');
                     document.body.classList.add('dull-background');
                     altitudeTimeOverlay.style.visibility = 'visible';
                     altitudeTimeOverlay.style.opacity = '1';

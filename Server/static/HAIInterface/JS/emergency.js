@@ -540,8 +540,7 @@ function activateFuelAlert() {
         document.getElementById('emptytankSound').pause();
         document.querySelector('.radiopanel').classList.toggle('open');
     }
-      
-    
+
  }
 
   // Function to close the emergency alert
