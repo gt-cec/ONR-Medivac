@@ -136,8 +136,7 @@
         <div class="user-text-box" id="userTextBox" style="display: none;" >User Text Will Appear Here</div>
       </div>
      
-      <div class="voice-assistant" id="assistant" style="display: none;" ></div>
-     
+      
         <div id="center" class="center">
             {% block content %}
         
@@ -285,7 +284,7 @@
                 <button class="submit-button" onclick="submitPressureValue()">Submit</button>
               </div>
               <div id="finalMessage" style="display: none;"></div>
-              <button class="ok-button" id="okButton" style="display: none;" onclick="closePressureAlert()">OK</button>
+              <button class="ok-button" id="ok-Button" style="display: none;" onclick="closePressureAlert()">OK</button>
             </div>
              <audio id="warningSound" >
                 <source src="../static/HAIInterface/img/warning-sound.mp3" type="audio/mpeg">
@@ -297,14 +296,15 @@
        <div class="alertbody">
         <div class="alertoverlay" id="alertOverlay">
            <div class="alert-box" id="alertBox">
-             <div class="engine-failure" id="engineFailureText"> Engine Failure!</div>
+             <div class="engine-failure" id="engineFailureText"> 🚨 <strong>ENGINE FAILURE!</strong></div>
              <div class="warning-sign">
                 <img src="../static/HAIInterface/img/siren.gif" class="siren-gif" alt="Siren">
              </div>
+             <div>Need to land Immediately</div>
             <!--  <button class="alert-button" id="moreInfoButton" onclick="showMoreInfo()">Click for more info</button>
               <button class="close-button" id="closeButton" onclick="closeAlert()">X</button> 
              <div id="alertExplanation" style="display: none;"> -->
-            <ul style="list-style-type:circle; padding: 15px; text-align: justify; ">
+            <!-- <ul style="list-style-type:circle; padding: 15px; text-align: justify; ">
             <li><b>Alert:</b> Engine failure detected. This is not a drill.</li>
                 <li><b>Action Required:</b> Initiating emergency procedures now.</li> 
                 <li><b>Immediate Task:</b> We need to select an alternate landing site.</li>
@@ -315,24 +315,34 @@
                 <li><b>Time Sensitive:</b> Swift action is crucial for our safety.</li>
             </ul>
 
-            </div>
+            </div> -->
             <button class="submit-button" style="display: none;" id="CDButton">Emergency Landing</button>
           </div>
         </div>        
        <audio id="sirenSound" >
            <source src="../static/HAIInterface/img/audio.mp3" type="audio/mpeg">
-        </audio> 
        </div>
         
        <!-- Fuel Tank Emergency    -->
        <div class="alertbody">
          <div class="alertoverlay" id="fuelAlertOverlay">
             <div class="alert-box" id="fuelAlertBox">
-              <div class="engine-failure" id="emptyTankText"> Fuel Tank Empty</div>
+              <div class="engine-failure" id="emptyTankText"> ⚠️ Fuel Gauge Alert</div>
               <div class="warning-sign">
                 <img src="../static/HAIInterface/img/empty-tank.png" class="siren-gif" alt="empty-tank"> 
               </div>
-              <button class="alert-button" id="fuelInfoButton" onclick="showFuelInfo()">Click for more info</button>
+            <p><strong>Detected:</strong> Fuel gauge reads empty</p>
+            <p><strong>Diagnostics:</strong>
+                Fuel flow <span class="status-check">✅</span>,
+                Engine <span class="status-check">✅</span>
+            </p>
+            <p><strong>Recommendation:</strong> Continue flight unless instructed otherwise</p>
+            <p>Status: Under continuous monitoring</p>
+            <p><strong>Medic Options:</strong></p>
+            <button class="ok-button" id="okFuel-Button" style="display: none;">OK</button>&ensp;&ensp;
+            <button class="ok-button" id="elFuel-Button">Change Destination</button>
+           
+              <!-- <button class="alert-button" id="fuelInfoButton" onclick="showFuelInfo()">Click for more info</button>
               <div id="fuelAlertExplanation" style="display: none;">
                 <ul style="list-style-type:circle; padding: 15px; text-align: justify; ">
                     <li><b>Fuel Gauge Alert:</b> My primary fuel gauge is indicating an empty tank. </li>
@@ -345,7 +355,7 @@
                     <li style="max-width:max-content"><b>Alternate Options:</b></li>  
                  </ul>
                     <button class="ok-button" id="elButtonFuel" >Change Destination</button>&ensp;&ensp;
-                    <button class="ok-button" id="groundButtonFuel" >Contact Control</button> 
+                    <button class="ok-button" id="groundButtonFuel" >Contact Control</button>  -->
                </div>
             </div>
          </div>        
@@ -362,7 +372,7 @@
               <div class="warning-signn">
                 <img src="../static/HAIInterface/img/warning-sign.png" class="siren-gif" alt="warning-sign">
               </div>
-              <button class="alert-button" id="altitudemoreInfoButton" onclick="showAltitudeInfo()">Click for more info</button>
+              <button class="alert-button" id="altitudemoreInfo-Button" onclick="showAltitudeInfo()">Click for more info</button>
               <div id="altitudealertExplanation" style="display: none;">
                 <p>Report the value shown by the backup Altitude  sensor:</p>
                   <select id="altitudeValue" class="input-field" >
@@ -378,7 +388,7 @@
                 <button class="submit-button" onclick="submitAltitudeValue()">Submit</button>
               </div>
               <div id="finalMessage" style="display: none;"></div>
-              <button class="ok-button" id="okButton" style="display: none;" onclick="closeAltitudeAlert()">OK</button>
+              <button class="ok-button" id="ok-Button" style="display: none;" onclick="closeAltitudeAlert()">OK</button>
             </div>
              <audio id="altitudeSound" >
                 <source src="../static/HAIInterface/img/warning-sound.mp3" type="audio/mpeg">
@@ -386,20 +396,24 @@
           </div>
 
 
-        <div class="alert warning">
-            <p>⚠️ <strong>Weather Alert:</strong> Turbulence ahead!</p>
-            <p>Suggested Change: Increase altitude (+5 min travel time)</p>
-            <button onclick="acceptChange()">✅ Accept Route Change</button>
-            <button onclick="ignoreChange()">❌ Ignore</button>
+        <div class="alertoverlay" id="altitudeTimeOverlay">
+            <div class="alert-box" id="altitudeTimeBox">
+                <div class="warning-sign">
+                <p>⚠️ <strong> Alert:</strong> Altitude Change </p>
+                <p>Suggested Change: Increase altitude (+5 min travel time)</p>
+                <button class="submit-button" id="acceptChange-Button" onclick="acceptChange()">✅ Accept Route Change</button>
+                <button class="submit-button" id="ignoreChange-Button"onclick="ignoreChange()">❌ Ignore</button>
+                </div>
+            </div>
         </div>
 
 
-        <div class="alert critical">
+        <!-- <div class="alert critical">
             <p>🚨 <strong>ENGINE FAILURE!</strong> Emergency landing required.</p>
             <p>Landing Site Options:</p>
             <button onclick="landNow()">🛬 Land (15 min, limited care)</button>
             <button onclick="continueFlight()">✈️ Continue (25 min, full care)</button>
-        </div>
+        </div> -->
 
         <!-- Weather Emergency    -->  
        <div class="alertbody">
@@ -664,20 +678,69 @@
 
         // Toggle AI Assistant Activation
         const aiToggle = document.getElementById("aiToggle");
-        const aiImage = document.getElementById("aiImage");
-        //const aiStatus = document.getElementById("aiStatus");
+            const aiImage = document.getElementById("aiImage");
+            const aiButton = document.querySelector(".voice-assistant"); 
 
-        const aiInactiveImage = "../static/HAIInterface/img/robotic_bgrm.png"; 
-        const aiActiveGif = "../static/HAIInterface/img/robotic_bgrm.gif"; 
+            const aiInactiveImage = "../static/HAIInterface/img/robotic_bgrm.png";
+            const aiActiveGif = "../static/HAIInterface/img/robotic_bgrm.gif";
 
-        let aiActive = false;
+            const toggleSound = new Audio("../static/HAIInterface/sound/activate.mp3");
+
+
+            let aiActive = false;
 
         aiToggle.addEventListener("click", function () {
             aiActive = !aiActive;
             aiImage.src = aiActive ? aiActiveGif : aiInactiveImage;
-            // aiStatus.textContent = aiActive ? "AI Assistant Activated" : "AI Assistant Deactivated";
-        });
 
+            // Toggle pulsating effect
+            if (aiActive) {
+                    aiButton.classList.add("active");
+                    toggleSound.currentTime = 0;  // reset in case it's still playing
+                    //toggleSound.play();
+                    document.body.classList.add('assistant-dull-background', 'active');
+                } else {
+                    aiButton.classList.remove("active");
+                    document.body.classList.remove('assistant-dull-background', 'active');
+
+                }
+            });
+
+
+
+        function acceptChange(){
+            console.log('change accepted-changing altitude')
+                const altitudeTimeOverlay = document.getElementById('altitudeTimeOverlay');
+                altitudeTimeOverlay.style.opacity = '0';
+                altitudeTimeOverlay.addEventListener('transitionend', () => {
+                    altitudeTimeOverlay.style.visibility = 'hidden';
+                    document.body.classList.remove('dull-background');
+                }, { once: true });
+                vitalsState = 0
+                console.log(vitalsState);
+                //updating the server
+                await fetch("/var?vitals-state=" + vitalsState)
+                log({ "page": "Inflight", "action": "Change altitude button on vitals emergency pressed" });
+                window.location.href = '/hai-interface/ca-page=' + 1 ;
+        }
+
+
+        function ignoreChange(){
+                console.log('ignore change-not change altitude')
+                const altitudeTimeOverlay = document.getElementById('altitudeTimeOverlay');
+                altitudeTimeOverlay.style.opacity = '0';
+                altitudeTimeOverlay.addEventListener('transitionend', () => {
+                    altitudeTimeOverlay.style.visibility = 'hidden';
+                    document.body.classList.remove('dull-background');
+                }, { once: true });
+                vitalsState = 0
+                console.log(vitalsState);
+                //updating the server
+                await fetch("/var?vitals-state=" + vitalsState)  
+                log({ "page": "Inflight", "action": "Ignore change button on vitals emergency pressed" });
+            }
+
+        
 
         //Listen to the socket for any changes from the controller:
         socket.on("update_callsign", (data) => {   // Callsign updates from the control panel
@@ -708,15 +771,26 @@
             }
         });
 
+        socket.on("show_overlay", (data) => {   // Transmit updates from the control panel
+                console.log("Showing Overlay");
+                log({ "page": "emergency", "action": "transmit command received: "  });
+                if (data.transmit == "1") {
+                    grdupdate(); //  for Transmit Comm1
+                } else if (data.transmit == "2") {
+                    grdcontact(); // Calls the receive function for Transmit Comm2
+                }
+            });
  
         socket.on("execute_command", (data) => {
-            const {action, elementId, value } = data;
-            console.log(`Executing: ${action} on ${elementId} with value: ${value}`);
+            //const {action, elementId, value} = data;
+            console;log(data)
+            console.log(`Executing: ${data.action} on ${data.whichbtn} with value: ${data.value}`);
+            const action=data.action
 
-            const element = document.getElementById(elementId) || document.querySelector(`[name='${elementId}']`);
+            const element = document.getElementById(data.whichbtn) || document.querySelector(`[name='${data.elementId}']`);
 
             if (!element) {
-                console.warn(`Element ${elementId} not found.`);
+                console.warn(`Element ${data.elementId} not found.`);
                 return;
             }
 
@@ -724,18 +798,17 @@
                 case "click":
                     element.click();
                     break;
-                case "check":
-                    if (element.type === "checkbox" || element.type === "radio") {
-                        element.checked = true;
-                    }
-                    break;
+                case "show":
+                    const altitudeTimeOverlay = document.getElementById('altitudeTimeOverlay');
+                    document.body.classList.add('dull-background');
+                    altitudeTimeOverlay.style.visibility = 'visible';
+                    altitudeTimeOverlay.style.opacity = '1';
                 case "set-value":
                     if (["INPUT", "TEXTAREA", "SELECT"].includes(element.tagName)) {
                         element.value = value;
                     }
                     break;
-                default:
-                    console.warn(`Unknown action: ${action}`);
+                
             }
         });
 

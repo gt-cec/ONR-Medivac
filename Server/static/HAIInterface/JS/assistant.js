@@ -25,19 +25,26 @@ const keywordsRoutes = {
 
 function showAssistant() {
     console.log('showing assistant');
+
+    aiActive = !aiActive;
+    aiImage.src = aiActive ? aiActiveGif : aiInactiveImage;
+
     const activeSound = new Audio('"../static/HAIInterface/img/active.mp3');
     activeSound.loop = false;
     activeSound.play();
     document.body.classList.add('assistant-dull-background', 'active');
     document.getElementById('assistant').style.display = 'block';
-    document.getElementById('userTextBox').style.display = 'block';
+    /* document.getElementById('userTextBox').style.display = 'block';
     document.getElementById('userTextBox').innerHTML = "<b>Jarvis: </b>Hello, What can I help you with?<br><br>" +
-    "You could say: <i>Change Destination</i>, <i>Emergency</i>, <i>Open Map</i>, <i>ETA</i> <br><br>";
+    "You could say: <i>Change Destination</i>, <i>Emergency</i>, <i>Open Map</i>, <i>ETA</i> <br><br>"; */
 }
 
 async function hideAssistant() {
     console.log('hiding assistant');
-    console.log('showing assistant');
+
+    aiActive = !aiActive;
+    aiImage.src = aiActive ? aiActiveGif : aiInactiveImage;
+
     const inactiveSound = new Audio('"../static/HAIInterface/img/inactive.mp3');
     inactiveSound.loop = false;
     inactiveSound.play();

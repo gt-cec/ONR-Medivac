@@ -94,17 +94,21 @@
     let help_rect =  document.getElementById("help").getBoundingClientRect();
     console.log(help_rect.top, help_rect.right, help_rect.bottom, map_rect.left);
 
-    socket.on("check_command", (data) => {
-        const { action, elementId, value } = data;
+     socket.on("check_command", (data) => {
+        //const {action, elementId, value} = data;
+        if (data.action == "check"){
+            console.log(data)
+            console.log(`check: ${data.whichbtn}`);
+            
+            // Get the checklist item using its numeric ID
+            let item = document.getElementById(data.whichbtn);
 
-        // Get the checklist item using its numeric ID
-        let item = document.getElementById(elementId);
-
-        if (item) {
-            checkbox_toggle(item);
-        } else {
-            console.error(`Element with ID ${elementId} not found.`);
-        }
+            if (item) {
+                checkbox_toggle(item);
+            } else {
+                console.error(`Element with ID ${elementId} not found.`);
+            }
+    }
     });
 
 {% endblock %}
