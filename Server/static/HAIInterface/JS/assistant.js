@@ -31,9 +31,9 @@ function showAssistant() {
 
     const activeSound = new Audio('"../static/HAIInterface/img/active.mp3');
     activeSound.loop = false;
-    activeSound.play();
+    //activeSound.play();
     document.body.classList.add('assistant-dull-background', 'active');
-    document.getElementById('assistant').style.display = 'block';
+    //document.getElementById('assistant').style.display = 'block';
     /* document.getElementById('userTextBox').style.display = 'block';
     document.getElementById('userTextBox').innerHTML = "<b>Jarvis: </b>Hello, What can I help you with?<br><br>" +
     "You could say: <i>Change Destination</i>, <i>Emergency</i>, <i>Open Map</i>, <i>ETA</i> <br><br>"; */
@@ -45,10 +45,10 @@ async function hideAssistant() {
     aiActive = !aiActive;
     aiImage.src = aiActive ? aiActiveGif : aiInactiveImage;
 
-    const inactiveSound = new Audio('"../static/HAIInterface/img/inactive.mp3');
-    inactiveSound.loop = false;
-    inactiveSound.play();
-    document.getElementById('assistant').style.display = 'none';
+    //const inactiveSound = new Audio('"../static/HAIInterface/img/inactive.mp3');
+    //inactiveSound.loop = false;
+    //inactiveSound.play();
+    //document.getElementById('assistant').style.display = 'none';
     document.body.classList.remove('assistant-dull-background', 'active');
     document.getElementById('userTextBox').style.display = 'none';
     await fetch("/ws", {
