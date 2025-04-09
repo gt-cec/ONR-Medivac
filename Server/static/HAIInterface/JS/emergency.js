@@ -10,7 +10,7 @@ function initEmergency() {
     // interval to trigger the emergency state, when needed
     setInterval(async () => {
         // only run on certain pages
-        if (!["/hai-interface/location", "/hai-interface/inflight", "/hai-interface/change-destination", "/hai-interface/help"].includes(window.location.pathname)) {
+      if (!["/hai-interface/location", "/hai-interface/inflight", "/hai-interface/change-destination", "/hai-interface/help", "/hai-interface/change-altitude" ].includes(window.location.pathname)) {
             return
         }
 
@@ -680,8 +680,6 @@ function activateAltitudeAlert() {
     }
 
 
-
-  
 
 
 
