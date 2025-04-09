@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cockpit Gauges</title>
+    <link rel="icon" href="data:,">
+    <style>
+        body {
+            margin: 0;
+            background-color: #0b0c10;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+        }
+
+        .gauge-panel {
+            width: 320px;
+            background-color: #1f2833;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            border-right: 2px solid #45a29e;
+        }
+
+        .gauge-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+
+        .gauge-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -60%);
+            text-align: center;
+        }
+
+        .gauge-label h2 {
+            font-size: 20px;
+            margin: 0;
+        }
+
+        .gauge-value {
+            font-size: 22px;
+            color: #ffcc00;
+        }
+
+        svg {
+            transform: rotate(-90deg);
+            /* Makes arc start from top */
+        }
+
+        circle.bg {
+            stroke: #2f3e46;
+        }
+
+        circle.fg {
+            stroke-linecap: round;
+            stroke-width: 15;
+            fill: none;
+            transition: stroke 0.3s, stroke-dashoffset 0.8s ease;
+        }
+
+        .pointer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 80px;
+            background-color: white;
+            transform-origin: bottom center;
+            transform: translate(-50%, -100%) rotate(0deg);
+            border-radius: 2px;
+            transition: transform 0.8s ease;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="gauge-panel">
+        <!-- Fuel Gauge -->
+        <div class="gauge-container" id="fuelGauge">
+            <svg width="200" height="200">
+                <circle class="bg" r="90" cx="100" cy="100" stroke-width="15" fill="none" />
+                <circle class="fg" id="fuelArc" r="90" cx="100" cy="100" />
+            </svg>
+            <div class="pointer" id="fuelPointer"></div>
+            <div class="gauge-label">
+                <h2>Fuel</h2>
+                <div class="gauge-value" id="fuelValue">100%</div>
+            </div>
+        </div>
+
+        <!-- Altitude Gauge -->
+        <div class="gauge-container" id="altitudeGauge">
+            <svg width="200" height="200">
+                <circle class="bg" r="90" cx="100" cy="100" stroke-width="15" fill="none" />
+                <circle class="fg" id="altitudeArc" r="90" cx="100" cy="100" />
+            </svg>
+            <div class="pointer" id="altitudePointer"></div>
+            <div class="gauge-label">
+                <h2>Altitude</h2>
+                <div class="gauge-value" id="altitudeValue">0 ft</div>
+            </div>
+        </div>
+
+        <!-- Pressure Gauge -->
+        <div class="gauge-container" id="pressureGauge">
+            <svg width="200" height="200">
+                <circle class="bg" r="90" cx="100" cy="100" stroke-width="15" fill="none" />
+                <circle class="fg" id="pressureArc" r="90" cx="100" cy="100" />
+            </svg>
+            <div class="pointer" id="pressurePointer"></div>
+            <div class="gauge-label">
+                <h2>Pressure</h2>
+                <div class="gauge-value" id="pressureValue">14.7 psi</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const RADIUS = 90;
+        const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+
+        // Fuel, Altitude, Pressure Gauge Circles
+        const fuelArc = document.getElementById('fuelArc');
+        const altitudeArc = document.getElementById('altitudeArc');
+        const pressureArc = document.getElementById('pressureArc');
+
+        // Pointer Elements
+        const fuelPointer = document.getElementById('fuelPointer');
+        const altitudePointer = document.getElementById('altitudePointer');
+        const pressurePointer = document.getElementById('pressurePointer');
+
+        // Set Dasharray for smooth animations
+        fuelArc.style.strokeDasharray = altitudeArc.style.strokeDasharray = pressureArc.style.strokeDasharray = `${CIRCUMFERENCE}`;
+        fuelArc.style.strokeDashoffset = altitudeArc.style.strokeDashoffset = pressureArc.style.strokeDashoffset = `${0}`;
+
+        // Function to update gauge appearance
+        function setGauge(gaugeElement, pointer, valuePercent, type) {
+            const offset = CIRCUMFERENCE - (valuePercent / 100) * CIRCUMFERENCE;
+            gaugeElement.style.strokeDashoffset = offset;
+
+            // Color logic: Red for critical, Orange for caution, Green for normal
+            if (valuePercent < 20) {
+                gaugeElement.style.stroke = 'red';
+            } else if (valuePercent < 50) {
+                gaugeElement.style.stroke = 'orange';
+            } else {
+                gaugeElement.style.stroke = 'limegreen';
+            }
+
+            // Rotate the pointer (0 to 180 degrees)
+            const angle = (valuePercent / 100) * 180;
+            pointer.style.transform = `translate(-50%, -100%) rotate(${angle}deg)`;
+        }
+
+        // Function to update all gauges and values
+        function updateGauges(fuel, altitude, pressure) {
+            document.getElementById('fuelValue').textContent = `${fuel.toFixed(0)}%`;
+            document.getElementById('altitudeValue').textContent = `${altitude.toFixed(0)} ft`;
+            document.getElementById('pressureValue').textContent = `${pressure.toFixed(1)} psi`;
+
+            setGauge(fuelArc, fuelPointer, fuel, "fuel");
+            setGauge(altitudeArc, altitudePointer, (altitude / 12000) * 100, "altitude");
+            setGauge(pressureArc, pressurePointer, (pressure / 15) * 100, "pressure");
+        }
+
+        // Simulate flight parameters
+        let fuel = 100;
+        let altitude = 0;
+        let pressure = 14.7;
+        let phase = "takeoff";
+
+        // Flight simulation loop
+        function simulateFlight() {
+            if (phase === "takeoff") {
+                if (altitude < 10000) {
+                    altitude += 200;
+                } else {
+                    phase = "cruise";
+                }
+            } else if (phase === "cruise") {
+                if (fuel > 30) {
+                    fuel -= 0.2;
+                    pressure = 14.7;
+                } else {
+                    phase = "landing";
+                }
+            } else if (phase === "landing") {
+                if (altitude > 0) {
+                    altitude -= 250;
+                    pressure = 14.5;
+                } else {
+                    altitude = 0;
+                    pressure = 14.7;
+                    return; // End of flight
+                }
+            }
+
+            updateGauges(fuel, altitude, pressure);
+            requestAnimationFrame(simulateFlight);
+        }
+
+        requestAnimationFrame(simulateFlight);
+    </script>
+
+</body>
+
+</html>

@@ -1217,7 +1217,7 @@ def handle_send_text(data):
 
 #Generate speech and play it asynchronously
 async def generate_audio(text):
-    audio_output = tts.tts(text, pitch=1.4)
+    audio_output = tts.tts(text)
     audio_data = np.array(audio_output, dtype=np.float32) 
     # Load audio and play asynchronously
     #data, samplerate = sf.read(audio_file, dtype="float32")
