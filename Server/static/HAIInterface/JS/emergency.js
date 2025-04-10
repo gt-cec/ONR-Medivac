@@ -701,7 +701,7 @@ function schedulePrompt() {
     vitalsShown = false;  // Reset vitals flag for next cycle
     await fetch("/var?last_radio_update=" + last_radio_update)
   }
-  else if (!vitalsShown && now - last_radio_update > 60000) {
+  else if (!vitalsShown && new Date().getTime() - last_radio_update > 60000) {
     if (timeToDestination > 0.5) {
       console.log("Showing vitals prompt");
       showVitalsPrompt();
@@ -712,7 +712,7 @@ function schedulePrompt() {
   // Schedule next radio prompt after 105s (1 minute + 45 seconds)
   //setTimeout(speakRadioPrompt, 105000);
 
-}, 15000)
+}, 5000)
 }
 
 
