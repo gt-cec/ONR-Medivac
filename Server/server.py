@@ -20,6 +20,9 @@ import multiprocessing
 import sounddevice as sd
 import soundfile as sf
 import numpy as np
+import torch
+from parler_tts import ParlerTTSForConditionalGeneration
+from transformers import AutoTokenizer
 
 app = Flask(__name__)
 socketio = SocketIO(app, async_mode="threading", logger=False, cors_allowed_origins="*")  # Ensure Flask remains non-blocking
@@ -27,7 +30,16 @@ socketio = SocketIO(app, async_mode="threading", logger=False, cors_allowed_orig
 # Initialize TTS
 #tts = TTS("tts_models/multilingual/multi-dataset/your_tts", progress_bar=False).to("cpu")
 os.environ['TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD'] = '1'
-tts = TTS("tts_models/en/ljspeech/tacotron2-DDC", progress_bar=False).to("cpu") 
+#tts = TTS("tts_models/en/ljspeech/speedy-speech", progress_bar=False).to("cpu") 
+#tts = TTS("tts_models/en/jenny/jenny", progress_bar=False).to("cpu") 
+#tts = TTS("tts_models/en/vctk/vits", progress_bar=False).to("cpu")
+#tts = TTS("tts_models/en/vctk/vits", progress_bar=False).to("cpu")  
+tts = TTS("tts_models/en/ljspeech/glow-tts","vocoder_models/en/ljspeech/multiband-melgan" , progress_bar=False).to("cpu")  
+
+
+
+
+ 
 
 
 

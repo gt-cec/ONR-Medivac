@@ -63,7 +63,7 @@ sf.write(output_path, raw_audio, sample_rate)
  """
 
 
-# Load a multi-speaker model (ensure low-latency model is selected)
+""" # Load a multi-speaker model (ensure low-latency model is selected)
 tts = TTS("tts_models/en/vctk/SpeedSpeech")
 
 # List available speakers
@@ -75,11 +75,13 @@ audio_male = tts.tts("Hello, this is a male voice.", speaker="p237", emotion="ha
 # Generate speech with a female voice and emotion
 audio_female = tts.tts("Hi there, this is a female voice.", speaker="p294", emotion="neutral")
 
-pip install git+https://github.com/huggingface/parler-tts.git
+pip install git+https://github.com/huggingface/parler-tts.git """
+
 import torch
 from parler_tts import ParlerTTSForConditionalGeneration
 from transformers import AutoTokenizer
 import soundfile as sf
+import numpy
 
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
@@ -87,8 +89,8 @@ model = ParlerTTSForConditionalGeneration.from_pretrained("parler-tts/parler-tts
 tokenizer = AutoTokenizer.from_pretrained("parler-tts/parler-tts-mini-v1.1")
 description_tokenizer = AutoTokenizer.from_pretrained(model.config.text_encoder._name_or_path)
 
-prompt = "Hey, how are you doing today?"
-description = "Jon's voice is monotone yet slightly fast in delivery, with a very close recording that almost has no background noise."
+prompt = "Hey, how are you doing today? I am a female AI pilot"
+description = "A female speaker delivers a slightly expressive and animated speech with a moderate speed and pitch. The recording is of very high quality, with the speaker's voice sounding clear and very close up."
 
 input_ids = description_tokenizer(description, return_tensors="pt").input_ids.to(device)
 prompt_input_ids = tokenizer(prompt, return_tensors="pt").input_ids.to(device)
