@@ -31,12 +31,14 @@ socketio = SocketIO(app, async_mode="threading", logger=False, cors_allowed_orig
 # Initialize TTS
 #tts = TTS("tts_models/multilingual/multi-dataset/your_tts", progress_bar=False).to("cpu")
 os.environ['TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD'] = '1'
-tts = TTS("tts_models/en/ljspeech/tacotron2-DDC", progress_bar=False).to("cpu") 
-tts = TTS("tts_models/en/ljspeech/speedy-speech", progress_bar=False).to("cpu") 
+#tts = TTS("tts_models/en/ljspeech/tacotron2-DDC", progress_bar=False).to("cpu") 
+#tts = TTS("tts_models/en/ljspeech/speedy-speech", progress_bar=False).to("cpu") 
 #tts = TTS("tts_models/en/jenny/jenny", progress_bar=False).to("cpu") 
 #tts = TTS("tts_models/en/vctk/vits", progress_bar=False).to("cpu")
 #tts = TTS("tts_models/en/vctk/vits", progress_bar=False).to("cpu")  
-tts = TTS("tts_models/en/ljspeech/glow-tts","vocoder_models/en/ljspeech/multiband-melgan" , progress_bar=False).to("cpu")  
+#tts= TTS("tts_models/en/ljspeech/glow-tts","vocoder_models/en/ljspeech/multiband-melgan" , progress_bar=False).to("cpu")  
+tts_manager = TTSManager("tts_models/en/ljspeech/speedy-speech")  
+
 
 
 
@@ -1250,6 +1252,7 @@ def handle_send_text(data):
     # Load the received data (e.g., text message)
     data = json.loads(data)
     text = data.get("text", "").strip()
+    print("Received Text", text)
     
     # Check if the text is empty after stripping
     if not text:
