@@ -492,7 +492,6 @@
         var radioReceive=0
         var takeOffMatlab=0
         var approachClearMatlab=0
-        let emergency = false;
         let lastTaskCompleted = null;  // Track which secondary task was completed last
         let tasks = ['radioUpdate', 'vitalsUpdate'];  // List of secondary tasks
 
@@ -506,6 +505,7 @@
         initEmergency()
         TimeToDestination() 
         initAssistant()
+        scheduleRadioPrompt()
 
         
         var helipads = JSON.parse('{{ helipads | tojson | safe }}')
@@ -814,6 +814,74 @@
                 
             }
         });
+
+
+        const radioInterval = 105000; // Total cycle time: 1 min + 45 sec = 105 sec
+        let radioPromptSpokenAt = 0;
+
+         
+
+        function scheduleRadioPrompt() {
+            // Only run on certain pages
+            if (!["/hai-interface/inflight", "/hai-interface/change-destination", "/hai-interface/help", "/hai-interface/change-altitude"].includes(window.location.pathname)) {
+                return;
+            }
+
+            // Get the current time
+            const now = new Date().getTime();
+
+            // If it's the first time the page is loaded, initialize start time and prompt times
+            if (!sessionStorage.getItem('flightStartTime')) {
+                sessionStorage.setItem('flightStartTime', now); // Set flight start time
+                sessionStorage.setItem('radioPromptSpokenAt', now); // Set the time the radio prompt was last spoken
+            }
+
+            // Retrieve the stored flight start time and radio prompt time
+            const flightStartTime = parseInt(sessionStorage.getItem('flightStartTime'), 10);
+            const radioPromptSpokenAt = parseInt(sessionStorage.getItem('radioPromptSpokenAt'), 10);
+
+            // Speak the radio update prompt
+            speakRadioPrompt();
+            sessionStorage.setItem('radioPromptSpokenAt', now); // Update the time the radio prompt was spoken
+            console.log('Radio update spoken');
+
+            // Schedule vitals prompt after 60s
+            setTimeout(() => {
+                const elapsed = new Date().getTime() - flightStartTime;
+                console.log(elapsed);
+                if (timeToDestination > 0.5) {
+                    console.log('Showing vitals prompt');
+                    showVitalsPrompt();
+                }
+            }, 60000);
+
+            // Schedule next radio prompt after 105s (1 minute + 45 seconds)
+            setTimeout(scheduleRadioPrompt, 105000);
+        }
+
+
+        // Use browser speech synthesis for radio prompt
+        function speakRadioPrompt() {
+            const message = "N A S X G S, this is Ground Control asking for update on flight status, patient status and estimated time to destination.";
+            const voices = window.speechSynthesis.getVoices();
+            const utterance = new SpeechSynthesisUtterance(message);
+            utterance.voice = voices[18];
+            utterance.rate = 1.05;
+            utterance.pitch = 1;
+            utterance.volume = 1;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Show vitals prompt visually
+        function showVitalsPrompt() {
+            log({ "page": "inflight", "action": "displaying vitals prompt" })
+            console.log('vitals logging prompt')
+            document.getElementById('vitals').style.display = "flex"
+            // Auto-remove after 10s
+            setTimeout(() => {
+                document.getElementById('vitals').style.display = "none"
+            }, 10000);
+        }
 
         {% block script %}
         {% endblock %}

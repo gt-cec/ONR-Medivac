@@ -48,6 +48,7 @@ function initEmergency() {
         lat1 = emergency_lat
 
         //Time to destination
+      console.log(destinationIndex)
         dest_lat = helipads[destinationIndex].latitude
         dest_long = helipads[destinationIndex].longitude
         lat_diff = (dest_lat - latitude) * Math.PI / 180  //radians
@@ -678,8 +679,6 @@ function activateAltitudeAlert() {
       //updating the server
       await fetch("/var?weather-emergency=" + weatherEmergency)
     }
-
-
 
 
 

@@ -20,6 +20,7 @@ import multiprocessing
 import sounddevice as sd
 import soundfile as sf
 import numpy as np
+from tts_manager import TTSManager
 import torch
 from parler_tts import ParlerTTSForConditionalGeneration
 from transformers import AutoTokenizer
@@ -30,16 +31,13 @@ socketio = SocketIO(app, async_mode="threading", logger=False, cors_allowed_orig
 # Initialize TTS
 #tts = TTS("tts_models/multilingual/multi-dataset/your_tts", progress_bar=False).to("cpu")
 os.environ['TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD'] = '1'
-#tts = TTS("tts_models/en/ljspeech/speedy-speech", progress_bar=False).to("cpu") 
+tts = TTS("tts_models/en/ljspeech/tacotron2-DDC", progress_bar=False).to("cpu") 
+tts = TTS("tts_models/en/ljspeech/speedy-speech", progress_bar=False).to("cpu") 
 #tts = TTS("tts_models/en/jenny/jenny", progress_bar=False).to("cpu") 
 #tts = TTS("tts_models/en/vctk/vits", progress_bar=False).to("cpu")
 #tts = TTS("tts_models/en/vctk/vits", progress_bar=False).to("cpu")  
 tts = TTS("tts_models/en/ljspeech/glow-tts","vocoder_models/en/ljspeech/multiband-melgan" , progress_bar=False).to("cpu")  
 
-
-
-
- 
 
 
 
@@ -1229,6 +1227,7 @@ def handle_send_text(data):
 
 #Generate speech and play it asynchronously
 async def generate_audio(text):
+    
     audio_output = tts.tts(text)
     audio_data = np.array(audio_output, dtype=np.float32) 
     # Load audio and play asynchronously
@@ -1248,22 +1247,26 @@ async def generate_audio(text):
 
 @socketio.on("send_text")
 def handle_send_text(data):
+    # Load the received data (e.g., text message)
     data = json.loads(data)
-    text = data.get("text", "")
-    stress_level = data.get("stress_level", "normal")
-
-    print(f"Received text: {text}")
-    if not text.strip():
-        return
-    else:
-        text=text.strip()
-        text=re.sub(r"[^a-zA-Z0-9.,'?! ]", "", text)
+    text = data.get("text", "").strip()
+    
+    # Check if the text is empty after stripping
+    if not text:
+        return  # Do nothing if there's no valid text
+    
+    # Clean the text (remove non-alphanumeric characters except common punctuation)
+    text = re.sub(r"[^a-zA-Z0-9.,'?! ]", "", text)
+    
+    # Add the clean text to the TTS manager
+    tts_manager.add_text(text)
         
-    future = asyncio.run_coroutine_threadsafe(generate_audio(text), loop)  # Run TTS in event loop
+    """ future = asyncio.run_coroutine_threadsafe(generate_audio(text), loop)  # Run TTS in event loop
+    
     try:
         future.result()  # Ensure execution
     except Exception as e:
-        print(f"Error in TTS execution: {e}")
+        print(f"Error in TTS execution: {e}") """
 
 @socketio.on("change_altitude")
 def handle_altitude(data):
