@@ -79,6 +79,7 @@ transmit=0
 receive=0
 takeoff=0
 approach_clear=0
+last_radio_update = 0
 
 # Global variables
 active_assistant = 'T'
@@ -87,7 +88,6 @@ prev_text=""
 received_text=""
 message = 'deactivate_assistant'
 emergency = False
-last_radio_update = 0
 last_time_set=None
 
 #lock to protect the global variable
@@ -839,7 +839,7 @@ def log():
 # reset server parameters
 @app.route("/reset", methods=["GET"])
 def reset_params():
-    global study_participant_id, sequence, study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page,rd_page,ca_page,cd_page,map_page, radio_page,transmit,receive, takeoff,approach_clear, user_text_audio, prev_text,received_text
+    global study_participant_id, sequence, study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page,rd_page,ca_page,cd_page,map_page, radio_page,transmit,receive, takeoff,approach_clear, user_text_audio, prev_text,received_text, last_radio_update
 
     study_participant_id = 0
     sequence=0
@@ -876,6 +876,7 @@ def reset_params():
     receive=0
     takeoff=0
     approach_clear=0
+    last_radio_update=0
 
     #clearing all events on reset 
     status_report_event.clear()
@@ -928,7 +929,7 @@ def clean(s):
 # set system variables
 @app.route("/var", methods=["GET"])
 def get_var():
-    global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude, engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page, rd_page, ca_page, cd_page, map_page, radio_page, transmit, receive, takeoff, approach_clear
+    global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude, engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page, rd_page, ca_page, cd_page, map_page, radio_page, transmit, receive, takeoff, approach_clear, last_radio_update
     if request.args.get("user-id"):
         study_participant_id = clean(request.args.get("user-id"))
     if request.args.get("study-stage"):
@@ -1007,6 +1008,9 @@ def get_var():
         takeoff = clean(request.args.get("takeoff")) #1=tafeoff , 0=otherwise
     if request.args.get("approach-clear"):  
         approach_clear = clean(request.args.get("approach-clear")) #1=helipad is clear  , 0=otherwise
+    if request.args.get("last-radio-update"):  
+        last_radio_update = clean(request.args.get("last-radio-update")) 
+        
    
     return_dict = {"user-id": str(study_participant_id),
                    "sequence": sequence,
@@ -1043,6 +1047,7 @@ def get_var():
                    "transmit":transmit,
                    "takeoff":takeoff,
                    "approach-clear":approach_clear,
+                   "last-radio-update": last_radio_update
                    }
 
     # sometimes SimConnect breaks and throws an OS Error, so we are saving the current lat/long when it works (or sending the last one)
