@@ -52,7 +52,7 @@
 		log({"page": "inflight", "action": "user acknowledged vitals prompt"})
 		console.log('vitals logging acknowledged')
 		document.getElementById('vitals').style.display = "none"
-		bell.pause()	
+		//bell.pause()	
 		//console.log("vitals completed time:", lastClicked)
 		
 	} 
@@ -125,58 +125,6 @@
 	setInterval(fetchRadioData, 350);   */
 
 
-	const radioInterval = 105000; // Total cycle time: 1 min + 45 sec = 105 sec
-	let radioPromptSpokenAt = 0;
-	var landingChecklistTime=timeToDestination- 30000; // Stop 30s before end
-
-		// On flight start
-		window.onload = () => {
-			window.flightStartTime = Date.now();
-			scheduleRadioPrompt();
-		};
-
-		// Speak radio prompt
-		function scheduleRadioPrompt() {
-			const now = Date.now();
-
-			speakRadioPrompt();
-			radioPromptSpokenAt = now;
-
-			// Schedule vitals prompt after 60s
-			setTimeout(() => {
-				const elapsed = Date.now() - window.flightStartTime;
-				if (elapsed < landingChecklistTime) {
-					showVitalsPrompt();
-				}
-			}, 60000);
-
-			// Schedule next radio prompt after 105s
-			setTimeout(scheduleRadioPrompt, radioInterval);
-		}
-
-		// Use browser speech synthesis for radio prompt
-		function speakRadioPrompt() {
-			const message = "Please provide a radio communication update.";
-			const utterance = new SpeechSynthesisUtterance(message);
-			utterance.rate = 1;
-			utterance.pitch = 1;
-			utterance.volume = 1;
-			window.speechSynthesis.speak(utterance);
-		}
-
-		// Show vitals prompt visually
-		function showVitalsPrompt() {
-			log({ "page": "inflight", "action": "displaying vitals prompt" })
-			console.log('vitals logging prompt') 
-			document.getElementById('vitals').style.display = "flex"
-			bell.play()
-			bell.volume = 0.2;
-
-			// Auto-remove after 10s
-			setTimeout(() => {
-				document.getElementById('vitals').style.display = "none"
-			}, 10000);
-		}
 
 		
 	// Initial fetch
