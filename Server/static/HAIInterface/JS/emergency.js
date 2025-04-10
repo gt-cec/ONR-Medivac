@@ -681,6 +681,69 @@ function activateAltitudeAlert() {
     }
 
 
+let vitalsShown = false;
+
+function schedulePrompt() {
+  setInterval(async () => {
+  // Only run on certain pages
+  if (!["/hai-interface/inflight", "/hai-interface/change-destination", "/hai-interface/help", "/hai-interface/change-altitude"].includes(window.location.pathname)) {
+    return;
+  }
+  console.log('last_radio_update', last_radio_update)
+  console.log(new Date().getTime())
+
+  // Speak the radio update prompt
+  if (new Date().getTime() - last_radio_update > 105000) {
+    console.log('asking radio update');
+    speakRadioPrompt();
+    last_radio_update = new Date().getTime() // Update the time the radio prompt was spoken
+    console.log('Radio update asked');
+    vitalsShown = false;  // Reset vitals flag for next cycle
+    await fetch("/var?last_radio_update=" + last_radio_update)
+  }
+  else if (!vitalsShown && now - last_radio_update > 60000) {
+    if (timeToDestination > 0.5) {
+      console.log("Showing vitals prompt");
+      showVitalsPrompt();
+      vitalsShown = true;
+    }
+
+  }
+  // Schedule next radio prompt after 105s (1 minute + 45 seconds)
+  //setTimeout(speakRadioPrompt, 105000);
+
+}, 15000)
+}
+
+
+
+
+
+// Use browser speech synthesis for radio prompt
+function speakRadioPrompt() {
+  const message = "N A S X G S, this is Ground Control asking for update on flight status, patient status and estimated time to destination.";
+  const voices = window.speechSynthesis.getVoices();
+  const utterance = new SpeechSynthesisUtterance(message);
+  utterance.voice = voices[18];
+  utterance.rate = 1.05;
+  utterance.pitch = 1;
+  utterance.volume = 1;
+  window.speechSynthesis.speak(utterance);
+  console.log('Radio update');
+}
+
+// Show vitals prompt visually
+function showVitalsPrompt() {
+  log({ "page": "inflight", "action": "displaying vitals prompt" })
+  console.log('vitals logging prompt')
+  document.getElementById('vitals').style.display = "flex"
+  // Auto-remove after 10s
+  setTimeout(() => {
+    document.getElementById('vitals').style.display = "none"
+  }, 10000);
+}
+
+
 
 
  // Activate the emergency alert for demo purposes

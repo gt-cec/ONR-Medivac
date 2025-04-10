@@ -1,11 +1,15 @@
 let compass;
 let latitude;
 let longitude;
+let last_radio_update;
 
 
 window.setInterval(function(){
-    getSimulatorData();
-    updateMap()
+    //making sure the data is available before executing the function
+    getSimulatorData()   //.then(() =>  { 
+        updateMap();
+        schedulePrompt();
+   // });
 }, 2000);
 
 
@@ -14,6 +18,8 @@ function getSimulatorData() {
         compass = data.MAGNETIC_COMPASS;
         latitude = data.LATITUDE;
         longitude = data.LONGITUDE;
+        
+
     });
     return false;
 }
@@ -29,3 +35,4 @@ function updateMap() {
 
     map.panTo(pos);
 }
+
