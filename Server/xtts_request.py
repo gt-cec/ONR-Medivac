@@ -90,11 +90,14 @@ tokenizer = AutoTokenizer.from_pretrained("parler-tts/parler-tts-mini-v1.1")
 description_tokenizer = AutoTokenizer.from_pretrained(model.config.text_encoder._name_or_path)
 
 prompt = "Hey, how are you doing today? I am a female AI pilot"
-description = "A female speaker delivers a slightly expressive and animated speech with a moderate speed and pitch. The recording is of very high quality, with the speaker's voice sounding clear and very close up."
-
+description = "Jarvis, A female speaker delivers a commanding clear human pilot like speech with a moderate speed and pitch. The recording is of very high quality, with the speaker's voice sounding clear and very close up."
+description = "Jarvis, the female speaker speaks in a panic voice, declaring emergency showing urgency of the situtaion. The recording is of very high quality, with the speaker's voice sounding clear and very close up."
 input_ids = description_tokenizer(description, return_tensors="pt").input_ids.to(device)
 prompt_input_ids = tokenizer(prompt, return_tensors="pt").input_ids.to(device)
 
 generation = model.generate(input_ids=input_ids, prompt_input_ids=prompt_input_ids)
 audio_arr = generation.cpu().numpy().squeeze()
 sf.write("parler_tts_out.wav", audio_arr, model.config.sampling_rate)
+
+#git lfs install
+# #GIT_LFS_SKIP_SMUDGE=1 git clone https://huggingface.co/myshell-ai/MeloTTS-English-v2

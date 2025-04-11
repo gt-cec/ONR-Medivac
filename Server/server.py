@@ -24,6 +24,7 @@ from tts_manager import TTSManager
 import torch
 from parler_tts import ParlerTTSForConditionalGeneration
 from transformers import AutoTokenizer
+from pathlib import Path
 
 app = Flask(__name__)
 socketio = SocketIO(app, async_mode="threading", logger=False, cors_allowed_origins="*")  # Ensure Flask remains non-blocking
@@ -81,7 +82,7 @@ transmit=0
 receive=0
 takeoff=0
 approach_clear=0
-last_radio_update = 0
+prompt_cycle_started = False
 
 # Global variables
 active_assistant = 'T'
@@ -833,15 +834,43 @@ def current_destination():
 # logging route
 @app.route("/log", methods=["POST"])
 def log():
-    log_string = f"{datetime.datetime.now().timestamp()},ID:{study_participant_id},STAGE:{study_stage},SEQUENCE:{sequence},DATA:{request.get_json()}"
+    
+    data = request.get_json()
+
+    page = data.get("page")
+    action = data.get("action")
+    timestamp = data.get("timestamp")
+
+    # Folder path: logs/YYYY-MM-DD_PARTICIPANT_ID/
+    today_str = datetime.datetime.now().strftime("%Y-%m-%d")
+    folder_path = Path(f"logs/{today_str}_{study_participant_id}")
+    folder_path.mkdir(parents=True, exist_ok=True)
+
+    # Log file based on study stage
+    log_file = folder_path / f"{study_stage}.log"
+
+    # Format log entry
+    log_string = (
+        f"{datetime.datetime.now().timestamp()},ID:{study_participant_id},"
+        f"STAGE:{study_stage},SEQUENCE:{sequence},"
+        f"DATA:{{'page':'{page}','action':'{action}','timestamp':{timestamp}}},"
+        f"ANY:{request.get_json()}"
+    )
+    # Write to log file (append)
+    with log_file.open("a+") as f:
+        f.write(log_string + "\n")
+
+    return {"status": "success", "logged": log_string}, 200
+
+    """ log_string = f"{datetime.datetime.now().timestamp()},ID:{study_participant_id},STAGE:{study_stage},SEQUENCE:{sequence},DATA:{request.get_json()}"
     with open(f"../Logs/{study_participant_id}_{study_stage}.log", "a+") as f:
         f.write(log_string + "\n")
-    return ""
+    return "" """
 
 # reset server parameters
 @app.route("/reset", methods=["GET"])
 def reset_params():
-    global study_participant_id, sequence, study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page,rd_page,ca_page,cd_page,map_page, radio_page,transmit,receive, takeoff,approach_clear, user_text_audio, prev_text,received_text, last_radio_update
+    global study_participant_id, sequence, study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page,rd_page,ca_page,cd_page,map_page, radio_page,transmit,receive, takeoff,approach_clear, user_text_audio, prev_text,received_text, prompt_cycle_started
 
     study_participant_id = 0
     sequence=0
@@ -878,7 +907,7 @@ def reset_params():
     receive=0
     takeoff=0
     approach_clear=0
-    last_radio_update=0
+    prompt_cycle_started=False
 
     #clearing all events on reset 
     status_report_event.clear()
@@ -931,7 +960,7 @@ def clean(s):
 # set system variables
 @app.route("/var", methods=["GET"])
 def get_var():
-    global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude, engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page, rd_page, ca_page, cd_page, map_page, radio_page, transmit, receive, takeoff, approach_clear, last_radio_update
+    global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude, engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page, rd_page, ca_page, cd_page, map_page, radio_page, transmit, receive, takeoff, approach_clear, prompt_cycle_started
     if request.args.get("user-id"):
         study_participant_id = clean(request.args.get("user-id"))
     if request.args.get("study-stage"):
@@ -1010,8 +1039,8 @@ def get_var():
         takeoff = clean(request.args.get("takeoff")) #1=tafeoff , 0=otherwise
     if request.args.get("approach-clear"):  
         approach_clear = clean(request.args.get("approach-clear")) #1=helipad is clear  , 0=otherwise
-    if request.args.get("last-radio-update"):  
-        last_radio_update = clean(request.args.get("last-radio-update")) 
+    if request.args.get("prompt-cycle-started"):  
+        prompt_cycle_started = clean(request.args.get("prompt-cycle-started")) 
         
    
     return_dict = {"user-id": str(study_participant_id),
@@ -1049,7 +1078,7 @@ def get_var():
                    "transmit":transmit,
                    "takeoff":takeoff,
                    "approach-clear":approach_clear,
-                   "last-radio-update": last_radio_update
+                   "prompt-cycle-started": prompt_cycle_started
                    }
 
     # sometimes SimConnect breaks and throws an OS Error, so we are saving the current lat/long when it works (or sending the last one)

@@ -717,8 +717,6 @@ function schedulePrompt() {
 
 
 
-
-
 // Use browser speech synthesis for radio prompt
 function speakRadioPrompt() {
   const message = "N A S X G S, this is Ground Control asking for update on flight status, patient status and estimated time to destination.";
