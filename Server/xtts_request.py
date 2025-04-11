@@ -6,7 +6,7 @@
 
 https://mbarnig.github.io/TTS-Models-Comparison/ """
 
-from TTS.api import TTS
+#from TTS.api import TTS
 import numpy as np
 import os
 import sounddevice as sd
@@ -85,19 +85,27 @@ import numpy
 
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
-model = ParlerTTSForConditionalGeneration.from_pretrained("parler-tts/parler-tts-mini-v1.1").to(device)
+""" model = ParlerTTSForConditionalGeneration.from_pretrained("parler-tts/parler-tts-mini-v1.1").to(device)
 tokenizer = AutoTokenizer.from_pretrained("parler-tts/parler-tts-mini-v1.1")
 description_tokenizer = AutoTokenizer.from_pretrained(model.config.text_encoder._name_or_path)
 
-prompt = "Hey, how are you doing today? I am a female AI pilot"
+prompt = "EMERGENCY DETECTED NEED TO LAND IMMEDIATELY""EMERGENCY DETECTED NEED TO LAND IMMEDIATELY"
 description = "Jarvis, A female speaker delivers a commanding clear human pilot like speech with a moderate speed and pitch. The recording is of very high quality, with the speaker's voice sounding clear and very close up."
-description = "Jarvis, the female speaker speaks in a panic voice, declaring emergency showing urgency of the situtaion. The recording is of very high quality, with the speaker's voice sounding clear and very close up."
+#description = "Jarvis, the female speaker speaks in a panic voice, declaring emergency showing urgency of the situtaion. The recording is of very high quality, with the speaker's voice sounding clear and very close up."
 input_ids = description_tokenizer(description, return_tensors="pt").input_ids.to(device)
 prompt_input_ids = tokenizer(prompt, return_tensors="pt").input_ids.to(device)
 
 generation = model.generate(input_ids=input_ids, prompt_input_ids=prompt_input_ids)
 audio_arr = generation.cpu().numpy().squeeze()
 sf.write("parler_tts_out.wav", audio_arr, model.config.sampling_rate)
-
+ """
 #git lfs install
 # #GIT_LFS_SKIP_SMUDGE=1 git clone https://huggingface.co/myshell-ai/MeloTTS-English-v2
+# Use a pipeline as a high-level helper
+""" from transformers import pipeline
+from transformers import AutoModel
+
+pipe = pipeline("text-to-speech", model="myshell-ai/MeloTTS-English-v2")
+# Load model directly
+
+model = AutoModel.from_pretrained("myshell-ai/MeloTTS-English-v2") """

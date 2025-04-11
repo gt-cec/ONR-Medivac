@@ -728,6 +728,7 @@ function speakRadioPrompt() {
   utterance.volume = 1;
   window.speechSynthesis.speak(utterance);
   console.log('Radio update');
+  console.log(utterance.voice)
 }
 
 // Show vitals prompt visually

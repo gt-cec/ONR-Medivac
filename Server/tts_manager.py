@@ -3,11 +3,16 @@ import queue
 import numpy as np
 import sounddevice as sd
 from TTS.api import TTS
-#from melotts import MeloTTS
+#from melo.api import TTS
 
 class TTSManager:
     def __init__(self, tts_model_name):
+        speed = 1.0
+        device = "cpu"
         self.tts = TTS(tts_model_name, gpu=False)  # CPU only
+        #self.tts = TTS(language='EN_V2', device=device)
+        #self.speaker_ids = self.tts.hps.data.spk2id
+
         self.text_queue = queue.Queue()
         self.audio_chunks = {}
         self.lock = threading.Lock()
@@ -37,7 +42,8 @@ class TTSManager:
                     pitch=1.4        # higher pitch for panic
                 )
             else:
-                audio = self.tts.tts(text, speaker_idx=0)
+                audio = self.tts.tts(text, speaker_idx=0, speed=1.0)
+                #audio = self.tts.tts(text, speaker_idx=self.speaker_ids['EN-US'], speed=1.0)
 
             audio = np.array(audio, dtype=np.float32)
 

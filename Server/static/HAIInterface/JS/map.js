@@ -283,7 +283,8 @@ function showHelipads(helipads) {
     }
 
     var nearestIconOptions = {
-        iconUrl: "/static/HAIInterface/img/green-helipad-icon.png",
+        iconUrl: "/static/HAIInterface/img/robotic_bgrm.png",
+        //iconUrl: "/static/HAIInterface/img/green-helipad-icon.png",
         iconSize: [35, 35],
     }
 

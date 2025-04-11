@@ -15,15 +15,12 @@ from flask_socketio import SocketIO
 import threading
 import websockets
 import json
-from TTS.api import TTS
 import multiprocessing
 import sounddevice as sd
 import soundfile as sf
 import numpy as np
 from tts_manager import TTSManager
 import torch
-from parler_tts import ParlerTTSForConditionalGeneration
-from transformers import AutoTokenizer
 from pathlib import Path
 
 app = Flask(__name__)
@@ -39,6 +36,7 @@ os.environ['TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD'] = '1'
 #tts = TTS("tts_models/en/vctk/vits", progress_bar=False).to("cpu")  
 #tts= TTS("tts_models/en/ljspeech/glow-tts","vocoder_models/en/ljspeech/multiband-melgan" , progress_bar=False).to("cpu")  
 tts_manager = TTSManager("tts_models/en/ljspeech/speedy-speech")  
+#tts_manager = TTSManager()
 
 
 

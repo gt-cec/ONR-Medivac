@@ -38,8 +38,8 @@ let nextTask = Math.random() < 0.5 ? "radio" : "vitals"; // Random first task
 function scheduleNextTask() {
     if (taskScheduled || timeToDestination <= 0.5 || currentPromptCount >= totalPrompts) return;
 
-    const minDelay = 30000;  //30s
-    const maxDelay = 105000; //105s
+    const minDelay = 20000;  //30s
+    const maxDelay = 90000; //90s
     const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay) + minDelay);
 
     taskScheduled = true;
