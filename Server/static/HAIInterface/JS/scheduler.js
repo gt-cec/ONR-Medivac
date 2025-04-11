@@ -26,43 +26,67 @@ if (["/hai-interface/inflight", "/hai-interface/change-destination", "/hai-inter
 
 let taskSequence = 0;
 let isPromptRunning = false;
-let nextTask = Math.random() < 0.5 ? "radio" : "vitals";
+let radioPromptsLeft = 5;
+let vitalsPromptsLeft = 5;
+
+const totalPrompts = radioPromptsLeft + vitalsPromptsLeft;
+let currentPromptCount = 0;
+
+let taskScheduled = false;
+let nextTask = Math.random() < 0.5 ? "radio" : "vitals"; // Random first task
+
+function scheduleNextTask() {
+    if (taskScheduled || timeToDestination <= 0.5 || currentPromptCount >= totalPrompts) return;
+
+    const minDelay = 30000;  //30s
+    const maxDelay = 105000; //105s
+    const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay) + minDelay);
+
+    taskScheduled = true;
+
+    setTimeout(() => {
+        if (timeToDestination <= 0.5 || currentPromptCount >= totalPrompts) {
+            taskScheduled = false;
+            return;
+        }
+
+        if (nextTask === "radio" && radioPromptsLeft > 0) {
+            speakRadioPrompt();
+            radioPromptsLeft--;
+            logAction("radio_prompt", Date.now());
+            nextTask = "vitals";
+        } else if (nextTask === "vitals" && vitalsPromptsLeft > 0) {
+            showVitalsPrompt();
+            vitalsPromptsLeft--;
+            logAction("vitals_prompt", Date.now());
+            nextTask = "radio";
+        } else {
+            // If one type is exhausted, fallback to the other
+            nextTask = radioPromptsLeft > 0 ? "radio" : "vitals";
+        }
+
+        currentPromptCount++;
+        taskScheduled = false;
+
+        scheduleNextTask(); // schedule next after current
+    }, randomDelay);
+}
+
 
 
 function startPromptScheduler() {
     if (isPromptRunning) return;
     isPromptRunning = true;
 
-    scheduleNextPrompt();
+    scheduleNextTask();
 }
 
-function scheduleNextPrompt() {
-    const delay = 30000 + Math.random() * 50000; // Between 30s and 80s
-
-    setTimeout(() => {
-        if (timeToDestination <= 0.5) return;
-
-        if (nextTask === "radio") {
-            speakRadioPrompt();
-            logAction("radio_prompt", Date.now());
-            nextTask = "vitals";
-        } else {
-            showVitalsPrompt();
-            logAction("vitals_prompt", Date.now());
-            nextTask = "radio";
-        }
-
-        taskSequence++;
-        scheduleNextPrompt();
-    }, delay);
-}
 
 
 let pendingLogs = [];
 
 function logAction(action, timestamp) {
     const logData = {
-        sequence: taskSequence,
         page: window.location.pathname,
         action: action,
         timestamp: timestamp
