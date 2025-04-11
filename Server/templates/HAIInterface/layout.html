@@ -18,6 +18,8 @@
     <script src="/static/HAIInterface/JS/log.js"></script>
     <script src="/static/HAIInterface/JS/emergency.js"></script>
     <script src="/static/HAIInterface/JS/assistant.js"></script>
+    <script src="/static/HAIInterface/JS/scheduler.js"></script>
+    
 
 
     <!-- Socket IO -->
@@ -508,7 +510,7 @@
         initEmergency()
         TimeToDestination() 
         initAssistant()
-        schedulePrompt()
+        //schedulePrompt()
 
         
         var helipads = JSON.parse('{{ helipads | tojson | safe }}')
