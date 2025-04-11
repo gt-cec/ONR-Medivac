@@ -23,6 +23,7 @@ from tts_manager import TTSManager
 import torch
 from pathlib import Path
 
+
 app = Flask(__name__)
 socketio = SocketIO(app, async_mode="threading", logger=False, cors_allowed_origins="*")  # Ensure Flask remains non-blocking
 
