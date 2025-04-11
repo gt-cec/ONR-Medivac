@@ -13,54 +13,63 @@ class MelottsTTSManager:
         self.tts = TTS(language='EN_V2', device="cpu")
         self.sample_rate = sample_rate
         self.speaker_ids = self.tts.hps.data.spk2id
-        self.audio_queue = queue.Queue()
-        self.generator_thread = threading.Thread(target=self._process_queue, daemon=True)
-        self.player_thread = threading.Thread(target=self._play_audio, daemon=True)
+
+        self.text_queue = queue.Queue()
+        self.audio_queue = queue.PriorityQueue()  # (order, filepath)
+
+        self.counter = 0  # sequence counter
+        self.lock = threading.Lock()
+
+        self.generator_thread = threading.Thread(target=self._generate_audio_loop, daemon=True)
+        self.player_thread = threading.Thread(target=self._play_audio_loop, daemon=True)
+
         self.generator_thread.start()
-        self.player_thread.start() 
-        
+        self.player_thread.start()
 
-    def add_text(self, text, emotion=None):
-        self.audio_queue.put((text, emotion))
+    def add_text(self, full_text):
+        # First few words (prime)
+        chunks = self._split_text(full_text)
+        for i, chunk in enumerate(chunks):
+            with self.lock:
+                order = self.counter
+                self.counter += 1
+            self.text_queue.put((order, chunk))
 
-            
+    def _split_text(self, text, chunk_size=5):
+        words = text.strip().split()
+        return [' '.join(words[i:i + chunk_size]) for i in range(0, len(words), chunk_size)]
 
-    def _process_queue(self):
+    def _generate_audio_loop(self):
         while True:
-            text, emotion = self.audio_queue.get()
+            order, text = self.text_queue.get()
             if not text:
                 continue
 
-            # File output path
             timestamp = int(time.time() * 1000)
-            filename = f"output.wav"
+            filename = f"melotts_chunk_{timestamp}_{order}.wav"
 
-            # Generate audio file
-            print(f"[Generator] Generating audio for: {text}")
-            filepath = self.tts.tts_to_file(text, self.speaker_ids['EN-US'], filename, speed=1.0)
-            print(filename)
-            data, sr = sf.read(filename, dtype='float32')
-            # sd.play(data, samplerate=sr)
-            # sd.wait()
+            print(f"[Generator] ({order}) Generating: {text}")
+            filepath = self.tts.tts_to_file(text, self.speaker_ids["EN-US"], filename,speed="1.0")
+            self.audio_queue.put((order, filepath))
+            self.text_queue.task_done()
 
-            # Put filepath in queue for playback
-            self.audio_queue.task_done()
-            self.audio_queue.put(filepath)
+    def _play_audio_loop(self):
+        next_to_play = 0
+        buffer = {}
 
-    def _play_audio(self):
         while True:
-            item = self.audio_queue.get()
-            if isinstance(item, str) and os.path.exists(item):
-                print(f"[Player] Playing audio: {item}")
-                data, sr = sf.read(item, dtype='float32')
-                sd.play(data, samplerate=sr)
-                sd.wait()
-                os.remove(item)  # Clean up
+            if not self.audio_queue.empty():
+                order, filepath = self.audio_queue.get()
+                buffer[order] = filepath
                 self.audio_queue.task_done()
 
-
-""" if __name__ == "__main__":
-    melotts=MelottsTTSManager()
-    melotts.add_text(" this is a test. hi I am Jarvis ")
-    melotts._process_queue() """
-   
+            if next_to_play in buffer:
+                filepath = buffer.pop(next_to_play)
+                print(f"[Player] Playing chunk {next_to_play}: {filepath}")
+                data, sr = sf.read(filepath, dtype='float32')
+                sd.play(data, samplerate=sr)
+                sd.wait()
+                os.remove(filepath)
+                next_to_play += 1
+            else:
+                time.sleep(0.05)  # wait a bit before checking again
