@@ -35,11 +35,11 @@ let currentPromptCount = 0;
 let taskScheduled = false;
 let nextTask = Math.random() < 0.5 ? "radio" : "vitals"; // Random first task
 
-function scheduleNextTask() {
+function scheduleNextTask(first = false) {
     if (taskScheduled || timeToDestination <= 0.5 || currentPromptCount >= totalPrompts) return;
 
-    const minDelay = 20000;  //30s
-    const maxDelay = 90000; //90s
+    const minDelay = first ? 0 : 20000;
+    const maxDelay = first ? 10000 : 90000;
     const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay) + minDelay);
 
     taskScheduled = true;
@@ -53,43 +53,41 @@ function scheduleNextTask() {
         if (nextTask === "radio" && radioPromptsLeft > 0) {
             speakRadioPrompt();
             radioPromptsLeft--;
-            logAction("radio_prompt", Date.now());
+            logAction("radio_prompt");
             nextTask = "vitals";
         } else if (nextTask === "vitals" && vitalsPromptsLeft > 0) {
             showVitalsPrompt();
             vitalsPromptsLeft--;
-            logAction("vitals_prompt", Date.now());
+            logAction("vitals_prompt");
             nextTask = "radio";
         } else {
-            // If one type is exhausted, fallback to the other
+            // fallback in case one task runs out
             nextTask = radioPromptsLeft > 0 ? "radio" : "vitals";
         }
 
         currentPromptCount++;
         taskScheduled = false;
-
-        scheduleNextTask(); // schedule next after current
+        scheduleNextTask(); // Chain the next task
     }, randomDelay);
 }
-
-
 
 function startPromptScheduler() {
     if (isPromptRunning) return;
     isPromptRunning = true;
 
-    scheduleNextTask();
+    // Start the first prompt with a 0-10s delay
+    scheduleNextTask(true);
 }
 
 
 
 let pendingLogs = [];
 
-function logAction(action, timestamp) {
+function logAction(page = window.location.pathname, action) {
     const logData = {
-        page: window.location.pathname,
+        page: page,
         action: action,
-        timestamp: timestamp
+        timestamp: Date.now()
     };
 
     sendLog(logData);

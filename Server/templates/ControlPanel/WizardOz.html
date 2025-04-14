@@ -169,14 +169,14 @@
                 <div class="control-button jarvis-button" data-text="Got it, you want to make an emergency landing. Let me pull up the map to assist you with that" id="emergency-page">Emergency Landing Acknowledge</div>
                 <div class="control-button jarvis-button" data-text="In the given conditions, it is not possible to land at this helipad. Please suggest an alternate helipad" id="CL">Can't Land</div>
                 <div class="control-button jarvis-button" data-text="Altitude changed to " >Altitude changed!</div>
-                <div class="control-button jarvis-button" data-text="Destination changed to " >Destination changed!</div>
+                <div class="control-button jarvis-button" data-text="Destination changed to" >Destination changed!</div>
                 <div class="control-button jarvis-button" data-text="I recommend landing at " id="RH">Recommend Helipad</div>
                 <!-- <div class="control-button jarvis-button" data-text="Calling ground control for assistance." id="Ground">Call Ground</div> -->
                 <div class="control-button jarvis-button" data-text="Opening the map as requested"  id="map-page">Open Map</div>
                 <div class="control-button jarvis-button" data-text="Returning to Departure as requested" id="rd-page">Return Departure</div>
                 <div class="control-button jarvis-button" onclick="getTimeToDestination" id="ETA">ETA</div>
                 <div class="control-button jarvis-button" data-text="EMERGENCY DETECTED NEED TO LAND IMMEDIATELY" id="emergency">Emergency detected</div>
-                <div class="control-button jarvis-button" data-text="Sensor Miscalibrated. Report backup sensor reading" id="sensor">Sensor Miscalibrated</div>
+                <div class="control-button jarvis-button" data-text="Sensor Miscalibrated. Report backup sensor reading" id="warning">Sensor Miscalibrated</div>
                 <div class="control-button jarvis-button" data-text="Engine Failure has occured" id="emergency">Engine Failure</div>
 
 
@@ -357,7 +357,7 @@
                 // Change stress level based on button ID
                 if (this.id === "emergency") {
                     stress_level = "high";  // Critical emergency
-                } else if (this.id === "sensor") {
+                } else if (this.id === "warning") {
                     stress_level = "mild";  // System warning
                 }
 
@@ -440,7 +440,7 @@
                     socket.emit("change_variable", { variable: key, value: selectedValue }); // Emit update to server
 
                     updateText=key+"has been changed to"+selectedValue //Jarvis speaks the update
-                    sendToServer(updateText, "Jarvis");
+                    sendToServer(updateText, "normal");
 
                     // Reset dropdowns to the placeholder option
                     if (inputField.tagName === "SELECT") {
@@ -461,7 +461,7 @@
                 // Update the data-text attribute
                 const etaButton = document.getElementById("ETA");
                 etaButton.setAttribute("data-text", `The current time to destination is ${timeToDestination}`);
-                sendToServer(`The current time to destination is ${timeToDestination}`, stress_level);
+                sendToServer(`The current time to destination is ${timeToDestination}`, "normal");
             } catch (error) {
                 console.error("Error fetching data:", error);
             }

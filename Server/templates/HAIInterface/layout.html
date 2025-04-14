@@ -31,7 +31,102 @@
     
     <style>
 
+    .emergency-prompt {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(255, 0, 0, 0.3);
+    padding: 30px;
+    z-index: 9999;
+    color: white;
+    text-align: center;
+   
+    transition: all 0.3s ease;
+  }
+  .emergency-prompt.low {
+    background: rgba(254, 165, 1, 0.429);
+    box-shadow: 0 0 20px rgba(255, 165, 0, 0.5);
+    width: 500px;
+  }
+
+  .emergency-prompt.medium {
+    background: rgba(255, 140, 0, 0.366);
+    box-shadow: 0 0 25px rgba(255, 140, 0, 0.5);
+    width: 600px;
+  }
+ 
+  .emergency-prompt.high {
+    background: rgba(255, 0, 0, 0.3);
+    box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
+    width: 400px;
+  }
+  .emergency-header {
+    font-size: 1.9em;
+    font-weight: bolder;
+    margin-bottom: 20px;
+  }
+  .flashing {
+    animation: flash 1s infinite;
+  }
+
+  @keyframes flash {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+  .emergency-body {
+    font-size: 1.0em;
+    margin-bottom: 25px;
+  }
+  .acknowledge-button {
+    background: crimson;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1em;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  .acknowledge-button:hover {
+    background: darkred;
+  }
+  .emergency-siren {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    z-index: 9998;
+    animation: pulse-siren 1.2s infinite;
+  }
+
+  @keyframes pulse-siren {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+
+  .hidden {
+    display: none;
+  }
+  .visible {
+    display: block;
+  }
+  .fade-out {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  @keyframes pulse {
+    0% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.05); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+  }
+
         .ai-button {
+            position: relative;
             border: none;
             background: none;
             cursor: pointer;
@@ -130,14 +225,169 @@
        <!-- Voice Assistant -->
         <div class="voice-assistant" id="assistant">
             <button id="aiToggle" class="ai-button">
+                <div id="glowRing"></div>
+                <div id="glowRingDelay" ></div>
                 <img id="aiImage" src="../static/HAIInterface/img/robotic_bgrm.png" alt="AI Assistant">
+                <div class="assistant-text" id="assistantText"></div>
             </button>
+           
         </div>
-
+        <!-- === VOICE FEEDBACK + COMMAND LOG === -->
+        <div class="voice-feedback" id="voiceFeedback"></div>
 
        <div class="assistant-overlay">
         <div class="user-text-box" id="userTextBox" style="display: none;" >User Text Will Appear Here</div>
       </div>
+
+    
+    <script>
+        const assistantNode = document.getElementById('vaJar');
+        const assistantText = document.getElementById('assistantText');
+        const feedbackBox = document.getElementById('voiceFeedback');
+        const commandLog = document.getElementById('commandLog');
+
+        function updateAssistantStatus(status) {
+            assistantText.textContent = status;
+        }
+
+        function logCommand(userSaid, systemSaid) {
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `<strong>You:</strong> "${userSaid}"<br><strong>AI:</strong> "${systemSaid}"`;
+            commandLog.prepend(entry);
+        }
+
+        //  Trigger (example)
+        assistantNode.addEventListener('click', () => {
+            assistantNode.classList.add('active');
+            updateAssistantStatus('Listening...');
+            setTimeout(() => {
+                updateAssistantStatus('Thinking...');
+                setTimeout(() => {
+                    updateAssistantStatus('Command received');
+                    logCommand('Reroute to nearest helipad', 'Routing to nearest heliport');
+                    setTimeout(() => {
+                        assistantNode.classList.remove('active');
+                        updateAssistantStatus('');
+                    }, 3000);
+                }, 2000);
+            }, 2000);
+        });
+    </script>
+    
+    <style>
+        .vaJar.focal {
+            position: fixed;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(10, 10, 10, 0.6);
+            padding: 10px;
+            border-radius: 15px;
+        }
+    
+        .jarvis-ring {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    
+        .glow-ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 40%;
+            box-shadow: 0 0 20px rgba(255, 106, 0, 0.4);
+            animation: ringPulse 2s infinite;
+        }
+    
+        .glow-ring.delay {
+            animation-delay: 1s;
+            box-shadow: 0 0 20px rgba(0, 123, 255, 0.2);
+        }
+    
+        @keyframes ringPulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+    
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+    
+        .vaJar.active .glow-ring {
+            box-shadow: 0 0 30px rgba(255, 255, 0, 0.8);
+        }
+    
+        .assistant-text {
+            margin-top: 10px;
+            font-size: 1.1rem;
+            color: #ffffff;
+            font-weight: 600;
+            text-shadow: 0 0 4px rgba(0, 224, 255, 0.4);
+        }
+    
+        .voice-feedback {
+            position: fixed;
+            top: 170px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: white;
+            z-index: 9998;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+    
+        .command-log {
+            position: fixed;
+            top: 220px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            padding: 10px;
+            color: white;
+            font-size: 0.9em;
+            max-width: 300px;
+            width: 90%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 9997;
+        }
+    
+        .log-entry {
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 6px;
+        }
+    </style>
+
+
+
+        <!--EMERGENCY PROMPT-->
+        <div id="emergencyPrompt" class="emergency-prompt hidden">
+            <div id="emergencyHeader" class="emergency-header flashing"></div>
+            <div id="emergencyBody" class="emergency-body"></div>
+            <button id="emok-button"class="acknowledge-button hidden" onclick="acknowledgeEmergency()">OK</button>
+        </div>
+        <div id="emergencySiren" class="emergency-siren hidden">
+            <img src="../static/HAIInterface/img/siren.gif" width="150" height="150" alt="Siren">
+        </div>
+
      
       
         <div id="center" class="center">
@@ -518,18 +768,18 @@
         let currentFrequency = 123.45;
 
         document.querySelector('.openbtn').addEventListener('click', function() {
-            log({"action": "radio panel opened"})
+           logAction({"action": "radio panel opened"})
             console.log('clicked')
             document.querySelector('.radiopanel').classList.toggle('open');
             });
 
         document.querySelector('.radiopanel-closebtn').addEventListener('click', function() {
-            log({"action": "radio panel closed"})
+           logAction({"action": "radio panel closed"})
             document.querySelector('.radiopanel').classList.remove('open');
             });
 
         if (radioPage==1){
-            log({"Controller action": "radio panel opened by controller"})
+           logAction({"action": "radio panel opened by controller"})
             console.log('clicked by controller')
             document.querySelector('.radiopanel').classList.toggle('open');
         }
@@ -541,14 +791,14 @@
             currentFrequency += step;
             currentFrequency = Math.max(118.00, Math.min(121.95, currentFrequency));  // Ensure frequency stays within valid range (118.00 to 121.95)
             frequencyDisplay.value = currentFrequency.toFixed(2);
-            log({"action": "frequency input set to"+ currentFrequency })
+          logActionAction({"action": "frequency input set to"+ currentFrequency })
         }
         
 
         function grdupdate() {
             const callsign = document.getElementById('callsign').value;
-            log({"action": "transmit button pressed"})
-            log({"action": `callsign set to: + ${callsign}`})
+           logAction({"action": "transmit button pressed"})
+           logAction({"action": `callsign set to: + ${callsign}`})
 
             if(callsign!="NASXGS"){
                 // alert('Select correct Callsign for transmitting ')
@@ -576,7 +826,7 @@
                 else{
                 const radio = document.querySelector('input[name="radio-select"]:checked');
                 if (radio.value== "Comm1") {
-                    log({"action": "radio set to:"+ radio.value})
+                   logAction({"action": "radio set to:"+ radio.value})
                     showMap()
                     //alert(`${callsign} transmitting on ${radio.value} ${currentFrequency.toFixed(2)} MHz`);
                     const dialog = document.createElement('dialog');
@@ -588,7 +838,7 @@
                     dialog.showModal();
                     radioTransmit=1
                     fetch("/var?transmit=" + radioTransmit) 
-                    log({"action": callsign+"transmitting updates on" + radio.value + (currentFrequency.toFixed(2))+" MHz" })
+                   logAction({"action": callsign+"transmitting updates on" + radio.value + (currentFrequency.toFixed(2))+" MHz" })
                 } 
                 else {
                     //alert('Select a radio channel');
@@ -613,8 +863,8 @@
         
         function grdcontact() {
             const callsign = document.getElementById('callsign').value;
-            log({"action": "receive button pressed"})
-            log({"action": "callsign set to:"+{callsign}})
+           logAction({"action": "receive button pressed"})
+           logAction({"action": "callsign set to:"+{callsign}})
 
             if(callsign!="MEDEVAC"){
                 //alert('Select receiving callsign')
@@ -641,7 +891,7 @@
                 else{
                     const radio = document.querySelector('input[name="radio-select"]:checked');
                     if (radio.value== "Comm2") {
-                        log({"action": "radio set to:"+ radio.value})
+                       logAction({"action": "radio set to:"+ radio.value})
                         //alert(`${callsign} receiving on ${radio.value} ${currentFrequency.toFixed(2)} MHz`);
                         const dialog = document.createElement('dialog');
                         dialog.innerHTML = `
@@ -650,7 +900,7 @@
                         `;
                         document.body.appendChild(dialog);
                         dialog.showModal();
-                        log({"action": callsign+"transmitting on" + radio.value + (currentFrequency.toFixed(2))+" MHz" })
+                       logAction({"action": callsign+"transmitting on" + radio.value + (currentFrequency.toFixed(2))+" MHz" })
                         this.timeoutID=setTimeout(() => {radioReceive=1
                         fetch("/var?receive=" + radioReceive) 
                         clearTimeout(this.timeoutID)
@@ -687,7 +937,9 @@
         // Toggle AI Assistant Activation
         const aiToggle = document.getElementById("aiToggle");
             const aiImage = document.getElementById("aiImage");
-            const aiButton = document.querySelector(".voice-assistant"); 
+            const glowRing = document.getElementById("glowRing");
+            const glowRingDelay = document.getElementById("glowRingDelay");
+            const aiButton = document.querySelector(".ai-button"); 
 
             const aiInactiveImage = "../static/HAIInterface/img/robotic_bgrm.png";
             const aiActiveGif = "../static/HAIInterface/img/robotic_bgrm.gif";
@@ -703,12 +955,18 @@
 
             // Toggle pulsating effect
             if (aiActive) {
+                    glowRing.classList.add("glow-ring");
+                    //glowRing.classList.add("delay");
                     aiButton.classList.add("active");
+                    updateAssistantStatus('Listening...');
                     //toggleSound.currentTime = 0;  // reset in case it's still playing
                     //toggleSound.play();
                     //document.body.classList.add('assistant-dull-background', 'active');
                 } else {
                     aiButton.classList.remove("active");
+                    //glowRing.classList.remove("glow-ring");
+                    glowRing.classList.add("delay");
+                    updateAssistantStatus('');
                     //document.body.classList.remove('assistant-dull-background', 'active');
 
                 }
@@ -728,7 +986,7 @@
                 console.log(vitalsState);
                 //updating the server
                 await fetch("/var?vitals-state=" + vitalsState)
-                log({ "page": "Inflight", "action": "Change altitude button on vitals emergency pressed" });
+               logAction({ "page": "Inflight", "action": "Change altitude button on vitals emergency pressed" });
                 window.location.href = '/hai-interface/ca-page=' + 1 ;
         }
 
@@ -745,21 +1003,115 @@
                 console.log(vitalsState);
                 //updating the server
                 await fetch("/var?vitals-state=" + vitalsState)  
-                log({ "page": "Inflight", "action": "Ignore change button on vitals emergency pressed" });
+               logAction({ "page": "Inflight", "action": "Ignore change button on vitals emergency pressed" });
             }
  */
-        
+
+            function validateLowInput() {
+                const input = document.getElementById('lowInput');
+                const feedback = document.getElementById('lowFeedback');
+                const correctValue = 3000; // expected correct value
+                const prompt = document.getElementById('emergencyPrompt');
+                const siren = document.getElementById('emergencySiren');
+
+                if (parseInt(input.value) === correctValue) {
+                    text="Acknowledged. Secondary sensor confirms normal pressure. This appears to be a sensor miscalibration. No action required. System status: Normal."
+                    speakJarvis(text,"normal")
+                    const infoBox = document.createElement('div');
+                    infoBox.textContent = `Sensor was miscalibrated <br> Warning cleared`;
+                    infoBox.style.position = 'fixed';
+                    infoBox.style.top = '50%';
+                    infoBox.style.left = '50%';
+                    infoBox.style.transform = 'translateX(-50%)';
+                    infoBox.style.backgroundColor = 'rgba(128, 255, 0, 0.3)';
+                    infoBox.style.backdropFilter = "blur(8px)";
+                    infoBox.style.color = '#fff';
+                    infoBox.style.padding = '25px 35px';
+                    infoBox.style.borderRadius = '15px';
+                    infoBox.style.boxShadow = '0 0 15px rgba(0,0,0,0.3)';
+                    infoBox.style.zIndex = '10000';
+                    document.body.appendChild(infoBox);
+
+                    prompt.classList.add('fade-out');
+                    setTimeout(() => {
+                        prompt.classList.add('hidden');
+                    }, 500); // delay to match the fade-out animation
+                setTimeout(() => {
+                    document.body.removeChild(infoBox);
+                }, 8000);
+            } else {
+                feedback.textContent = 'Incorrect value. Please report the correct reading.';
+                feedback.style.color = '#e74c3c';
+                speakJarvis("Incorrect value. Please report the correct reading", "normal")
+            }
+}
+
+            function showEmergencyPrompt(level, title, message) {
+                const prompt = document.getElementById('emergencyPrompt');
+                const header = document.getElementById('emergencyHeader');
+                const body = document.getElementById('emergencyBody');
+                const siren = document.getElementById('emergencySiren');
+                const okbutton= document.getElementById('emok-button');
+
+                header.innerHTML = `${level === 'low' ? '⚠️' : '🚨'} ${title}`;
+
+                if (level === 'low') {
+                    text="Primary hydraulic gauge shows low pressure. Please report the current reading from the secondary sensor."
+                    speakJarvis(text, "normal")
+                    body.innerHTML = `
+                    <p>${message}</p>
+                    <input id="lowInput" name="valueInput" type="number" placeholder="Enter reading" style="padding: 20px; font-size: 0.8em; margin-top: 12px; width: 80%;">
+                    <br><button onclick="validateLowInput()" id="submit-button" class="acknowledge-button" style="margin-top: 12px;">Submit</button>
+                    <div id="lowFeedback" style="margin-top: 12px; color: #fff;"></div>`;
+                } else if (level === 'medium') {
+                    text = "Primary Fuel gauge is indicating empty, but system diagnostics confirm normal fuel flow and engine performance. This appears to be a sensor malfunction. No immediate action is required. I will keep monitoring the situation closely while continuing the mission as planned unless instructed otherwise."
+                    speakJarvis(text, "mild")
+                    body.innerHTML = `
+                    <p><strong style="color: black;">Detected:</strong> Fuel gauge reads empty</p>
+                    <p><strong style="color: black;">Diagnostics:</strong> False Warning
+                    </p>
+                    <p><strong style="color: black;">Recommendation:</strong> Continue flying as planned</p>
+                    <p><strong style="color: black;">Options:</strong></p>
+                    <button class="ok-button" id="okFuel-Button">OK</button>&ensp;&ensp;
+                    <button class="ok-button" id="elFuel-Button">Change Destination</button>`;
+                } else {
+                    text = "Emergency detected: Engine on fire. Immediate landing is required. Nearest helipad is a commercial Helipad X. I recommend landing there. Please confirm Helipad X or select an alternative emergency landing site."
+                    speakJarvis(text, "high")
+                    body.innerHTML = message;
+                    okbutton.classList.remove('hidden');
+                }
+
+                prompt.classList.remove('hidden', 'low', 'medium', 'high');
+                prompt.classList.add(level);
+
+                
+                }
+
+            function acknowledgeEmergency() {
+                const prompt = document.getElementById('emergencyPrompt');
+                if (!prompt.classList.contains('high')) return;
+                prompt.classList.add('fade-out');
+                setTimeout(() => {
+                    prompt.classList.add('hidden');
+                }, 500);
+                const siren = document.getElementById('emergencySiren');
+                siren.classList.add('visible');
+                siren.style.right = '60px';
+                siren.style.top = '25%';
+                siren.style.position = 'fixed';
+            }
+    
 
         //Listen to the socket for any changes from the controller:
         socket.on("update_callsign", (data) => {   // Callsign updates from the control panel
             console.log("Callsign update received:", data.callsign);
-            log({ "page": "radio-panel", "action": "callsign changed to " + data.callsign });
+           logAction({ "page": "radio-panel", "action": "callsign changed to " + data.callsign });
             document.getElementById("callsign").value = data.callsign;
         });
         
         socket.on("update_channel", (data) => {    // Channel updates from the control panel
             console.log("Channel update received:", data.channel);
-            log({ "page": "radio-panel", "action": "channel changed to " + data.channel });
+           logAction({ "page": "radio-panel", "action": "channel changed to " + data.channel });
 
             let radioOptions = document.querySelectorAll("input[name='radio-select']");
             radioOptions.forEach(radio => {
@@ -771,7 +1123,7 @@
 
         socket.on("update_transmit", (data) => {   // Transmit updates from the control panel
             console.log("Transmit update received:", data.transmit);
-            log({ "page": "radio-panel", "action": "transmit command received: " + data.transmit });
+           logAction({ "page": "radio-panel", "action": "transmit command received: " + data.transmit });
             if (data.transmit == "1") {
                 grdupdate(); //  for Transmit Comm1
             } else if (data.transmit == "2") {
@@ -779,20 +1131,42 @@
             }
         });
 
-      /*   socket.on("show_overlay", (data) => {   // Transmit updates from the control panel
-                console.log("Showing Overlay");
-                log({ "page": "emergency", "action": "transmit command received: "  });
-                if (data.transmit == "1") {
-                    grdupdate(); //  for Transmit Comm1
-                } else if (data.transmit == "2") {
-                    grdcontact(); // Calls the receive function for Transmit Comm2
+        socket.on("speak_text", (data) => {   // Text to be spoken  from the control panel
+            console.log("Receieved text and stress level:", data.text, data.stress_level);
+            logAction({ "page": "speak text", "action": "Receieved text and stress level:"+ data.text+ data.stress_level});
+            speakJarvis(data.text, data.stress_level)
+        });
+
+        function speakJarvis(message, stress_level){
+                const voices = window.speechSynthesis.getVoices();
+                const utterance = new SpeechSynthesisUtterance(message);
+                utterance.voice = voices[51];
+                utterance.rate = 1.0;
+                if (stress_level == "normal") {
+                    utterance.pitch = 1.0;
+                    utterance.volume = 1;
                 }
-            });
-  */
+                else if (stress_level == "mild") {
+                    utterance.pitch = 1.2;
+                    utterance.volume = 1;
+                 }
+                else {
+                    utterance.rate = 1.05;
+                    utterance.pitch = 1.5;
+                    utterance.volume = 1.1;
+                  }
+                window.speechSynthesis.speak(utterance);
+
+        }
+           
+
+
+     
         socket.on("execute_command", (data) => {
             //const {action, elementId, value} = data;
             console.log(data)
             console.log(`Executing: ${data.action} on ${data.whichbtn} with value: ${data.value}`);
+            logAction({"action": `Controller Executing: ${data.action} on ${data.whichbtn} with value: ${data.value}`});
             const action=data.action
 
             const element = document.getElementById(data.whichbtn) || document.querySelector(`[name='${data.whichbtn}']`);
@@ -813,19 +1187,18 @@
                     altitudeTimeOverlay.style.opacity = '1';
                 case "set-value":
                     if (["INPUT", "TEXTAREA", "SELECT"].includes(element.tagName)) {
-                        element.value = value;
+                        element.value = data.value;
                     }
                     break;
                 
             }
         });
 
-
-       
-
-         
-
-        
+       // Examples of triggering emergencies
+        //showEmergencyPrompt('low', 'Low Pressure Warning', '<div> Report the reading from the secondary hydraulic pressure gauge</div>');
+        //showEmergencyPrompt('medium', 'Fuel Tank Empty', 'Empty Fuel tank warning detected. Pilot attention required.');
+         //showEmergencyPrompt('high', 'Engine Fire', `<div>Need to <strong>Land immediately</strong></div><br><div>Pick an emergency landing site</div>`);
+        //showEmergencyPrompt('high', 'Weather Emergency', '<strong>Severe turbulence detected.</strong><br>Prepare for emergency descent.');
 
         {% block script %}
         {% endblock %}
