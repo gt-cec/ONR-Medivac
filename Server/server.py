@@ -19,13 +19,18 @@ import multiprocessing
 import sounddevice as sd
 import soundfile as sf
 import numpy as np
-from tts_manager import TTSManager
+#from tts_manager import TTSManager
 import torch
 from pathlib import Path
 
 
 app = Flask(__name__)
 socketio = SocketIO(app, async_mode="threading", logger=False, cors_allowed_origins="*")  # Ensure Flask remains non-blocking
+
+# Set the logging level
+app.logger.setLevel(logging.ERROR)
+logging.getLogger('socketio').setLevel(logging.ERROR)
+
 
 # Initialize TTS
 #tts = TTS("tts_models/multilingual/multi-dataset/your_tts", progress_bar=False).to("cpu")
@@ -36,7 +41,7 @@ os.environ['TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD'] = '1'
 #tts = TTS("tts_models/en/vctk/vits", progress_bar=False).to("cpu")
 #tts = TTS("tts_models/en/vctk/vits", progress_bar=False).to("cpu")  
 #tts= TTS("tts_models/en/ljspeech/glow-tts","vocoder_models/en/ljspeech/multiband-melgan" , progress_bar=False).to("cpu")  
-tts_manager = TTSManager("tts_models/en/ljspeech/speedy-speech")  
+#tts_manager = TTSManager("tts_models/en/ljspeech/speedy-speech")  
 #tts_manager = TTSManager()
 
 
@@ -1282,9 +1287,10 @@ async def generate_audio(text):
 
 @socketio.on("send_text")
 def handle_send_text(data):
-    # Load the received data (e.g., text message)
+    # Load the received data (e.g., text message and stress_level)
     data = json.loads(data)
     text = data.get("text", "").strip()
+    stress_level=data["stress_level"]
     print("Received Text", text)
     
     # Check if the text is empty after stripping
@@ -1293,9 +1299,13 @@ def handle_send_text(data):
     
     # Clean the text (remove non-alphanumeric characters except common punctuation)
     text = re.sub(r"[^a-zA-Z0-9.,'?! ]", "", text)
+
+    # Send text to JS speech synthesizer
+    socketio.emit("speak_text", {"text": text, "stress_level":stress_level})
+
     
     # Add the clean text to the TTS manager
-    tts_manager.add_text(text)
+    #tts_manager.add_text(text)
         
     """ future = asyncio.run_coroutine_threadsafe(generate_audio(text), loop)  # Run TTS in event loop
     
