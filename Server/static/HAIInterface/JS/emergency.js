@@ -347,7 +347,7 @@ function TimeToDestination() {
 // Function to activate the pressure warning alert
 function activateWarningAlert() {
   console.log("PressureWarning activated")
-  document.getElementById('warningSound').play();
+  //document.getElementById('warningSound').play();
 
   setTimeout(() => {
     document.getElementById('warningSound').pause();
@@ -436,7 +436,7 @@ function activateEngineAlert() {
  logAction({"page": "Inflight", "action": "Engine failure emergency- emergnecy propmt displayed"}); 
   console.log(EngineFailure)
   showEmergencyPrompt('high', 'Engine Fire', `<div>Need to <strong>Land immediately</strong></div><br><div>Pick an emergency landing site</div>`);
-  document.getElementById('sirenSound').play();
+  //document.getElementById('sirenSound').play();
 
   setTimeout(() => {
     document.getElementById('sirenSound').pause();
@@ -498,7 +498,7 @@ function activateFuelAlert() {
   console.log("Fuel alert activated")
   console.log(EmptyTank)
   showEmergencyPrompt('medium', 'Fuel Tank Empty', 'Empty Fuel tank warning detected. Pilot attention required.');
-  document.getElementById('emptytankSound').play();
+  //document.getElementById('emptytankSound').play();
  logAction({"page": "Inflight", "action": "Fuel tank emergency alert-displayed"}); 
   /* const fAoverlay = document.getElementById('fuelAlertOverlay');
   document.body.classList.add('dull-background');
@@ -571,7 +571,7 @@ function activateFuelAlert() {
 // Function to activate the altitude  alert
 function activateAltitudeAlert() {
   console.log("Altitude alert activated")
-  document.getElementById('altitudeSound').play();
+ // document.getElementById('altitudeSound').play();
  logAction({"page": "Inflight", "action": " Altitude alert activated"}); 
   const altitudeoverlay = document.getElementById('altitudealertOverlay');
   document.body.classList.add('dull-background');
