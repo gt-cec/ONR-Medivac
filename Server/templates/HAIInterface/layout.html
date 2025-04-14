@@ -972,7 +972,9 @@
                 }
             });
 
-
+        let hasSpokenLowWarning=false
+        let hasSpokenEngineFire = false
+        let hasSpokenEmptyFuel = false
 
         /* function acceptChange(){
             console.log('change accepted-changing altitude')
@@ -1057,7 +1059,11 @@
 
                 if (level === 'low') {
                     text="Primary hydraulic gauge shows low pressure. Please report the current reading from the secondary sensor."
-                    speakJarvis(text, "normal")
+                    if(!hasSpokenLowWarning)
+                    {
+                        speakJarvis(text, "normal")
+                        hasSpokenLowWarning=true
+                     }
                     body.innerHTML = `
                     <p>${message}</p>
                     <input id="lowInput" name="valueInput" type="number" placeholder="Enter reading" style="padding: 20px; font-size: 0.8em; margin-top: 12px; width: 80%;">
@@ -1065,7 +1071,11 @@
                     <div id="lowFeedback" style="margin-top: 12px; color: #fff;"></div>`;
                 } else if (level === 'medium') {
                     text = "Primary Fuel gauge is indicating empty, but system diagnostics confirm normal fuel flow and engine performance. This appears to be a sensor malfunction. No immediate action is required. I will keep monitoring the situation closely while continuing the mission as planned unless instructed otherwise."
-                    speakJarvis(text, "mild")
+                    if (!hasSpokenEmptyFuel) {
+                        speakJarvis(text, "mild")
+                        hasSpokenEmptyFuel=true
+                    }
+
                     body.innerHTML = `
                     <p><strong style="color: black;">Detected:</strong> Fuel gauge reads empty</p>
                     <p><strong style="color: black;">Diagnostics:</strong> False Warning
@@ -1076,7 +1086,11 @@
                     <button class="ok-button" id="elFuel-Button">Change Destination</button>`;
                 } else {
                     text = "Emergency detected: Engine on fire. Immediate landing is required. Nearest helipad is a commercial Helipad X. I recommend landing there. Please confirm Helipad X or select an alternative emergency landing site."
-                    speakJarvis(text, "high")
+                    if (!hasSpokenEngineFire) {
+                        speakJarvis(text, "high")
+                        hasSpokenEngineFire=true
+                    }
+
                     body.innerHTML = message;
                     okbutton.classList.remove('hidden');
                 }
@@ -1138,6 +1152,9 @@
         });
 
         function speakJarvis(message, stress_level){
+                // Stop any ongoing speech before speaking new message
+                window.speechSynthesis.cancel();
+
                 const voices = window.speechSynthesis.getVoices();
                 const utterance = new SpeechSynthesisUtterance(message);
                 utterance.voice = voices[2];  //for firefox
