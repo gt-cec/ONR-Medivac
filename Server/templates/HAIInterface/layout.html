@@ -972,9 +972,7 @@
                 }
             });
 
-        let hasSpokenLowWarning=false
-        let hasSpokenEngineFire = false
-        let hasSpokenEmptyFuel = false
+   
 
         /* function acceptChange(){
             console.log('change accepted-changing altitude')
@@ -1009,111 +1007,7 @@
             }
  */
 
-            function validateLowInput() {
-                const input = document.getElementById('lowInput');
-                const feedback = document.getElementById('lowFeedback');
-                const correctValue = 3000; // expected correct value
-                const prompt = document.getElementById('emergencyPrompt');
-                const siren = document.getElementById('emergencySiren');
-
-                if (parseInt(input.value) === correctValue) {
-                    text="Acknowledged. Secondary sensor confirms normal pressure. This appears to be a sensor miscalibration. No action required. System status: Normal."
-                    speakJarvis(text,"normal")
-                    const infoBox = document.createElement('div');
-                    infoBox.textContent = `Sensor was miscalibrated <br> Warning cleared`;
-                    infoBox.style.position = 'fixed';
-                    infoBox.style.top = '50%';
-                    infoBox.style.left = '50%';
-                    infoBox.style.transform = 'translateX(-50%)';
-                    infoBox.style.backgroundColor = 'rgba(128, 255, 0, 0.3)';
-                    infoBox.style.backdropFilter = "blur(8px)";
-                    infoBox.style.color = '#fff';
-                    infoBox.style.padding = '25px 35px';
-                    infoBox.style.borderRadius = '15px';
-                    infoBox.style.boxShadow = '0 0 15px rgba(0,0,0,0.3)';
-                    infoBox.style.zIndex = '10000';
-                    document.body.appendChild(infoBox);
-
-                    prompt.classList.add('fade-out');
-                    setTimeout(() => {
-                        prompt.classList.add('hidden');
-                    }, 500); // delay to match the fade-out animation
-                setTimeout(() => {
-                    document.body.removeChild(infoBox);
-                }, 8000);
-            } else {
-                feedback.textContent = 'Incorrect value. Please report the correct reading.';
-                feedback.style.color = '#e74c3c';
-                speakJarvis("Incorrect value. Please report the correct reading", "normal")
-            }
-}
-
-            function showEmergencyPrompt(level, title, message) {
-                const prompt = document.getElementById('emergencyPrompt');
-                const header = document.getElementById('emergencyHeader');
-                const body = document.getElementById('emergencyBody');
-                const siren = document.getElementById('emergencySiren');
-                const okbutton= document.getElementById('emok-button');
-
-                header.innerHTML = `${level === 'low' ? '⚠️' : '🚨'} ${title}`;
-
-                if (level === 'low') {
-                    text="Primary hydraulic gauge shows low pressure. Please report the current reading from the secondary sensor."
-                    if(!hasSpokenLowWarning)
-                    {
-                        speakJarvis(text, "normal")
-                        hasSpokenLowWarning=true
-                     }
-                    body.innerHTML = `
-                    <p>${message}</p>
-                    <input id="lowInput" name="valueInput" type="number" placeholder="Enter reading" style="padding: 20px; font-size: 0.8em; margin-top: 12px; width: 80%;">
-                    <br><button onclick="validateLowInput()" id="submit-button" class="acknowledge-button" style="margin-top: 12px;">Submit</button>
-                    <div id="lowFeedback" style="margin-top: 12px; color: #fff;"></div>`;
-                } else if (level === 'medium') {
-                    text = "Primary Fuel gauge is indicating empty, but system diagnostics confirm normal fuel flow and engine performance. This appears to be a sensor malfunction. No immediate action is required. I will keep monitoring the situation closely while continuing the mission as planned unless instructed otherwise."
-                    if (!hasSpokenEmptyFuel) {
-                        speakJarvis(text, "mild")
-                        hasSpokenEmptyFuel=true
-                    }
-
-                    body.innerHTML = `
-                    <p><strong style="color: black;">Detected:</strong> Fuel gauge reads empty</p>
-                    <p><strong style="color: black;">Diagnostics:</strong> False Warning
-                    </p>
-                    <p><strong style="color: black;">Recommendation:</strong> Continue flying as planned</p>
-                    <p><strong style="color: black;">Options:</strong></p>
-                    <button class="ok-button" id="okFuel-Button">OK</button>&ensp;&ensp;
-                    <button class="ok-button" id="elFuel-Button">Change Destination</button>`;
-                } else {
-                    text = "Emergency detected: Engine on fire. Immediate landing is required. Nearest helipad is a commercial Helipad X. I recommend landing there. Please confirm Helipad X or select an alternative emergency landing site."
-                    if (!hasSpokenEngineFire) {
-                        speakJarvis(text, "high")
-                        hasSpokenEngineFire=true
-                    }
-
-                    body.innerHTML = message;
-                    okbutton.classList.remove('hidden');
-                }
-
-                prompt.classList.remove('hidden', 'low', 'medium', 'high');
-                prompt.classList.add(level);
-
-                
-                }
-
-            function acknowledgeEmergency() {
-                const prompt = document.getElementById('emergencyPrompt');
-                if (!prompt.classList.contains('high')) return;
-                prompt.classList.add('fade-out');
-                setTimeout(() => {
-                    prompt.classList.add('hidden');
-                }, 500);
-                const siren = document.getElementById('emergencySiren');
-                siren.classList.add('visible');
-                siren.style.right = '60px';
-                siren.style.top = '25%';
-                siren.style.position = 'fixed';
-            }
+            
     
 
         //Listen to the socket for any changes from the controller:
@@ -1153,7 +1047,7 @@
 
         function speakJarvis(message, stress_level){
                 // Stop any ongoing speech before speaking new message
-                window.speechSynthesis.cancel();
+                //window.speechSynthesis.cancel();
 
                 const voices = window.speechSynthesis.getVoices();
                 const utterance = new SpeechSynthesisUtterance(message);
@@ -1199,7 +1093,7 @@
                     break;
                 case "show":
                     const altitudeTimeOverlay = document.getElementById('showAlert-button');
-                    document.body.classList.add('dull-background');
+                    document.embody.classList.add('dull-background');
                     altitudeTimeOverlay.style.visibility = 'visible';
                     altitudeTimeOverlay.style.opacity = '1';
                 case "set-value":

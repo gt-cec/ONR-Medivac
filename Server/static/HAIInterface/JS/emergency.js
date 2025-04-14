@@ -241,7 +241,7 @@ function initEmergency() {
         // to show Fuel tank empty alert 
         //if (EmptyTank == 1 && satisfied==true) {
         if (EmptyTank == 1) {
-         logAction({"page": "emergency", "action": "show Fuel Tank Empty Alert , hide map"})
+          logAction({"page": "emergency", "action": "show Fuel Tank Empty Alert , hide map"})
           hideMap()
          /*  audio.play()
           audio.volume=0.05 */
@@ -279,7 +279,7 @@ function initEmergency() {
       // For weather emergency
       if (weatherEmergency == 1 ) {
         console.log('Weather emergency')
-       logAction({"page": "emergency", "action": "show Weather Emergency Alert, hide map"})
+        logAction({"page": "emergency", "action": "show Weather Emergency Alert, hide map"})
         hideMap()
         activateWeatherAlert()
        }
@@ -314,6 +314,10 @@ function initEmergency() {
     }
 }
 
+
+let hasSpokenLowWarning=false
+let hasSpokenEngineFire = false
+let hasSpokenEmptyFuel = false
 
 function TimeToDestination() {
     setInterval(async () => {
@@ -357,6 +361,9 @@ function activateWarningAlert() {
   
   logAction({"page": "Inflight", "action": "Pressure Warning alert activated"}); 
   showEmergencyPrompt('low', 'Low Pressure Warning', '<div> Report the reading from the secondary hydraulic pressure gauge</div>');
+  PressureWarning=0  
+  //updating the server
+  fetch("/var?pressure-warning=" + PressureWarning) 
 
   /* document.body.classList.add('dull-background');
   const pWoverlay = document.getElementById('pressureWarningalertOverlay');
@@ -447,6 +454,7 @@ function activateEngineAlert() {
   document.body.classList.add('dull-background');
   overlay.style.visibility = 'visible';
   overlay.style.opacity = '1'; */
+  EngineFailure=0
   //updating the server
   fetch("/var?engine-failure=" + EngineFailure)
 }
@@ -509,7 +517,11 @@ function activateFuelAlert() {
   closeFuelAlert();
  logAction({ "page": "Inflight", "action": "Continue button on Fuel tank emergency pressed" });
   //document.getElementById('emptytankSound').pause();
-}
+ }
+  EmptyTank=0
+  console.log(EmptyTank); 
+  //updating the server
+  fetch("/var?empty-tank=" + EmptyTank)
 }
 
   // Function to show more information regarding fuel tank and stop the siren
@@ -746,6 +758,116 @@ function showVitalsPrompt() {
     document.getElementById('vitals').style.display = "none"
   }, 10000);
 }
+
+function validateLowInput() {
+  const input = document.getElementById('lowInput');
+  const feedback = document.getElementById('lowFeedback');
+  const correctValue = 3000; // expected correct value
+  const prompt = document.getElementById('emergencyPrompt');
+  const siren = document.getElementById('emergencySiren');
+
+  if (parseInt(input.value) === correctValue) {
+      text="Acknowledged. Secondary sensor confirms normal pressure. This appears to be a sensor miscalibration. WARNING CLEARED. System status: Normal."
+      speakJarvis(text,"normal")
+      const infoBox = document.createElement('div');
+      infoBox.textContent = `Sensor was miscalibrated <br> Warning cleared`;
+      infoBox.style.position = 'fixed';
+      infoBox.style.top = '50%';
+      infoBox.style.left = '50%';
+      infoBox.style.transform = 'translateX(-50%)';
+      infoBox.style.backgroundColor = 'rgba(128, 255, 0, 0.3)';
+      infoBox.style.backdropFilter = "blur(8px)";
+      infoBox.style.color = '#fff';
+      infoBox.style.padding = '25px 35px';
+      infoBox.style.borderRadius = '15px';
+      infoBox.style.boxShadow = '0 0 15px rgba(0,0,0,0.3)';
+      infoBox.style.zIndex = '10000';
+      document.body.appendChild(infoBox);
+
+      prompt.classList.add('fade-out');
+      setTimeout(() => {
+          prompt.classList.add('hidden');
+      }, 500); // delay to match the fade-out animation
+      setTimeout(() => {
+          document.body.removeChild(infoBox);
+      }, 8000);
+  } 
+  else {
+      feedback.textContent = 'Incorrect value. Please report the correct reading.';
+      feedback.style.color = '#e74c3c';
+      speakJarvis("Incorrect value. Please report the correct reading", "normal")
+  }
+}
+
+
+function acknowledgeEmergency() {
+  const prompt = document.getElementById('emergencyPrompt');
+  if (!prompt.classList.contains('high')) return;
+  prompt.classList.add('fade-out');
+  setTimeout(() => {
+      prompt.classList.add('hidden');
+  }, 500);
+  const siren = document.getElementById('emergencySiren');
+  siren.classList.add('visible');
+  siren.style.right = '60px';
+  siren.style.top = '25%';
+  siren.style.position = 'fixed';
+}
+
+
+function showEmergencyPrompt(level, title, message) {
+  const prompt = document.getElementById('emergencyPrompt');
+  const header = document.getElementById('emergencyHeader');
+  const embody = document.getElementById('emergencyBody');
+  const siren = document.getElementById('emergencySiren');
+  const emokbutton= document.getElementById('emok-button');
+  prompt.classList.remove('hidden', 'low', 'medium', 'high', 'fade-out');
+
+  header.innerHTML = `${level === 'low' ? '⚠️' : '🚨'} ${title}`;
+  console.log("showing emergency")
+  if (level === 'low') {
+      console.log("showing low")
+      text="Primary hydraulic gauge shows low pressure. Please report the current reading from the secondary sensor."
+      if(!hasSpokenLowWarning)
+      {
+          speakJarvis(text, "normal")
+          hasSpokenLowWarning=true
+       }
+      embody.innerHTML = `
+      <p>${message}</p>
+      <input id="lowInput" name="valueInput" type="number" placeholder="Enter reading" style="padding: 20px; font-size: 0.8em; margin-top: 12px; width: 80%;">
+      <br><button onclick="validateLowInput()" id="submit-button" class="acknowledge-button" style="margin-top: 12px;">Submit</button>
+      <div id="lowFeedback" style="margin-top: 12px; color: #fff;"></div>`;
+  } else if (level === 'medium') {
+      text = "Primary Fuel gauge is indicating empty, but system diagnostics confirm normal fuel flow and engine performance. This appears to be a sensor malfunction. No immediate action is required. I will keep monitoring the situation closely while continuing the mission as planned unless instructed otherwise."
+      if (!hasSpokenEmptyFuel) {
+          speakJarvis(text, "mild")
+          hasSpokenEmptyFuel=true
+      }
+      embody.innerHTML = `<p><strong style="color: black;">Detected:</strong> Fuel gauge reads empty</p>
+      <p><strong style="color: black;">Diagnostics:</strong> False Warning</p>
+      <p><strong style="color: black;">Recommendation:</strong> Continue flying as planned</p>
+      <p><strong style="color: black;">Options:</strong></p>
+      <button class="ok-button" id="okFuel-Button">OK</button>&ensp;&ensp;
+      <button class="ok-button" id="elFuel-Button">Change Destination</button>`;
+  } else {
+      text = "Emergency detected: Immediate landing is required. Nearest helipad is a commercial Helipad X. I recommend landing there. Please confirm Helipad X or select an alternative emergency landing site."
+      if (!hasSpokenEngineFire) {
+          speakJarvis(text, "high")
+          hasSpokenEngineFire=true
+      }
+
+      embody.innerHTML = message;
+      emokbutton.classList.remove('hidden');
+  }
+
+ 
+  prompt.classList.add("emergency-prompt",level);
+
+  
+  }
+
+
 
 
 
