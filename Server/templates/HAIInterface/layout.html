@@ -1140,20 +1140,20 @@
         function speakJarvis(message, stress_level){
                 const voices = window.speechSynthesis.getVoices();
                 const utterance = new SpeechSynthesisUtterance(message);
-                utterance.voice = voices[51];
-                utterance.rate = 1.0;
+                utterance.voice = voices[2];  //for firefox
+                utterance.rate = 1.0; //all these variables as per firefox
                 if (stress_level == "normal") {
                     utterance.pitch = 1.0;
-                    utterance.volume = 1;
+                    utterance.volume = 0.7;
                 }
                 else if (stress_level == "mild") {
-                    utterance.pitch = 1.2;
-                    utterance.volume = 1;
+                    utterance.pitch = 1.5;
+                    utterance.volume = 0.7;
                  }
                 else {
-                    utterance.rate = 1.05;
-                    utterance.pitch = 1.5;
-                    utterance.volume = 1.1;
+                    utterance.rate = 1.4;
+                    utterance.pitch = 2.0;
+                    utterance.volume = 1.0;
                   }
                 window.speechSynthesis.speak(utterance);
 
@@ -1206,42 +1206,3 @@
 
 </html>     
 
-<select id="voiceSelect"></select>
-function populateVoiceList() {
-  if (typeof speechSynthesis === "undefined") {
-    return;
-  }
-
-  const voices = speechSynthesis.getVoices();
-
-  for (let i = 0; i < voices.length; i++) {
-    const option = document.createElement("option");
-    option.textContent = `${voices[i].name} (${voices[i].lang})`;
-
-    if (voices[i].default) {
-      option.textContent +=i;
-    }
-
-    option.setAttribute("data-lang", voices[i].lang);
-    option.setAttribute("data-name", voices[i].name);
-    document.getElementById("voiceSelect").appendChild(option);
-  }
-}
-
-populateVoiceList();
-if (
-  typeof speechSynthesis !== "undefined" &&
-  speechSynthesis.onvoiceschanged !== undefined
-) {
-  speechSynthesis.onvoiceschanged = populateVoiceList;
-}
- const message = "N A S X G S, this is Ground Control asking for update on flight status, patient status and estimated time to destination.";
-  const voices = window.speechSynthesis.getVoices();
-  const utterance = new SpeechSynthesisUtterance(message);
-  utterance.voice = voices[51];
-  utterance.rate = 1.05;
-  utterance.pitch = 1.0;
-  utterance.volume = 1;
-  window.speechSynthesis.speak(utterance);
-  console.log('Radio update');
-  console.log(utterance.voice)

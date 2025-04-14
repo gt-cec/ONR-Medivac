@@ -355,11 +355,13 @@ function activateWarningAlert() {
   }, 2000); //  2 seconds
 
   
- logAction({"page": "Inflight", "action": "Pressure Warning alert activated"}); 
-  document.body.classList.add('dull-background');
+  logAction({"page": "Inflight", "action": "Pressure Warning alert activated"}); 
+  showEmergencyPrompt('low', 'Low Pressure Warning', '<div> Report the reading from the secondary hydraulic pressure gauge</div>');
+
+  /* document.body.classList.add('dull-background');
   const pWoverlay = document.getElementById('pressureWarningalertOverlay');
   pWoverlay.style.visibility = 'visible';
-  pWoverlay.style.opacity = '1';
+  pWoverlay.style.opacity = '1'; */
   }
 
   // Function to show more information
@@ -433,6 +435,7 @@ function activateWarningAlert() {
 function activateEngineAlert() {
  logAction({"page": "Inflight", "action": "Engine failure emergency- emergnecy propmt displayed"}); 
   console.log(EngineFailure)
+  showEmergencyPrompt('high', 'Engine Fire', `<div>Need to <strong>Land immediately</strong></div><br><div>Pick an emergency landing site</div>`);
   document.getElementById('sirenSound').play();
 
   setTimeout(() => {
@@ -440,10 +443,10 @@ function activateEngineAlert() {
     document.getElementById('sirenSound').currentTime = 0; // Reset to the beginning
   }, 2000); //  2 seconds
 
-  const overlay = document.getElementById('alertOverlay');
+  /* const overlay = document.getElementById('alertOverlay');
   document.body.classList.add('dull-background');
   overlay.style.visibility = 'visible';
-  overlay.style.opacity = '1';
+  overlay.style.opacity = '1'; */
   //updating the server
   fetch("/var?engine-failure=" + EngineFailure)
 }
@@ -494,17 +497,18 @@ function activateEngineAlert() {
 function activateFuelAlert() {
   console.log("Fuel alert activated")
   console.log(EmptyTank)
+  showEmergencyPrompt('medium', 'Fuel Tank Empty', 'Empty Fuel tank warning detected. Pilot attention required.');
   document.getElementById('emptytankSound').play();
  logAction({"page": "Inflight", "action": "Fuel tank emergency alert-displayed"}); 
-  const fAoverlay = document.getElementById('fuelAlertOverlay');
+  /* const fAoverlay = document.getElementById('fuelAlertOverlay');
   document.body.classList.add('dull-background');
   fAoverlay.style.visibility = 'visible';
-  fAoverlay.style.opacity = '1';
+  fAoverlay.style.opacity = '1'; */
   document.getElementById('okFuel-Button').style.display = 'block';
   document.getElementById("okFuel-Button").onclick = () => {
   closeFuelAlert();
  logAction({ "page": "Inflight", "action": "Continue button on Fuel tank emergency pressed" });
-  document.getElementById('emptytankSound').pause();
+  //document.getElementById('emptytankSound').pause();
 }
 }
 
@@ -608,7 +612,7 @@ function activateAltitudeAlert() {
     `;
     document.body.appendChild(dialog);
     dialog.showModal();
-  logAction({"page": "Inflight", "action": "Altitude alert- altitude submitted"});  
+    logAction({"page": "Inflight", "action": "Altitude alert- altitude submitted"});  
    closeAltitudeAlert()
   }
 
@@ -632,11 +636,12 @@ function activateAltitudeAlert() {
   function activateWeatherAlert() {
    logAction({"page": "Inflight", "action": "Weather emergency- emergnecy propmt displayed"}); 
     console.log("Weather Emergency",weatherEmergency)
-    document.getElementById('weathersirenSound').play();
+    showEmergencyPrompt('high', 'Weather Emergency', '<strong>Severe turbulence detected.</strong><br>Prepare for emergency descent.');
+   /*  document.getElementById('weathersirenSound').play();
     const weatheroverlay = document.getElementById('weatheralertOverlay');
     document.body.classList.add('dull-background');
     weatheroverlay.style.visibility = 'visible';
-    weatheroverlay.style.opacity = '1';
+    weatheroverlay.style.opacity = '1'; */
   }
 
     // Function to show more information about weather emergency and stop the siren
@@ -722,10 +727,10 @@ function speakRadioPrompt() {
   const message = "N A S X G S, this is Ground Control asking for update on flight status, patient status and estimated time to destination.";
   const voices = window.speechSynthesis.getVoices();
   const utterance = new SpeechSynthesisUtterance(message);
-  utterance.voice = voices[18];
-  utterance.rate = 1.05;
+  utterance.voice = voices[0];  //Firefox
+  utterance.rate = 1.2;
   utterance.pitch = 1;
-  utterance.volume = 1;
+  utterance.volume = 0.8;  //between 0 and 1(highest)
   window.speechSynthesis.speak(utterance);
   console.log('Radio update');
   console.log(utterance.voice)
