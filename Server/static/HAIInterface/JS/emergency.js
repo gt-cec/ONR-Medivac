@@ -351,7 +351,7 @@ function TimeToDestination() {
 // Function to activate the pressure warning alert
 function activateWarningAlert() {
   console.log("PressureWarning activated")
-  //document.getElementById('warningSound').play();
+  document.getElementById('warningSound').play();
 
   setTimeout(() => {
     document.getElementById('warningSound').pause();
@@ -584,11 +584,15 @@ function activateFuelAlert() {
 function activateAltitudeAlert() {
   console.log("Altitude alert activated")
  // document.getElementById('altitudeSound').play();
- logAction({"page": "Inflight", "action": " Altitude alert activated"}); 
+  logAction({"page": "Inflight", "action": " Altitude alert activated"}); 
   const altitudeoverlay = document.getElementById('altitudealertOverlay');
-  document.body.classList.add('dull-background');
+  showEmergencyPrompt('low', 'Sensor Miscalibrated', '<div> Report the reading from the secondary altitude gauge</div>');
+  /* document.body.classList.add('dull-background');
   altitudeoverlay.style.visibility = 'visible';
-  altitudeoverlay.style.opacity = '1';
+  altitudeoverlay.style.opacity = '1'; */
+  altitudeAlert=0
+  //updating the server
+  fetch("/var?altitude-alert=" + altitudeAlert)
   }
 
   // Function to show more information for altitude alert
@@ -778,7 +782,7 @@ function showVitalsPrompt() {
 function validateLowInput() {
   const input = document.getElementById('lowInput');
   const feedback = document.getElementById('lowFeedback');
-  const correctValue = 3000; // expected correct value
+  const correctValue = 75; // expected correct value
   const prompt = document.getElementById('emergencyPrompt');
   const siren = document.getElementById('emergencySiren');
 
