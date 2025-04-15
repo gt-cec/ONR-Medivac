@@ -440,7 +440,7 @@ function activateWarningAlert() {
 //Engine Failure
 // Function to activate the engine failure emergency alert
 function activateEngineAlert() {
- logAction({"page": "Inflight", "action": "Engine failure emergency- emergnecy propmt displayed"}); 
+ logAction({"page": "Inflight", "action": "Engine failure emergency- emergency propmt displayed"}); 
   console.log(EngineFailure)
   showEmergencyPrompt('high', 'Engine Fire', `<div>Need to <strong>Land immediately</strong></div><br><div>Pick an emergency landing site</div>`);
   //document.getElementById('sirenSound').play();
@@ -515,7 +515,7 @@ function activateFuelAlert() {
   document.getElementById('okFuel-Button').style.display = 'block';
   document.getElementById("okFuel-Button").onclick = () => {
   closeFuelAlert();
- logAction({ "page": "Inflight", "action": "Continue button on Fuel tank emergency pressed" });
+  logAction({ "page": "Inflight", "action": "Continue button on Fuel tank emergency pressed" });
   //document.getElementById('emptytankSound').pause();
  }
   EmptyTank=0
@@ -563,7 +563,7 @@ function activateFuelAlert() {
   // Function to close the emergency alert
   async function closeFuelAlert() {
     console.log("closing")
-   logAction({"page": "Inflight", "action": "Empty Tank emergency- close button "}); 
+    logAction({"page": "Inflight", "action": "Empty Tank emergency- close button "}); 
     document.getElementById('emptytankSound').pause();
     document.getElementById('emptytankSound').currentTime = 0;
     const fAoverlay = document.getElementById('fuelAlertOverlay');
@@ -576,7 +576,7 @@ function activateFuelAlert() {
     console.log(EmptyTank); 
     //updating the server
     await fetch("/var?empty-tank=" + EmptyTank)
-  }
+}
 
 
 //training scenario
@@ -654,6 +654,10 @@ function activateAltitudeAlert() {
     document.body.classList.add('dull-background');
     weatheroverlay.style.visibility = 'visible';
     weatheroverlay.style.opacity = '1'; */
+    weatherEmergency = 0
+    console.log(weatherEmergency);
+    //updating the server
+    fetch("/var?weather-emergency=" + weatherEmergency)
   }
 
     // Function to show more information about weather emergency and stop the siren
@@ -734,30 +738,42 @@ function schedulePrompt() {
 
 
 
-// Use browser speech synthesis for radio prompt
+
+
+// radio prompt
 function speakRadioPrompt() {
   const message = "N A S X G S, this is Ground Control asking for update on flight status, patient status and estimated time to destination.";
-  const voices = window.speechSynthesis.getVoices();
-  const utterance = new SpeechSynthesisUtterance(message);
-  utterance.voice = voices[0];  //Firefox
-  utterance.rate = 1.2;
-  utterance.pitch = 1;
-  utterance.volume = 0.8;  //between 0 and 1(highest)
-  window.speechSynthesis.speak(utterance);
+  speakGround(message)
   console.log('Radio update');
-  console.log(utterance.voice)
+  logAction({ "page": "radio update", "action": `radio update asked` });
+  //console.log(utterance.voice)
 }
 
 // Show vitals prompt visually
 function showVitalsPrompt() {
   logAction({ "page": "inflight", "action": "displaying vitals prompt" })
   console.log('vitals logging prompt')
+  logAction({ "page": "vitals prompt", "action": `log vitals prompted` });
   document.getElementById('vitals').style.display = "flex"
+    bell.play()
+    //setInterval(bell.play(), 300);  //delayimg sound
+    bell.volume = 0.2;
   // Auto-remove after 10s
   setTimeout(() => {
     document.getElementById('vitals').style.display = "none"
-  }, 10000);
+    logAction({ "page": "vitals prompt", "action": `auto off vitals prompt` });
+    bell.pause()	
+  }, 15000);
 }
+  document.getElementById("vitals-acknowledge-button").onclick = () => {
+    logAction({ "page": "inflight", "action": "user acknowledged vitals prompt" })
+    console.log('vitals logging acknowledged')
+    document.getElementById('vitals').style.display = "none"
+    bell.pause()	
+    //console.log("vitals completed time:", lastClicked)
+
+  }
+
 
 function validateLowInput() {
   const input = document.getElementById('lowInput');
@@ -767,10 +783,10 @@ function validateLowInput() {
   const siren = document.getElementById('emergencySiren');
 
   if (parseInt(input.value) === correctValue) {
-      text="Acknowledged. Secondary sensor confirms normal pressure. This appears to be a sensor miscalibration. WARNING CLEARED. System status: Normal."
+    text ="Copy. Sensor miscalibration likely. WARNING CLEARED. System status: Normal. Continuing course."
       speakJarvis(text,"normal")
       const infoBox = document.createElement('div');
-      infoBox.textContent = `Sensor was miscalibrated <br> Warning cleared`;
+      infoBox.textContent = "Sensor was miscalibrated. Warning cleared";
       infoBox.style.position = 'fixed';
       infoBox.style.top = '50%';
       infoBox.style.left = '50%';
@@ -783,6 +799,7 @@ function validateLowInput() {
       infoBox.style.boxShadow = '0 0 15px rgba(0,0,0,0.3)';
       infoBox.style.zIndex = '10000';
       document.body.appendChild(infoBox);
+      logAction({ "page": "low pressure", "action": `user entered right value` });
 
       prompt.classList.add('fade-out');
       setTimeout(() => {
@@ -793,16 +810,19 @@ function validateLowInput() {
       }, 8000);
   } 
   else {
-      feedback.textContent = 'Incorrect value. Please report the correct reading.';
-      feedback.style.color = '#e74c3c';
-      speakJarvis("Incorrect value. Please report the correct reading", "normal")
+    feedback.textContent = 'Incorrect value. Report the correct reading. Left panel, third dial.';
+    feedback.style.color = '#e74c3c';
+    speakJarvis("Incorrect value. Please report the correct reading", "normal")
+    logAction({ "page": "low pressure", "action": `user entered wrong value` });
+
   }
 }
 
 
 function acknowledgeEmergency() {
   const prompt = document.getElementById('emergencyPrompt');
-  if (!prompt.classList.contains('high')) return;
+  logAction({ "page": "emergency", "action": ` (High)Emergency acknowledged` });
+  // if (!prompt.classList.contains('high')) return;
   prompt.classList.add('fade-out');
   setTimeout(() => {
       prompt.classList.add('hidden');
@@ -822,51 +842,63 @@ function showEmergencyPrompt(level, title, message) {
   const siren = document.getElementById('emergencySiren');
   const emokbutton= document.getElementById('emok-button');
   prompt.classList.remove('hidden', 'low', 'medium', 'high', 'fade-out');
+  emokbutton.classList.add('hidden')
 
   header.innerHTML = `${level === 'low' ? '⚠️' : '🚨'} ${title}`;
   console.log("showing emergency")
+  logAction({ "page": "Inflight", "action": `showing emergency: ${level} ${title} ${message}` });
   if (level === 'low') {
       console.log("showing low")
-      text="Primary hydraulic gauge shows low pressure. Please report the current reading from the secondary sensor."
-      if(!hasSpokenLowWarning)
-      {
-          speakJarvis(text, "normal")
-          hasSpokenLowWarning=true
-       }
+      text ="Hydraulic pressure anomaly detected. Request backup reading from pressure gauge, left panel, third dial."
+      speakJarvis(text, "normal")
+      prompt.style.backgroundColor = "rgba(254, 165, 1, 0.429)";
+      prompt.style.boxShadow = "0 0 20px rgba(255, 165, 0, 0.5)";
+      prompt.style.width= "500px";
+    
       embody.innerHTML = `
       <p>${message}</p>
       <input id="lowInput" name="valueInput" type="number" placeholder="Enter reading" style="padding: 20px; font-size: 0.8em; margin-top: 12px; width: 80%;">
       <br><button onclick="validateLowInput()" id="submit-button" class="acknowledge-button" style="margin-top: 12px;">Submit</button>
       <div id="lowFeedback" style="margin-top: 12px; color: #fff;"></div>`;
-  } else if (level === 'medium') {
-      text = "Primary Fuel gauge is indicating empty, but system diagnostics confirm normal fuel flow and engine performance. This appears to be a sensor malfunction. No immediate action is required. I will keep monitoring the situation closely while continuing the mission as planned unless instructed otherwise."
-      if (!hasSpokenEmptyFuel) {
-          speakJarvis(text, "mild")
-          hasSpokenEmptyFuel=true
-      }
-      embody.innerHTML = `<p><strong style="color: black;">Detected:</strong> Fuel gauge reads empty</p>
-      <p><strong style="color: black;">Diagnostics:</strong> False Warning</p>
-      <p><strong style="color: black;">Recommendation:</strong> Continue flying as planned</p>
-      <p><strong style="color: black;">Options:</strong></p>
-      <button class="ok-button" id="okFuel-Button">OK</button>&ensp;&ensp;
-      <button class="ok-button" id="elFuel-Button">Change Destination</button>`;
-  } else {
-      text = "Emergency detected: Immediate landing is required. Nearest helipad is a commercial Helipad X. I recommend landing there. Please confirm Helipad X or select an alternative emergency landing site."
-      if (!hasSpokenEngineFire) {
-          speakJarvis(text, "high")
-          hasSpokenEngineFire=true
-      }
+    } 
+  else if (level === 'medium') {
+        text = "Primary Fuel gauge is indicating empty, but system diagnostics confirm normal fuel flow and engine performance. This appears to be a sensor malfunction. No immediate action is required. I will keep monitoring the situation closely while continuing the mission as planned unless instructed otherwise."
+        speakJarvis(text, "mild")
+        prompt.style.backgroundColor = "rgba(255, 140, 0, 0.366)";
+        prompt.style.boxShadow = "0 0 25px rgba(255, 140, 0, 0.5)";
+        prompt.style.width = "600px";
 
-      embody.innerHTML = message;
-      emokbutton.classList.remove('hidden');
+        embody.innerHTML = `<p><strong style="color: black;">Detected:</strong> Fuel gauge reads empty</p>
+        <p><strong style="color: black;">Diagnostics:</strong> False Warning</p>
+        <p><strong style="color: black;">Recommendation:</strong> Continue flying as planned</p>
+        <p><strong style="color: black;">Options:</strong>
+        <button class="ok-button" id="okFuel-Button">OK</button>&ensp;&ensp;
+        <button class="ok-button" id="elFuel-Button">Change Destination</button></p>`;
+
+        document.getElementById("okFuel-Button").onclick = () => {
+          prompt.classList.add('fade-out');
+          setTimeout(() => {
+            prompt.classList.add('hidden');
+          }, 500);
+          logAction({ "page": "Inflight", "action": "Continue button on Fuel tank emergency pressed" });
+        } 
+        document.getElementById("elFuel-Button").onclick = () => {
+          prompt.classList.add('hidden')
+          logAction({ "page": "Inflight", "action": "Change destination button on Fuel tank emergency pressed" });
+          window.location.href = '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1;
+        }
   }
-
- 
-  prompt.classList.add("emergency-prompt",level);
-
+  else {
+        text = "Emergency detected: Immediate landing is required. Nearest helipad is a commercial Helipad Hilton. I recommend landing there. Please confirm Helipad X or select an alternative emergency landing site."
+        speakJarvis(text, "high") 
+        prompt.style.backgroundColor = "rgba(255, 0, 0, 0.3)";
+        prompt.style.boxShadow = "0 0 30px rgba(255, 0, 0, 0.6)";
+        prompt.style.width = "400px";
+        embody.innerHTML = message;
+        emokbutton.classList.remove('hidden');
+  }
   
-  }
-
+}
 
 
 
