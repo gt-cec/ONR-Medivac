@@ -1,0 +1,14 @@
+Requirements
+
+System Level
+Python3
+ffmpeg
+
+Python Libraries
+numpy
+json
+matplotlib
+scipy
+pyAudio
+pySound
+threading
