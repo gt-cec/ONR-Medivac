@@ -1041,8 +1041,14 @@
 
         socket.on("speak_text", (data) => {   // Text to be spoken  from the control panel
             console.log("Receieved text and stress level:", data.text, data.stress_level);
-            logAction({ "page": "speak text", "action": "Receieved text and stress level:"+ data.text+ data.stress_level});
-            speakJarvis(data.text, data.stress_level)
+            logAction({ "page": "speak text", "action": "Receieved text and level:"+ data.text+ data.stress_level});
+            const level=data.stress_level
+            if(level=="ground"){
+                speakGround(data.text)
+            }
+            else{
+                speakJarvis(data.text, data.stress_level)
+            }
         });
 
         function speakJarvis(message, stress_level){
@@ -1067,9 +1073,23 @@
                     utterance.volume = 1.0;
                   }
                 window.speechSynthesis.speak(utterance);
+                logAction({ "page": "Jarvis speaking", "action": `Message: ${message} Stress level: ${stress_level}` });
 
         }
-           
+        
+        // Ground control 
+        function speakGround(message) {
+            const voices = window.speechSynthesis.getVoices();
+            const utterance = new SpeechSynthesisUtterance(message);
+            utterance.voice = voices[0];  //Firefox
+            utterance.rate = 1.2;
+            utterance.pitch = 1;
+            utterance.volume = 0.8;  //between 0 and 1(highest)
+            window.speechSynthesis.speak(utterance);
+            console.log('Ground control speaking ');
+            logAction({ "page": "Ground speaking", "action": message });
+            //console.log(utterance.voice)
+        }
 
 
      

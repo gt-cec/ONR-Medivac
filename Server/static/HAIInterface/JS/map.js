@@ -226,9 +226,9 @@ async function getSimulatorData() {
             timeToDestination=data["time-to-destination"]
             changeAltitude = data["change-altitude"]
             EngineFailure=data["engine-failure"]
-            console.log('EngineFailure received')
+            //console.log('EngineFailure received')
             emergencyPage=data["emergency-page"]// emergency page
-            console.log('emergencyPage received')
+            //console.log('emergencyPage received')
             CDPage=data["cd-page"] //change destination page
             CAPage=data["ca-page"] // change altitude page
             RDPage=data["rd-page"] // return to departure page
@@ -285,7 +285,7 @@ function showHelipads(helipads) {
     var nearestIconOptions = {
         iconUrl: "/static/HAIInterface/img/robotic_bgrm.gif",
         //iconUrl: "/static/HAIInterface/img/green-helipad-icon.png",
-        iconSize: [50, 50],
+        iconSize: [80, 80],
     }
 
     var destinationIconOptions = {

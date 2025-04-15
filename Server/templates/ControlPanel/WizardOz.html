@@ -144,9 +144,11 @@
             <h2>Voice Control</h2>
             <div class="subcontent-container">
                 <h3>Ground Control Responses</h3>
-                <div class="control-button radio-button" data-text="Calling ground control for assistance." id="Ground">Ask for Radio Update</div>
-                <div class="control-button radio-button" data-text="Opening the map as requested." id="mappage">Emergency Response</div>
-                <div class="control-button radio-button" data-text="ETA request received. Calculating estimated time of arrival." id="RDpage">ETA</div>
+                <div class="control-button radio-button" data-text="Ground Control, go ahead MedEvac" id="Ground">Ground Control, go ahead MedEvac</div>
+                <div class="control-button radio-button" data-text="Copy, MedEvac. Maintain current flight path. Monitor patient and cabin conditions. Report any changes immediately. Out." id="grdLowPress">Low pressure response</div>
+                <div class="control-button radio-button" data-text="Copy, MedEvac. Continue current course. Monitoring telemetry. Prepare for diversion if further alerts occur. We'll advise. Out." id="grdEmptyTank">Empty Tank Response</div>
+                <div class="control-button radio-button" data-text="Copy, MedEvac. Divert to Site Hotel-2, 2 km south of current path. Hospital team on standby. Transmitting coordinates to AP now. Out." id="grdEngFail">Engine Failure Response</div>
+
             </div>
             <div class="subcontent-container">
                 <h3>Jarvis Control</h3>
@@ -170,9 +172,9 @@
                 <div class="control-button jarvis-button" data-text="In the given conditions, it is not possible to land at this helipad. Please suggest an alternate helipad" id="CL">Can't Land</div>
                 <div class="control-button jarvis-button" data-text="Altitude changed to " >Altitude changed!</div>
                 <div class="control-button jarvis-button" data-text="Destination changed to" >Destination changed!</div>
-                <div class="control-button jarvis-button" data-text="I recommend landing at " id="RH">Recommend Helipad</div>
-                <!-- <div class="control-button jarvis-button" data-text="Calling ground control for assistance." id="Ground">Call Ground</div> -->
-                <div class="control-button jarvis-button" data-text="Opening the map as requested"  id="map-page">Open Map</div>
+                <div class="control-button jarvis-button" data-text="I recommend landing at Commercial Heliport Hilton " id="RH">Recommend Helipad</div>
+                <div class="control-button jarvis-button" data-text="Ground control asking to divert to Do you confirm" id="GroundEngFail">Ground control asking to divert to  </div> 
+                <div class="control-button jarvis-button" data-text="Opening map"  id="map-page">Open Map</div>
                 <div class="control-button jarvis-button" data-text="Returning to Departure as requested" id="rd-page">Return Departure</div>
                 <div class="control-button jarvis-button" onclick="getTimeToDestination" id="ETA">ETA</div>
                 <div class="control-button jarvis-button" data-text="EMERGENCY DETECTED NEED TO LAND IMMEDIATELY" id="emergency">Emergency detected</div>
@@ -278,16 +280,17 @@
                 <div class="subcontent-container">
                     <h3>Start</h3>
                     <div class="click-buttons-panel">
-                        <div class="control-button jarvis-button" data-text="Are you ready to start?" id="Start">Speak: Start</div>
-                        <div class="control-button jarvis-button" data-text="Please confirm the destination: Emory University Hospital" id="Confimdest">Speak: Confirm Dest</div>
+                        <div class="control-button jarvis-button" data-text="Are you ready to start?" id="Start">Jarvis:Start</div>
+                        <div class="control-button jarvis-button" data-text="Please confirm the destination: Emory University Hospital" id="Confimdest">Jarvis:Confirm Dest</div>
                     </div>
                     <div class="click-buttons-panel">
                         <div class="click-buttons" id="start">Start</div>
                         <div class="click-buttons" id="confirm">Confirm</div>
                     </div>
                     <div class="click-buttons-panel">
-                        <div class="control-button jarvis-button" data-text="Put on your seatbelts and ensure that all equipments are secure", id="secure"> Speak: Secure</div>
-                        <div class="control-button jarvis-button" data-text="Are you ready for takeoff" , id="check2"> Speak: Takeoff?</div>
+                        <div class="control-button jarvis-button" data-text="Put on your seatbelts and ensure that all equipments are secure", id="secure"> Jarvis:Secure</div>
+                        <div class="control-button jarvis-button" data-text="Put on your seatbelts", id="secure"> Jarvis:Seatbelts</div>
+                        <div class="control-button jarvis-button" data-text="Are you ready for takeoff" , id="check2"> Jarvis:Takeoff?</div>
                     </div>
                     <div class="check-buttons">
                         <button class="check" id="check0">Check 1</button>
@@ -299,10 +302,15 @@
                         <button class="uncheck" id="uncheck1">Uncheck 2</button>
                         <button class="uncheck" id="uncheck2">Uncheck 3</button>
                     </div>
+                    <div class="control-button radio-button" data-text="Ground Control, go ahead MedEvac" id="Ground">Ground Control, go
+                        ahead MedEvac</div>
+                   
                     
+                  
+
                     <h3>Scenario 1</h3>
                     <div class="click-buttons-panel">
-                        <div class="control-button jarvis-button" data-text="Acknowledging your request" id="Ack">Speak: Acknowledge</div>
+                        <div class="control-button jarvis-button" data-text="Acknowledging your request" id="Ack">Jarvis:Acknowledge</div>
                     </div>
 
                     <h3>Scenario 2</h3>
@@ -313,25 +321,39 @@
                         <div class="click-buttons" id="ignoreChange">Ignore Change</div>
                     </div>
                     <div class="open-button" id="ca-page">Change Altitude Page</div>
-                    <div class="control-button jarvis-button" data-text="Acknowledged, proceeding to change altitude" id="ca-page">Speak: Change altitude Acknowledge</div>
+                    <div class="control-button jarvis-button" data-text="Acknowledged, proceeding to change altitude" id="ca-page">Jarvis:Change altitude Acknowledge</div>
                     <label for="altitude">Change Altitude to (above 1000):</label>
                     <input type="text" id="altitude">
                     <button class="change-button" id="altitude">Change</button>
-                    <div class="control-button jarvis-button" data-text="Acknowledging your request" id="Ack">Speak: Acknowledge</div>
+                    <div class="control-button jarvis-button" data-text="Acknowledging your request" id="Ack">Jarvis:Acknowledge</div>
 
                     <h3>Scenario 3</h3>
-                    <div class="control-button jarvis-button" data-text="Primary Fuel gauge is indicating empty, but system diagnostics confirm normal fuel flow and engine performance. This appears to be a sensor malfunction. No immediate action is required. I will keep monitoring the situation closely while continuing the mission as planned unless instructed otherwise." id="fuelTank">Speak: Empty Fuel Tank </div>
+                    <div class="control-button jarvis-button" data-text="Primary Fuel gauge is indicating empty. System diagnostics confirm normal fuel flow and engine performance. Appears to be a sensor malfunction. I will keep monitoring the situation closely while continue oncourse unless instructed otherwise." id="fuelTank">Jarvis:Empty Fuel Tank </div>
+                    <div class="control-button jarvis-button" data-text="Awaiting Confirmation" id="waitAck">Jarvis:Waiting Acknowledge </div>\
                     <div class="click-buttons-panel">
                         <div class="click-buttons" id="okFuel">OK Button(fuel)</div>
                         <div class="click-buttons" id="elFuel">Emergency Landing(fuel)</div>
                     </div>
-                    <div class="control-button jarvis-button" data-text="Acknowledging your request" id="Ack">Speak: Acknowledge</div>
+                    <div class="control-button jarvis-button" data-text="Nearest landing site is a commercial helipad Hilton " id="NH"> Jarvis: Nearest Helipad</div>
+                    <div class="control-button jarvis-button" data-text="Acknowledging your request" id="Ack">Jarvis: Acknowledge</div>
                     <div class="open-button" id="cd-page">Change Destination Page</div>
                     <div class="open-button" id="map-page">Open Map</div>
 
+                    <div class="control-button radio-button"
+                        data-text="Copy, MedEvac. Continue current course. Monitoring telemetry. Prepare for diversion if further alerts occur. We'll advise. Out."
+                        id="grdEmptyTank">Empty Tank Response</div>
+
                     <h3>Scenario 4</h3>
-                    <div class="control-button jarvis-button" data-text="EMERGENCY DETECTED NEED TO LAND IMMEDIATELY" id="emergency"> Speak: Emergency detected</div>
-                    <div class="control-button jarvis-button" data-text="Engine Failure has occured" id="emergency"> Speak: Engine Failure</div>
+
+                    <div class="control-button radio-button" data-text="Copy, MedEvac. Maintain current flight path. Monitor patient and cabin conditions. Report any changes immediately. Out." id="grdLowPress">GRD:Low pressure response</div>
+                    <div class="control-button jarvis-button" data-text="EMERGENCY DETECTED NEED TO LAND IMMEDIATELY" id="emergency"> Jarvis:Emergency detected</div>
+                    <div class="control-button jarvis-button" data-text="Engine on fire" id="emergency"> Jarvis:Engine Failure</div>
+                    <div class="control-button jarvis-button" data-text="I recommend landing at Commercial Heliport Hilton " id="RH">Jarvis: Recommend Helipad</div>
+                    
+                    <div class="control-button radio-button" data-text="Copy, MedEvac. Divert to Old Fourth Ward, 2 km south of current path. Hospital team on standby. Transmitting coordinates to AP now. Out." id="grdEngFail">GRD:Engine Failure Response</div>
+
+                    <div class="control-button jarvis-button" data-text="Ground control asking to divert to Old Fourth Ward Children's Heliport Do you confirm" id="GroundEngFail">Jarvis: Ground control asking to divert to  </div> 
+                    <div class="control-button jarvis-button" data-text="Opening map"  id="map-page">Open Map</div>
                     <div class="open-button" id="emergency-page">Emergency Page</div>
                     <div class="open-button" id="map-page">Open Map</div>
                     
@@ -350,15 +372,19 @@
         // Add event listeners to buttons
         document.querySelectorAll(".control-button").forEach(button => {
             button.addEventListener("click", function () {
-                document.getElementById("activate-jarvis").click();  // Auto-activate Jarvis when Jarvis needs to speak
+                let stress_level = "normal";  // default value
 
-                let stress_level = "normal";  // Default stress level to "normal"
+                if (button.classList.contains("radio-button")) {
+                    stress_level = "ground";
+                } else {
+                    document.getElementById("activate-jarvis").click();  // Auto-activate Jarvis
 
-                // Change stress level based on button ID
-                if (this.id === "emergency") {
-                    stress_level = "high";  // Critical emergency
-                } else if (this.id === "warning") {
-                    stress_level = "mild";  // System warning
+                    // Change stress level based on button ID
+                    if (this.id === "emergency") {
+                        stress_level = "high";
+                    } else if (this.id === "warning") {
+                        stress_level = "mild";
+                    }
                 }
 
                 sendToServer(this.getAttribute("data-text"), stress_level);
@@ -438,8 +464,16 @@
                     document.getElementById("error-message").style.display = "none"; // Hide error message
                     var key = button.id; // Variable name
                     socket.emit("change_variable", { variable: key, value: selectedValue }); // Emit update to server
-
-                    updateText=key+"has been changed to"+selectedValue //Jarvis speaks the update
+                    if(selectedValue==5){                         
+                        updateText = key + "has been changed to Hilton Heliport" 
+                    }
+                    else if (electedValue == 19)
+                    {
+                        updateText = "Dirverting to Old Forth Ward Childern's Hospital"
+                    }
+                    else{
+                        updateText=key+"has been changed to"+selectedValue //Jarvis speaks the update
+                    }
                     sendToServer(updateText, "normal");
 
                     // Reset dropdowns to the placeholder option
