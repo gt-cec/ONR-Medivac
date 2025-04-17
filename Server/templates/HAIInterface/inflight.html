@@ -35,11 +35,11 @@
 	let TargetIndex = 100
 	var audio = document.getElementById("myAudio"); 
 	var bell = document.getElementById("bell"); 
-	document.getElementById('help').onclick = () => { log({"page": "Inflight", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
-	document.getElementById("emergency-landing").onclick = () => { log({"page": "Inflight", "action": "emergency landing button pressed"}); window.location.href = '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 }
-	document.getElementById("return-departure").onclick = () => {  log({"page": "Inflight", "action": "return to departure button pressed"}); window.location.href = '/hai-interface/location?inflight=' + 1 + '&dest=' + 21 }
-	document.getElementById("change-destination").onclick = () => {  log({"page": "Inflight", "action": "change destination button pressed"}); window.location.href = '/hai-interface/change-destination?inflight=' + 1 }
-	document.getElementById("change-altitude").onclick = () => { log({"page": "Inflight", "action": "change altitude button pressed"}); window.location.href = '/hai-interface/change-altitude?Changed_altitude='+ 1500 }
+	document.getElementById('help').onclick = () => {logAction({"page": "Inflight", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
+	document.getElementById("emergency-landing").onclick = () => {logAction({"page": "Inflight", "action": "emergency landing button pressed"}); window.location.href = '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 }
+	document.getElementById("return-departure").onclick = () => { logAction({"page": "Inflight", "action": "return to departure button pressed"}); window.location.href = '/hai-interface/location?inflight=' + 1 + '&dest=' + 21 }
+	document.getElementById("change-destination").onclick = () => { logAction({"page": "Inflight", "action": "change destination button pressed"}); window.location.href = '/hai-interface/change-destination?inflight=' + 1 }
+	document.getElementById("change-altitude").onclick = () => {logAction({"page": "Inflight", "action": "change altitude button pressed"}); window.location.href = '/hai-interface/change-altitude?Changed_altitude='+ 1500 }
 
 
 	document.getElementById('help').href='/hai-interface/help?num='+HelpId
@@ -49,7 +49,7 @@
 
 	// vitals reminder, onclick for the vital reminder done button
 	document.getElementById("vitals-acknowledge-button").onclick = () => {
-		log({"page": "inflight", "action": "user acknowledged vitals prompt"})
+		logAction({"page": "inflight", "action": "user acknowledged vitals prompt"})
 		console.log('vitals logging acknowledged')
 		document.getElementById('vitals').style.display = "none"
 		//bell.pause()	
@@ -67,7 +67,7 @@
 		console.log("vitals time:", curr)
 		
 		//if( radioCompletetime - curr > 135000 ){  // 135s assuming 30s logging+ 30s gap + 45s radio update + 30s gap
-		log({"page": "inflight", "action": "displaying vitals prompt"})
+		logAction({"page": "inflight", "action": "displaying vitals prompt"})
 		console.log('vitals logging prompt')
 		lastClicked = new window.Date().getTime()
 		//lastClicked = Infinity  

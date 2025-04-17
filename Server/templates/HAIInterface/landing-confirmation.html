@@ -39,7 +39,7 @@
 
 <script>
     {% block script %}
-    log({"page": "landing-confirmation", "action": "opened page"});
+   logAction({"page": "landing-confirmation", "action": "opened page"});
     var HelpId=7
 
     var helipad = 1
@@ -51,7 +51,7 @@
 
     document.getElementById("confirm-land-button").onclick = async () => { 
         await fetch("/var?decision-state=1")
-        log({"page": "landing-confirmation", "action": "gave landing confirmation"});
+       logAction({"page": "landing-confirmation", "action": "gave landing confirmation"});
         window.location.href = '/hai-interface/landing-countdown'
     }
 
@@ -75,12 +75,12 @@
     function checkbox_toggle(item) {
         let idx = Number(item.id)
         if (checklist_checked[idx]) {
-            log({"page": "landing-confirmation", "action": "checkbox toggle", "item": idx, "value": "OFF"});
+           logAction({"page": "landing-confirmation", "action": "checkbox toggle", "item": idx, "value": "OFF"});
             checklist_checked[idx] = false
             item.getElementsByTagName("img")[0].src = "../../static/HAIInterface/img/unchecked.png"
         }
         else {
-            log({"page": "landing-confirmation", "action": "checkbox toggle", "item": idx, "value": "ON"});
+           logAction({"page": "landing-confirmation", "action": "checkbox toggle", "item": idx, "value": "ON"});
             checklist_checked[idx] = true
             item.getElementsByTagName("img")[0].src = "../../static/HAIInterface/img/checked.png"
         }  
@@ -89,7 +89,7 @@
             allChecks = true
             // set the safe to land button onclick
             document.getElementById("safe-to-land-button").onclick = () => {
-                log({"page": "landing-confirmation", "action": "confirmed safe to land"});
+               logAction({"page": "landing-confirmation", "action": "confirmed safe to land"});
                 showHelipadReady()
             }
             // return defaults
@@ -105,7 +105,7 @@
     showHelipadConfirm(helipad)
         
     function showHelipadConfirm(pad) {
-        log({"page": "landing-confirmation", "action": "showing helipad confirm", "value": pad});
+       logAction({"page": "landing-confirmation", "action": "showing helipad confirm", "value": pad});
         //if the pad value is undefined meaning pressed cancel
         helipad = pad
         document.getElementById('helipad-confirm-container').style.display = "flex";
@@ -118,26 +118,26 @@
     }
 
     function showHelipadSelect() {
-        log({"page": "landing-confirmation", "action": " choose different helipad option, showing helipad select"});
+       logAction({"page": "landing-confirmation", "action": " choose different helipad option, showing helipad select"});
         document.getElementById('helipad-confirm-container').style.display = "none";
         document.getElementById('helipad-select-container').style.display = "flex";
         document.getElementById('helipad-ready-container').style.display = "none";
     }
 
     function showHelipadReady() {
-        log({"page": "landing-confirmation", "action": "showing helipad ready"});
+       logAction({"page": "landing-confirmation", "action": "showing helipad ready"});
         document.getElementById('helipad-confirm-container').style.display = "none";
         document.getElementById('helipad-select-container').style.display = "none";
         document.getElementById('helipad-ready-container').style.display = "flex";
     }
 
     function abort() {
-        log({"page": "landing-confirmation", "action": "abort button pressed"});
+       logAction({"page": "landing-confirmation", "action": "abort button pressed"});
         alert("Aborting Mission!");
     }
 
     document.getElementById('approach-sidebar').style.backgroundColor="pink";
-    document.getElementById('help').onclick = () => { log({"page": "landing Confirmation", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
+    document.getElementById('help').onclick = () => {logAction({"page": "landing Confirmation", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
 
     {% endblock %}
     </script>

@@ -15,11 +15,344 @@
                 height: 100vh;
             }
             .left-pane {
-                width: 23%;
+                width: 320px;
                 height: 100%;
                 overflow: hidden;
                 border-right: 1px solid #ccc;
-            }
+                display: flex;
+                flex-direction: column;
+                }
+  .top {
+    height: 50%;
+    display: flex;
+    flex-direction: column; /* Stack gauges vertically */
+    justify-content: space-around;
+    align-items: center;
+    
+    background-color: #1f2833;
+    padding: 10px;
+    gap: 20px;
+    border-right: 2px solid #45a29e;
+}
+
+
+
+.gauge-panel {
+    height: 50%;
+    width: 100%;
+    background-color: #1f2833;
+    padding: 10px;
+    display: flex;
+    flex-direction: column; 
+    justify-content: space-around; /* Equal spacing */
+    align-items: stretch;
+}
+
+.gauge-container {
+    position: relative;
+    width: 55%;
+    aspect-ratio: 2 / 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: 1px;
+    padding: 2px;
+}
+
+.gauge-inner {
+    position: relative;
+    width: 100%;
+    padding-top: 50%; /* 2:1 ratio */
+}
+
+svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+
+.arc-bg {
+    fill: none;
+    stroke-width: 15;
+    stroke: #2f3e46;
+}
+
+.arc-fg {
+      fill: none;
+    stroke-width: 15;
+    stroke-linecap: round;
+    
+    stroke-dasharray: 283;
+    stroke-dashoffset: 283;
+    transition: stroke 0.3s ease, stroke-dashoffset 0.8s ease;
+}
+
+.pointer {
+    position: absolute;
+    bottom: 0;
+    left: 60%;
+    width: 3px;
+    height: 50%;
+    background-color: white;
+    transform-origin: bottom center;
+     transform: translateX(-50%) rotate(-90deg);
+     border-radius: 2px;
+    transition: transform 0.8s ease;
+    z-index: 2;
+}
+
+.gauge-label {
+    text-align: center;
+     top: 60%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  color: white;
+  justify-content: space-around; /* Equal spacing */
+ align-items: center;
+}
+
+.gauge-label h2 {
+    font-size: 14px;
+    margin: 0;
+      padding-bottom: 1px;
+      padding-right: 1px;
+      text-align: center;
+      
+}
+
+.gauge-value {
+    font-size: 12px;
+    color: #ffcc00;
+     text-align: center;
+
+}
+
+           .bottom {
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.radiopanel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background-color: #1a1f2b;
+    padding: 5px;
+    border-radius: 8px;
+    color: #f0f0f0;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 12px;
+    box-sizing: border-box;
+}
+
+.panel-title {
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 4px;
+    color: #ffffff;
+}
+
+.panel-row {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.radiopanel label {
+    font-size: 14px;
+    padding: 3px 3px 5px 5px;
+    text-align: left;
+}
+
+.radiopanel select,
+.radiopanel input[type="text"] {
+    background-color: #2a3344;
+    color: #fff;
+    padding: 5px;
+    border: 1px solid #4a5d7e;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.radio-group .radio-options {
+    display: flex;
+    gap: 2px;
+    justify-content: space-between;
+    font-size: 10px;
+}
+
+.radio-options label {
+    flex: 1 1 22%;
+    background-color: #2e3b4f;
+    padding: 4px 6px;
+    border-radius: 6px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    position: relative;
+    color: white;
+    margin-top: 5px;
+}
+
+.radio-options label:hover {
+    background-color: #3b4c64;
+}
+
+.radio-options input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.radio-options input[type="radio"]:checked + span {
+    background-color: #007bff;
+    border-radius: 4px;
+    padding: 2px 6px;
+}
+
+/* Wraps the entire frequency control set tightly */
+.frequency-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 0;
+    margin-top: 4px;
+    margin-bottom: 0px;
+}
+
+/* Label just above frequency - make spacing minimal */
+label[for="frequency-input"] {
+    margin-bottom: 0px;
+    margin-top: 5px;
+    display: block;
+    color: #ccc;
+}
+
+/*  circular buttons */
+.frequency-btn {
+    width: 28px;
+    height: 28px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    padding: 0;
+}
+
+.frequency-btn:hover {
+    background-color: #3399ff;
+    transform: scale(1.05);
+}
+
+/* Frequency display field */
+#frequency-display {
+    width: 100px;
+    padding: 2px;
+    font-weight: bold;
+    font-size: 12px;
+    text-align: center;
+    background-color: #1e2838;
+    color: #fff;
+    border: 1px solid #4a5d7e;
+    border-radius: 6px;
+}
+.controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+}
+
+.controls button {
+    flex: 1 1 48%;
+    padding: 3px 6px;
+    font-size: 12px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    max-width: 150px
+}
+
+.transmit-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.transmit-btn:hover {
+    background-color: #218838;
+}
+
+.receive-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.receive-btn:hover {
+    background-color: #c82333;
+}
+
+.feedback {
+    text-align: center;
+    font-size: 12px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    margin-top: 4px;
+    display: none;
+}
+
+.feedback.success {
+    display: block;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.feedback.error {
+    display: block;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Transmit Animation */
+.transmit-animation {
+    position: absolute;
+    bottom: 60px;
+    right: 30px;
+    width: 30px;
+    height: 30px;
+    background: radial-gradient(circle, #28a745 20%, transparent 70%);
+    border-radius: 50%;
+    opacity: 0;
+    animation: none;
+    z-index: 999;
+}
+
+@keyframes transmitPulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.6; }
+    100% { transform: scale(2); opacity: 0; }
+}
+
+        
             .right-pane {
                 width: 77%;
                 height: 100%;
@@ -49,57 +382,95 @@
         <div class="main-pane">
             <div class="left-pane">
                 <!-- <iframe src="../../templates/VitalsTask/flight_gauges.html" class="iframe-container"></iframe> -->
-               
-                <div class="gauge-container">
-                    <h1>Backup Flight Instruments</h1>
-                <div class="gauge-wrapper">
-                    <div class="gauge four gauge3">
-                    <div class="slice-colors">
-                        <div class="st slice-item"></div>
-                        <div class="st slice-item"></div>
-                        <div class="st slice-item"></div>
-                        <div class="st slice-item"></div>
-                    </div>
-                    <div class="needle"></div>
-                    <div class="gauge-center">
-                        <div class="label">HYDRAULICS</div>
-                        <div class="number">75 psi</div>
-                    </div>    
-                    </div>
+            <!-- <div class="top"> -->
+          
+        <div class="gauge-panel">
+            <div class="gauge-container" id="fuelGauge">
+                <div class="gauge-inner">
+                    <svg viewBox="0 0 200 120">
+                        <path class="arc-bg" d="M 10 100 A 90 90 0 0 1 190 100" />
+                        <path class="arc-fg" id="fuelArc" d="M 10 100 A 90 90 0 0 1 190 100" />
+                    </svg>
+                    <div class="pointer" id="fuelPointer"></div>
                 </div>
-                <div class="gauge-wrapper">
-                    <div class="gauge fuel-four gauge4">
-                        <div class="slice-colors">
-                        <div class="st slice-item"></div>
-                        <div class="st slice-item"></div>
-                        <div class="st slice-item"></div>
-                        <div class="st slice-item"></div>
-                        </div>
-                        <div class="needle"></div>
-                        <div class="gauge-center">
-                        <div class="label">FUEL</div>
-                        <div class="number">85%</div>
-                        </div>    
-                    </div>
+                <div class="gauge-label">
+                    <h2>Fuel</h2> <br><br>
+                    <div class="gauge-value" id="fuelValue">100%</div>
                 </div>
-
-                <div class="gauge-wrapper">
-                    <div class="gauge four gauge3" id="altitude-gauge">
-                        <div class="slice-colors">
-                        <div class="st slice-item"></div>
-                        <div class="st slice-item"></div>
-                        <div class="st slice-item"></div>
-                        <div class="st slice-item"></div>
-                        </div>
-                        <div class="needle"></div>
-                        <div class="gauge-center">
-                        <div class="label">ALTITUDE</div>
-                        <div class="number" id="altitude-value">1000 ft</div>
-                        </div>    
-                    </div>
-                </div>
-                </div>  
             </div>
+        
+            <div class="gauge-container" id="altitudeGauge">
+                <div class="gauge-inner">
+                    <svg viewBox="0 0 200 120">
+                        <path class="arc-bg" d="M 10 100 A 90 90 0 0 1 190 100" />
+                        <path class="arc-fg" id="altitudeArc" d="M 10 100 A 90 90 0 0 1 190 100" />
+                    </svg>
+                    <div class="pointer" id="altitudePointer"></div>
+                </div>
+                <div class="gauge-label">
+                    <h2>Altitude</h2>
+                    <div class="gauge-value" id="altitudeValue">0 ft</div>
+                </div>
+            </div>
+        
+            <div class="gauge-container" id="pressureGauge">
+                <div class="gauge-inner">
+                    <svg viewBox="0 0 200 120">
+                        <path class="arc-bg" d="M 10 100 A 90 90 0 0 1 190 100" />
+                        <path class="arc-fg" id="pressureArc" d="M 10 100 A 90 90 0 0 1 190 100" />
+                    </svg>
+                    <div class="pointer" id="pressurePointer"></div>
+                </div>
+                <div class="gauge-label">
+                    <h2>Pressure</h2>
+                    <div class="gauge-value" id="pressureValue">14.7 psi</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Section: Radio Communication Panel -->
+        <div class="bottom">
+            <div id="radiopanel" class="radiopanel">
+                <h2 class="panel-title">Radio Communication</h2>
+        
+                <div class="panel-row">
+                    <label for="callsign">Callsign</label>
+                    <select id="callsign">
+                        <option value="" disabled selected>Select</option>
+                        <option value="NASXGS">NASXGS</option>
+                        <option value="MEDEVAC">MEDEVAC</option>
+                    </select>
+                </div>
+        
+                <div class="panel-row radio-group">
+                    <label>Select Radio</label>
+                    <div class="radio-options">
+                        <label><input type="radio" name="radio-select" value="Nav1"><span>NAV1</span></label>
+                        <label><input type="radio" name="radio-select" value="Nav2"><span>NAV2</span></label>
+                        <label><input type="radio" name="radio-select" value="Comm1"><span>COMM1</span></label>
+                        <label><input type="radio" name="radio-select" value="Comm2"><span>COMM2</span></label>
+                    </div>
+                </div>
+        
+                <div class="panel-row ">
+                    <label for="frequency-input">Frequency</label>
+                    <div class="frequency-control">
+                        <button class="frequency-btn" onclick="changeFrequency(-0.05)">-</button>
+                        <input type="text" id="frequency-display" value="123.45" readonly>
+                        <button class="frequency-btn" onclick="changeFrequency(0.05)">+</button>
+                    </div>
+                </div>
+        
+                <div class=" panel-row controls">
+                    <button onclick="grdupdate()" class="transmit-btn">Transmit Updates</button>
+                    <button onclick="grdcontact()" class="receive-btn">Emergency Line</button>
+                </div>
+        
+                <div id="radio-feedback" class="feedback"></div>
+            </div>
+        </div>
+    </div>
+
             <div class="right-pane">
                 <div class="vertical-container">
                     <div class="title-pane">
@@ -139,6 +510,13 @@
                 </div>
             </div>
         </div>
+
+        <!-- Transmit Animation Icon -->
+        <div id="transmit-animation" class="transmit-animation"></div>
+        
+        <!-- Audio Elements -->
+        <audio id="radio-static" src="sounds/radio-static.mp3" preload="auto"></audio>
+        <audio id="radio-beep" src="sounds/beep.mp3" preload="auto"></audio>
     </body>
 
     <script>
@@ -209,21 +587,110 @@
     
         }, 5000);
 
-      const altitudeGauge = document.getElementById('altitude-gauge');
-      const altitudeValue = document.getElementById('altitude-value');
-      let vitalsEmergency=false
-  
-      function updateAltitude() {
-          altitudeValue.textContent = '1500 ft';
-          altitudeGauge.classList.remove('gauge3');
-          altitudeGauge.classList.add('gauge4');
-      }
-  
-      function changeGauge() {
-          altitudeValue.textContent ='1000 ft';
-          altitudeGauge.classList.remove('gauge4');
-          altitudeGauge.classList.add('gauge3');
-      }
+      let currentPhase = "ground";
+        let frequency = 123.45;
+        let lastValues = { pressure: 0, altitude: 0, fuel: 0 };
+
+        function changeFrequency(amount) {
+                const freqDisplay = document.getElementById("frequency-display");
+                let freq = parseFloat(freqDisplay.value);
+                freq += amount;
+                freq = Math.max(108.00, Math.min(136.00, freq)); // VHF typical range
+                freqDisplay.value = freq.toFixed(2);
+            }
+
+            function simulateConnection() {
+                return Math.random() > 0.3; // 70% chance of success
+            }
+
+            function showFeedback(message, type) {
+                const feedback = document.getElementById("radio-feedback");
+                feedback.textContent = message;
+                feedback.className = 'feedback ' + (type === 'success' ? 'success' : 'error');
+            }
+
+            function playSound(id) {
+                const sound = document.getElementById(id);
+                if (sound) {
+                    sound.currentTime = 0;
+                    sound.play();
+                }
+            }
+
+            function startTransmitAnimation() {
+                const anim = document.getElementById('transmit-animation');
+                anim.style.animation = "transmitPulse 1s ease-out forwards";
+                anim.style.opacity = 1;
+
+                setTimeout(() => {
+                    anim.style.animation = "none";
+                    anim.style.opacity = 0;
+                }, 1000);
+            }
+
+            function grdupdate() {
+                const isConnected = simulateConnection();
+                playSound("radio-static");
+
+                if (isConnected) {
+                    playSound("radio-beep");
+                    showFeedback("Transmission sent to ground station.", "success");
+                    startTransmitAnimation();
+                } else {
+                    showFeedback("Failed to establish connection. Try again.", "error");
+                }
+            }
+
+            function grdcontact() {
+                const isConnected = simulateConnection();
+                playSound("radio-static");
+
+                if (isConnected) {
+                    playSound("radio-beep");
+                    showFeedback("Emergency signal sent successfully.", "success");
+                    startTransmitAnimation();
+                } else {
+                    showFeedback("Emergency contact failed.", "error");
+                }
+            }
+        function updateNeedle(id, value, max, minAngle, maxAngle) {
+            const ratio = Math.min(value / max, 1);
+            const angle = minAngle + ratio * (maxAngle - minAngle);
+            document.getElementById(id).style.transform = `rotate(${angle}deg)`;
+        }
+
+       
+
+        let takeoffTime = null;
+        let landingCountdownStarted = false;
+
+        function fetchFlightData() {
+            fetch("/var")
+                .then(res => res.json())
+                .then(data => {
+                    if (data.takeoff && !takeoffTime) {
+                        currentPhase = "takeoff";
+                        takeoffTime = Date.now();
+                    } else if (takeoffTime && Date.now() - takeoffTime > 5000 && currentPhase === "takeoff") {
+                        currentPhase = "cruise";
+                    }
+
+                    if (data["approach-clear"] && currentPhase !== "descent") {
+                        currentPhase = "descent";
+                        if (!landingCountdownStarted) {
+                            landingCountdownStarted = true;
+                            setTimeout(() => currentPhase = "landing", 30000);
+                        }
+                    }
+
+                   updateGauge(fuel, "fuelArc", "fuelPointer", "fuelValue", '%', 100, "fuel");
+                    updateGauge(altitude, "altitudeArc", "altitudePointer", "altitudeValue", ' ft', MAX_ALTITUDE, "altitude");
+                    updateGauge(pressure, "pressureArc", "pressurePointer", "pressureValue", ' psi', NORMAL_PRESSURE, "pressure");
+                })
+                .catch(err => console.error("Failed to fetch /var:", err));
+        }
+
+        setInterval(fetchFlightData, 2000);
 
     setInterval(async function fetchVitalstate() {
         let response = await fetch("/var");
@@ -244,6 +711,131 @@
           vitalsEmergency=false
         }
       }, 1000);  // Fetch vitals state every 1 second
+
+
+
+                const RADIUS = 90;
+                const CIRCUMFERENCE = Math.PI * RADIUS;
+
+
+               function getGaugeColor(value, type) {
+                    switch (type) {
+                        case "fuel":
+                            if (value >= 75) return "green";
+                            if (value >= 50) return "yellow";
+                            if (value >= 25) return "orange";
+                            return "red";
+                        case "altitude":
+                            if (value < 100) return "red";
+                            if (value < 5000) return "orange";
+                            if (value <= 11000) return "green";
+                            return "yellow";
+                        case "pressure":
+                            if (value > 14.5) return "green";
+                            if (value >= 13) return "yellow";
+                            if (value >= 12) return "orange";
+                            return "red";
+                        default:
+                            return "gray";
+                    }
+                }
+
+                function updateGauge(value, arcId, pointerId, valueId, unit = '%', maxValue = 100, type = "fuel") {
+                    const percent = Math.min(1, Math.max(0, value / maxValue));
+                    const maxLength = 283;
+                    const offset = maxLength * (1 - percent);
+
+                   
+       
+
+                    
+                    const arc = document.getElementById(arcId);
+                    const pointer = document.getElementById(pointerId);
+                    const valueText = document.getElementById(valueId);
+                  
+                    // Set Dasharray for smooth animations
+                    arc.style.strokeDasharray = `${CIRCUMFERENCE}`;
+                    arc.style.strokeDashoffset = `${offset}`;
+
+                    const color = getGaugeColor(value, type);
+
+                    arc.style.stroke = color;
+                    pointer.style.background = "white";
+                    valueText.innerText = `${Math.round(value)}${unit}`;
+
+                   const rotation = -90 + (180 * percent);
+                   pointer.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+                }
+
+
+               
+
+                let flightPhase = "ground";
+                let altitude = 0;
+                let fuel = 100;
+                let pressure = 14.7;
+
+            const MAX_ALTITUDE = 12000;
+            const MIN_PRESSURE = 12.5;
+            const NORMAL_PRESSURE = 14.7;
+
+            // Simulated values
+            let takeoff = 0;
+            let approach_clear = 0;
+
+            function simulateFlight() {
+                setInterval(() => {
+                    // Update values based on phase
+                    if (flightPhase === "takeoff") {
+                        altitude = Math.min(MAX_ALTITUDE, altitude + 400); // 400 ft per tick (~25fps)
+                        pressure = Math.max(MIN_PRESSURE, pressure - 0.05);
+                    } else if (flightPhase === "cruise") {
+                        // Hold steady
+                    } else if (flightPhase === "descent") {
+                        altitude = Math.max(0, altitude - 400);
+                        pressure = Math.min(NORMAL_PRESSURE, pressure + 0.05);
+                    }
+
+                    // Fuel always decreases slowly
+                    fuel = Math.max(0, fuel - 0.03);
+
+                    // Update UI
+                    updateGauge(fuel, "fuelArc", "fuelPointer", "fuelValue", '%', 100, "fuel");
+                    updateGauge(altitude, "altitudeArc", "altitudePointer", "altitudeValue", ' ft', MAX_ALTITUDE, "altitude");
+                    updateGauge(pressure, "pressureArc", "pressurePointer", "pressureValue", ' psi', NORMAL_PRESSURE, "pressure");
+                }, 200); // ~5 times per second
+            }
+
+            simulateFlight();
+
+                    // Simulate external signals (can replace these with real-time server signals)
+                    function startTakeoff() {
+                        takeoff = 1;
+                        flightPhase = "takeoff";
+                        console.log("Takeoff started");
+
+                        setTimeout(() => {
+                            flightPhase = "cruise";
+                            console.log("Cruise started");
+                        }, 5000); // 5 seconds after takeoff
+                    }
+
+                    function beginDescent() {
+                        approach_clear = 1;
+                        flightPhase = "descent";
+                        console.log("Descent started");
+
+                        setTimeout(() => {
+                            flightPhase = "ground";
+                            altitude = 0;
+                            pressure = NORMAL_PRESSURE;
+                            console.log("Landed");
+                        }, 30000); // 30 seconds descent
+                    }
+
+                    // Simulate event triggers
+                    setTimeout(startTakeoff, 2000);         // Takeoff in 2 seconds
+                    setTimeout(beginDescent, 15000);        // Descent in 15 seconds from start
     </script>
     
 </html>

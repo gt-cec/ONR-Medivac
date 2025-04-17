@@ -26,7 +26,7 @@
     let inflight = urlParams.get("inflight") == "1"
     targetIndex = urlParams.get("target-index")
 
-    log({"page": "checklist", "action": "opened page", "inflight": inflight})
+    logAction({"page": "checklist", "action": "opened page", "inflight": inflight})
 
     document.getElementById("title").innerHTML = inflight ? "Inflight Checklist" : "Takeoff Checklist"
 
@@ -46,12 +46,12 @@
         if (checklist_checked[idx]) {
             checklist_checked[idx] = false
             item.getElementsByTagName("img")[0].src = "../../static/HAIInterface/img/unchecked.png"
-            log({"page": "checklist", "action": "toggled checkbox", "inflight": inflight, "item": idx, "value": "ON"})
+            logAction({"page": "checklist", "action": "toggled checkbox", "inflight": inflight, "item": idx, "value": "ON"})
         }
         else {
             checklist_checked[idx] = true
             item.getElementsByTagName("img")[0].src = "../../static/HAIInterface/img/checked.png"
-            log({"page": "checklist", "action": "toggled checkbox", "inflight": inflight, "item": idx, "value": "OFF"})
+            logAction({"page": "checklist", "action": "toggled checkbox", "inflight": inflight, "item": idx, "value": "OFF"})
         }  
         
         // show confirm button (or not)
@@ -64,23 +64,23 @@
     }   
     
     function abort() {
-        log({"page": "checklist", "action": "abort button pressed"})
+        logAction({"page": "checklist", "action": "abort button pressed"})
         alert("Aborting Mission!");
     }
 
     document.getElementById( (inflight ? 'cruise' : 'takeoff') + '-sidebar').style.backgroundColor="pink";
-    document.getElementById('help').onclick = () => { log({"page": "checklist", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
+    document.getElementById('help').onclick = () => { logAction({"page": "checklist", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
 
     function enableConfirmButton() {
         document.getElementById('confirm-button').style.backgroundColor = "#12d429"
         document.getElementById("confirm-button").onclick = async () => {
-            log({"page": "checklist", "action": "confirm button clicked", "inflight": inflight})
+            logAction({"page": "checklist", "action": "confirm button clicked", "inflight": inflight})
             // If inflight and the checklist is completed, then authorize approach
             if (inflight) await fetch("/var?approach-clear=1")  
             window.location.href =  inflight ? "/hai-interface/landing-confirmation" : "/hai-interface/countdown?target-index=" + targetIndex
         }
         document.getElementById("confirm-button").style.boxShadow = ""
-        log({"page": "checklist", "action": "showing confirm button", "inflight": inflight})
+        logAction({"page": "checklist", "action": "showing confirm button", "inflight": inflight})
     }
 
     function disableConfirmButton() {
