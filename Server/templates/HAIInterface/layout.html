@@ -256,23 +256,6 @@
             entry.innerHTML = `<strong>You:</strong> "${userSaid}"<br><strong>AI:</strong> "${systemSaid}"`;
             commandLog.prepend(entry);
         }
-
-        //  Trigger (example)
-        assistantNode.addEventListener('click', () => {
-            assistantNode.classList.add('active');
-            updateAssistantStatus('Listening...');
-            setTimeout(() => {
-                updateAssistantStatus('Thinking...');
-                setTimeout(() => {
-                    updateAssistantStatus('Command received');
-                    logCommand('Reroute to nearest helipad', 'Routing to nearest heliport');
-                    setTimeout(() => {
-                        assistantNode.classList.remove('active');
-                        updateAssistantStatus('');
-                    }, 3000);
-                }, 2000);
-            }, 2000);
-        });
     </script>
     
     <style>
@@ -457,55 +440,9 @@
 
         
 
-        <!-- Radio Comms  -->
-        <div id="radiopanel"  class="radiopanel">
-            <button class="radiopanel-closebtn" >&times;</button>
-                <h2>Radio Communication</h2>
-                <label for="callsign">Callsign:</label>
-                <select id="callsign">
-                    <option value="" disabled selected>Select Callsign</option>
-                    <option value="NASXGS">NASXGS</option>
-                    <option value="MEDEVAC">MEDEVAC</option>
-                </select>
-                <br><br>
-                <div class="radio-group">
-                    <p>Select Radio:</p>
-                    <div class="radio-options">
-                        <label>
-                            <input type="radio" name="radio-select" value="Nav1">
-                            <span>NAV1</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="radio-select" value="Nav2">
-                            <span>NAV2</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="radio-select" value="Comm1">
-                            <span>COMM1</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="radio-select" value="Comm2">
-                            <span>COMM2</span>
-                        </label>
-                    </div>
-                </div>
-                <label for="frequency-input">Frequency:</label>
-                <div class="frequency-control">
-                    <button class="frequency-btn" onclick="changeFrequency(-0.05)">-</button>
-                    <input type="text" id="frequency-display" value="123.45" readonly>
-                    <button class="frequency-btn" onclick="changeFrequency(0.05)">+</button>
-                </div>
-                <br><br>
-
-                <div class="controls">
-                    <button onclick="grdupdate()" class="transmit-btn">Transmit COMM1</button>
-                    <button onclick="grdcontact()" class="receive-btn">Transmit COMM2</button>
-                </div>
-
-
-        </div>
+       
      
-        <button class="openbtn" ></button> 
+
 
         <!-- Pressure Warning  -->
         <div class="alertoverlay" id="pressureWarningalertOverlay">

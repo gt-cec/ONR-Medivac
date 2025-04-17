@@ -19,7 +19,7 @@
 
 <script>
 {% block script %}
-    log({"page": "countdown", "action": "opened page"})
+    logAction({"page": "countdown", "action": "opened page"})
 
     //Reseting the time to be 0 at takeoff
     var currentDateTime = new Date();
@@ -42,7 +42,7 @@
     var downloadTimer = setInterval(async () => {
         timeLeft -= 1;
         if (timeLeft < 0) {
-            log({"page": "countdown", "action": "countdown complete"})
+            logAction({"page": "countdown", "action": "countdown complete"})
             if (targetIndex) {
                 await fetch("/var?destination-index=" + targetIndex)
             }
@@ -52,17 +52,17 @@
         }
         else {
             document.getElementById("countdown").innerHTML = timeLeft
-            log({"page": "countdown", "action": "countdown now " + timeLeft})
+            logAction({"page": "countdown", "action": "countdown now " + timeLeft})
         }
     }, 1000);
 
     function abort() {
-        log({"page": "checklist", "action": "abort button pressed"})
+        logAction({"page": "checklist", "action": "abort button pressed"})
         alert("Aborting Mission!");
     }
     
     document.getElementById('takeoff-sidebar').style.backgroundColor = "pink";
-    document.getElementById('help').onclick = () => { log({"page": "countdown", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
+    document.getElementById('help').onclick = () => { logAction({"page": "countdown", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
 
 {% endblock %}
 </script>

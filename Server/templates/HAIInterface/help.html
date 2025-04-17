@@ -35,7 +35,7 @@
 
 <script>
 {% block script %}
-    log({"page": "help", "action": "opened page"})
+    logAction({"page": "help", "action": "opened page"})
 
      var data=JSON.parse('{{ data | tojson | safe}}')
      var header  =data.desp
@@ -58,7 +58,7 @@
      {
         console.log("pressed")
         if (speaker_on) {
-            log({"page": "help", "action": "help speaker pressed"})
+            logAction({"page": "help", "action": "help speaker pressed"})
             speaker_on = false
             document.getElementById("img_icon").src = "../../static/HAIInterface/img/speaker_off.png"
         }
@@ -75,7 +75,7 @@
     {
         const audio = new Audio("https://www.fesliyanstudios.com/play-mp3/387");
         audio.play();
-        log({"page": "help", "action": " Asking for further assistance"})
+        logAction({"page": "help", "action": " Asking for further assistance"})
     }
      
 

@@ -13,9 +13,9 @@
 
 <script>
 {% block script %}
-    log({"page": "landed", "action": "opened page"});
+   logAction({"page": "landed", "action": "opened page"});
     var HelpId=9
-    document.getElementById('help').onclick = () => { log({"page": "landed", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
+    document.getElementById('help').onclick = () => {logAction({"page": "landed", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
     document.getElementById('map').href = '/hai-interface/map'
     document.getElementById('landing-sidebar').style.backgroundColor = "pink";
 {% endblock %}
