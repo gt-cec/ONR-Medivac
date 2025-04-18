@@ -50,7 +50,7 @@ function scheduleNextTask(first = false) {
             return;
         }
 
-        if (nextTask === "radio" && radioPromptsLeft > 0) {
+        if (nextTask === "radio" && radioPromptsLeft > 0 && emergency==0) {
             speakRadioPrompt();
             radioPromptsLeft--;
             logAction("radio_prompt");
@@ -60,7 +60,11 @@ function scheduleNextTask(first = false) {
             vitalsPromptsLeft--;
             logAction("vitals_prompt");
             nextTask = "radio";
-        } else {
+        } else if (emergency == 1 && vitalsPromptsLeft == 0)
+        {
+            showVitalsPrompt();
+        }
+         else {
             // fallback in case one task runs out
             nextTask = radioPromptsLeft > 0 ? "radio" : "vitals";
         }

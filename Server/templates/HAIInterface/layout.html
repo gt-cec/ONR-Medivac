@@ -18,7 +18,7 @@
     <script src="/static/HAIInterface/JS/log.js"></script>
     <script src="/static/HAIInterface/JS/emergency.js"></script>
     <script src="/static/HAIInterface/JS/assistant.js"></script>
-    <script src="/static/HAIInterface/JS/scheduler.js"></script>
+  
     
 
 
@@ -418,15 +418,7 @@
             </div>
         </div>
 
-        <div id= "vitals" style="display:none;" class="main-content-container vitals-popup">
-            <div class="general-title" style="background-color: palegoldenrod;">Vitals Logging</div>
-            <div class="subcontent-container">
-                <div></div>
-                <div class="index-text" style="font-size: 25pt;">Please log patient vitals now</div>
-                <div class="index-text" style="font-size: 20pt;">Hit acknowledge AFTER you have submitted the vitals</div>&ensp;
-                <div id="vitals-acknowledge-button" class="button">ACKNOWLEDGE</div>
-            </div>
-        </div>
+        
 
         <div id="emergency" style="display:none; justify-content: space-between;"class="main-content-container vitals-popup">
             <img id='img_icon' src="../static/HAIInterface/img/alert.gif" width="150" height="150">
@@ -702,168 +694,7 @@
         
         var helipads = JSON.parse('{{ helipads | tojson | safe }}')
         let helipadsLoaded = false  // flag automatically set to true (so helipads only load once, after we know where the origin and current destination are)
-        let currentFrequency = 123.45;
-
-        document.querySelector('.openbtn').addEventListener('click', function() {
-           logAction({"action": "radio panel opened"})
-            console.log('clicked')
-            document.querySelector('.radiopanel').classList.toggle('open');
-            });
-
-        document.querySelector('.radiopanel-closebtn').addEventListener('click', function() {
-           logAction({"action": "radio panel closed"})
-            document.querySelector('.radiopanel').classList.remove('open');
-            });
-
-        if (radioPage==1){
-           logAction({"action": "radio panel opened by controller"})
-            console.log('clicked by controller')
-            document.querySelector('.radiopanel').classList.toggle('open');
-        }
-
-
-        function changeFrequency(step) {
-            const frequencyDisplay = document.getElementById('frequency-display');
-            let currentFrequency = parseFloat(frequencyDisplay.value);
-            currentFrequency += step;
-            currentFrequency = Math.max(118.00, Math.min(121.95, currentFrequency));  // Ensure frequency stays within valid range (118.00 to 121.95)
-            frequencyDisplay.value = currentFrequency.toFixed(2);
-          logActionAction({"action": "frequency input set to"+ currentFrequency })
-        }
-        
-
-        function grdupdate() {
-            const callsign = document.getElementById('callsign').value;
-           logAction({"action": "transmit button pressed"})
-           logAction({"action": `callsign set to: + ${callsign}`})
-
-            if(callsign!="NASXGS"){
-                // alert('Select correct Callsign for transmitting ')
-                const dialog = document.createElement('dialog');
-                    dialog.innerHTML = `
-                    <p>Select correct Callsign for transmitting updates</p>
-                    <button onclick="this.closest('dialog').close()">OK</button>
-                    `;
-                    document.body.appendChild(dialog);
-                    dialog.showModal();
-            }
-            else{
-                const Frequency = document.getElementById('frequency-display').value
-                if(!Frequency){
-                    // alert("Set Frequency")
-                    const dialog = document.createElement('dialog');
-                    dialog.innerHTML = `
-                    <p>Set Frequency</p>
-                    <button onclick="this.closest('dialog').close()">OK</button>
-                    `;
-                    document.body.appendChild(dialog);
-                    dialog.showModal();
-                    
-                }
-                else{
-                const radio = document.querySelector('input[name="radio-select"]:checked');
-                if (radio.value== "Comm1") {
-                   logAction({"action": "radio set to:"+ radio.value})
-                    showMap()
-                    //alert(`${callsign} transmitting on ${radio.value} ${currentFrequency.toFixed(2)} MHz`);
-                    const dialog = document.createElement('dialog');
-                    dialog.innerHTML = `
-                    <p>${callsign} transmitting updates on ${radio.value} ${currentFrequency.toFixed(2)} MHz</p>
-                    <button onclick="this.closest('dialog').close(), hideMap()">Close</button>
-                    `;
-                    document.body.appendChild(dialog);
-                    dialog.showModal();
-                    radioTransmit=1
-                    fetch("/var?transmit=" + radioTransmit) 
-                   logAction({"action": callsign+"transmitting updates on" + radio.value + (currentFrequency.toFixed(2))+" MHz" })
-                } 
-                else {
-                    //alert('Select a radio channel');
-                    const dialog = document.createElement('dialog');
-                    dialog.innerHTML = `
-                    <p>Select a radio channel for transmitting updates</p>
-                    <button onclick="this.closest('dialog').close()">OK</button>
-                    `;
-                    document.body.appendChild(dialog);
-                    dialog.showModal();
-                }
-                }
-          } if (radioTransmit==1){
-                setTimeout(() => {
-                 radioTransmit=0
-                 fetch("/var?transmit=" + radioTransmit) 
-                }, 20000)  // wait 20 seconds to set is back to 0
-            }
-        }
-
-
-        
-        function grdcontact() {
-            const callsign = document.getElementById('callsign').value;
-           logAction({"action": "receive button pressed"})
-           logAction({"action": "callsign set to:"+{callsign}})
-
-            if(callsign!="MEDEVAC"){
-                //alert('Select receiving callsign')
-                const dialog = document.createElement('dialog');
-                    dialog.innerHTML = `
-                    <p>Select correct Callsign for contacting Control</p>
-                    <button onclick="this.closest('dialog').close()">OK</button>
-                    `;
-                    document.body.appendChild(dialog);
-                    dialog.showModal();
-            }
-            else{
-                const Frequency = document.getElementById('frequency-display').value
-                if(!Frequency){
-                    //alert("Set Frequency")
-                    const dialog = document.createElement('dialog');
-                    dialog.innerHTML = `
-                    <p>Set Frequency</p>
-                    <button onclick="this.closest('dialog').close()">OK</button>
-                    `;
-                    document.body.appendChild(dialog);
-                    dialog.showModal();
-                }
-                else{
-                    const radio = document.querySelector('input[name="radio-select"]:checked');
-                    if (radio.value== "Comm2") {
-                       logAction({"action": "radio set to:"+ radio.value})
-                        //alert(`${callsign} receiving on ${radio.value} ${currentFrequency.toFixed(2)} MHz`);
-                        const dialog = document.createElement('dialog');
-                        dialog.innerHTML = `
-                        <p>${callsign} contacting Control on ${radio.value} ${currentFrequency.toFixed(2)} MHz</p>
-                        <button onclick="this.closest('dialog').close()">Close</button>
-                        `;
-                        document.body.appendChild(dialog);
-                        dialog.showModal();
-                       logAction({"action": callsign+"transmitting on" + radio.value + (currentFrequency.toFixed(2))+" MHz" })
-                        this.timeoutID=setTimeout(() => {radioReceive=1
-                        fetch("/var?receive=" + radioReceive) 
-                        clearTimeout(this.timeoutID)
-                         }, 5000)  // wait 5 seconds to send to server
-                        
-                } 
-                else {
-                    // alert('Radio channel for Receiving missing or incorrect');  
-                    const dialog = document.createElement('dialog');
-                    dialog.innerHTML = `
-                    <p>'Radio channel for contacting Control missing or incorrect'</p>
-                    <button onclick="this.closest('dialog').close()">OK</button>
-                    `;
-                    document.body.appendChild(dialog);
-                    dialog.showModal();
-                }
-                }
-          }
-          if (radioReceive==1){
-                setTimeout(() => {
-                    radioReceive=0
-                 fetch("/var?receive=" + radioReceive) 
-                }, 20000)  // wait 30 seconds to set is back to 0
-            }
-        }
-
+       
         //updateFrequencyDisplay();
         document.getElementById("map").addEventListener('mapClicked', function(event) {
             console.log('mapClicked event heard');
@@ -994,7 +825,7 @@
 
                 const voices = window.speechSynthesis.getVoices();
                 const utterance = new SpeechSynthesisUtterance(message);
-                utterance.voice = voices[2];  //for firefox
+                utterance.voice = voices[0];  //for firefox
                 utterance.rate = 1.0; //all these variables as per firefox
                 if (stress_level == "normal") {
                     utterance.pitch = 1.0;
@@ -1018,7 +849,7 @@
         function speakGround(message) {
             const voices = window.speechSynthesis.getVoices();
             const utterance = new SpeechSynthesisUtterance(message);
-            utterance.voice = voices[0];  //Firefox
+            utterance.voice = voices[2];  //Firefox
             utterance.rate = 1.2;
             utterance.pitch = 1;
             utterance.volume = 0.8;  //between 0 and 1(highest)
