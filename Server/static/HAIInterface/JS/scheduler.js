@@ -129,7 +129,7 @@ function speakGround(message) {
     window.speechSynthesis.speak(utterance);
     console.log('Ground control speaking ');
     logAction({ "page": "Ground speaking", "action": message });
-    //console.log(utterance.voice)
+    console.log("radio")
 }
 
 let pendingLogs = [];

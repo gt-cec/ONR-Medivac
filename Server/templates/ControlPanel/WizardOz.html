@@ -335,7 +335,7 @@
                     <!-- Text Input for Entering Button Name -->
                     <label for="clickbtn">Which Button:</label>
                     <input type="text" id="clickbtn">
-                    <button class="change-button" onclick="sendControlCommand()">Click</button>
+                    <button class="change-button">Click</button>
 
                     <!-- make gauges dynamic -->
                     <label for="sensor">Sensor Reading:</label>
@@ -380,8 +380,8 @@
                     <h3>Scenario 1</h3>
                     <div class="control-button jarvis-button" data-text="Acknowledging your request" id="Ack">Jarvis:Acknowledge</div>
                     <label for="clickbtn">Altitude:</label>
-                    <input type="text" id="clickbtn">
-                    <button class="text-button" onclick="sendControlCommand()">Send</button>
+                    <input type="text" id="inputValAltitude">
+                    <button class="text-button" >Send</button>
 
                     <div class="control-button jarvis-button" data-text="Severe weather detected. Immediate landing required. " id="emergency">
                         Jarvis:Emergency detected</div>
@@ -455,8 +455,8 @@
                     <h3>Scenario 4</h3>
                     <div class="control-button jarvis-button" data-text="Acknowledging your request" id="Ack">Jarvis:Acknowledge</div>
                     <label for="clickbtn">Pressure val:</label>
-                    <input type="text" id="clickbtn">
-                    <button class="text-button" onclick="sendControlCommand()">Send</button>
+                    <input type="text" id="inputValPressure">
+                    <button class="text-button">Send</button>
                     <div class="control-button radio-button" data-text="Ground Control, go ahead MedEvac" id="Ground">Ground Control, go ahead MedEvac</div>
                     <div class="control-button radio-button" data-text="Copy, MedEvac. Maintain current flight path. Monitor patient and cabin conditions. Report any changes immediately. Out." id="grdLowPress">GRD:Low pressure response</div>
                     <div class="control-button jarvis-button" data-text="EMERGENCY DETECTED NEED TO LAND IMMEDIATELY" id="emergency"> Jarvis:Emergency detected</div>
@@ -653,14 +653,15 @@
             });
 
 
-        document.querySelectorAll(".text-buttons").forEach(button => {
+        document.querySelectorAll(".text-button").forEach(button => {
             button.addEventListener("click", async function () {
                 let inputField = document.getElementById("clickbtn");
                 whichbtn = `valueInput`; // Use text input value
                 let action = "set-value"
-                let value = `${inputField.value}`
-                socket.emit("control_command", { action, whichbtn, value });
-                console.log(`Sent command: ${action} on ${whichbtn} with value: ${value}`);
+                let InputVal = document.getElementById("inputValPressure").value
+                console.log(InputVal)
+                socket.emit("control_command", { action, whichbtn, InputVal });
+                console.log(`Sent command: ${action} on ${whichbtn} with value: ${InputVal}`);
             });
         });
 
