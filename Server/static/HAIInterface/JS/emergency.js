@@ -706,9 +706,9 @@ function activateAltitudeAlert() {
     }
 
 
-let vitalsShown = false;
 
-function schedulePrompt() {
+
+/* function schedulePrompt() {
   setInterval(async () => {
   // Only run on certain pages
   if (!["/hai-interface/inflight", "/hai-interface/change-destination", "/hai-interface/help", "/hai-interface/change-altitude"].includes(window.location.pathname)) {
@@ -738,37 +738,13 @@ function schedulePrompt() {
   //setTimeout(speakRadioPrompt, 105000);
 
 }, 5000)
-}
+} */
 
 
 
 
 
-// radio prompt
-function speakRadioPrompt() {
-  const message = "N A S X G S, this is Ground Control asking for update on flight status, patient status and estimated time to destination.";
-  speakGround(message)
-  console.log('Radio update');
-  logAction({ "page": "radio update", "action": `radio update asked` });
-  //console.log(utterance.voice)
-}
 
-// Show vitals prompt visually
-function showVitalsPrompt() {
-  logAction({ "page": "inflight", "action": "displaying vitals prompt" })
-  console.log('vitals logging prompt')
-  logAction({ "page": "vitals prompt", "action": `log vitals prompted` });
-  document.getElementById('vitals').style.display = "flex"
-    bell.play()
-    //setInterval(bell.play(), 300);  //delayimg sound
-    bell.volume = 0.2;
-  // Auto-remove after 10s
-  setTimeout(() => {
-    document.getElementById('vitals').style.display = "none"
-    logAction({ "page": "vitals prompt", "action": `auto off vitals prompt` });
-    bell.pause()	
-  }, 15000);
-}
   
 
 function validateLowInput(expectedValue) {
