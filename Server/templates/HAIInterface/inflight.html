@@ -47,15 +47,7 @@
 	document.getElementById('cruise-sidebar').style.backgroundColor = "pink"
 
 
-	// vitals reminder, onclick for the vital reminder done button
-	document.getElementById("vitals-acknowledge-button").onclick = () => {
-		logAction({"page": "inflight", "action": "user acknowledged vitals prompt"})
-		console.log('vitals logging acknowledged')
-		document.getElementById('vitals').style.display = "none"
-		//bell.pause()	
-		//console.log("vitals completed time:", lastClicked)
-		
-	} 
+	
 	
 
 	//fetch from server for emergency?

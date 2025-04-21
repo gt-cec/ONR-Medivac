@@ -706,9 +706,9 @@ function activateAltitudeAlert() {
     }
 
 
-let vitalsShown = false;
 
-function schedulePrompt() {
+
+/* function schedulePrompt() {
   setInterval(async () => {
   // Only run on certain pages
   if (!["/hai-interface/inflight", "/hai-interface/change-destination", "/hai-interface/help", "/hai-interface/change-altitude"].includes(window.location.pathname)) {
@@ -738,89 +738,53 @@ function schedulePrompt() {
   //setTimeout(speakRadioPrompt, 105000);
 
 }, 5000)
-}
+} */
 
 
 
 
 
-// radio prompt
-function speakRadioPrompt() {
-  const message = "N A S X G S, this is Ground Control asking for update on flight status, patient status and estimated time to destination.";
-  speakGround(message)
-  console.log('Radio update');
-  logAction({ "page": "radio update", "action": `radio update asked` });
-  //console.log(utterance.voice)
-}
 
-// Show vitals prompt visually
-function showVitalsPrompt() {
-  logAction({ "page": "inflight", "action": "displaying vitals prompt" })
-  console.log('vitals logging prompt')
-  logAction({ "page": "vitals prompt", "action": `log vitals prompted` });
-  document.getElementById('vitals').style.display = "flex"
-    bell.play()
-    //setInterval(bell.play(), 300);  //delayimg sound
-    bell.volume = 0.2;
-  // Auto-remove after 10s
-  setTimeout(() => {
-    document.getElementById('vitals').style.display = "none"
-    logAction({ "page": "vitals prompt", "action": `auto off vitals prompt` });
-    bell.pause()	
-  }, 15000);
-}
-  document.getElementById("vitals-acknowledge-button").onclick = () => {
-    logAction({ "page": "inflight", "action": "user acknowledged vitals prompt" })
-    console.log('vitals logging acknowledged')
-    document.getElementById('vitals').style.display = "none"
-    bell.pause()	
-    //console.log("vitals completed time:", lastClicked)
+  
 
-  }
-
-
-function validateLowInput() {
+function validateLowInput(expectedValue) {
   const input = document.getElementById('lowInput');
   const feedback = document.getElementById('lowFeedback');
-  const correctValue = 75; // expected correct value
   const prompt = document.getElementById('emergencyPrompt');
   const siren = document.getElementById('emergencySiren');
 
-  if (parseInt(input.value) === correctValue) {
-    text ="Copy. Sensor miscalibration likely. WARNING CLEARED. System status: Normal. Continuing course."
-      speakJarvis(text,"normal")
-      const infoBox = document.createElement('div');
-      infoBox.textContent = "Sensor was miscalibrated. Warning cleared";
-      infoBox.style.position = 'fixed';
-      infoBox.style.top = '50%';
-      infoBox.style.left = '50%';
-      infoBox.style.transform = 'translateX(-50%)';
-      infoBox.style.backgroundColor = 'rgba(128, 255, 0, 0.3)';
-      infoBox.style.backdropFilter = "blur(8px)";
-      infoBox.style.color = '#fff';
-      infoBox.style.padding = '25px 35px';
-      infoBox.style.borderRadius = '15px';
-      infoBox.style.boxShadow = '0 0 15px rgba(0,0,0,0.3)';
-      infoBox.style.zIndex = '10000';
-      document.body.appendChild(infoBox);
-      logAction({ "page": "low pressure", "action": `user entered right value` });
+  if (parseInt(input.value) === expectedValue) {
+    const text = "Copy. Sensor miscalibration likely. WARNING CLEARED. System status: Normal. Continuing course.";
+    speakJarvis(text, "normal");
 
-      prompt.classList.add('fade-out');
-      setTimeout(() => {
-          prompt.classList.add('hidden');
-      }, 500); // delay to match the fade-out animation
-      setTimeout(() => {
-          document.body.removeChild(infoBox);
-      }, 8000);
-  } 
-  else {
-    feedback.textContent = 'Incorrect value. Report the correct reading. Left panel, third dial.';
+    const infoBox = document.createElement('div');
+    infoBox.textContent = "Sensor was miscalibrated. Warning cleared";
+    infoBox.style.position = 'fixed';
+    infoBox.style.top = '50%';
+    infoBox.style.left = '50%';
+    infoBox.style.transform = 'translateX(-50%)';
+    infoBox.style.backgroundColor = 'rgba(128, 255, 0, 0.3)';
+    infoBox.style.backdropFilter = "blur(8px)";
+    infoBox.style.color = '#fff';
+    infoBox.style.padding = '25px 35px';
+    infoBox.style.borderRadius = '15px';
+    infoBox.style.boxShadow = '0 0 15px rgba(0,0,0,0.3)';
+    infoBox.style.zIndex = '10000';
+    document.body.appendChild(infoBox);
+
+    logAction({ "page": "Inflight", "action": `user entered correct value: ${expectedValue}` });
+
+    prompt.classList.add('fade-out');
+    setTimeout(() => prompt.classList.add('hidden'), 500);
+    setTimeout(() => document.body.removeChild(infoBox), 8000);
+  } else {
+    feedback.textContent = 'Incorrect value. Report the correct reading.';
     feedback.style.color = '#e74c3c';
-    speakJarvis("Incorrect value. Please report the correct reading", "normal")
-    logAction({ "page": "low pressure", "action": `user entered wrong value` });
-
+    speakJarvis("Incorrect value. Please report the correct reading", "normal");
+    logAction({ "page": "Inflight", "action": `user entered incorrect value: ${input.value}, expected: ${expectedValue}` });
   }
 }
+
 
 
 function acknowledgeEmergency() {
@@ -851,20 +815,32 @@ function showEmergencyPrompt(level, title, message) {
   header.innerHTML = `${level === 'low' ? '⚠️' : '🚨'} ${title}`;
   console.log("showing emergency")
   logAction({ "page": "Inflight", "action": `showing emergency: ${level} ${title} ${message}` });
+
+  let expectedValue = 75; // default
+  let text = "";
+
   if (level === 'low') {
-      console.log("showing low")
-      text ="Hydraulic pressure anomaly detected. Request backup reading from pressure gauge, left panel, third dial."
-      speakJarvis(text, "normal")
+      console.log("showing low");
+      if (title.toLowerCase().includes("pressure")) {
+        text = "Hydraulic pressure anomaly detected. Request reading from backup pressure gauge, left panel, third dial.";
+        expectedValue = 75;
+      } 
+      else if (title.toLowerCase().includes("sensor")) {
+        text = "Primary Altitude sensor miscalibrated. Request reading from secondary altitude gauge, left panel, second dial.";
+        expectedValue = 1500;
+      }
+      speakJarvis(text, "normal");
       prompt.style.backgroundColor = "rgba(254, 165, 1, 0.429)";
       prompt.style.boxShadow = "0 0 20px rgba(255, 165, 0, 0.5)";
-      prompt.style.width= "500px";
-    
+      prompt.style.width = "500px";
+
       embody.innerHTML = `
       <p>${message}</p>
       <input id="lowInput" name="valueInput" type="number" placeholder="Enter reading" style="padding: 20px; font-size: 0.8em; margin-top: 12px; width: 80%;">
-      <br><button onclick="validateLowInput()" id="submit-button" class="acknowledge-button" style="margin-top: 12px;">Submit</button>
+      <br><button onclick="validateLowInput(${expectedValue})" id="submit-button" class="acknowledge-button" style="margin-top: 12px;">Submit</button>
       <div id="lowFeedback" style="margin-top: 12px; color: #fff;"></div>`;
-    } 
+  }
+
   else if (level === 'medium') {
         text = "Primary Fuel gauge is indicating empty, but system diagnostics confirm normal fuel flow and engine performance. This appears to be a sensor malfunction. No immediate action is required. I will keep monitoring the situation closely while continuing the mission as planned unless instructed otherwise."
         speakJarvis(text, "mild")

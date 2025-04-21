@@ -36,7 +36,7 @@
             text-align: center;
             color: #333;
         }
-        .control-button, .open-button, .change-button, .actbutton, button{
+        .control-button, .open-button, .change-button, .text-button, .actbutton, button{
             padding: 12px;
             margin: 5px 0;
             text-align: center;
@@ -45,12 +45,82 @@
             width: 100%;
             font-size: 17px;
         }
-        .control-button { background-color: #f94ae1; color: white; }
-        .control-button:hover { background-color: #0056b3; }
-        .actbutton { background-color: #ff4400; color: white; }
-        .actbutton:hover { background-color: #b30900; }
-        .open-button { background-color: #17a2b8; color: white; }
-        .open-button:hover { background-color: #138496; }
+        /* Distinction for each button group */
+        .jarvis-button {
+            background-color: #f94a81;
+            color: white;
+            border: 2px solid #d4355b;
+            font-weight: bold;
+        }
+        .jarvis-button:hover {
+            background-color: #d4355b;
+        }
+
+        .radio-button {
+            background-color: #4a79f9;
+            color: white;
+            border: 2px solid #365cd7;
+            font-weight: bold;
+        }
+        .radio-button:hover {
+            background-color: #365cd7;
+        }
+
+        .click-buttons-panel .click-buttons {
+            background-color: #6c757d;
+            color: white;
+            font-weight: 600;
+        }
+
+        #start, #submit {
+            background-color: #29c6f1ea;
+            color: white;
+        }
+
+        #confirm, #acceptChange, #okFuel {
+            background-color: #28a745;
+        }
+
+        #abort, #ignoreChange {
+            background-color: #dc3545;
+        }
+
+        #showAlert, .check, #elFuel {
+            background-color: #ffc107;
+            color: black;
+        }
+
+        .uncheck {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        /* Align open buttons horizontally */
+        .open-buttons-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .open-button {
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            text-align: center;
+            padding: 8px;
+            white-space: normal;
+        }
+        .open-button:hover {
+            background-color: #138496;
+        }
         button { background-color: #28a745; color: white; border: none; }
         button:hover { background-color: #218838; }
         input[type="text"] {
@@ -78,8 +148,6 @@
             padding: 10px;
             max-width: 600px;
         }
-
-       
 
         .click-buttons-panel,
         .check-buttons {
@@ -147,7 +215,7 @@
                 <div class="control-button radio-button" data-text="Ground Control, go ahead MedEvac" id="Ground">Ground Control, go ahead MedEvac</div>
                 <div class="control-button radio-button" data-text="Copy, MedEvac. Maintain current flight path. Monitor patient and cabin conditions. Report any changes immediately. Out." id="grdLowPress">Low pressure response</div>
                 <div class="control-button radio-button" data-text="Copy, MedEvac. Continue current course. Monitoring telemetry. Prepare for diversion if further alerts occur. We'll advise. Out." id="grdEmptyTank">Empty Tank Response</div>
-                <div class="control-button radio-button" data-text="Copy, MedEvac. Divert to Site Hotel-2, 2 km south of current path. Hospital team on standby. Transmitting coordinates to AP now. Out." id="grdEngFail">Engine Failure Response</div>
+                <div class="control-button radio-button" data-text="Copy, MedEvac. Divert to Old Forth Ward Hospital, 2 km south of current path. Hospital team on standby. Transmitting coordinates to Jarvis now. Out." id="grdEngFail">Engine Failure Response</div>
 
             </div>
             <div class="subcontent-container">
@@ -199,11 +267,12 @@
                 <h3>Page Control</h3>
                 <div class="actbutton" id="activate-jarvis">Activate Jarvis</div>
                 <div class="actbutton" id="deactivate-jarvis">Deactivate Jarvis</div>
-                <div class="open-button" id="emergency-page">Emergency Page</div>
-                <div class="open-button" id="cd-page">Change Destination Page</div>
-                <div class="open-button" id="ca-page">Change Altitude Page</div>
-                <div class="open-button" id="rd-page">Return to Departure Page</div>
-                <div class="open-button" id="map-page">Open Map</div>
+                <div class="open-buttons-wrapper">
+                    <div class="open-button" id="ca-page">Alt Pg</div>
+                    <div class="open-button" id="cd-page">Dest Pg</div>
+                    <div class="open-button" id="map-page">Map</div>
+                    <div class="open-button" id="emergency-page">Emerg</div>
+                </div>
                 <!-- <div class="open-button" id="radio-page">Open Radio Panel</div> -->
             </div>
             
@@ -213,10 +282,7 @@
                 <input type="text" id="altitudetxt">
                 <button class="change-button" id="altitude">Change</button> -->
             
-                <label for="destination">Change Destination to (Target Index):</label>
-                <input type="text" id="destination">
-                <button class="change-button" id="destination">Change</button>
-                <div id="error-message" style="color: red; display: none;">Please fill out the field before submitting!</div>
+               
             </div>
             
                 <!-- <label for="callsign">Change Callsign:</label>
@@ -302,6 +368,9 @@
                         <button class="uncheck" id="uncheck1">Uncheck 2</button>
                         <button class="uncheck" id="uncheck2">Uncheck 3</button>
                     </div>
+                    <div class="click-buttons" id="confirm">Confirm</div>
+                    <div class="control-button jarvis-button" data-text="Acknowledge, Takeoffing" , id="check2"> Jarvis: Takeoffing </div>
+
                     <div class="control-button radio-button" data-text="Ground Control, go ahead MedEvac" id="Ground">Ground Control, go
                         ahead MedEvac</div>
                    
@@ -309,9 +378,36 @@
                   
 
                     <h3>Scenario 1</h3>
-                    <div class="click-buttons-panel">
-                        <div class="control-button jarvis-button" data-text="Acknowledging your request" id="Ack">Jarvis:Acknowledge</div>
+                    <div class="control-button jarvis-button" data-text="Acknowledging your request" id="Ack">Jarvis:Acknowledge</div>
+                    <label for="clickbtn">Altitude:</label>
+                    <input type="text" id="clickbtn">
+                    <button class="text-button" onclick="sendControlCommand()">Send</button>
+
+                    <div class="control-button jarvis-button" data-text="Severe weather detected. Immediate landing required. " id="emergency">
+                        Jarvis:Emergency detected</div>
+                    <div class="control-button jarvis-button" data-text="Bad Weather" id="emergency"> Jarvis: Bad Weather</div>
+                    <div class="control-button jarvis-button" data-text="I recommend landing at nearest helipad which is a Commercial Heliport Hilton. Confirm—should we land at Hilton or request alternate site?" id="warning"> Jarvis: Recommend Helipad</div>
+                    <div class="control-button jarvis-button" data-text= "Confirm—should we land at Hilton or request alternate site?"id="warning"> Jarvis: Ask to select helipad</div>
+                    <div class="control-button jarvis-button"data-text="Awaiting response. This is a time-critical situation. Immediate landing required. Select landing site immediately" id="emergency">Jarvis: Waiting</div>
+                    
+                    <div class="control-button radio-button" data-text="Ground Control, go ahead MedEvac" id="Ground">Ground Control, go
+                        ahead MedEvac</div>
+                    <div class="control-button radio-button" data-text="MedEvac, copy. What’s the medical status of the infant? Request current vitals." id="grdpatstatus">GRD: Patient status?</div>
+                    <div class="control-button radio-button" data-text="MedEvac, copy. Infant condition stable.Proceed to land at Hilton. Emergency medical team is en route and will meet you on arrival. Maintain vitals monitoring" id="grdwearesponse">GRD: Weather emerg response</div>
+                    <div class="control-button jarvis-button" data-text="Acknowledge, Changing destination to Hilton Heliport " id="JarvisHilton">Jarvis: Changing destination to Hilton </div>
+                    <div class="control-button jarvis-button" data-text="Opening map" id="map-page">Open Map</div>
+                    <div class="open-buttons-wrapper">
+                        <div class="open-button" id="map-page">Open Map</div>
+                        <div class="open-button" id="emergency-page">Open Emerg Pg</div>
                     </div>
+                    <label for="destination">Change Destination to (Target Index):</label>
+                    <input type="text" id="destination">
+                    <button class="change-button" id="destination">Change</button>
+                    <div id="error-message" style="color: red; display: none;">Please fill out the field before submitting!</div>
+                    
+                    
+              
+                
 
                     <h3>Scenario 2</h3>
                     <div class="control-button jarvis-button" data-text="You want to change altitude. However, that will increase the time to destination. Will you like to proceed" id="altChange"> Speak:Alt change time increase </div>
@@ -326,36 +422,61 @@
                     <input type="text" id="altitude">
                     <button class="change-button" id="altitude">Change</button>
                     <div class="control-button jarvis-button" data-text="Acknowledging your request" id="Ack">Jarvis:Acknowledge</div>
+                    <div class="control-button radio-button" data-text="Ground Control, go ahead MedEvac" id="Ground">Ground Control, go
+                        ahead MedEvac</div>
+                    <div class="control-button radio-button" data-text="MedEvac One, copy. Patient is showing signs of altitude sensitivity. Administer D-Oxphylline immediately. Instruct pilot to descend to 1,500 feet. Keep monitoring the infant and report any abnormalities. Confirm actions taken. Over." id="Ground">Grd: vital emergency response</div>
 
                     <h3>Scenario 3</h3>
                     <div class="control-button jarvis-button" data-text="Primary Fuel gauge is indicating empty. System diagnostics confirm normal fuel flow and engine performance. Appears to be a sensor malfunction. I will keep monitoring the situation closely while continue oncourse unless instructed otherwise." id="fuelTank">Jarvis:Empty Fuel Tank </div>
-                    <div class="control-button jarvis-button" data-text="Awaiting Confirmation" id="waitAck">Jarvis:Waiting Acknowledge </div>\
+                    <div class="control-button jarvis-button" data-text="Awaiting Confirmation" id="waitAck">Jarvis:Waiting Acknowledge </div>
                     <div class="click-buttons-panel">
                         <div class="click-buttons" id="okFuel">OK Button(fuel)</div>
                         <div class="click-buttons" id="elFuel">Emergency Landing(fuel)</div>
                     </div>
                     <div class="control-button jarvis-button" data-text="Nearest landing site is a commercial helipad Hilton " id="NH"> Jarvis: Nearest Helipad</div>
                     <div class="control-button jarvis-button" data-text="Acknowledging your request" id="Ack">Jarvis: Acknowledge</div>
-                    <div class="open-button" id="cd-page">Change Destination Page</div>
-                    <div class="open-button" id="map-page">Open Map</div>
+                    <div class="open-buttons-wrapper">
+                        <div class="open-button" id="cd-page">Open change Dest Pg</div>
+                        <div class="open-button" id="map-page">Open Map</div>
+                        <div class="open-button" id="emergency-page">Open Emerg Pg</div>
+                    </div>
+                    <label for="destination">Change Destination to (Target Index):</label>
+                    <input type="text" id="destination">
+                    <button class="change-button" id="destination">Change</button>
+                    <div id="error-message" style="color: red; display: none;">Please fill out the field before submitting!</div>
+                    <div class="control-button jarvis-button" data-text="Awaiting confirmation. Please advise or acknowledge diversion"id="waitingConfi">Jarvis: Waiting</div>
 
-                    <div class="control-button radio-button"
-                        data-text="Copy, MedEvac. Continue current course. Monitoring telemetry. Prepare for diversion if further alerts occur. We'll advise. Out."
-                        id="grdEmptyTank">Empty Tank Response</div>
+
+                    <div class="control-button radio-button" data-text="Ground Control, go ahead MedEvac" id="Ground">Ground Control, go
+                        ahead MedEvac</div>
+
+                    <div class="control-button radio-button" data-text="Copy, MedEvac. Continue current course. Monitoring telemetry. Prepare for diversion if further alerts occur. We'll advise. Out." id="grdEmptyTank">Empty Tank Response</div>
 
                     <h3>Scenario 4</h3>
-
+                    <div class="control-button jarvis-button" data-text="Acknowledging your request" id="Ack">Jarvis:Acknowledge</div>
+                    <label for="clickbtn">Pressure val:</label>
+                    <input type="text" id="clickbtn">
+                    <button class="text-button" onclick="sendControlCommand()">Send</button>
+                    <div class="control-button radio-button" data-text="Ground Control, go ahead MedEvac" id="Ground">Ground Control, go ahead MedEvac</div>
                     <div class="control-button radio-button" data-text="Copy, MedEvac. Maintain current flight path. Monitor patient and cabin conditions. Report any changes immediately. Out." id="grdLowPress">GRD:Low pressure response</div>
                     <div class="control-button jarvis-button" data-text="EMERGENCY DETECTED NEED TO LAND IMMEDIATELY" id="emergency"> Jarvis:Emergency detected</div>
                     <div class="control-button jarvis-button" data-text="Engine on fire" id="emergency"> Jarvis:Engine Failure</div>
-                    <div class="control-button jarvis-button" data-text="I recommend landing at Commercial Heliport Hilton " id="RH">Jarvis: Recommend Helipad</div>
-                    
-                    <div class="control-button radio-button" data-text="Copy, MedEvac. Divert to Old Fourth Ward, 2 km south of current path. Hospital team on standby. Transmitting coordinates to AP now. Out." id="grdEngFail">GRD:Engine Failure Response</div>
+                    <div class="control-button jarvis-button" data-text="I recommend landing at Commercial Heliport Hilton " id="warning">Jarvis: Recommend Helipad</div>
+                    <div class="control-button jarvis-button" data-text="Awaiting response. This is a time-critical situation. Immediate landing required. Select landing site immediately" id="emergency">Jarvis: Waiting</div>
 
+                    
+                    <div class="control-button radio-button" data-text="Ground Control, go ahead MedEvac" id="Ground">Ground Control, go
+                        ahead MedEvac</div>
+                    <div class="control-button radio-button" data-text="Copy, MedEvac. Divert to Old Fourth Ward, 2 km south of current path. Hospital team on standby. Transmitting coordinates to AP now. Out." id="grdEngFail">GRD:Engine Failure Response</div>
                     <div class="control-button jarvis-button" data-text="Ground control asking to divert to Old Fourth Ward Children's Heliport Do you confirm" id="GroundEngFail">Jarvis: Ground control asking to divert to  </div> 
-                    <div class="control-button jarvis-button" data-text="Opening map"  id="map-page">Open Map</div>
-                    <div class="open-button" id="emergency-page">Emergency Page</div>
-                    <div class="open-button" id="map-page">Open Map</div>
+                    <div class="open-buttons-wrapper">
+                        <div class="open-button" id="map-page">Open Map</div>
+                        <div class="open-button" id="emergency-page">Open Emerg Pg</div>
+                    </div>
+                    <label for="destination">Change Destination to (Target Index):</label>
+                    <input type="text" id="destination">
+                    <button class="change-button" id="destination">Change</button>
+                    <div id="error-message" style="color: red; display: none;">Please fill out the field before submitting!</div>
                     
 
                 </div>
@@ -530,6 +651,18 @@
                     console.log(`Sent command: ${action} on ${whichbtn} with value: ${value}`);
                 });
             });
+
+
+        document.querySelectorAll(".text-buttons").forEach(button => {
+            button.addEventListener("click", async function () {
+                let inputField = document.getElementById("clickbtn");
+                whichbtn = `valueInput`; // Use text input value
+                let action = "set-value"
+                let value = `${inputField.value}`
+                socket.emit("control_command", { action, whichbtn, value });
+                console.log(`Sent command: ${action} on ${whichbtn} with value: ${value}`);
+            });
+        });
 
         // Function to control user screen buttons
         function sendControlCommand(button = null, action = "click", value = null) {

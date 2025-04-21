@@ -911,7 +911,7 @@ def reset_params():
     receive=0
     takeoff=0
     approach_clear=0
-    prompt_cycle_started=False
+    prompt_cycle_started = False
 
     #clearing all events on reset 
     status_report_event.clear()

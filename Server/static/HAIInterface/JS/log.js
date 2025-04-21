@@ -7,3 +7,38 @@ function log(message) {
         body: JSON.stringify(data)
       })
 }
+
+let pendingLogs = [];
+
+function logAction(page = window.location.pathname, action) {
+  const logData = {
+    page: page,
+    action: action,
+    timestamp: Date.now()
+  };
+
+  sendLog(logData);
+}
+
+function sendLog(data) {
+  fetch("/log", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  }).then(res => {
+    if (!res.ok) throw new Error("Failed to log");
+  }).catch(err => {
+    console.warn("Log failed, queuing for retry:", err);
+    pendingLogs.push(data);
+  });
+}
+
+// Retry logic every 15 seconds
+setInterval(() => {
+  if (pendingLogs.length > 0) {
+    const retry = [...pendingLogs];
+    pendingLogs = [];
+
+    retry.forEach(item => sendLog(item));
+  }
+}, 15000);
