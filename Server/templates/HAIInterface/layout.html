@@ -994,7 +994,7 @@
 
                 const voices = window.speechSynthesis.getVoices();
                 const utterance = new SpeechSynthesisUtterance(message);
-                utterance.voice = voices[2];  //for firefox
+                utterance.voice = voices[0];  //for firefox
                 utterance.rate = 1.0; //all these variables as per firefox
                 if (stress_level == "normal") {
                     utterance.pitch = 1.0;
@@ -1018,7 +1018,7 @@
         function speakGround(message) {
             const voices = window.speechSynthesis.getVoices();
             const utterance = new SpeechSynthesisUtterance(message);
-            utterance.voice = voices[0];  //Firefox
+            utterance.voice = voices[2];  //Firefox
             utterance.rate = 1.2;
             utterance.pitch = 1;
             utterance.volume = 0.8;  //between 0 and 1(highest)
