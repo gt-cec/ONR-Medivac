@@ -1,24 +1,27 @@
 
 let promptCycleStarted = false;
 
-async function checkAndStartPromptCycle(stopCycle=false) {
+async function checkAndStartPromptCycle(stopCycle = false) {
     try {
         const res = await fetch("/var");
         const data = await res.json();
-       /*  const takeoff = data["takeoff"];
+        const takeoff = data["takeoff"];
         const approachClear = data["approach_clear"];
-        const emergency = data["emergency"]; */
-        
-
-        if (!data["prompt-cycle-started"]) {
-            console.log("Updating server")
-            await fetch("/var?prompt-cycle-started=" + true)
+        emergency = data["emergency-state"]; 
+        if (takeoff == 1 && !data["prompt-cycle-started"]) {
+            console.log("Starting prompt cycle");
+            logAction({ "action": "Starting prompt cycle" });
+            await fetch("/var?prompt-cycle-started=true");
             promptCycleStarted = true;
-            startPromptScheduler(stopCycle);  // Begin the random scheduler
-        } else {
-            promptCycleStarted = true;
-            startPromptScheduler(stopCycle);  // Continue across allowed pages
+            startPromptScheduler();
         }
+
+        if (approachClear == 1) {
+            console.log("Stopping prompt cycle due to approach_clear");
+            logAction({ "action": "Stopping prompt cycle" });
+            startPromptScheduler(true); //  stopCycle=true
+        }
+
     } catch (err) {
         console.error("Error checking prompt status:", err);
     }
@@ -41,53 +44,68 @@ let currentPromptCount = 0;
 let taskScheduled = false;
 let nextTask = Math.random() < 0.5 ? "radio" : "vitals"; // Random first task
 
-function scheduleNextTask(first = false, emergency = 0, stopCycle) {
-    if (taskScheduled || stopCycle || currentPromptCount >= totalPrompts) return;
+function scheduleNextTask(first = false) {
+    if (taskScheduled || currentPromptCount >= totalPrompts) return;
 
     const minDelay = first ? 0 : 20000;
     const maxDelay = first ? 10000 : 90000;
     const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay) + minDelay);
-
     taskScheduled = true;
 
-    setTimeout(() => {
-        if (stopCycle || currentPromptCount >= totalPrompts) {
+    setTimeout(async () => {
+        // check latest emergency status
+        try {
+            const res = await fetch("/var");
+            const data = await res.json();
+            emergency = data["emergency-state"];
+        } catch (e) {
+            console.error("Error getting latest emergency status:", e);
+        }
+
+        if (currentPromptCount >= totalPrompts) {
             taskScheduled = false;
             return;
         }
 
+        // Emergency  override
+        if (emergency == 1) {
+            console.log("EMERGENCY ACTIVE - Only showing vitals prompt");
+            showVitalsPrompt();
+            logAction({"page": "emergency", "action": "vitals_prompt (emergency)"});
+            taskScheduled = false;
+            scheduleNextTask();
+            return;
+        }
+
+        // Normal behavior
         if (nextTask === "radio" && radioPromptsLeft > 0) {
             speakRadioPrompt();
             radioPromptsLeft--;
-            logAction("radio_prompt");
+            logAction({ "page": "radio prompt", "action": `radio update prompt ${5-radioPromptsLeft}` });
             nextTask = "vitals";
         } else if (nextTask === "vitals" && vitalsPromptsLeft > 0) {
             showVitalsPrompt();
             vitalsPromptsLeft--;
-            logAction("vitals_prompt");
+            logAction({ "page": "vitals prompt", "action": `vitals_prompt ${5 - vitalsPromptsLeft}` });
             nextTask = "radio";
-        } else if (emergency == 1 && vitalsPromptsLeft == 0)
-        {
-            showVitalsPrompt();
-        }
-         else {
-            // fallback in case one task runs out
+        } else {
+            // Fallback switch if one task depleted
             nextTask = radioPromptsLeft > 0 ? "radio" : "vitals";
         }
 
         currentPromptCount++;
         taskScheduled = false;
-        scheduleNextTask(); // Chain the next task
+        scheduleNextTask();
     }, randomDelay);
 }
 
-function startPromptScheduler(emergency, stopCycle) {
-    if (isPromptRunning) return;
+function startPromptScheduler(stopCycle = false) {
+    if (isPromptRunning || stopCycle) return;
     isPromptRunning = true;
-
     // Start the first prompt with a 0-10s delay
-    scheduleNextTask(true, emergency, stopCycle);
+    scheduleNextTask(true); 
 }
+
 
 
 let vitalsShown = false;
@@ -122,14 +140,13 @@ function showVitalsPrompt() {
 function speakGround(message) {
     const voices = window.speechSynthesis.getVoices();
     const utterance = new SpeechSynthesisUtterance(message);
-    utterance.voice = voices[2];  //Firefox
+    utterance.voice = voices[2];  //Firefox- female
     utterance.rate = 1.2;
     utterance.pitch = 1;
     utterance.volume = 0.8;  //between 0 and 1(highest)
     window.speechSynthesis.speak(utterance);
     console.log('Ground control speaking ');
     logAction({ "page": "Ground speaking", "action": message });
-    console.log("radio")
 }
 
 let pendingLogs = [];

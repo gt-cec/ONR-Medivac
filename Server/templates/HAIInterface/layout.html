@@ -31,39 +31,55 @@
     
     <style>
 
-    .emergency-prompt {
+    /* Overlay for background blur */
+    .blur-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(6px);
+        background-color: rgba(0, 0, 0, 0.2); /* subtle dark tint */
+        z-index: 9998; /* just below the prompt */
+    }
+
+    /* Emergency prompt styling */
+.emergency-prompt {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(255, 0, 0, 0.3);
-    backdrop-filter: blur(8px);
+    background: rgba(255, 0, 0, 0.5); /* increased opacity */
+    backdrop-filter: blur(10px);
     border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(255, 0, 0, 0.3);
+    box-shadow: 0 8px 32px rgba(255, 0, 0, 0.4);
     padding: 30px;
     z-index: 9999;
     color: white;
     text-align: center;
-   
     transition: all 0.3s ease;
-  }
-  .emergency-prompt.low {
-    background: rgba(254, 165, 1, 0.429);
-    box-shadow: 0 0 20px rgba(255, 165, 0, 0.5);
-    width: 500px;
-  }
+}
 
-  .emergency-prompt.medium {
-    background: rgba(255, 140, 0, 0.366);
-    box-shadow: 0 0 25px rgba(255, 140, 0, 0.5);
+/* Low severity */
+.emergency-prompt.low {
+    background: rgba(255, 165, 0, 0.6);
+    box-shadow: 0 0 20px rgba(255, 165, 0, 0.6);
+    width: 500px;
+}
+
+/* Medium severity */
+.emergency-prompt.medium {
+    background: rgba(255, 87, 34, 0.6);
+    box-shadow: 0 0 25px rgba(255, 87, 34, 0.5);
     width: 600px;
-  }
- 
-  .emergency-prompt.high {
-    background: rgba(255, 0, 0, 0.3);
+}
+
+/* High severity */
+.emergency-prompt.high {
+    background: rgba(255, 0, 0, 0.5);
     box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
     width: 400px;
-  }
+}
   .emergency-header {
     font-size: 1.9em;
     font-weight: bolder;
@@ -362,6 +378,7 @@
 
 
         <!--EMERGENCY PROMPT-->
+        <div class="blur-overlay"></div>
         <div id="emergencyPrompt" class="emergency-prompt hidden">
             <div id="emergencyHeader" class="emergency-header flashing"></div>
             <div id="emergencyBody" class="emergency-body"></div>
@@ -836,8 +853,8 @@
                     utterance.volume = 0.7;
                  }
                 else {
-                    utterance.rate = 1.4;
-                    utterance.pitch = 2.0;
+                    utterance.rate = 1.3;
+                    utterance.pitch = 2.5;
                     utterance.volume = 1.0;
                   }
                 window.speechSynthesis.speak(utterance);

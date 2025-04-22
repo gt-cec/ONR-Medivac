@@ -800,6 +800,9 @@ function acknowledgeEmergency() {
   siren.style.right = '60px';
   siren.style.top = '25%';
   siren.style.position = 'fixed';
+  text =" I recommend landing at the Nearest helipad which is a commercial Helipad Hilton. Please confirm Helipa or select an alternative emergency landing site now."
+  speakJarvis(text, "high")
+
 }
 
 
@@ -848,11 +851,11 @@ function showEmergencyPrompt(level, title, message) {
         prompt.style.boxShadow = "0 0 25px rgba(255, 140, 0, 0.5)";
         prompt.style.width = "600px";
 
-        embody.innerHTML = `<p><strong style="color: black;">Detected:</strong> Fuel gauge reads empty</p>
-        <p><strong style="color: black;">Diagnostics:</strong> False Warning</p>
-        <p><strong style="color: black;">Recommendation:</strong> Continue flying as planned</p>
-        <p><strong style="color: black;">Options:</strong>
-        <button class="ok-button" id="okFuel-Button">OK</button>&ensp;&ensp;
+        embody.innerHTML = `<p><strong>Detected:</strong> Fuel gauge reads empty</p>
+        <p><strong >Diagnostics:</strong> False Warning</p>
+        <p><strong >Recommendation:</strong> Continue flying as planned</p>
+        <p><strong>Options:</strong>
+        <button class="ok-button" id="okFuel-Button">OK</button>
         <button class="ok-button" id="elFuel-Button">Change Destination</button></p>`;
 
         document.getElementById("okFuel-Button").onclick = () => {
@@ -861,15 +864,22 @@ function showEmergencyPrompt(level, title, message) {
             prompt.classList.add('hidden');
           }, 500);
           logAction({ "page": "Inflight", "action": "Continue button on Fuel tank emergency pressed" });
+          text = "Acknowledge. Continuing on current flight path to Emory University Hospital"
+          speakJarvis(text, "normal") 
         } 
         document.getElementById("elFuel-Button").onclick = () => {
           prompt.classList.add('hidden')
+          text ="Acknowledged. Pulling up map for emergency landing "
+          speakJarvis(text, "medium") 
           logAction({ "page": "Inflight", "action": "Change destination button on Fuel tank emergency pressed" });
           window.location.href = '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1;
+          window.onload = () => {
+            speakJarvis("Please select your preferred landing site.", "medium");
+          };
         }
   }
   else {
-        text = "Emergency detected: Immediate landing is required. Nearest helipad is a commercial Helipad Hilton. I recommend landing there. Please confirm Helipad X or select an alternative emergency landing site."
+        text = "Emergency detected: Immediate landing is required. Attention Emergency detected"
         speakJarvis(text, "high") 
         prompt.style.backgroundColor = "rgba(255, 0, 0, 0.3)";
         prompt.style.boxShadow = "0 0 30px rgba(255, 0, 0, 0.6)";

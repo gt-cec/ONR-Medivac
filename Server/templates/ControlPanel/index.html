@@ -102,32 +102,39 @@
 
         document.getElementById("trigger-emergency").onclick = async () => {
             await fetch("/var?airspace-state=1")
+            await fetch("/var?emergency-state=1") 
             //await fetch("/var?dest-changed=" + false)  //so as to force them to choose a destination
         }
 
         document.getElementById("trigger-vitals").onclick = async () => {
             await fetch("/var?vitals-state=1")
+            await fetch("/var?emergency-state=1") 
         }
 
         document.getElementById("trigger-pressure-warning").onclick = async () => {
             await fetch("/var?pressure-warning=1")
+            await fetch("/var?emergency-state=1") 
             //await fetch("/var?dest-changed=" + false)  //so as to force them to choose a destination
         }
 
         document.getElementById("trigger-engine-failure").onclick = async () => {
             await fetch("/var?engine-failure=1")
+            await fetch("/var?emergency-state=1") 
             //await fetch("/var?dest-changed=" + false)  //so as to force them to choose a destination
         }
 
         document.getElementById("trigger-empty-tank").onclick = async () => {
             await fetch("/var?empty-tank=1")
+            await fetch("/var?emergency-state=1") 
             //await fetch("/var?dest-changed=" + false)  //so as to force them to choose a destination
         }
         document.getElementById("trigger-weather-emergency").onclick = async () => {
             await fetch("/var?weather-emergency=1")
+            await fetch("/var?emergency-state=1") 
         }
         document.getElementById("trigger-altitude-alert").onclick = async () => {
             await fetch("/var?altitude-alert=1")
+            await fetch("/var?emergency-state=1") 
         }
 
         document.getElementById("set-stage").onclick = async () => {

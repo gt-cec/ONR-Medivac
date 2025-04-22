@@ -1,5 +1,4 @@
 
-
 // resets the sensor log checklist
 function resetChecklist() {
     // add the sensors and actions to the checklist variable, as FALSE
@@ -53,7 +52,7 @@ function generateKeypad() {
 
 // show the keypad
 function showKeypad() {
-    log({"sensor": currentSensor, "action": "keypad open"})
+   logAction({"sensor": currentSensor, "action": "keypad open"})
     document.getElementById("keypad").style.display = "flex"
     document.getElementById("action-button-container").style.display = "none"
     displayInputValue(currentSensor)
@@ -62,7 +61,7 @@ function showKeypad() {
 
 // show the action buttons
 function showActionButtons() {
-    log({"sensor": currentSensor, "action": "show action buttons"})
+   logAction({"sensor": currentSensor, "action": "show action buttons"})
     showingKeypad = false
     document.getElementById("keypad").style.display = "none"
     document.getElementById("action-button-container").style.display = "flex"
@@ -119,18 +118,18 @@ function resetSensorDOM() {
 function setSensor(sensor) {
     // if already running another item, cancel
     if (inProgress) {
-        log({"sensor": currentSensor, "action": "open", "data": "a sensor action is in progress, cancelling"})
+       logAction({"sensor": currentSensor, "action": "open", "data": "a sensor action is in progress, cancelling"})
         return    
     }
 
     // if showing the keypad, ignore
     if (showingKeypad) {
-        log({"sensor": currentSensor, "action": "open", "data": "user tried to change the sensor, but cancelled because the keypad is showing"})
+       logAction({"sensor": currentSensor, "action": "open", "data": "user tried to change the sensor, but cancelled because the keypad is showing"})
         return
     }
 
     // log the event
-    log({"sensor": sensor, "action": "opened sensor tab"})
+   logAction({"sensor": sensor, "action": "opened sensor tab"})
 
     // set the global variable
     currentSensor = sensor
@@ -142,17 +141,17 @@ function setSensor(sensor) {
 // when the user presses a "Capture", "Log", or "Save" action
 function recordVital(action) {
     // log the event
-    log({"sensor": currentSensor, "action": action, "data": "action button pressed"})
+   logAction({"sensor": currentSensor, "action": action, "data": "action button pressed"})
 
     // if already running another item, cancel
     if (inProgress) {
-        log({"sensor": currentSensor, "action": action, "data": "a sensor action is in progress, cancelling"})
+       logAction({"sensor": currentSensor, "action": action, "data": "a sensor action is in progress, cancelling"})
         return    
     }
 
     // if the sensor is already checked, cancel
     if (checklist[currentSensor][action]) {
-        log({"sensor": currentSensor, "action": action, "data": "sensor item has already been completed, cancelling"})
+       logAction({"sensor": currentSensor, "action": action, "data": "sensor item has already been completed, cancelling"})
         return
     }
 
@@ -164,12 +163,12 @@ function recordVital(action) {
         }
         // end at a false action
         if (!checklist[currentSensor][a]) {
-            log({"sensor": currentSensor, "action": action, "data": "sensor item needs preceeding checks, cancelling"})
+           logAction({"sensor": currentSensor, "action": action, "data": "sensor item needs preceeding checks, cancelling"})
             return
         }
     }
 
-    log({"sensor": currentSensor, "action": action, "data": "starting sensor action"})
+   logAction({"sensor": currentSensor, "action": action, "data": "starting sensor action"})
     
     // set the in progress flag
     inProgress = true
@@ -192,7 +191,7 @@ function recordVital(action) {
             // set the action in the checklist
             checklist[currentSensor][action] = true
             
-            log({"sensor": currentSensor, "action": action, "data": "sensor action complete"})
+           logAction({"sensor": currentSensor, "action": action, "data": "sensor action complete"})
 
             // if the capture vital, open the keypad
             if (action == "capture") {
@@ -213,15 +212,15 @@ function recordVital(action) {
 // when the user presses "Submit"
 function submit() {
     // log the event
-    log({"sensor": "submit", "action": "submit"})
+   logAction({"sensor": "submit", "action": "submit"})
 
     // if not all check boxes filled, cancel
     if (!checkChecklist()) {
-        log({"sensor": "submit", "action": "submit", "data": "submit failed incomplete vitals checklist"})
+       logAction({"sensor": "submit", "action": "submit", "data": "submit failed incomplete vitals checklist"})
         return
     }
     else {
-        log({"sensor": "submit", "action": "submit", "data": "submit succeeded"})
+       logAction({"sensor": "submit", "action": "submit", "data": "submit succeeded"})
     }
 
     // reset the checklist
@@ -304,7 +303,7 @@ function processKeystroke(obj) {
         vitalsLog[currentSensor] += idx == 11 ? 0 : idx
     }
     displayInputValue(currentSensor)
-    log({"sensor": currentSensor, "action": "keypad press", "key": idx, "value": vitalsLog[currentSensor]})
+   logAction({"sensor": currentSensor, "action": "keypad press", "key": idx, "value": vitalsLog[currentSensor]})
 }
 
 
