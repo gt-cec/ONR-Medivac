@@ -66,7 +66,7 @@ window.setInterval(async () => {
 
 
 function showMap() {
-    log({ page: "map", action: "show map" })
+   logAction({ page: "map", action: "show map" })
     //window.dispatchEvent(new CustomEvent('mapClicked'));
 
     // if setting the destination, flash the instruction
@@ -105,7 +105,7 @@ function selectItem(helipadIndex) {
     if (typeof helipadIndex === "undefined" || helipadIndex == -1 ) {
         return
     }
-    log({ page: "map", action: "selected helipad", value: helipadIndex })
+   logAction({ page: "map", action: "selected helipad", value: helipadIndex })
 
     mapSelection = helipadIndex
 
@@ -167,13 +167,13 @@ function selectItem(helipadIndex) {
     //let setDestination= true
     // set the destination box if applicable
     if (setDestination) {
-        log({ page: "map", action: "set destination", value: targetIndex })
+       logAction({ page: "map", action: "set destination", value: targetIndex })
         fillDestinationBox(targetIndex)
     }
 }
 
 function hideMap() {
-    log({ page: "map", action: "hide map" })
+   logAction({ page: "map", action: "hide map" })
     document.getElementById("center").style.zIndex = 1
     document.getElementById("center").classList.add("fadein")
     document.getElementById("center").classList.remove("fadeout")
@@ -283,6 +283,11 @@ function showHelipads(helipads) {
     }
 
     var nearestIconOptions = {
+        iconUrl: "/static/HAIInterface/img/green-helipad-icon.png",
+        iconSize: [50, 50],
+    }
+
+    var apIconOptions = {
         iconUrl: "/static/HAIInterface/img/robotic_bgrm.gif",
         //iconUrl: "/static/HAIInterface/img/green-helipad-icon.png",
         iconSize: [80, 80],
@@ -334,6 +339,20 @@ function showHelipads(helipads) {
             [helipads[i].latitude, helipads[i].longitude],
             options
         )
+
+        // Add AP marker diagonally below the nearest helipad
+        if (helipads[i].nearest) {
+            const offsetLat = 0.001;  //  offset to icon
+            const offsetLng = 0.001;
+
+            const apLat = helipads[i].latitude - offsetLat;
+            const apLng = helipads[i].longitude + offsetLng;
+
+            apIconMarker = L.marker([apLat, apLng], {
+                icon: L.icon(apIconOptions), // AP Icon
+                zIndexOffset: 10
+            }).addTo(map);
+        }
         let helipadIndex = i
 
         
@@ -559,7 +578,7 @@ function initMap() {
             return
         }
         targetIndex = mapSelection // setting the selected helipad as target
-        log({ page: "map", action: "changing helipad", value: mapSelection })
+       logAction({ page: "map", action: "changing helipad", value: mapSelection })
         if (studyStage == 4){
             targetIndex = 19//landing for scenario 4
             if(mapSelection==19) {
@@ -582,7 +601,7 @@ function initMap() {
         }
         
         targetIndex = mapSelection; // setting the selected helipad as target
-        log({ page: "map", action: "changing helipad", value: mapSelection });
+       logAction({ page: "map", action: "changing helipad", value: mapSelection });
         
         //let popupContent;
         //let latlng =L.latLng(latitude, longitude);
@@ -597,7 +616,7 @@ function initMap() {
                 const dialog = document.createElement('dialog');
                 dialog.innerHTML = `
                 <p>Control has asked to reroute to Old Forth. Contact control for more information</p>
-                <button  onclick="this.closest('dialog').close()">OK</button>
+                <button id="okMap-button"  onclick="this.closest('dialog').close()">OK</button>
                 `;
                 document.body.appendChild(dialog);
                 dialog.showModal();
@@ -606,7 +625,7 @@ function initMap() {
                     const dialog = document.createElement('dialog');
                     dialog.innerHTML = `
                     <p>Cannot fly to this location in given conditions.</p>
-                    <button  onclick="this.closest('dialog').close()">OK</button>
+                    <button id="okMap-button"  onclick="this.closest('dialog').close()">OK</button>
                     `;
                     document.body.appendChild(dialog);
                     dialog.showModal();
@@ -614,7 +633,7 @@ function initMap() {
         }
         else if(studyStage == 1) {
             targetIndex = mapSelection // setting the selected helipad as target
-            log({ page: "map", action: "changing helipad", value: mapSelection })
+           logAction({ page: "map", action: "changing helipad", value: mapSelection })
             selectItem(mapSelection) // reload the bottom bar for the selected item
         }
         
@@ -628,7 +647,7 @@ function initMap() {
                 const dialog = document.createElement('dialog');
                 dialog.innerHTML = `
                 <p> Destination location can not be changed. Control has asked to continue as planned. Contact control if needed </p>
-                <button onclick="this.closest('dialog').close()">OK</button>
+                <button id="okMap-button" onclick="this.closest('dialog').close()">OK</button>
                 `;
                 document.body.appendChild(dialog);
                 dialog.showModal();

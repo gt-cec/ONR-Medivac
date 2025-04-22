@@ -58,6 +58,7 @@ departure_index = 21 # will be overwritten, just giving a default value(Miller F
 decision_state = 0  # 0=wait, 1=land
 vitals_state = 0  # 0=normal, 1=emergency
 airspace_emergency_state = 0  # 0=normal, 1=emergency
+emergency_state = 0 # 0=no emergency, 1= atleast 1 emergency
 satisfied = False  # becomes true when emergency occured
 warning_satisfied = False  # becomes true when pressure warning appears
 weather_satisfied = False  # becomes true when weather emergency occurs
@@ -713,14 +714,16 @@ def set_event():
 
 @app.route('/state', methods=['POST'])
 def get_states():
-    global takeoffEvent, engine_failure, pressure_warning, empty_tank, vitals_state, weather_emergency, altitude_alert,jarvis_event
+    global takeoffEvent, engine_failure, pressure_warning, empty_tank, vitals_state, weather_emergency, altitude_alert,jarvis_event, emergency_state 
     
     if(airspace_emergency_state==1 or vitals_state==1 or engine_failure==1 or pressure_warning==1 or empty_tank==1 or weather_emergency==1 or altitude_alert==1):
         emergency_event.set()
+        emergency_state=1
         print('Emergency event set')
 
     if(emergency_event.is_set() and airspace_emergency_state==0 and vitals_state==0 and engine_failure==0 and pressure_warning==0 and empty_tank==0 and weather_emergency==0 and altitude_alert==0):
         emergency_event.clear()
+        emergency_state=0
         print('Emergency event cleared')
 
     if request.is_json:
@@ -874,7 +877,7 @@ def log():
 # reset server parameters
 @app.route("/reset", methods=["GET"])
 def reset_params():
-    global study_participant_id, sequence, study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page,rd_page,ca_page,cd_page,map_page, radio_page,transmit,receive, takeoff,approach_clear, user_text_audio, prev_text,received_text, prompt_cycle_started
+    global study_participant_id, sequence, study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page,rd_page,ca_page,cd_page,map_page, radio_page,transmit,receive, takeoff,approach_clear, user_text_audio, prev_text,received_text, prompt_cycle_started
 
     study_participant_id = 0
     sequence=0
@@ -884,6 +887,7 @@ def reset_params():
     decision_state = 0  # 0=normal, 1=wait
     vitals_state = 0  # 0=normal, 1=emergency
     airspace_emergency_state = 0  # 0=normal, 1=emergency
+    emergency_state=0  # 0=normal, 1=emergency
     satisfied=False
     warning_satisfied= False
     weather_satisfied=False
@@ -964,7 +968,7 @@ def clean(s):
 # set system variables
 @app.route("/var", methods=["GET"])
 def get_var():
-    global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude, engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page, rd_page, ca_page, cd_page, map_page, radio_page, transmit, receive, takeoff, approach_clear, prompt_cycle_started
+    global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, emergency_state, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude, engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page, rd_page, ca_page, cd_page, map_page, radio_page, transmit, receive, takeoff, approach_clear, prompt_cycle_started
     if request.args.get("user-id"):
         study_participant_id = clean(request.args.get("user-id"))
     if request.args.get("study-stage"):
@@ -984,6 +988,9 @@ def get_var():
     if request.args.get("airspace-state"):
         airspace_emergency_state = clean(request.args.get(
             "airspace-state"))  # 0=normal, 1=emergency    
+    if request.args.get("emergency-state"):
+        emergency_state = clean(request.args.get(
+            "emergency-state"))  # 0=no emergency, 1=atleast 1 emergency happening 
     if request.args.get("satisfied"):
        satisfied = clean(request.args.get(
             "satisfied"))         
@@ -1045,6 +1052,15 @@ def get_var():
         approach_clear = clean(request.args.get("approach-clear")) #1=helipad is clear  , 0=otherwise
     if request.args.get("prompt-cycle-started"):  
         prompt_cycle_started = clean(request.args.get("prompt-cycle-started")) 
+
+    if(airspace_emergency_state==1 or vitals_state==1 or engine_failure==1 or pressure_warning==1 or empty_tank==1 or weather_emergency==1 or altitude_alert==1):
+        emergency_state=1
+        print('Emergency event set')
+
+    if( airspace_emergency_state==0 and vitals_state==0 and engine_failure==0 and pressure_warning==0 and empty_tank==0 and weather_emergency==0 and altitude_alert==0):
+        emergency_state=0
+        print('Emergency event cleared')
+    
         
    
     return_dict = {"user-id": str(study_participant_id),
@@ -1055,6 +1071,7 @@ def get_var():
                    "decision-state": decision_state,
                    "vitals-state": vitals_state,
                    "airspace-state": airspace_emergency_state,
+                   "emergency-state":emergency_state,
                    "satisfied":satisfied,
                    "warning-satisfied": warning_satisfied,
                    "weather-satisfied": weather_satisfied,

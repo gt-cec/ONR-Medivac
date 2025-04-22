@@ -10,10 +10,6 @@
             <source src="../../static/HAIInterface/img/bell.mp3" type="audio/mpeg">
         </audio>
         <style>
-            body {
-                margin: 0;
-                font-family: Arial, Helvetica, sans-serif;
-            }
             :root {
             --primary-color: #0C2D48;
             --secondary-color: #145DA0;
@@ -31,14 +27,11 @@
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', 'Roboto', sans-serif;
-            background-color: #121212;
-            color: var(--text-primary);
-            line-height: 1.6;
         }
 
         .left-pane {
-            width: 320px;
-            height: 100vh;
+            width: 430px;
+            height: 90vh;
             overflow: hidden;
             border-right: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
@@ -142,11 +135,33 @@
         }
 
         .gauge-value {
-            font-size: 14px;
+            font-size: 15px;
             color: #f1c40f;
             text-align: center;
             margin-top: 3px; 
-            font-weight: 500;
+            font-weight: bolder;
+        }
+
+        .fuel-warning {
+            position: absolute;
+            top: -10px;
+            background-color: red;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 14px;
+            animation: flash 1s infinite;
+            z-index: 3;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @keyframes flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
 
         /*RADIO PANEL */
@@ -178,12 +193,12 @@
 
         .panel-title {
             text-align: center;
-            font-size: 16px;
+            font-size: 17px;
             margin-bottom: 8px;
             color: var(--text-primary);
             letter-spacing: 1px;
             text-transform: uppercase;
-            font-weight: 500;
+            font-weight: bolder;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             padding-bottom: 5px;
         }
@@ -199,13 +214,15 @@
         }
 
         .radiopanel label {
-            font-size: 15px;
+            font-size: 16px;
             padding: 3px 0; 
             text-align: left;
             color: var(--text-secondary);
             margin-bottom: 3px; 
-            font-weight: 500;
+            font-weight: bold;
         }
+
+        
 
         .radiopanel select,
         .radiopanel input[type="text"] {
@@ -216,6 +233,7 @@
             border-radius: 8px;
             font-size: 14px;
             transition: all 0.3s ease;
+            height: 10px; 
         }
 
         .radiopanel select:focus,
@@ -229,7 +247,8 @@
             display: flex;
             gap: 5px;
             justify-content: space-between;
-            font-size: 12px;
+            font-size: 13px;
+            
         }
 
         .radio-options label {
@@ -254,6 +273,7 @@
         .radio-options input[type="radio"] {
             position: absolute;
             opacity: 0;
+           
         }
 
         .radio-options input[type="radio"]:checked + span {
@@ -279,7 +299,7 @@
             margin-bottom: 3px; 
             display: block;
             color: var(--text-secondary);
-            font-size: 15px;
+            font-size: 16px;
         }
 
         .frequency-btn {
@@ -289,7 +309,6 @@
             color: white;
             border: none;
             border-radius: 50%;
-            font-weight: bold;
             font-size: 16px; 
             cursor: pointer;
             display: flex;
@@ -311,7 +330,7 @@
         }
 
         #frequency-display {
-            width: 120px; 
+            width: 150px; 
             padding: 4px;
             font-weight: 500;
             font-size: 16px;
@@ -335,20 +354,17 @@
 
         .controls button {
             flex: 1 1 48%;
-            padding: 5px; 
-            font-size: 13px; 
+            font-size: 14px; 
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 500;
             letter-spacing: 0.5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-          
             margin-top: 0%;
-           
-           
+             
         }
 
         .transmit-btn {
@@ -371,7 +387,7 @@
 
         .feedback {
             text-align: center;
-            font-size: 13px;
+            font-size: 15px;
             padding: 8px;
             border-radius: 8px;
             margin-top: 8px;
@@ -385,7 +401,7 @@
             visibility: visible;
             height: auto;
             background-color: rgba(46, 204, 113, 0.2);
-            color: #2ecc71;
+            color: #2eccc1;
             border: 1px solid rgba(46, 204, 113, 0.3);
         }
 
@@ -401,7 +417,7 @@
         .transmit-animation {
             position: fixed;
             bottom: 60px;
-            right: 30px;
+            left: 30px;
             width: 50px;
             height: 50px;
             background: radial-gradient(circle, rgba(46, 204, 113, 0.8) 20%, transparent 70%);
@@ -417,7 +433,35 @@
             100% { transform: scale(3); opacity: 0; }
         }
 
-    
+        .dialogue-box {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            background: rgba(30, 30, 47, 0.95);
+            border: 3px solid #4caf50;
+            color: #fff;
+            padding: 10px 14px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            z-index: 9999;
+            font-size: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dialogue-box button {
+            margin-top: 10px;
+            padding: 2px 3px;
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
 
         
             .right-pane {
@@ -443,11 +487,11 @@
             }
 
             div.vitals-popup {
-                z-index: 5;
-                position:absolute;
+                z-index: 9999;
                 width: 60vw;
                 height: 50vh;
                 top: 25%;
+                left:25%;
                 align-self: center;
                 box-shadow: 2px 2px 5px grey;
                 background-color: palevioletred;
@@ -511,7 +555,8 @@
             margin: 5vh;
             flex-grow: 1;
             height: 50%;
-            width: calc(100vw - 2*30vh);
+            z-index: 9999;
+            position: absolute;
         }
 
 
@@ -525,6 +570,7 @@
                 <!-- Gauge Panel Section -->
                 <div class="gauge-panel">
                     <div class="gauge-container" id="fuelGauge">
+                        <div class="fuel-warning hidden" id="fuelWarning">⚠ EMPTY</div>
                         <div class="gauge-label">Fuel</div>
                         <div class="gauge-inner">
                             <svg viewBox="0 0 200 120">
@@ -568,7 +614,7 @@
             
                         <div class="panel-row">
                             <label for="callsign">Callsign</label>
-                            <select id="callsign">
+                            <select class="callsign" id="callsign">
                                 <option value="" disabled selected>Select</option>
                                 <option value="NASXGS">NASXGS</option>
                                 <option value="MEDEVAC">MEDEVAC</option>
@@ -578,10 +624,10 @@
                         <div class="panel-row radio-group">
                             <label>Select Radio</label>
                             <div class="radio-options">
-                                <label><input type="radio" name="radio-select" value="Nav1"><span>NAV1</span></label>
-                                <label><input type="radio" name="radio-select" value="Nav2"><span>NAV2</span></label>
-                                <label><input type="radio" name="radio-select" value="Comm1"><span>COMM1</span></label>
-                                <label><input type="radio" name="radio-select" value="Comm2"><span>COMM2</span></label>
+                                <label class="radio-options label"><input type="radio" name="radio-select" value="Nav1"><span>NAV1</span></label>
+                                <label class="radio-options label"><input type="radio" name="radio-select" value="Nav2"><span>NAV2</span></label>
+                                <label class="radio-options label"><input type="radio" name="radio-select" value="Comm1"><span>COMM1</span></label>
+                                <label class="radio-options label"><input type="radio" name="radio-select" value="Comm2"><span>COMM2</span></label>
                             </div>
                         </div>
             
@@ -595,11 +641,12 @@
                         </div>
             
                         <div class="panel-row controls">
-                            <button onclick="grdupdate()" class="transmit-btn">Transmit</button>
+                            <button onclick="grdupdate()" class="transmit-btn">Updates</button>
                             <button onclick="grdcontact()" class="receive-btn">Emergency</button>
                         </div>
             
                         <div id="radio-feedback" class="feedback"></div>
+                        <div id="connection-dialogue" class="dialogue-box" style="display: none;"></div>
                     </div>
                 </div>
             </div>
@@ -751,6 +798,11 @@
                 const feedback = document.getElementById("radio-feedback");
                 feedback.textContent = message;
                 feedback.className = 'feedback ' + (type === 'success' ? 'success' : 'error');
+                // Clear after 10 seconds
+                setTimeout(() => {
+                    feedback.textContent = '';
+                    feedback.className = 'feedback'; // reset to base class if needed
+                }, 10000); 
             }
 
             function playSound(id) {
@@ -772,31 +824,69 @@
                 }, 1000);
             }
 
-            function grdupdate() {
-                const isConnected = simulateConnection();
-                playSound("radio-static");
+           function showConnectionDialogue(message) {
+                const container = document.getElementById("connection-dialogue");
+                container.innerHTML = `
+                <div class="dialogue-box">
+                    <p>${message}</p>
+                    <button onclick="endTransmission()">Stop Transmission</button>
+                </div>`;
+                container.style.display = "block";
+            }
 
-                if (isConnected) {
+            function endTransmission() {
+                const container = document.getElementById("connection-dialogue");
+                container.style.display = "none";
+                showFeedback("Transmission ended.", "success");
+            }
+
+            function handleRadioTransmission(expectedCallsign, expectedChannel, successMessage) {
+                    const callsignInput = document.getElementById("callsign");
+                    const selectedRadio = document.querySelector('input[name="radio-select"]:checked');
+
+                    if (!callsignInput || !callsignInput.value.trim()) {
+                        showFeedback("Callsign is missing.", "error");
+                        return;
+                    }
+
+                    if (!selectedRadio) {
+                        showFeedback("Radio channel is not selected.", "error");
+                        return;
+                    }
+
+                    const callsign = callsignInput.value.trim();
+                    const channel = selectedRadio.value.trim();
+
+                    if (callsign !== expectedCallsign) {
+                        showFeedback("Invalid callsign entered.", "error");
+                        return;
+                    }
+
+                    if (channel.toUpperCase() !== expectedChannel.toUpperCase()) {
+                        showFeedback("Incorrect radio channel selected.", "error");
+                        return;
+                    }
+                    const isConnected = simulateConnection();
+                    playSound("radio-static");
+
+                    if (isConnected) {
                     playSound("radio-beep");
-                    showFeedback("Transmission sent to ground station.", "success");
+                    showConnectionDialogue(successMessage);
                     startTransmitAnimation();
-                } else {
+                    } else {
                     showFeedback("Failed to establish connection. Try again.", "error");
-                }
+                     }
             }
 
-            function grdcontact() {
-                const isConnected = simulateConnection();
-                playSound("radio-static");
+        function grdupdate() {
+                handleRadioTransmission("NASXGS", "COMM1", "Transmitting to Ground Station (NASXGS on COMM1)....");
+        }
 
-                if (isConnected) {
-                    playSound("radio-beep");
-                    showFeedback("Emergency signal sent successfully.", "success");
-                    startTransmitAnimation();
-                } else {
-                    showFeedback("Emergency contact failed.", "error");
-                }
-            }
+        function grdcontact() {
+            handleRadioTransmission("MEDEEVAC", "COMM2", "Emergency Contact Initiated (MEDEEVAC on COMM2)....");
+        }
+            
+          
         function updateNeedle(id, value, max, minAngle, maxAngle) {
             const ratio = Math.min(value / max, 1);
             const angle = minAngle + ratio * (maxAngle - minAngle);
@@ -808,7 +898,7 @@
         let takeoffTime = null;
         let landingCountdownStarted = false;
 
-        function fetchFlightData() {
+        /* function fetchFlightData() {
             fetch("/var")
                 .then(res => res.json())
                 .then(data => {
@@ -835,7 +925,7 @@
         }
 
         setInterval(fetchFlightData, 2000);
-
+ */
     let vitalsEmergency=false
 
     setInterval(async function fetchVitalstate() {
@@ -848,12 +938,14 @@
         message = JSON.parse(message);
         if(message["takeoff"] == 1 && !(message["prompt-cycle-started"] == true || message["prompt-cycle-started"] == "true")){
             console.log("Starting prompt cycle")
-            logAction(logAction({ "action": "Starting prompt cycle" }))
+            logAction({ "action": "Starting prompt cycle" })
             checkAndStartPromptCycle();
+            startTakeoff()
         }
         if (message["approach_clear"] == 1 )
          {
             checkAndStartPromptCycle(stopCycle=true);
+            beginDescent()
          }
         if (message["vitals-state"]==1)
         {
@@ -917,6 +1009,12 @@
 
             const rotation = -90 + (180 * percent);
             pointer.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+
+            // Fuel emergency handling
+            if (fuelEmergency) {
+                const warning = document.getElementById("fuelWarning");
+                warning.classList.remove("hidden");
+            }
         }
 
 
@@ -934,6 +1032,7 @@
     // Simulated values
     let takeoff = 0;
     let approach_clear = 0;
+    let fuelEmergency= false;
 
     function simulateFlight() {
         setInterval(() => {
@@ -948,8 +1047,12 @@
                 pressure = Math.min(NORMAL_PRESSURE, pressure + 0.05);
             }
 
-            // Fuel always decreases slowly
+            // Fuel  decreases slowly
             fuel = Math.max(0, fuel - 0.03);
+            // Fuel emergency 
+            if(fuelEmergency) { 
+                fuel = 0;
+            }
 
             // Update UI
             updateGauge(fuel, "fuelArc", "fuelPointer", "fuelValue", '%', 100, "fuel");
@@ -960,34 +1063,34 @@
 
     simulateFlight();
 
-            // Simulate external signals (can replace these with real-time server signals)
-            function startTakeoff() {
-                takeoff = 1;
-                flightPhase = "takeoff";
-                console.log("Takeoff started");
+        // Simulate external signals (can replace these with real-time server signals)
+        function startTakeoff() {
+            takeoff = 1;
+            flightPhase = "takeoff";
+            console.log("Takeoff started");
 
-                setTimeout(() => {
-                    flightPhase = "cruise";
-                    console.log("Cruise started");
-                }, 5000); // 5 seconds after takeoff
-            }
+            setTimeout(() => {
+                flightPhase = "cruise";
+                console.log("Cruise started");
+            }, 5000); // 5 seconds after takeoff
+        }
 
-            function beginDescent() {
-                approach_clear = 1;
-                flightPhase = "descent";
-                console.log("Descent started");
+        function beginDescent() {
+            approach_clear = 1;
+            flightPhase = "descent";
+            console.log("Descent started");
 
-                setTimeout(() => {
-                    flightPhase = "ground";
-                    altitude = 0;
-                    pressure = NORMAL_PRESSURE;
-                    console.log("Landed");
-                }, 30000); // 30 seconds descent
-            }
+            setTimeout(() => {
+                flightPhase = "ground";
+                altitude = 0;
+                pressure = NORMAL_PRESSURE;
+                console.log("Landed");
+            }, 30000); // 30 seconds descent
+        }
 
             // Simulate event triggers
-            setTimeout(startTakeoff, 2000);         // Takeoff in 2 seconds
-            setTimeout(beginDescent, 15000);        // Descent in 15 seconds from start
+           // setTimeout(startTakeoff, 2000);         // Takeoff in 2 seconds
+           // setTimeout(beginDescent, 15000);        // Descent in 15 seconds from start
 
 
     document.getElementById("vitals-acknowledge-button").onclick = () => {
