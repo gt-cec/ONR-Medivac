@@ -9,6 +9,7 @@ def process_all_xlsx_files(folder_path):
     #stage2_data = defaultdict(lambda: defaultdict(list(lambda: defaultdict(lambda: "not found"))))
     stage2_data = defaultdict(lambda: defaultdict(list))
     stage3_data = defaultdict(lambda: defaultdict(list))
+    stage4_data = defaultdict(lambda: defaultdict(list))
     
 
     for item in os.listdir(folder_path):
@@ -23,7 +24,7 @@ def process_all_xlsx_files(folder_path):
                 # Process only .xlsx files
                 if os.path.isfile(file_path) and file_name.endswith('.xlsx'):
                     # Call the function to extract data and extend all_data
-                    file_data, file_stage2_data, file_stage3_data = process_excel_file(file_path) # 3 different excel files
+                    file_data, file_stage2_data, file_stage3_data,file_stage4_data  = process_excel_file(file_path) # 4 different excel files
                     all_data.extend(file_data)
                     
                     # Merge stage data
@@ -33,6 +34,12 @@ def process_all_xlsx_files(folder_path):
                     for user_id, actions in file_stage3_data.items():
                         for action, times in actions.items():
                             stage3_data[user_id][action].extend(times)
+                    for user_id, actions in file_stage4_data.items():
+                        for action, times in actions.items():
+                            if isinstance(times, list):
+                                stage4_data[user_id][action].extend(times)
+                            else:
+                                stage4_data[user_id][action] = times  # It's a float or single value
 
 
     # Combine all data into a single dataframe
@@ -50,7 +57,7 @@ def process_all_xlsx_files(folder_path):
     stage3_output_path = os.path.join(folder_path, 'stage3_data.xlsx')
     stage3_df.to_excel(stage3_output_path, index=False) # index set to false to not get the assigned index(0,1..) 
     print(f"Stage 3 data has been written to {stage3_output_path}") """
-
+    """ 
     # Create and save Stage 2 Excel file
     stage2_df = create_stage_dataframe(stage2_data,2)
     stage2_output_path = os.path.join(folder_path, 'stage2_data.xlsx')
@@ -61,7 +68,13 @@ def process_all_xlsx_files(folder_path):
     stage3_df = create_stage_dataframe(stage3_data,3)
     stage3_output_path = os.path.join(folder_path, 'stage3_data.xlsx')
     stage3_df.to_excel(stage3_output_path, index=False)
-    print(f"Stage 3 data has been written to {stage3_output_path}")
+    print(f"Stage 3 data has been written to {stage3_output_path}") """
+
+    # Create and save Stage 4 Excel file
+    stage4_df = create_stage_dataframe(stage4_data,4)
+    stage4_output_path = os.path.join(folder_path, 'stage4_data.xlsx')
+    stage4_df.to_excel(stage4_output_path, index=False)
+    print(f"Stage 4 data has been written to {stage4_output_path}")
 
 def create_stage_dataframe(stage_data, stage_number):
     # Get all unique actions across all users
@@ -76,6 +89,9 @@ def create_stage_dataframe(stage_data, stage_number):
         if stage_number == 2:
             user_dict['Vitals State 1 Time'] = user_actions.get('vitals_state_1', [''])[0]
             user_dict['Vitals State 0 Time'] = user_actions.get('vitals_state_0', [''])[0]
+        if stage_number == 4:
+            user_dict['Vitals State 1 stage4'] = user_actions.get('vitals_state_1_stage4', [''])[0]
+            user_dict['Vitals State 0 stage4'] = user_actions.get('vitals_state_0_stage4', [''])[0]
         for action in all_actions:
             if action not in ['first_row_time', 'vitals_state_1', 'vitals_state_0']:
                 times = user_actions.get(action, [])
@@ -106,18 +122,28 @@ def process_excel_file(file_path):
 
     stage2_data = defaultdict(lambda: defaultdict(list))
     stage3_data = defaultdict(lambda: defaultdict(list))
+    stage4_data = defaultdict(lambda: defaultdict(list))
 
     try:
         #id = df['ID'].iloc[0]
         first_row_time = df['time'].iloc[0]
     except KeyError:
         print(f"KeyError occurred when trying df['ID'] or df['time'] in file {file_path}")
-        return [], stage2_data, stage3_data
+        return [], stage2_data, stage3_data, stage4_data
 
     vitals_state_1_time = None
     vitals_state_0_time = None
+    pressure_warning_start = None
+    pressure_warning_end = None
+    engine_failure_start = None
+    engine_failure_end = None
+    medevac_transmit_time = None
+    reroute_oldforth_time = None
+    vitals_state_1_stage4 = None
+    vitals_state_0_stage4 = None
     scenario = df['Stage'].iloc[0]
     sequence = df['Sequence'].iloc[0]
+    i=0
 
     # Initialize an empty list to store data
     data_list = []
@@ -185,7 +211,7 @@ def process_excel_file(file_path):
             submit_times.append(submit_time)
             vitals_logging_times.append(vitals_logging_time)
 
-        # Emergency response time (for scenario 2 and 3):
+        # Emergency response time (for scenario 2 and 3 and 4):
         log=str(row['action']).strip()
         if scenario == 2:
             stage2_data[id]['first_row_time'].append(first_row_time)
@@ -201,6 +227,59 @@ def process_excel_file(file_path):
             stage3_data[id]['first_row_time'].append(first_row_time)
             if "tank emergency" in log.lower():
                 stage3_data[id][log].append(row['time'])
+        elif scenario == 4:
+            stage4_data[id]['first_row_time'].append(first_row_time)
+            log_lower = log.lower()
+
+            # Pressure warning start
+            if pressure_warning_start is None and (
+                'pressure miscalibrated warning' in log_lower or 
+                'pressure warning alert activated' in log_lower): 
+                pressure_warning_start = row['time']
+                stage4_data[id]['pressure_warning_start'].append(pressure_warning_start)
+
+            # Pressure warning end
+            if pressure_warning_end is None and (
+                'pressure warning alert close button pressed' in log_lower
+            ):  
+                pressure_warning_end= row['time']
+                stage4_data[id]['pressure_warning_end'].append(pressure_warning_end)
+
+            # Engine failure alert start
+            if engine_failure_start is None and (
+                'show engine failure alert' in log_lower or
+                'engine failure' in log_lower
+            ):
+                engine_failure_start= row['time']
+                stage4_data[id]['engine_failure_start'].append(engine_failure_start)
+
+            # Engine failure alert end
+            if engine_failure_end is None and (
+                'engine failure emergency- close button pressed' in log_lower
+            ):
+                engine_failure_end= row['time']
+                stage4_data[id]['engine_failure_end'].append(engine_failure_end)
+
+            # MEDEVAC transmitting time after engine failure closed
+            if engine_failure_end is not None and medevac_transmit_time is None and (
+                'medevactransmitting' in log_lower
+            ):
+                medevac_transmit_time= row['time']
+                stage4_data[id]['medevac_transmit_time'].append(medevac_transmit_time)
+
+            # Reroute to Oldforth time after engine failure closed
+            if engine_failure_end is not None and reroute_oldforth_time is None and (
+                'reroute to oldforth' in log_lower
+            ):
+                reroute_oldforth_time= row['time']
+                stage4_data[id]['reroute_oldforth_time'].append(reroute_oldforth_time) 
+            if vitals_state_1_stage4 is None and row['vitals-state'] == 1.0:
+                vitals_state_1_stage4 = row['time']
+                stage4_data[id]['vitals_state_1_stage4'].append(vitals_state_1_stage4)
+            if vitals_state_1_stage4 is not None and vitals_state_0_stage4 is None and row['vitals-state'] == 0.0:
+                vitals_state_0_stage4 = row['time']
+                stage4_data[id]['vitals_state_0_stage4'].append(vitals_state_0_stage4)
+
 
     # Create a dataframe for the user and scenario
     lists = {
@@ -242,7 +321,7 @@ def process_excel_file(file_path):
     # Create the DataFrame from the list of dictionaries
     user_data = pd.DataFrame(data_list)
 
-    return [user_data],stage2_data, stage3_data
+    return [user_data],stage2_data, stage3_data, stage4_data
 
 if __name__ == "__main__":
     folder_path = '/Users/sanyadoda/ONR-Medivac/Server/UserStudyLogs'
