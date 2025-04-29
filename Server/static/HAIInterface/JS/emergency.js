@@ -748,7 +748,7 @@ function activateAltitudeAlert() {
   
 
 function validateLowInput(expectedValue) {
-  const input = document.getElementById('lowInput');
+  const input = document.getElementById('valueInput');
   const feedback = document.getElementById('lowFeedback');
   const prompt = document.getElementById('emergencyPrompt');
   const siren = document.getElementById('emergencySiren');
@@ -839,8 +839,8 @@ function showEmergencyPrompt(level, title, message) {
 
       embody.innerHTML = `
       <p>${message}</p>
-      <input id="lowInput" name="valueInput" type="number" placeholder="Enter reading" style="padding: 20px; font-size: 0.8em; margin-top: 12px; width: 80%;">
-      <br><button onclick="validateLowInput(${expectedValue})" id="submit-button" class="acknowledge-button" style="margin-top: 12px;">Submit</button>
+      <input id="valueInput" name="valueInput" type="number" placeholder="Enter reading" style="padding: 20px; font-size: 0.8em; margin-top: 12px; width: 80%;">
+      <br><button id="submit-button" onclick="validateLowInput(${expectedValue})" class="acknowledge-button" style="margin-top: 12px;">Submit</button>
       <div id="lowFeedback" style="margin-top: 12px; color: #fff;"></div>`;
   }
 

@@ -1389,7 +1389,8 @@ def change_variable(data):
 def control_command(data):
     action=data['action']
     elementId=data['whichbtn']
-    value=data['value']
+    
+    print(data)
     #Forwards control commands from the controller panel to the user's screen
     print(f"Control Command: {data}")
     if (action=="check"):

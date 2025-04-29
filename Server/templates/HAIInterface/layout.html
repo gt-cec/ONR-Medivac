@@ -881,9 +881,10 @@
         socket.on("execute_command", (data) => {
             //const {action, elementId, value} = data;
             console.log(data)
-            console.log(`Executing: ${data.action} on ${data.whichbtn} with value: ${data.value}`);
-            logAction({"action": `Controller Executing: ${data.action} on ${data.whichbtn} with value: ${data.value}`});
+            console.log(`Executing: ${data.action} on ${data.whichbtn} with value: ${data.InputVal}`);
+            logAction({"action": `Controller Executing: ${data.action} on ${data.whichbtn} with value: ${data.InputVal}`});
             const action=data.action
+
 
             const element = document.getElementById(data.whichbtn) || document.querySelector(`[name='${data.whichbtn}']`);
 
@@ -903,7 +904,7 @@
                     altitudeTimeOverlay.style.opacity = '1';
                 case "set-value":
                     if (["INPUT", "TEXTAREA", "SELECT"].includes(element.tagName)) {
-                        element.value = data.value;
+                        element.value = data.InputVal;
                     }
                     break;
                 
