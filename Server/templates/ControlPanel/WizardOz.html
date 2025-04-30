@@ -400,6 +400,7 @@
                     <label for="altitude-input">Altitude:</label>
                     <input type="text" id="altitude-input">
                     <button class="text-button" data-btn="altitude-input">Send</button>
+                    <div class="click-buttons" id="submit">Submit</div>
 
                     <div class="control-button jarvis-button" data-text="Severe weather detected. Immediate landing required. " id="emergency"> Jarvis:Emergency detected</div>
                     <div class="control-button jarvis-button" data-text="Bad Weather" id="emergency"> Jarvis: Bad Weather</div>
@@ -492,6 +493,7 @@
                     <label for="pressure-input">Pressure val:</label>
                     <input type="text" id="pressure-input">
                     <button class="text-button" data-btn="pressure-input">Send</button>
+                    <div class="click-buttons" id="submit">Submit</div>
 
                     <div class="control-button radio-button" data-text="Ground Control, go ahead MedEvac" id="Ground">Ground Control, go ahead MedEvac</div>
                     <div class="control-button radio-button" data-text="Copy, MedEvac. Maintain current flight path. Monitor patient and cabin conditions. Report any changes immediately. Out." id="grdLowPress">GRD:Low pressure response</div>
@@ -625,7 +627,7 @@
                     var key = button.id; // Variable name
                     socket.emit("change_variable", { variable: key, value: selectedValue }); // Emit update to server
                     if(selectedValue==5){                         
-                        updateText = key + "has been changed to Hilton Heliport. Please Confirm" 
+                        updateText = key + "diverting to Hilton Heliport. Please Confirm" 
                     }
                     else if (selectedValue == 19)
                     {
@@ -702,9 +704,14 @@
                 console.log(InputVal)
                 socket.emit("control_command", { action, whichbtn, InputVal });
                 console.log(`Sent command: ${action} on ${whichbtn} with value: ${InputVal}`);
-
+                speakText="setting"+ inputId +"to"+ InputVal
+                sendToServer(speakText,"normal")
                 // Reset the input field
                 inputField.value = "";
+                setTimeout(()=>{
+                    socket.emit("control_command", { action:"click", whichbtn: `submit-button`, value:null });
+                    console.log(`Sent command: submit`);
+                }, 5000);  // submitting after 5 seconds
             });
         });
 

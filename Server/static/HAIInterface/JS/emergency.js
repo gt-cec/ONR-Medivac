@@ -751,6 +751,7 @@ function validateLowInput(expectedValue) {
   const input = document.getElementById('valueInput');
   const feedback = document.getElementById('lowFeedback');
   const prompt = document.getElementById('emergencyPrompt');
+  const blurOverlay = document.getElementById('blurOverlay');
   const siren = document.getElementById('emergencySiren');
 
   if (parseInt(input.value) === expectedValue) {
@@ -775,7 +776,7 @@ function validateLowInput(expectedValue) {
     logAction({ "page": "Inflight", "action": `user entered correct value: ${expectedValue}` });
 
     prompt.classList.add('fade-out');
-    setTimeout(() => prompt.classList.add('hidden'), 500);
+    setTimeout(() => {prompt.classList.add('hidden'), blurOverlay.classList.add('hidden')}, 500);
     setTimeout(() => document.body.removeChild(infoBox), 8000);
   } else {
     feedback.textContent = 'Incorrect value. Report the correct reading.';
@@ -789,17 +790,23 @@ function validateLowInput(expectedValue) {
 
 function acknowledgeEmergency() {
   const prompt = document.getElementById('emergencyPrompt');
-  logAction({ "page": "emergency", "action": ` (High)Emergency acknowledged` });
+  const blurOverlay = document.getElementById('blurOverlay');
+  logAction({ "page": "emergency", "action": ` (High) Emergency acknowledged` });
   // if (!prompt.classList.contains('high')) return;
   prompt.classList.add('fade-out');
   setTimeout(() => {
       prompt.classList.add('hidden');
+      blurOverlay.classList.add('hidden');
+    
   }, 500);
   const siren = document.getElementById('emergencySiren');
   siren.classList.add('visible');
   siren.style.right = '60px';
   siren.style.top = '25%';
   siren.style.position = 'fixed';
+  window.location.href = '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 //directing to emergency page
+  fetch("/var?map-page=1")  //open map
+
   text =" I recommend landing at the Nearest helipad which is a commercial Helipad Hilton. Please confirm Helipa or select an alternative emergency landing site now."
   speakJarvis(text, "high")
 
@@ -808,13 +815,14 @@ function acknowledgeEmergency() {
 
 function showEmergencyPrompt(level, title, message) {
   const prompt = document.getElementById('emergencyPrompt');
+  const blurOverlay = document.getElementById('blurOverlay');
   const header = document.getElementById('emergencyHeader');
   const embody = document.getElementById('emergencyBody');
   const siren = document.getElementById('emergencySiren');
   const emokbutton= document.getElementById('emok-button');
   prompt.classList.remove('hidden', 'low', 'medium', 'high', 'fade-out');
   emokbutton.classList.add('hidden')
-
+  blurOverlay.classList.remove('hidden')
   header.innerHTML = `${level === 'low' ? '⚠️' : '🚨'} ${title}`;
   console.log("showing emergency")
   logAction({ "page": "Inflight", "action": `showing emergency: ${level} ${title} ${message}` });
@@ -862,6 +870,7 @@ function showEmergencyPrompt(level, title, message) {
           prompt.classList.add('fade-out');
           setTimeout(() => {
             prompt.classList.add('hidden');
+            blurOverlay.classList.add('hidden');
           }, 500);
           logAction({ "page": "Inflight", "action": "Continue button on Fuel tank emergency pressed" });
           text = "Acknowledge. Continuing on current flight path to Emory University Hospital"
@@ -869,6 +878,7 @@ function showEmergencyPrompt(level, title, message) {
         } 
         document.getElementById("elFuel-Button").onclick = () => {
           prompt.classList.add('hidden')
+          blurOverlay.classList.add('hidden');
           text ="Acknowledged. Pulling up map for emergency landing "
           speakJarvis(text, "medium") 
           logAction({ "page": "Inflight", "action": "Change destination button on Fuel tank emergency pressed" });

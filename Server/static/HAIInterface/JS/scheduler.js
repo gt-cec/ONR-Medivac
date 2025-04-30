@@ -45,7 +45,7 @@ let taskScheduled = false;
 let nextTask = Math.random() < 0.5 ? "radio" : "vitals"; // Random first task
 
 function scheduleNextTask(first = false) {
-    if (taskScheduled || currentPromptCount >= totalPrompts) return;
+    if (taskScheduled || currentPromptCount >= totalPrompts || stopPromptCycle) return;
 
     const minDelay = first ? 0 : 20000;
     const maxDelay = first ? 10000 : 90000;
@@ -100,12 +100,17 @@ function scheduleNextTask(first = false) {
 }
 
 function startPromptScheduler(stopCycle = false) {
-    if (isPromptRunning || stopCycle) return;
-    isPromptRunning = true;
-    // Start the first prompt with a 0-10s delay
-    scheduleNextTask(true); 
-}
+    if (stopCycle) {
+        stopPromptCycle = true;
+        console.log("Prompt cycle marked to stop");
+        return;
+    }
 
+    if (isPromptRunning) return;
+    isPromptRunning = true;
+    stopPromptCycle = false;
+    scheduleNextTask(true);
+}
 
 
 let vitalsShown = false;
@@ -125,7 +130,14 @@ function showVitalsPrompt() {
     console.log('vitals logging prompt')
     logAction({ "page": "vitals prompt", "action": `log vitals prompted` });
     document.getElementById('vitals').style.display = "flex"
-    bell.play()
+    document.addEventListener("DOMContentLoaded", function () {
+        var bell = document.getElementById("bell");
+        if (bell) {
+            bell.play();
+        } else {
+            console.error("Audio element with ID 'bell' not found.");
+        }
+    });
     //setInterval(bell.play(), 300);  //delayimg sound
     bell.volume = 0.2;
     // Auto-remove after 15s
