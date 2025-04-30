@@ -150,13 +150,15 @@ function showVitalsPrompt() {
 
 // Ground control 
 function speakGround(message) {
-    const voices = window.speechSynthesis.getVoices();
+  /*   const voices = window.speechSynthesis.getVoices();
     const utterance = new SpeechSynthesisUtterance(message);
     utterance.voice = voices[2];  //Firefox- female
     utterance.rate = 1.2;
     utterance.pitch = 1;
     utterance.volume = 0.8;  //between 0 and 1(highest)
-    window.speechSynthesis.speak(utterance);
+    window.speechSynthesis.speak(utterance); */
+    const audio = new Audio('../../static/VitalsTask/radioUpdate.m4a');
+    audio.play();
     console.log('Ground control speaking ');
     logAction({ "page": "Ground speaking", "action": message });
 }
