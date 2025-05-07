@@ -18,198 +18,14 @@
     <script src="/static/HAIInterface/JS/log.js"></script>
     <script src="/static/HAIInterface/JS/emergency.js"></script>
     <script src="/static/HAIInterface/JS/assistant.js"></script>
-  
-    
-
 
     <!-- Socket IO -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js" integrity="sha512-HTENHrkQ/P0NGDFd5nk6ibVtCkcM7jhr2c7GyvXp5O+4X6O5cQO9AhqFzM+MdeBivsX7Hoys2J7pp2wdgMpCvw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
 
     {% block imports %}
     {% endblock %}
     
     <style>
-
-    /* Overlay for background blur */
-    .blur-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        backdrop-filter: blur(6px);
-        background-color: rgba(0, 0, 0, 0.2); /* subtle dark tint */
-        z-index: 9998; 
-    }
-
-    /* Emergency prompt styling */
-.emergency-prompt {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(255, 0, 0, 0.5); /* increased opacity */
-    backdrop-filter: blur(10px);
-    border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(255, 0, 0, 0.4);
-    padding: 30px;
-    z-index: 9999;
-    color: white;
-    text-align: center;
-    transition: all 0.3s ease;
-}
-
-/* Low severity */
-.emergency-prompt.low {
-    background: rgba(255, 165, 0, 0.6);
-    box-shadow: 0 0 20px rgba(255, 165, 0, 0.6);
-    width: 500px;
-}
-
-/* Medium severity */
-.emergency-prompt.medium {
-    background: rgba(255, 87, 34, 0.6);
-    box-shadow: 0 0 25px rgba(255, 87, 34, 0.5);
-    width: 600px;
-}
-
-/* High severity */
-.emergency-prompt.high {
-    background: rgba(255, 0, 0, 0.5);
-    box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
-    width: 400px;
-}
-  .emergency-header {
-    font-size: 1.9em;
-    font-weight: bolder;
-    margin-bottom: 20px;
-  }
-  .flashing {
-    animation: flash 1s infinite;
-  }
-
-  @keyframes flash {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.2; }
-  }
-  .emergency-body {
-    font-size: 1.0em;
-    margin-bottom: 25px;
-  }
-  .acknowledge-button {
-    background: crimson;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    font-size: 1em;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  .acknowledge-button:hover {
-    background: darkred;
-  }
-  .emergency-siren {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    z-index: 9998;
-    animation: pulse-siren 1.2s infinite;
-  }
-
-  @keyframes pulse-siren {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-  }
-
-  .hidden {
-    display: none;
-  }
-  .visible {
-    display: block;
-  }
-  .fade-out {
-    opacity: 0;
-    transition: opacity 0.5s ease;
-  }
-  @keyframes pulse {
-    0% { transform: translate(-50%, -50%) scale(1); }
-    50% { transform: translate(-50%, -50%) scale(1.05); }
-    100% { transform: translate(-50%, -50%) scale(1); }
-  }
-
-        .ai-button {
-            position: relative;
-            border: none;
-            background: none;
-            cursor: pointer;
-            transition: transform 0.3s;
-            z-index: 9999;
-            margin-top: 3vh;
-            padding: 2vh 2vw 2vh 2vw;
-        }
-
-        .ai-button img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-        }
-
-        .ai-button:active {
-            transform: scale(0.5);
-        }
-
-        /* Radio Panel */
-        .radio-panel {
-            background: #0f3460;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-            width: 300px;
-        }
-
-        .radio-panel h2 {
-            text-align: center;
-        }
-
-        .radio-button {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border: none;
-            border-radius: 8px;
-            background: #e94560;
-            color: white;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .radio-button:hover {
-            background: #d13450;
-        }
-
-        .toggle-btn {
-            background: #e94560;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: background 0.3s;
-            width: 100%;
-        }
-
-        .toggle-btn:hover {
-            background: #d13450;
-        }
-
         {% block styling %}
         {% endblock %}        
     </style>
@@ -540,21 +356,6 @@
             <p><strong>Medic Options:</strong></p>
             <button class="ok-button" id="okFuel-Button" style="display: none;">OK</button>&ensp;&ensp;
             <button class="ok-button" id="elFuel-Button">Change Destination</button>
-           
-              <!-- <button class="alert-button" id="fuelInfoButton" onclick="showFuelInfo()">Click for more info</button>
-              <div id="fuelAlertExplanation" style="display: none;">
-                <ul style="list-style-type:circle; padding: 15px; text-align: justify; ">
-                    <li><b>Fuel Gauge Alert:</b> My primary fuel gauge is indicating an empty tank. </li>
-                    <li><b>Gauge Reliability:</b> There's a high probability this reading is inaccurate.</li>
-                    <li><b>Confidence Level: </b>I am 95% certain we have sufficient fuel on board.</li>
-                    <li><b>Safety Assessment:</b> Based on my calculations, it is safe to continue our flight.</li>
-                    <li><b>Backup Systems:</b> A reserve fuel tank is available if needed.</li>
-                    <li><b>Current Plan:</b> I intend to maintain our planned route and destination unless requested otherwise.</li> 
-                    <button class="ok-button" id="okButtonFuel" style="display: none;">Continue as planned</button>
-                    <li style="max-width:max-content"><b>Alternate Options:</b></li>  
-                 </ul>
-                    <button class="ok-button" id="elButtonFuel" >Change Destination</button>&ensp;&ensp;
-                    <button class="ok-button" id="groundButtonFuel" >Contact Control</button>  -->
                </div>
             </div>
          </div>        
@@ -606,14 +407,6 @@
             </div>
         </div>
 
-
-        <!-- <div class="alert critical">
-            <p>🚨 <strong>ENGINE FAILURE!</strong> Emergency landing required.</p>
-            <p>Landing Site Options:</p>
-            <button onclick="landNow()">🛬 Land (15 min, limited care)</button>
-            <button onclick="continueFlight()">✈️ Continue (25 min, full care)</button>
-        </div> -->
-
         <!-- Weather Emergency    -->  
        <div class="alertbody">
         <div class="alertoverlay" id="weatheralertOverlay">
@@ -646,13 +439,10 @@
            <source src="../static/HAIInterface/img/audio.mp3" type="audio/mpeg">
         </audio> 
        </div>
-        
-            
     </body>
 
     <script>
         const socket = io.connect("http://localhost:8080");
-
         var userId = "none"
         var studyStage = -1
         var decisionState = 0
@@ -677,7 +467,6 @@
         var RDPage=0
         var mapPage=0
         var radioPage=0
-        
 
         // this var isn't updated by the server, but can be changed on various pages
         let emergencyState = 0
@@ -696,43 +485,31 @@
         const radioInterval = 105000; // Total cycle time: 1 min + 45 sec = 105 sec
         let last_radio_update = 0;
 
-        
-
         // initialize the map
 	    var planeMarker, map, mapSelection
         var setDestination = false;
 	    initMap()
-
         initEmergency()
         TimeToDestination() 
         initAssistant()
-        //schedulePrompt()
-
         
         var helipads = JSON.parse('{{ helipads | tojson | safe }}')
         let helipadsLoaded = false  // flag automatically set to true (so helipads only load once, after we know where the origin and current destination are)
        
-        //updateFrequencyDisplay();
         document.getElementById("map").addEventListener('mapClicked', function(event) {
             console.log('mapClicked event heard');
             showMap();
         });
 
-
         // Toggle AI Assistant Activation
         const aiToggle = document.getElementById("aiToggle");
-            const aiImage = document.getElementById("aiImage");
-            const glowRing = document.getElementById("glowRing");
-            const glowRingDelay = document.getElementById("glowRingDelay");
-            const aiButton = document.querySelector(".ai-button"); 
-
-            const aiInactiveImage = "../static/HAIInterface/img/robotic_bgrm.png";
-            const aiActiveGif = "../static/HAIInterface/img/robotic_bgrm.gif";
-
-            //const toggleSound = new Audio("../static/HAIInterface/sound/activate.mp3");
-
-
-            let aiActive = false;
+        const aiImage = document.getElementById("aiImage");
+        const glowRing = document.getElementById("glowRing");
+        const glowRingDelay = document.getElementById("glowRingDelay");
+        const aiButton = document.querySelector(".ai-button"); 
+        const aiInactiveImage = "../static/HAIInterface/img/robotic_bgrm.png";
+        const aiActiveGif = "../static/HAIInterface/img/robotic_bgrm.gif";
+        let aiActive = false;
 
         aiToggle.addEventListener("click", function () {
             aiActive = !aiActive;
@@ -740,60 +517,15 @@
 
             // Toggle pulsating effect
             if (aiActive) {
-                    glowRing.classList.add("glow-ring");
-                    //glowRing.classList.add("delay");
-                    aiButton.classList.add("active");
-                    updateAssistantStatus('Listening...');
-                    //toggleSound.currentTime = 0;  // reset in case it's still playing
-                    //toggleSound.play();
-                    //document.body.classList.add('assistant-dull-background', 'active');
-                } else {
-                    aiButton.classList.remove("active");
-                    //glowRing.classList.remove("glow-ring");
-                    glowRing.classList.add("delay");
-                    updateAssistantStatus('');
-                    //document.body.classList.remove('assistant-dull-background', 'active');
-
-                }
-            });
-
-   
-
-        /* function acceptChange(){
-            console.log('change accepted-changing altitude')
-                const altitudeTimeOverlay = document.getElementById('altitudeTimeOverlay');
-                altitudeTimeOverlay.style.opacity = '0';
-                altitudeTimeOverlay.addEventListener('transitionend', () => {
-                    altitudeTimeOverlay.style.visibility = 'hidden';
-                    document.body.classList.remove('dull-background');
-                }, { once: true });
-                vitalsState = 0
-                console.log(vitalsState);
-                //updating the server
-                await fetch("/var?vitals-state=" + vitalsState)
-               logAction({ "page": "Inflight", "action": "Change altitude button on vitals emergency pressed" });
-                window.location.href = '/hai-interface/ca-page=' + 1 ;
-        }
-
-
-        function ignoreChange(){
-                console.log('ignore change-not change altitude')
-                const altitudeTimeOverlay = document.getElementById('altitudeTimeOverlay');
-                altitudeTimeOverlay.style.opacity = '0';
-                altitudeTimeOverlay.addEventListener('transitionend', () => {
-                    altitudeTimeOverlay.style.visibility = 'hidden';
-                    document.body.classList.remove('dull-background');
-                }, { once: true });
-                vitalsState = 0
-                console.log(vitalsState);
-                //updating the server
-                await fetch("/var?vitals-state=" + vitalsState)  
-               logAction({ "page": "Inflight", "action": "Ignore change button on vitals emergency pressed" });
+                glowRing.classList.add("glow-ring");
+                aiButton.classList.add("active");
+                updateAssistantStatus('Listening...');
+            } else {
+                aiButton.classList.remove("active");
+                glowRing.classList.add("delay");
+                updateAssistantStatus('');
             }
- */
-
-            
-    
+        });
 
         //Listen to the socket for any changes from the controller:
         socket.on("update_callsign", (data) => {   // Callsign updates from the control panel
@@ -804,7 +536,7 @@
         
         socket.on("update_channel", (data) => {    // Channel updates from the control panel
             console.log("Channel update received:", data.channel);
-           logAction({ "page": "radio-panel", "action": "channel changed to " + data.channel });
+            logAction({ "page": "radio-panel", "action": "channel changed to " + data.channel });
 
             let radioOptions = document.querySelectorAll("input[name='radio-select']");
             radioOptions.forEach(radio => {
@@ -837,29 +569,25 @@
         });
 
         function speakJarvis(message, stress_level){
-                // Stop any ongoing speech before speaking new message
-                //window.speechSynthesis.cancel();
-
-                const voices = window.speechSynthesis.getVoices();
-                const utterance = new SpeechSynthesisUtterance(message);
-                utterance.voice = voices[0];  //for firefox
-                utterance.rate = 1.0; //all these variables as per firefox
-                if (stress_level == "normal") {
-                    utterance.pitch = 1.0;
-                    utterance.volume = 0.7;
+            const voices = window.speechSynthesis.getVoices();
+            const utterance = new SpeechSynthesisUtterance(message);
+            utterance.voice = voices[0];  //for firefox
+            utterance.rate = 1.0; //all these variables as per firefox
+            if (stress_level == "normal") {
+                utterance.pitch = 1.0;
+                utterance.volume = 0.7;
+            }
+            else if (stress_level == "mild") {
+                utterance.pitch = 1.5;
+                utterance.volume = 0.7;
                 }
-                else if (stress_level == "mild") {
-                    utterance.pitch = 1.5;
-                    utterance.volume = 0.7;
-                 }
-                else {
-                    utterance.rate = 1.2;
-                    utterance.pitch = 2.5;
-                    utterance.volume = 1.0;
-                  }
-                window.speechSynthesis.speak(utterance);
-                logAction({ "page": "Jarvis speaking", "action": `Message: ${message} Stress level: ${stress_level}` });
-
+            else {
+                utterance.rate = 1.2;
+                utterance.pitch = 2.5;
+                utterance.volume = 1.0;
+                }
+            window.speechSynthesis.speak(utterance);
+            logAction({"page": "Jarvis speaking", "action": `Message: ${message} Stress level: ${stress_level}` });
         }
         
         // Ground control 
@@ -873,10 +601,7 @@
             window.speechSynthesis.speak(utterance);
             console.log('Ground control speaking ');
             logAction({ "page": "Ground speaking", "action": message });
-            //console.log(utterance.voice)
         }
-
-
      
         socket.on("execute_command", (data) => {
             //const {action, elementId, value} = data;
@@ -884,15 +609,11 @@
             console.log(`Executing: ${data.action} on ${data.whichbtn} with value: ${data.InputVal}`);
             logAction({"action": `Controller Executing: ${data.action} on ${data.whichbtn} with value: ${data.InputVal}`});
             const action=data.action
-
-
             const element = document.getElementById(data.whichbtn) || document.querySelector(`[name='${data.whichbtn}']`);
-
             if (!element) {
                 console.warn(`Element ${data.whichbtn} not found.`);
                 return;
             }
-
             switch (action) {
                 case "click":
                     element.click();
@@ -907,19 +628,10 @@
                         element.value = data.InputVal;
                     }
                     break;
-                
             }
         });
-
-       // Examples of triggering emergencies
-        //showEmergencyPrompt('low', 'Low Pressure Warning', '<div> Report the reading from the secondary hydraulic pressure gauge</div>');
-        //showEmergencyPrompt('medium', 'Fuel Tank Empty', 'Empty Fuel tank warning detected. Pilot attention required.');
-         //showEmergencyPrompt('high', 'Engine Fire', `<div>Need to <strong>Land immediately</strong></div><br><div>Pick an emergency landing site</div>`);
-        //showEmergencyPrompt('high', 'Weather Emergency', '<strong>Severe turbulence detected.</strong><br>Prepare for emergency descent.');
 
         {% block script %}
         {% endblock %}
     </script>
-
 </html>     
-

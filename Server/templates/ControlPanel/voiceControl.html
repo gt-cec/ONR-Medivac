@@ -118,11 +118,6 @@
             });
         }
 
-       /*  document.getElementById("Empage").onclick = () => { fetch( '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1) }
-        document.getElementById("CApage").onclick = () => { window.location.href = '/hai-interface/change-destination?inflight=' + 1 }
-        document.getElementById("CApage").onclick = () => { window.location.href = '/hai-interface/change-altitude?Changed_altitude='+ 10000 }
-        document.getElementById('mappage').href = '/hai-interface/map' */
-
         document.getElementById("sendtxt").onclick = async () => {
             sendText=document.getElementById("saytext").value
             await fetch("/speak", {
