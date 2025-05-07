@@ -4,7 +4,6 @@ import socket
 import struct
 import time
 import re
-import webbrowser
 from flask_socketio import SocketIO
 import json
 from vars.helipads import data
@@ -13,7 +12,7 @@ from vars.initialization import *
 from vars.routes import keywords_routes
 from vars.simconnect import position
 from vars.threads import *
-from utility import *
+import utility
 
 app = Flask(__name__)
 socketio = SocketIO(app, async_mode="threading", logger=False, cors_allowed_origins="*")  # Ensure Flask remains non-blocking
@@ -193,10 +192,8 @@ def get_text():
     if request.is_json:
         print("request received on speak: ", request.get_json())
         received_text_request= request.get_json()
-        
         if received_text_request["type"] == "say_text":
            received_text = str(received_text_request["text"])
-   
     response = {
         "received_text": received_text
     }
@@ -316,52 +313,52 @@ def voice_control():
 def get_var():
     global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, emergency_state, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude, engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page, rd_page, ca_page, cd_page, map_page, radio_page, transmit, receive, takeoff, approach_clear, prompt_cycle_started
     if request.args.get("user-id"):
-        study_participant_id = clean(request.args.get("user-id"))
+        study_participant_id = utility.clean(request.args.get("user-id"))
     if request.args.get("study-stage"):
-        study_stage = clean(request.args.get("study-stage"))
+        study_stage = utility.clean(request.args.get("study-stage"))
     if request.args.get("sequence"):
-        sequence = clean(request.args.get("sequence"))
+        sequence = utility.clean(request.args.get("sequence"))
     if request.args.get("destination-index"):
-        destination_index = clean(request.args.get("destination-index"))
+        destination_index = utility.clean(request.args.get("destination-index"))
     if request.args.get("departure-index"):
-        departure_index = clean(request.args.get("departure-index"))
+        departure_index = utility.clean(request.args.get("departure-index"))
     if request.args.get("decision-state"):
-        decision_state = clean(request.args.get(
+        decision_state = utility.clean(request.args.get(
             "decision-state"))  # 0=normal, 1=land
     if request.args.get("vitals-state"):
-        vitals_state = clean(request.args.get(
+        vitals_state = utility.clean(request.args.get(
             "vitals-state"))  # 0=normal, 1=emergency
     if request.args.get("airspace-state"):
-        airspace_emergency_state = clean(request.args.get(
+        airspace_emergency_state = utility.clean(request.args.get(
             "airspace-state"))  # 0=normal, 1=emergency    
     if request.args.get("emergency-state"):
-        emergency_state = clean(request.args.get(
+        emergency_state = utility.clean(request.args.get(
             "emergency-state"))  # 0=no emergency, 1=atleast 1 emergency happening 
     if request.args.get("satisfied"):
-       satisfied = clean(request.args.get(
+       satisfied = utility.clean(request.args.get(
             "satisfied"))         
     if request.args.get("warning-satisfied"):
-       warning_satisfied = clean(request.args.get(
+       warning_satisfied = utility.clean(request.args.get(
             "warning-satisfied"))  
     if request.args.get("weather-satisfied"):
-       weather_satisfied = clean(request.args.get(
+       weather_satisfied = utility.clean(request.args.get(
             "weather-satisfied"))  
     if request.args.get("altitude-satisfied"):
-       altitude_satisfied = clean(request.args.get(
+       altitude_satisfied = utility.clean(request.args.get(
             "altitude-satisfied"))  
     if request.args.get("dest-changed"):
-       dest_changed = clean(request.args.get(
+       dest_changed = utility.clean(request.args.get(
             "dest-changed"))    
     if request.args.get("empty-tank"):  # fuel tank empty emergency
-        empty_tank = clean(request.args.get("empty-tank"))
+        empty_tank = utility.clean(request.args.get("empty-tank"))
     if request.args.get("weather-emergency"):  # weather emergencyy
-        weather_emergency = clean(request.args.get("weather-emergency"))
+        weather_emergency = utility.clean(request.args.get("weather-emergency"))
     if request.args.get("altitude-alert"):  
-        altitude_alert= clean(request.args.get("altitude-alert"))
+        altitude_alert= utility.clean(request.args.get("altitude-alert"))
     if request.args.get("pressure-warning"):  # pressure warninhg
-        pressure_warning = clean(request.args.get("pressure-warning"))
+        pressure_warning = utility.clean(request.args.get("pressure-warning"))
     if request.args.get("engine-failure"):  # engine failure emergency
-        engine_failure= clean(request.args.get("engine-failure"))
+        engine_failure= utility.clean(request.args.get("engine-failure"))
     if request.args.get("flight-start-time"):
         flight_start_time = request.args.get("flight-start-time")
     if request.args.get("reset-user-display"):
@@ -375,29 +372,29 @@ def get_var():
     if request.args.get("post-trial"):
         post_trial = request.args.get("post-trial")
     if request.args.get("change-altitude"):  #change altitude
-        change_altitude = clean(request.args.get("change-altitude"))
+        change_altitude = utility.clean(request.args.get("change-altitude"))
     if request.args.get("emergency-page"):
-        emergency_page =  clean(request.args.get("emergency-page"))
+        emergency_page =  utility.clean(request.args.get("emergency-page"))
     if request.args.get("cd-page"):
-        cd_page =  clean(request.args.get("cd-page"))
+        cd_page =  utility.clean(request.args.get("cd-page"))
     if request.args.get("ca-page"):
-        ca_page =  clean(request.args.get("ca-page"))
+        ca_page =  utility.clean(request.args.get("ca-page"))
     if request.args.get("rd-page"):
-        rd_page =  clean(request.args.get("rd-page"))
+        rd_page =  utility.clean(request.args.get("rd-page"))
     if request.args.get("map-page"):
-        map_page =  clean(request.args.get("map-page"))
+        map_page =  utility.clean(request.args.get("map-page"))
     if request.args.get("radio-page"):
-        radio_page =  clean(request.args.get("radio-page"))
+        radio_page =  utility.clean(request.args.get("radio-page"))
     if request.args.get("receive"):  # receive from radiopanel-- for emergency guidance
-        receive = clean(request.args.get("receive")) #1=receive pressed , 0=otherwise 
+        receive = utility.clean(request.args.get("receive")) #1=receive pressed , 0=otherwise 
     if request.args.get("transmit"):  # transmit from radiopanel-- for radio updates
-        transmit = clean(request.args.get("transmit")) #1=transmit pressed , 0=otherwise 
+        transmit = utility.clean(request.args.get("transmit")) #1=transmit pressed , 0=otherwise 
     if request.args.get("takeoff"):  # takeoff
-        takeoff = clean(request.args.get("takeoff")) #1=tafeoff , 0=otherwise
+        takeoff = utility.clean(request.args.get("takeoff")) #1=tafeoff , 0=otherwise
     if request.args.get("approach-clear"):  
-        approach_clear = clean(request.args.get("approach-clear")) #1=helipad is clear  , 0=otherwise
+        approach_clear = utility.clean(request.args.get("approach-clear")) #1=helipad is clear  , 0=otherwise
     if request.args.get("prompt-cycle-started"):  
-        prompt_cycle_started = clean(request.args.get("prompt-cycle-started")) 
+        prompt_cycle_started = utility.clean(request.args.get("prompt-cycle-started")) 
 
     if(airspace_emergency_state==1 or vitals_state==1 or engine_failure==1 or pressure_warning==1 or empty_tank==1 or weather_emergency==1 or altitude_alert==1):
         emergency_state=1
