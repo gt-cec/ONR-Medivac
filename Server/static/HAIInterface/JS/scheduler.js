@@ -130,16 +130,21 @@ function showVitalsPrompt() {
     console.log('vitals logging prompt')
     logAction({ "page": "vitals prompt", "action": `log vitals prompted` });
     document.getElementById('vitals').style.display = "flex"
+    const bell = new Audio("../../static/HAIInterface/img/bell.mp3")
+    bell.play();
+    bell.volume = 0.2;
     document.addEventListener("DOMContentLoaded", function () {
-        var bell = document.getElementById("bell");
+        //var bell = document.getElementById("bell");
+        const bell = new Audio("../../static/HAIInterface/img/bell.mp3")
         if (bell) {
             bell.play();
+            bell.volume = 0.2;
         } else {
             console.error("Audio element with ID 'bell' not found.");
         }
     });
     //setInterval(bell.play(), 300);  //delayimg sound
-    bell.volume = 0.2;
+   
     // Auto-remove after 15s
     setTimeout(() => {
         document.getElementById('vitals').style.display = "none"
