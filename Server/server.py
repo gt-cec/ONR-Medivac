@@ -1,7 +1,5 @@
 from flask import Flask, render_template, request, jsonify, make_response
 import os
-import requests
-import zipfile
 import logging
 import datetime
 import threading
@@ -13,14 +11,9 @@ import re
 import webbrowser
 from flask_socketio import SocketIO
 import threading
-import websockets
 import json
-import multiprocessing
 import sounddevice as sd
-import soundfile as sf
 import numpy as np
-#from tts_manager import TTSManager
-import torch
 from pathlib import Path
 
 
@@ -31,23 +24,8 @@ socketio = SocketIO(app, async_mode="threading", logger=False, cors_allowed_orig
 app.logger.setLevel(logging.ERROR)
 logging.getLogger('socketio').setLevel(logging.ERROR)
 
-
 # Initialize TTS
-#tts = TTS("tts_models/multilingual/multi-dataset/your_tts", progress_bar=False).to("cpu")
 os.environ['TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD'] = '1'
-#tts = TTS("tts_models/en/ljspeech/tacotron2-DDC", progress_bar=False).to("cpu") 
-#tts = TTS("tts_models/en/ljspeech/speedy-speech", progress_bar=False).to("cpu") 
-#tts = TTS("tts_models/en/jenny/jenny", progress_bar=False).to("cpu") 
-#tts = TTS("tts_models/en/vctk/vits", progress_bar=False).to("cpu")
-#tts = TTS("tts_models/en/vctk/vits", progress_bar=False).to("cpu")  
-#tts= TTS("tts_models/en/ljspeech/glow-tts","vocoder_models/en/ljspeech/multiband-melgan" , progress_bar=False).to("cpu")  
-#tts_manager = TTSManager("tts_models/en/ljspeech/speedy-speech")  
-#tts_manager = TTSManager()
-
-
-
-
-
 
 # system state variables
 study_participant_id = 0
@@ -100,9 +78,6 @@ last_time_set=None
 
 #lock to protect the global variable
 lock = threading.Lock()
-
-# start Jarvis
-# Jarvis.start_jarvis()
 
 # create instances of event for voice assistant
 jarvis_event = threading.Event()
@@ -183,8 +158,6 @@ position = {
     "compass": 0,
     "altitude": 0.0
 }
-
-
 
 # Creating simconnection
 try:
@@ -293,19 +266,6 @@ data = {
         "latitude": "33.9484611",
         "longitude": "-83.4070611",
     },
-    # "1": {
-    #     "name": "Grady Memorial Hospital",
-    #     "id": "1GE8",
-    #     "location": "80 JESSE HILL JR DR. ATLANTA, GA 30303",
-    #     "hasHospital": True,
-    #     "nearest": False,
-    #     "nominal": False,
-    #     "nominal_departure": False,
-    #     "image1": "../static/HAIInterface/img/Mary1.png",
-    #     "image2": "../static/HAIInterface/img/Ruffwood.png",
-    #     "latitude": "33.7525500",
-    #     "longitude": "-84.3820778",
-    # }, 
     "2": {
         "name": "Ruffwood Heliport",
         "id": "73GA",
@@ -628,7 +588,6 @@ def matlab_destination_update():
 
 # Keywords and corresponding routes
 keywords_routes = {
-    #"help": "http://127.0.0.1:8080/hai-interface/help",
     "altitude": "http://127.0.0.1:8080/hai-interface/change-altitude",
     "height": "http://127.0.0.1:8080/hai-interface/change-altitude",
     "destination": "http://127.0.0.1:8080/hai-interface/change-destination",
@@ -709,7 +668,6 @@ def set_event():
         print("message: Event", event_name ,action)
     else:
         print("error: Invalid event name")
-
     return ""
 
 @app.route('/state', methods=['POST'])
@@ -841,9 +799,7 @@ def current_destination():
 # logging route
 @app.route("/log", methods=["POST"])
 def log():
-    
     data = request.get_json()
-
     page = data.get("page")
     action = data.get("action")
     timestamp = data.get("timestamp")
@@ -866,13 +822,7 @@ def log():
     # Write to log file (append)
     with log_file.open("a+") as f:
         f.write(log_string + "\n")
-
     return {"status": "success", "logged": log_string}, 200
-
-    """ log_string = f"{datetime.datetime.now().timestamp()},ID:{study_participant_id},STAGE:{study_stage},SEQUENCE:{sequence},DATA:{request.get_json()}"
-    with open(f"../Logs/{study_participant_id}_{study_stage}.log", "a+") as f:
-        f.write(log_string + "\n")
-    return "" """
 
 # reset server parameters
 @app.route("/reset", methods=["GET"])
@@ -1060,8 +1010,6 @@ def get_var():
     if( airspace_emergency_state==0 and vitals_state==0 and engine_failure==0 and pressure_warning==0 and empty_tank==0 and weather_emergency==0 and altitude_alert==0):
         emergency_state=0
         print('Emergency event cleared')
-    
-        
    
     return_dict = {"user-id": str(study_participant_id),
                    "sequence": sequence,
@@ -1111,7 +1059,6 @@ def get_var():
         position["latitude"] = lat
         position["longitude"] = long
         position["compass"] = compass
-        #position["altitude"] = alt
     except:
         logging.info("SimConnect Error in /var")
         try:
@@ -1120,12 +1067,9 @@ def get_var():
         except:
             pass
         pass
-
     return_dict["latitude"] = position["latitude"]
     return_dict["longitude"] = position["longitude"]
     return_dict["compass"] = position["compass"]
-    #return_dict["altitude"] = position["altitude"]
-
     return jsonify(return_dict)
 
 # Vitals Task
@@ -1198,109 +1142,20 @@ def start_event_loop(loop):
 
 # Start event loop in a background thread
 threading.Thread(target=start_event_loop, args=(loop,), daemon=True).start()
-""" 
-# Shared flag to stop playback
-stop_playback_flag = multiprocessing.Event()
 
-def process_tts(text, stress_level):
-    output_path = f"output_{text[:5]}.wav"
-    tts.tts_to_file(text=text, file_path=output_path)
-    return output_path
-
- #Plays audio and allow interruption using stop_flag.
-def play_audio(file_path, stop_flag):
-    data, samplerate = sf.read(file_path)  # Load audio file
-    print('playing')
-    sd.play(data,samplerate)
-
-     # Handle mono vs stereo audio
-    channels = 1 if len(data.shape) == 1 else data.shape[1]
-
-    #Callback function to stream audio and check for stop
-    def callback(outdata, frames, time, status):
-        if status:
-            print(status)
-        if stop_flag.is_set():  # Stop playback if flag is set
-            raise sd.CallbackStop
-        outdata[:] = data[:frames].reshape(-1, channels)  # Fill buffer (resphaping to allow mono and stereo both)
-
-    try:
-        with sd.OutputStream(samplerate=samplerate, channels=channels, callback=callback):
-            sd.sleep(int(len(data) / samplerate * 1000))  # Wait for playback to finish
-        print("Playback finished.")
-    except sd.CallbackStop:
-        print("Playback interrupted.")
-
-#Handle TTS request, generate audio, and plays it
-def handle_request(text, stress_level):
-    #output_path = process_tts(text, stress_level)  # Blocking TTS generation
-
-    # Start playback in a separate process
-    #play_process = multiprocessing.Process(target=play_audio, args=(output_path, stop_playback_flag))
-    play_process = multiprocessing.Process(target=generate_audio, args=(text,stress_level))
-    play_process.start()
-
-    #return output_path, play_process
-
-def stop_audio(play_process):
-    stop_playback_flag.set()  # Signal to stop playback
-    play_process.join()  # Ensure process stops
-    stop_playback_flag.clear()  # Reset flag for next playback
-
- #Handle text received from WebSocket and play TTS audio
-@socketio.on("send_text")
-def handle_send_text(data):
-    data = json.loads(data)
-    text = data.get("text", "")
-    stress_level = data.get("stress_level", "normal")
-
-    print(f"Received text: {text}")
-
-    # Process TTS & Start playback
-    play_process = multiprocessing.Process(target=generate_audio, args=(text,stress_level))
-    play_process.start()
-    #output_file, playback_process = handle_request(text, stress_level)
-
-    #return playback_process  # Return process handle in case you want to stop it later """
-
-
-""" def generate_audio(text, stress_level):
-    print(f"Speaking: {text}")
-    
-    if stress_level == "high":
-        params = {"speed": 1.7, "pitch": 1.2, "emotion": "angry"}  # Emergency
-    elif stress_level == "mild":
-        params = {"speed": 1.5, "pitch": 1.1, "emotion": "serious"}  # Warning
-    else:
-        params = {"speed": 1.2, "pitch": 1.0, "emotion": "neutral"}  # Normal
-    
-    audio_output = tts.tts(text, pitch=1.4)
-    audio_data = np.array(audio_output, dtype=np.float32)
-
-    sd.play(audio_data, samplerate=22050)  # Play at 22.05 kHz
-    while sd.get_stream().active:
-         asyncio.sleep(0.1)  # Check every 100ms """
-
-
-#Generate speech and play it asynchronously
+# Generate speech and play it asynchronously
 async def generate_audio(text):
-    
     audio_output = tts.tts(text)
     audio_data = np.array(audio_output, dtype=np.float32) 
-    # Load audio and play asynchronously
-    #data, samplerate = sf.read(audio_file, dtype="float32")
 
     # Play audio in a separate thread to avoid blocking
     def play_audio():
-        #sd.play(data, samplerate)
         sd.play(audio_data, samplerate=22050)  # Play at 22.05 kHz
         sd.wait()
 
     audio_thread = threading.Thread(target=play_audio, daemon=True)
     audio_thread.start()
 
-    # Cleanup temp file
-    #os.remove(audio_file)
 
 @socketio.on("send_text")
 def handle_send_text(data):
@@ -1319,17 +1174,6 @@ def handle_send_text(data):
 
     # Send text to JS speech synthesizer
     socketio.emit("speak_text", {"text": text, "stress_level":stress_level})
-
-    
-    # Add the clean text to the TTS manager
-    #tts_manager.add_text(text)
-        
-    """ future = asyncio.run_coroutine_threadsafe(generate_audio(text), loop)  # Run TTS in event loop
-    
-    try:
-        future.result()  # Ensure execution
-    except Exception as e:
-        print(f"Error in TTS execution: {e}") """
 
 @socketio.on("change_altitude")
 def handle_altitude(data):
@@ -1351,45 +1195,37 @@ def handle_destination(data):
     socketio.emit("update_destination", {"destination": destination})
 
 
-
 @socketio.on("change_variable")
 def change_variable(data):
     """Receive a variable name and its changed value, and emit the update to all clients based on the variable."""
     # variable name and value from the data received
     var_name = data["variable"]
     var_value = data["value"]
-    
     print(f"Received update: {var_name} = {var_value}")
-    
     #  Send update to ALL connected clients based on the variable
     if var_name == "altitude":
         print(f"Altitude updated to: {var_value}")
         socketio.emit("update_altitude", {"altitude": var_value})
-    
     elif var_name == "destination":
         print(f"Destination updated to: {var_value}")
         socketio.emit("update_destination", {"destination": var_value})
-    
     elif var_name == "callsign":
         print(f"Callsign updated to: {var_value}")
         socketio.emit("update_callsign", {"callsign": var_value})
-    
     elif var_name == "channel":
         print(f"Channel updated to: {var_value}")
         socketio.emit("update_channel", {"channel": var_value})
-    
     elif var_name == "transmit":
         print(f"Transmit updated to: {var_value}")
         socketio.emit("update_transmit", {"transmit": var_value})
-    
     else:
         print(f"Unknown variable: {var_name}")
+
 
 @socketio.on("control_command")
 def control_command(data):
     action=data['action']
     elementId=data['whichbtn']
-    
     print(data)
     #Forwards control commands from the controller panel to the user's screen
     print(f"Control Command: {data}")
@@ -1398,10 +1234,5 @@ def control_command(data):
     else:
         socketio.emit("execute_command", data)
    
-
-    
-
 if __name__ == "__main__":
-    """   Jarvis.start_jarvis()  # Start listening before running Flask app
-    socketio.run(app, host="0.0.0.0", port=8080) """
     socketio.run(app, host="0.0.0.0", port=8080, debug=False, log_output=False,allow_unsafe_werkzeug=True)

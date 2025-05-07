@@ -837,29 +837,25 @@
         });
 
         function speakJarvis(message, stress_level){
-                // Stop any ongoing speech before speaking new message
-                //window.speechSynthesis.cancel();
-
-                const voices = window.speechSynthesis.getVoices();
-                const utterance = new SpeechSynthesisUtterance(message);
-                utterance.voice = voices[0];  //for firefox
-                utterance.rate = 1.0; //all these variables as per firefox
-                if (stress_level == "normal") {
-                    utterance.pitch = 1.0;
-                    utterance.volume = 0.7;
+            const voices = window.speechSynthesis.getVoices();
+            const utterance = new SpeechSynthesisUtterance(message);
+            utterance.voice = voices[0];  //for firefox
+            utterance.rate = 1.0; //all these variables as per firefox
+            if (stress_level == "normal") {
+                utterance.pitch = 1.0;
+                utterance.volume = 0.7;
+            }
+            else if (stress_level == "mild") {
+                utterance.pitch = 1.5;
+                utterance.volume = 0.7;
                 }
-                else if (stress_level == "mild") {
-                    utterance.pitch = 1.5;
-                    utterance.volume = 0.7;
-                 }
-                else {
-                    utterance.rate = 1.2;
-                    utterance.pitch = 2.5;
-                    utterance.volume = 1.0;
-                  }
-                window.speechSynthesis.speak(utterance);
-                logAction({ "page": "Jarvis speaking", "action": `Message: ${message} Stress level: ${stress_level}` });
-
+            else {
+                utterance.rate = 1.2;
+                utterance.pitch = 2.5;
+                utterance.volume = 1.0;
+                }
+            window.speechSynthesis.speak(utterance);
+            logAction({"page": "Jarvis speaking", "action": `Message: ${message} Stress level: ${stress_level}` });
         }
         
         // Ground control 
