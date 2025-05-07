@@ -14,6 +14,11 @@ function initEmergency() {
             return
         }
 
+        // Jack: catch a destination index of None
+        if (helipads[destinationIndex] == undefined) {
+          console.log("Destination index has not been set yet.")
+        }
+
         time_diff = (new Date()).getTime() / 1000 - flightStartTime  //flightStartTime starts when countdown begins (countdown page) 
         console.log(time_diff)
 
@@ -48,7 +53,7 @@ function initEmergency() {
         lat1 = emergency_lat
 
         //Time to destination
-      console.log(destinationIndex)
+        console.log(destinationIndex)
         dest_lat = helipads[destinationIndex].latitude
         dest_long = helipads[destinationIndex].longitude
         lat_diff = (dest_lat - latitude) * Math.PI / 180  //radians
