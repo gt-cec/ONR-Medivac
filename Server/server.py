@@ -62,53 +62,6 @@ def matlab_destination_update():
         s.sendto(struct.pack('>f', approach_clear_signal), (MATLAB_IP, MATLAB_PORT_APPROACH_CLEAR))
 
 
-
-@app.route('/voice', methods=['POST'])
-def voice():
-    while True:
-        def recording_started():
-            print("Listening...")
-            # mark the event as  set
-            event.set()
-            if request.method == 'POST':
-                return jsonify({"type": "activate_assistant"}), 200 
-
-        def recording_finished():
-            print("Speech end detected... transcribing...")
-            # mark the event as not set
-            #event.clear()
-            # socketio.emit("disconnect")
-            # socketio.emit("type", {"type": "deactivate_assistant"})
-            if request.method == 'POST':
-                 return jsonify({"type": "deactivate_assistant"}), 200 
-
-        # WebSocket server address
-        WS_SERVER_ADDRESS = "ws://127.0.0.1:8080"
-         # Open subroutes based on detected keywords
-        def perform_action(user_text):
-            user_text=user_text.lower()
-            print("Looking")
-            for keyword, route in keywords_routes.items():
-                if keyword in user_text:
-                    # Open the route in the default browser
-                    webbrowser.open(route)
-                    break  # Exit loop after finding the first matching keyword
-            txt="Sorry, didn't find" + user_text
-            print(txt)
-            if request.method == 'POST':
-                 return jsonify({"type": "user_text", "text": txt}), 200  
-
-        with AudioToText(spinner=False, model="small.en", language="en", wake_words="jarvis", on_wakeword_detected=recording_started, on_recording_stop=recording_finished
-        , wake_word_timeout=7.0 ) as recorder:
-            print('Say "Jarvis" then speak.')
-            #print(recorder.text())
-            user_text=recorder.text().strip()
-            print(user_text)
-            if(user_text):
-                 #socketio.emit("response", {"response": user_text})
-                 perform_action(user_text)
-            print("Done. Now we should exit. Bye!")
-
 @app.route('/set_event', methods=['POST'])
 def set_event():
     print("request received in /set_event: ", request.get_json())
