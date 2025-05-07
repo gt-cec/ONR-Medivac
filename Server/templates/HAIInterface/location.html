@@ -55,10 +55,10 @@ log({"page": "location", "action": "opened page"});
     document.getElementById( (inflight ? 'cruise' : 'preflight') + '-sidebar').style.backgroundColor = "pink"
     console.log("7657656453654Here IN LOCATION");
 
-
     // get the location
     fetch("/var").then(resp => resp.json()).then(data => {
         targetIndex = urlParams.get("dest") == "-1" ? data["departure-index"] : urlParams.get("dest") == "-2" ? 3 : urlParams.get("dest")
+        console.log("!!!" + targetIndex + " " + helipads[targetIndex])
         document.getElementById("destination-box-indicator").setAttribute("src", "../static/HAIInterface/img/" + (helipads[targetIndex].hasHospital ? "hospital-icon.png" : "commercial-icon.png"))
         document.getElementById("destination-box-name").innerHTML = helipads[targetIndex].name
         document.getElementById("destination-box-address").innerHTML = helipads[targetIndex].location

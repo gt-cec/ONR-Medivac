@@ -20,6 +20,7 @@ socketio = SocketIO(app, async_mode="threading", logger=False, cors_allowed_orig
 # Set the logging level
 app.logger.setLevel(logging.ERROR)
 logging.getLogger('socketio').setLevel(logging.ERROR)
+logging.getLogger('werkzeug').setLevel(logging.ERROR)
 
 # Creating simconnection
 try:
@@ -51,6 +52,7 @@ def matlab_destination_update():
         approach_clear_signal = int(approach_clear)
 
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        print("Sending a matlab update", destination_index, "takeoff", takeoff_signal)
 
         # send the location
         s.sendto(struct.pack('>f', latitude), (MATLAB_IP, MATLAB_PORT_LAT_MIN))
@@ -60,6 +62,8 @@ def matlab_destination_update():
         s.sendto(struct.pack('>f', takeoff_signal), (MATLAB_IP, MATLAB_PORT_TAKEOFF))
         s.sendto(struct.pack('>f', approach_clear_signal), (MATLAB_IP, MATLAB_PORT_APPROACH_CLEAR))
 
+matlab_updater = threading.Thread(target=matlab_destination_update)
+matlab_updater.start()
 
 @app.route('/set_event', methods=['POST'])
 def set_event():
@@ -463,6 +467,7 @@ def get_var():
     return_dict["latitude"] = position["latitude"]
     return_dict["longitude"] = position["longitude"]
     return_dict["compass"] = position["compass"]
+
     return jsonify(return_dict)
 
 # Vitals Task
@@ -480,7 +485,6 @@ def vitals(subroute=None):
 # HAI Interface
 @app.route("/hai-interface/")
 def hai_interface_index():
-    print("helipads", data)
     return render_template("HAIInterface/index.html", helipads=data)
 
 @app.route("/hai-interface/<string:subroute>",  methods=['GET'])
