@@ -162,7 +162,7 @@ function speakGround(message) {
     utterance.pitch = 1;
     utterance.volume = 0.8;  //between 0 and 1(highest)
     window.speechSynthesis.speak(utterance); */
-    const audio = new Audio('../../static/VitalsTask/radioUpdate.m4a');
+    const audio = new Audio('../../static/VitalsTask/radioUpdate.mp3');
     audio.play();
     console.log('Ground control speaking ');
     logAction({ "page": "Ground speaking", "action": message });

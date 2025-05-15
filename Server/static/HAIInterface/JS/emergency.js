@@ -719,8 +719,24 @@ function validateLowInput(expectedValue) {
   const prompt = document.getElementById('emergencyPrompt');
   const blurOverlay = document.getElementById('blurOverlay');
   const siren = document.getElementById('emergencySiren');
+  const enteredValue = parseFloat(input.value);
 
-  if (parseInt(input.value) === expectedValue) {
+  let lowerBound, upperBound;
+
+  if (expectedValue === 14.7) {
+    // Pressure reading range
+    lowerBound = 12.5;
+    upperBound = 14.7;
+  } else if (expectedValue === 10000) {
+    // Altitude reading range
+    lowerBound = 9000;
+    upperBound = 12000;
+  } else {
+    lowerBound = expectedValue;
+    upperBound = expectedValue;
+  }
+
+  if (enteredValue >= lowerBound && enteredValue <= upperBound) {
     markEmergencyResolved(); 
     const text = "Copy. Sensor miscalibration likely. WARNING CLEARED. System status: Normal. Continuing course.";
     speakJarvis(text, "normal");
@@ -841,7 +857,7 @@ function showEmergencyPrompt(level, title, message) {
 
   logAction({ "page": "Inflight", "action": `showing emergency: ${level} ${title} ${message}` });
 
-  let expectedValue = 75;
+  let expectedValue = 14.7;
   let text = "";
 
   // Repeat alert every 45s if not resolved
@@ -857,10 +873,10 @@ function showEmergencyPrompt(level, title, message) {
   if (level === 'low') {
     if (title.toLowerCase().includes("pressure")) {
       text = "Hydraulic pressure anomaly detected. Request reading from backup pressure gauge, left panel, third dial.";
-      expectedValue = 75;
+      expectedValue = 14.7;
     } else if (title.toLowerCase().includes("sensor")) {
       text = "Primary Altitude sensor miscalibrated. Request reading from secondary altitude gauge, left panel, second dial.";
-      expectedValue = 1500;
+      expectedValue = 10000;
     }
 
     speakJarvis(text, "normal");
