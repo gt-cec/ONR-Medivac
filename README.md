@@ -4,7 +4,7 @@ The  TTS engine being used (https://github.com/coqui-ai/TTS?tab=readme-ov-file) 
 Virtual environment is created in conda, activate before running
 1.  conda activate TTSenv
 2. Start running server.py
-3. Open all the routes- /voicecontrol, ControlPanel/JarvisOz
+3. Open all the routes- Experiment Control Panel (/control), Voice Control(/woz) and /var
 
 ## Activate Conda
 
@@ -37,5 +37,9 @@ Wizard of Oz (sending voice commands/responses):
 
 Voice Control (radio state variables):
 `http://127.0.0.1:8080/voicecontrol`
+
+Variables:
+`http://127.0.0.1:8080/var`
+
 
 
