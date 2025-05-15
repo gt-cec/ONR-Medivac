@@ -227,7 +227,7 @@ def log():
 # reset server parameters
 @app.route("/reset", methods=["GET"])
 def reset_params():
-    global study_participant_id, sequence, study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page,rd_page,ca_page,cd_page,map_page, radio_page,transmit,receive, takeoff,approach_clear, user_text_audio, prev_text,received_text, prompt_cycle_started
+    global study_participant_id, sequence, study_stage, destination_index, departure_index, decision_state, dest_changed, vitals_state, airspace_emergency_state, emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display, time_to_destination, pre_trial, post_trial, change_altitude,engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page,rd_page,ca_page,cd_page,map_page, radio_page,transmit,receive, takeoff,approach_clear, user_text_audio, prev_text,received_text, prompt_cycle_started, selected_helipad
 
     study_participant_id = 0
     sequence=0
@@ -266,6 +266,7 @@ def reset_params():
     takeoff=0
     approach_clear=0
     prompt_cycle_started = False
+    selected_helipad= None
 
     #clearing all events on reset 
     status_report_event.clear()
@@ -312,10 +313,41 @@ def show_woz():
 def voice_control():
     return render_template("ControlPanel/voiceControl.html")
 
+def clean(s):
+    return re.sub(r'[^A-Za-z0-9]+', '', s)
+
+@app.route("/helipad_index", methods=["POST"])
+def get_helipad_index():
+
+    data = request.json
+    name = data.get("name")
+    index = data.get("index")
+
+    # Case-insensitive name match (partial)
+    if name:
+        name_lower = name.lower()
+        for idx, helipad in data.items():
+            full_name = helipad.get("name", "")
+            if name_lower in full_name.lower():
+                return jsonify({"index": idx, "name": full_name})
+        return jsonify({"error": "Helipad name not found"}), 404
+
+    # Lookup by index
+    elif index is not None:
+        index_str = str(index)
+        if index_str in data:
+            full_name = data[index_str].get("name", "")
+            return jsonify({"index": index_str, "name": full_name})
+        else:
+            return jsonify({"error": "Index not found"}), 404
+
+    else:
+        return jsonify({"error": "Provide either 'name' or 'index' in request"}), 400
+
 # set system variables
 @app.route("/var", methods=["GET"])
 def get_var():
-    global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, emergency_state, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude, engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page, rd_page, ca_page, cd_page, map_page, radio_page, transmit, receive, takeoff, approach_clear, prompt_cycle_started
+    global study_participant_id,sequence,study_stage, destination_index, departure_index, decision_state, dest_changed, emergency_state, vitals_state, airspace_emergency_state, satisfied, warning_satisfied, weather_satisfied, altitude_satisfied, flight_start_time, reset_user_display, reset_vitals_display , aq, sm, time_to_destination, pre_trial, post_trial, change_altitude, engine_failure, pressure_warning, empty_tank, weather_emergency, altitude_alert, emergency_page, rd_page, ca_page, cd_page, map_page, radio_page, transmit, receive, takeoff, approach_clear, prompt_cycle_started, selected_helipad
     if request.args.get("user-id"):
         study_participant_id = utility.clean(request.args.get("user-id"))
     if request.args.get("study-stage"):
@@ -398,7 +430,10 @@ def get_var():
     if request.args.get("approach-clear"):  
         approach_clear = utility.clean(request.args.get("approach-clear")) #1=helipad is clear  , 0=otherwise
     if request.args.get("prompt-cycle-started"):  
-        prompt_cycle_started = utility.clean(request.args.get("prompt-cycle-started")) 
+        prompt_cycle_started = clean(request.args.get("prompt-cycle-started")) 
+    if request.args.get("selected-helipad"):  
+        selected_helipad = clean(request.args.get("selected-helipad"))
+
 
     if(airspace_emergency_state==1 or vitals_state==1 or engine_failure==1 or pressure_warning==1 or empty_tank==1 or weather_emergency==1 or altitude_alert==1):
         emergency_state=1
@@ -444,7 +479,9 @@ def get_var():
                    "transmit":transmit,
                    "takeoff":takeoff,
                    "approach-clear":approach_clear,
-                   "prompt-cycle-started": prompt_cycle_started
+                   "prompt-cycle-started": prompt_cycle_started,
+                   'selected-helipad':selected_helipad
+
                    }
 
     # sometimes SimConnect breaks and throws an OS Error, so we are saving the current lat/long when it works (or sending the last one)

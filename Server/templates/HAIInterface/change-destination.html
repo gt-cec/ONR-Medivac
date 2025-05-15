@@ -105,10 +105,10 @@
     let emergency = urlParams.get("emergency") == "1"
 
     if(emergency){
-        log({"page": "emergency-landing", "action": "opened page"})
+        logAction({"page": "emergency-landing", "action": "opened page"})
     }
     else{
-        log({"page": "change-destination", "action": "opened page"})
+        logAction({"page": "change-destination", "action": "opened page"})
     }
 
     document.getElementById('help').href='/hai-interface/help?num='+HelpId
@@ -116,7 +116,7 @@
 
     // set the submit button
     document.getElementById("submit-button").onclick = () => {
-        log({"page": "change-destination", "action": "submit button pressed"})
+        logAction({"page": "change-destination", "action": "submit button pressed"})
         window.location.href = '/hai-interface/location?inflight=' + urlParams.get("inflight") + '&dest=' + targetIndex
         //Reseting the time to be 0 at takeoff
         var currentDateTime = new Date();
@@ -128,7 +128,7 @@
     // Listen for destination change updates from control panel
     socket.on("update_destination", (data) => {
             console.log("destination update received from controller:", data.destination);
-            log({"page": "change-destination", "action": "destination changed by controller" + data.destination })
+            logAction({"page": "change-destination", "action": "destination changed by controller" + data.destination })
             window.location.href = '/hai-interface/location?inflight=' + urlParams.get("inflight") + '&dest=' + data.destination
             //Reseting the time to be 0 at takeoff
             var currentDateTime = new Date();
@@ -147,7 +147,7 @@
 
     // select the Cruise element
     document.getElementById('cruise-sidebar').style.backgroundColor="pink";
-    document.getElementById('help').onclick = () => { log({"page": "change-destination", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
+    document.getElementById('help').onclick = () => { logAction({"page": "change-destination", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
 
     {% endblock %}
 </script>

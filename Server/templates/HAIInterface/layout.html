@@ -467,6 +467,8 @@
         var RDPage=0
         var mapPage=0
         var radioPage=0
+        
+        
 
         // this var isn't updated by the server, but can be changed on various pages
         let emergencyState = 0
@@ -484,6 +486,9 @@
         let tasks = ['radioUpdate', 'vitalsUpdate'];  // List of secondary tasks
         const radioInterval = 105000; // Total cycle time: 1 min + 45 sec = 105 sec
         let last_radio_update = 0;
+        let selected_helipad = "none"
+
+        
 
         // initialize the map
 	    var planeMarker, map, mapSelection

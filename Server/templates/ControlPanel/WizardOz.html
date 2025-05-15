@@ -399,15 +399,16 @@
                     <!-- Altitude Sensor-->
                     <label for="altitude-input">Altitude:</label>
                     <input type="text" id="altitude-input">
-                    <button class="text-button" data-btn="altitude-input">Send</button>
+                    <button class="text-button" data-btn="altitude-input">Send</button> 
                     <div class="click-buttons" id="submit">Submit</div>
 
                     <div class="control-button jarvis-button" data-text="Severe weather detected. Immediate landing required. " id="emergency"> Jarvis:Emergency detected</div>
                     <div class="control-button jarvis-button" data-text="Bad Weather" id="emergency"> Jarvis: Bad Weather</div>
-                    <div class="control-button jarvis-button" data-text="I recommend landing at nearest helipad which is a Commercial Heliport Hilton. Confirm—should we land at Hilton or request alternate site?" id="warning"> Jarvis: Recommend Helipad</div>
-                    <div class="control-button jarvis-button" data-text= "Confirm—should we land at Hilton or request alternate site?"id="warning"> Jarvis: Ask to select helipad</div>
+                    <div class="control-button jarvis-button" data-text="I suggest landing at the nearest helipad — Hilton, a commercial helipad marked in green. Please confirm landing at Hilton or choose another site now.?" id="warning"> Jarvis: Recommend Helipad</div>
+                    <div class="control-button jarvis-button" data-text= "Specify your preferred helipad. You can view details by clicking on the helipad shown  on your screen"id="warning"> Jarvis: Ask to select helipad</div>
                     <div class="control-button jarvis-button"data-text="Awaiting response. This is a time-critical situation. Immediate landing required. Select landing site immediately" id="emergency">Jarvis: Waiting</div>
-                    
+                    <div class="control-button jarvis-button"data-text="Click helipad to view its details" id="view">Jarvis: Click helipad to view details</div>
+
                     <div class="control-button radio-button" data-text="Ground Control, go ahead MedEvac" id="Ground">Ground Control, go ahead MedEvac</div>
                     <div class="control-button radio-button" data-text="MedEvac, copy. What is the medical status of the infant? Request current vitals." id="grdpatstatus">GRD: Patient status?</div>
                     <div class="control-button radio-button" data-text="MedEvac, copy. Infant condition stable.Proceed to land at Hilton. Emergency medical team is en route and will meet you on arrival. Maintain vitals monitoring" id="grdwearesponse">GRD: Weather emerg response</div>
@@ -476,6 +477,7 @@
                     <button class="change-button" id="destination">Change</button>
                     <div id="error-message" style="color: red; display: none;">Please fill out the field before submitting!</div>
                     <div class="control-button jarvis-button" data-text="Awaiting Response. Please advise or acknowledge diversion"id="waitingConfi">Jarvis: Waiting for response</div>
+                    <div class="control-button jarvis-button"data-text="Click helipad to view its details" id="view">Jarvis: Click helipad to view details</div>
 
 
                     <div class="control-button radio-button" data-text="Ground Control, go ahead MedEvac" id="Ground">Ground Control, go ahead MedEvac</div>
@@ -515,6 +517,7 @@
                     <button class="change-button" id="destination">Change</button>
                     <div id="error-message" style="color: red; display: none;">Please fill out the field before submitting!</div>
                     <div class="control-button jarvis-button" data-text="Acknowledge, rerouting to Old Fourth Ward Children's Heliport " id="GroundEngFail">Jarvis: Rerouting Old forth  </div> 
+                    <div class="control-button jarvis-button"data-text="Click helipad to view its details" id="view">Jarvis: Click helipad to view details</div>
 
                     <div class="click-buttons-panel">
                         <div class="click-buttons" id="okMap">ok Map</div>
@@ -625,17 +628,47 @@
                 } else {
                     document.getElementById("error-message").style.display = "none"; // Hide error message
                     var key = button.id; // Variable name
+                    updateText = key + "has been changed to" + selectedValue //Jarvis speaks the update
+
+                     // Special logic for destination input (name or index lookup)
+                    if (button.id === "destination") {
+                        let payload = {};
+
+                        // If input is all digits, treat as index. Otherwise, name.
+                        if (/^\d+$/.test(selectedValue)) {
+                            payload.index = selectedValue;
+                        } else {
+                            payload.name = selectedValue;
+                        }
+
+                        fetch("/helipad_index", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(payload)
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error("Helipad not found.");
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                selectedValue = data.index;
+                                const helipadName = data.name;
+
+                                updateText = "diverting to " + helipadName+ "please confirm";
+                                console.log("Destination updated:", updateText);
+                                //logAction(`Destination sscaet to: ${helipadName} (Index: ${indexNumber})`);
+                            })
+                            .catch(error => {
+                                console.error("Error fetching helipad info:", error);
+                                //logAction("Could not find helipad. Please check your input.");
+                            });
+                    }
+
                     socket.emit("change_variable", { variable: key, value: selectedValue }); // Emit update to server
-                    if(selectedValue==5){                         
-                        updateText = key + "diverting to Hilton Heliport. Please Confirm" 
-                    }
-                    else if (selectedValue == 19)
-                    {
-                        updateText = "Dirverting to Old Forth Ward Childern's Hospital. Please Confirm"
-                    }
-                    else{
-                        updateText=key+"has been changed to"+selectedValue //Jarvis speaks the update
-                    }
                     sendToServer(updateText, "normal");
 
                     // Reset dropdowns to the placeholder option
@@ -711,7 +744,7 @@
                 setTimeout(()=>{
                     socket.emit("control_command", { action:"click", whichbtn: `submit-button`, value:null });
                     console.log(`Sent command: submit`);
-                }, 5000);  // submitting after 5 seconds
+                }, 2000);  // submitting after 2 seconds
             });
         });
 

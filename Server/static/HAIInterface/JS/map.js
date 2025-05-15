@@ -342,7 +342,7 @@ function showHelipads(helipads) {
 
         // Add AP marker diagonally below the nearest helipad
         if (helipads[i].nearest) {
-            const offsetLat = 0.01;  //  offset to icon
+            const offsetLat = 0.1;  //  offset to icon
             const offsetLng = 0.05;
 
             const apLat = parseFloat(helipads[i].latitude - offsetLat);
@@ -359,19 +359,33 @@ function showHelipads(helipads) {
         let helipadIndex = i
 
         
-        if(helipadIndex==targetIndex){
-            let newDestination= markerOptions
-            newDestination.icon = L.icon(destinationIconOptions)
-                let  newDestinationmarker = L.marker(
-                    [helipads[targetIndex].latitude, helipads[targetIndex].longitude],
-                    newDestination)
-                newDestinationmarker.addTo(map)
+        let destinationMarker = null; // global variable
 
+        if (helipadIndex === targetIndex) {
+            // Remove old destination marker if it exists
+            if (destinationMarker) {
+                map.removeLayer(destinationMarker);
+                destinationMarker = null;
+            }
+
+            // Create new marker
+            let newDestination = markerOptions;
+            newDestination.icon = L.icon(destinationIconOptions);
+            destinationMarker = L.marker(
+                [helipads[targetIndex].latitude, helipads[targetIndex].longitude],
+                newDestination
+            );
+            destinationMarker.addTo(map);
         }
+
         marker.on("click", function (ev) {
 
             //remove the marker from the previous
-           
+            if (selectedmarker) {
+                map.removeLayer(selectedmarker);
+                selectedmarker = null;
+            }
+
             selectItem(helipadIndex)
             let selected= markerOptions
             selected.icon = L.icon(selectedlIconOptions)
@@ -379,6 +393,7 @@ function showHelipads(helipads) {
                 [helipads[helipadIndex].latitude, helipads[helipadIndex].longitude],
                 selected)
             selectedmarker.addTo(map)
+            fetch("/var?selected-helipad" + helipadIndex)  //send to server
             
 
             /* if (setDestination) {
@@ -390,7 +405,7 @@ function showHelipads(helipads) {
 
             selectedmarker.on("mouseout", function (ev) {
                 console.log('out')
-                map.removeLayer( selectedmarker)
+                map.removeLayer(selectedmarker)
                 if(helipadIndex!=targetIndex){
                     selectItem(100)
                 }

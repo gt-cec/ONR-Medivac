@@ -47,7 +47,7 @@
 <script>
 {% block script %}
 console.log("Here IN LOCATION");    
-log({"page": "location", "action": "opened page"});
+logAction({"page": "location", "action": "opened page"});
     var HelpId=1
     const urlParams = new URLSearchParams(window.location.search)
     let inflight = urlParams.get("inflight") == 1 ? 1 : 0
@@ -81,7 +81,7 @@ log({"page": "location", "action": "opened page"});
     })
  
     document.getElementById("confirm-button").onclick = async () => {
-        log({"page": "location", "action": "confirm button pressed"})
+        logAction({"page": "location", "action": "confirm button pressed"})
         await fetch("/var?destination-index=" + targetIndex)
         if (inflight == 0) {
             window.location.href = "/hai-interface/checklist?inflight=" + inflight + "&target-index=" + targetIndex
@@ -92,7 +92,7 @@ log({"page": "location", "action": "opened page"});
     }
     socket.on("update_destination", (data) => {
         console.log("destination confirmation received from controller:");
-        log({"page": "change-destination", "action": "confirmed by controller"})
+        logAction({"page": "change-destination", "action": "confirmed by controller"})
         fetch("/var?destination-index=" + targetIndex)
         if (inflight == 0) {
             window.location.href = "/hai-interface/checklist?inflight=" + inflight + "&target-index=" + targetIndex
@@ -103,8 +103,8 @@ log({"page": "location", "action": "opened page"});
         
     });
 
-    document.getElementById("cancel-button").onclick = () => { log({"page": "location", "action": "cancel button pressed"}); history.back() }
-    document.getElementById('help').onclick = () => { log({"page": "location", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
+    document.getElementById("cancel-button").onclick = () => { logAction({"page": "location", "action": "cancel button pressed"}); history.back() }
+    document.getElementById('help').onclick = () => { logAction({"page": "location", "action": "help button pressed"}); window.location.href = '/hai-interface/help?num=' + HelpId }
     
     var bodyRect = document.body.getBoundingClientRect()
     let rect =  document.getElementById("confirm-button").getBoundingClientRect();
