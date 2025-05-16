@@ -342,7 +342,7 @@ function showHelipads(helipads) {
 
         // Add AP marker diagonally below the nearest helipad
         if (helipads[i].nearest) {
-            const offsetLat = 0.07;  //  offset to icon
+            const offsetLat = 0.05;  //  offset to icon
             const offsetLng = 0.05;
 
             const apLat = parseFloat(helipads[i].latitude - offsetLat);
@@ -381,7 +381,7 @@ function showHelipads(helipads) {
         marker.on("click", function (ev) {
 
             //remove the marker from the previous
-            i/* f (selectedmarker) {
+            /* if (selectedmarker) {
                 map.removeLayer(selectedmarker);
                 selectedmarker = null;
             } */
@@ -393,7 +393,7 @@ function showHelipads(helipads) {
                 [helipads[helipadIndex].latitude, helipads[helipadIndex].longitude],
                 selected)
             selectedmarker.addTo(map)
-            fetch("/var?selected-helipad" + helipadIndex)  //send to server
+            fetch("/var?selected-helipad=" + helipadIndex)  //send to server
             
 
             /* if (setDestination) {

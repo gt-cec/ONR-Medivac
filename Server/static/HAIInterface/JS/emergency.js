@@ -943,6 +943,7 @@ function showEmergencyPrompt(level, title, message) {
 
 // Resolves current emergency
 function markEmergencyResolved() {
+  fetch("/var?emergency-state=0") 
   fetch("/var?emergency=0")
   const prompt = document.getElementById('emergencyPrompt');
   const blurOverlay = document.getElementById('blurOverlay');

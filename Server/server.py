@@ -5,7 +5,7 @@ import struct
 import time
 import re
 from flask_socketio import SocketIO
-#from SimConnect import *
+from SimConnect import *
 import json
 from vars.helipads import data
 from vars.help import HelpData
