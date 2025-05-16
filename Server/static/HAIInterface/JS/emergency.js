@@ -747,12 +747,12 @@ function validateLowInput(expectedValue) {
     infoBox.style.top = '50%';
     infoBox.style.left = '50%';
     infoBox.style.transform = 'translateX(-50%)';
-    infoBox.style.backgroundColor = 'rgba(128, 255, 0, 0.3)';
+    infoBox.style.backgroundColor = 'rgba(0, 47, 255, 0.51)';
     infoBox.style.backdropFilter = "blur(8px)";
     infoBox.style.color = '#fff';
-    infoBox.style.padding = '25px 35px';
+    infoBox.style.padding = '35px 45px';
     infoBox.style.borderRadius = '15px';
-    infoBox.style.boxShadow = '0 0 15px rgba(0,0,0,0.3)';
+    infoBox.style.boxShadow = '0 0 20px rgba(0,0,0,0.3)';
     infoBox.style.zIndex = '10000';
     document.body.appendChild(infoBox);
 
@@ -789,7 +789,7 @@ function acknowledgeEmergency() {
   siren.style.position = 'fixed';
   window.location.href = '/hai-interface/change-destination?inflight=' + 1 + '&emergency=' + 1 //directing to emergency page
   fetch("/var?map-page=1")  //open map
-  window.onload = () => {
+  //window.onload = () => {
   text ="We must land immediately. I suggest landing at the nearest helipad — Hilton, a commercial helipad marked in green. Please confirm landing at Hilton or choose another site now."
   speakJarvis(text, "high")
     // Start polling for destination change
@@ -804,7 +804,7 @@ function acknowledgeEmergency() {
         })
         .catch(err => console.error("Error checking dest-changed:", err));
     }, 2000);
-  }
+//  }
 }
 
 
@@ -903,27 +903,26 @@ function showEmergencyPrompt(level, title, message) {
       <p><strong>Diagnostics:</strong> False Warning</p>
       <p><strong>Recommendation:</strong> Continue flying as planned</p>
       <p><strong>Options:</strong>
-        <button class="ok-button" id="okFuel-Button">OK</button>
-        <button class="ok-button" id="elFuel-Button">Change Destination</button>
+        <button class="ok-button" id="okFuel-button">OK</button>
+        <button class="ok-button" id="elFuel-button">Change Destination</button>
       </p>`;
 
-    document.getElementById("okFuel-Button").onclick = () => {
+    document.getElementById("okFuel-button").onclick = () => {
       markEmergencyResolved();
       logAction({ "page": "Inflight", "action": "Continue button on Fuel tank emergency pressed" });
       speakJarvis("Acknowledge. Continuing the current flight path to Emory University Hospital", "normal");
     };
 
-    document.getElementById("elFuel-Button").onclick = () => {
+    document.getElementById("elFuel-button").onclick = () => {
       speakJarvis("Acknowledged. Searching for nearby helipads", "medium");
       logAction({ "page": "Inflight", "action": "Change destination button on Fuel tank emergency pressed" });
       window.location.href = '/hai-interface/change-destination?inflight=1&emergency=1'; //directing to emergency page
       fetch("/var?map-page=1")  //open map
 
-      window.onload = () => {
         text = " Available helipads are displayed on the map. The nearest is Hilton a commercial site marked in green. Where would you like to land?"
         speakJarvis(text,"medium")
-      };
-    };
+    
+    }
   }
 
   else {

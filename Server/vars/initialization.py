@@ -39,6 +39,8 @@ receive=0
 takeoff=0
 approach_clear=0
 prompt_cycle_started = False
+selected_helipad= None
+
 
 # Global variables
 active_assistant = 'T'
