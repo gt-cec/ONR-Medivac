@@ -13,4 +13,4 @@
 # TODO
 
 # launch the webserver
-python3 Server/webserver.py
+python3 Server/server.py

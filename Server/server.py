@@ -5,7 +5,10 @@ import struct
 import time
 import re
 from flask_socketio import SocketIO
-from SimConnect import *
+try:
+    from SimConnect import *
+except ImportError:
+    pass
 import json
 from vars.helipads import data
 from vars.help import HelpData
@@ -494,8 +497,9 @@ def get_var():
         position["latitude"] = lat
         position["longitude"] = long
         position["compass"] = compass
-    except:
+    except Exception as e:
         logging.info("SimConnect Error in /var")
+        print("Simconnect failed to get plane lat/log/compass/altitude:", e)
         try:
             sm = SimConnect()
             aq = AircraftRequests(sm, _time=10)
