@@ -341,7 +341,7 @@ function activateWarningAlert() {
   function showInfo() {
    logAction({"page": "Inflight", "action": "Pressure Warning- show info button pressed"}); 
     document.getElementById('warningSound').pause();
-    document.getElementById('warningSound').currenTime=0;
+    document.getElementById('warningSound').currentTime=0;
     const pWalertBox = document.getElementById('pressureWarningalertBox');
     pWalertBox.classList.add('expanded');
     document.getElementById('pressureWarningalertExplanation').style.display = 'block';
@@ -357,7 +357,7 @@ function activateWarningAlert() {
   // Function to submit pressure value
   async function submitPressureValue() {
    /*  document.getElementById('warningSound').pause();
-    document.getElementById('warningSound').currenTime=0;
+    document.getElementById('warningSound').currentTime=0;
     const pressureValue = document.getElementById('pressureValue').value;
     const resultMessage = document.getElementById('resultMessage');
     const finalMessage = document.getElementById('finalMessage');
@@ -518,10 +518,10 @@ function activateFuelAlert() {
 
   
     document.getElementById("groundButtonFuel").onclick =  () => { closeFuelAlert(); 
-     logAction({"page": "Inflight", "action": "Control button on Fuel tank emergency pressed"}); 
-        console.log('opening radio panel')
-        document.getElementById('emptytankSound').pause();
-        document.querySelector('.radiopanel').classList.toggle('open');
+    logAction({"page": "Inflight", "action": "Control button on Fuel tank emergency pressed"}); 
+    console.log('opening radio panel')
+    document.getElementById('emptytankSound').pause();
+    document.querySelector('.radiopanel').classList.toggle('open');
     }
 
  }
@@ -565,7 +565,7 @@ function activateAltitudeAlert() {
   function showAltitudeInfo() {
    logAction({"page": "Inflight", "action": "Altitude alert- show more info button pressed"}); 
     document.getElementById('altitudeSound').pause();
-    document.getElementById('altitudeSound').currenTime=0;
+    document.getElementById('altitudeSound').currentTime=0;
     const altitudealertBox = document.getElementById('altitudealertBox');
     altitudealertBox.classList.add('expanded');
     document.getElementById('altitudealertExplanation').style.display = 'block';
@@ -582,7 +582,7 @@ function activateAltitudeAlert() {
   // Function to submit pressure value
   function submitAltitudeValue() {
     document.getElementById('altitudeSound').pause();
-    document.getElementById('altitudeSound').currenTime=0;
+    document.getElementById('altitudeSound').currentTime=0;
     const altitudeValue = document.getElementById('altitudeValue').value;
     console.log(altitudeValue)
    logAction({"page": "Inflight", "action": "Altitude alert- submit button pressed with altitude value as:"+ altitudeValue}); 
@@ -909,6 +909,7 @@ function showEmergencyPrompt(level, title, message) {
 
     document.getElementById("okFuel-button").onclick = () => {
       markEmergencyResolved();
+      closeFuelAlert();
       logAction({ "page": "Inflight", "action": "Continue button on Fuel tank emergency pressed" });
       speakJarvis("Acknowledge. Continuing the current flight path to Emory University Hospital", "normal");
     };

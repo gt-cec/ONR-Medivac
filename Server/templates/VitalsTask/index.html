@@ -1024,7 +1024,7 @@
     let fuel = 100;
     let pressure = 14.7;
 
-    const MAX_ALTITUDE = 12000;
+    const MAX_ALTITUDE = 10000;
     const MIN_PRESSURE = 12.5;
     const NORMAL_PRESSURE = 14.7;
 
@@ -1041,6 +1041,8 @@
                 pressure = Math.max(MIN_PRESSURE, pressure - 0.05);
             } else if (flightPhase === "cruise") {
                 // Hold steady
+                pressure=14.7
+                altitude=10000
             } else if (flightPhase === "descent") {
                 altitude = Math.max(0, altitude - 400);
                 pressure = Math.min(NORMAL_PRESSURE, pressure + 0.05);
