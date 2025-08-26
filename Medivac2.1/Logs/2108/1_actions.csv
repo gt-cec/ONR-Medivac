@@ -1,0 +1,473 @@
+page,action,key,value,timestamp
+Heart Rate,opened sensor tab,,,1752772964997
+Heart Rate,keypad open,,,1752772964997
+Heart Rate,show action buttons,,,1752772964998
+speak text,Receieved text and level:Are you ready to start?normal,,,1752773032650
+,Controller Executing: click on start-button with value: undefined,,,1752773035720
+index,confirm button pressed,,,1752773035720
+,,,,
+speak text,Receieved text and level:Please confirm the destination Emory University Hospitalnormal,,,1752773036724
+Jarvis speaking,Message: Please confirm the destination Emory University Hospital Stress level: normal,,,1752773036724
+map,selected helipad,,,1752773036779
+,Controller Executing: click on confirm-button with value: undefined,,,1752773041472
+,,,,
+checklist,opened page,,,1752773041540
+map,selected helipad,,,1752773042527
+checklist,toggled checkbox,,,1752773044117
+checklist,toggled checkbox,,,1752773045826
+checklist,toggled checkbox,,,1752773047789
+checklist,showing confirm button,,,1752773047790
+,Controller Executing: click on confirm-button with value: undefined,,,1752773049068
+countdown,opened page,,,1752773049132
+Heart Rate,opened sensor tab,,,1752773049633
+map,selected helipad,,,1752773050118
+countdown,countdown now 4,,,1752773050133
+Heart Rate,capture,,,1752773050602
+Jarvis speaking,"Message: Acknowledge, Taking Off Stress level: normal",,,1752773050591
+countdown,countdown now 3,,,1752773051133
+Heart Rate,capture,,,1752773051614
+Heart Rate,keypad open,,,1752773051614
+countdown,countdown now 2,,,1752773052134
+Heart Rate,keypad press,5,5,1752773052367
+Heart Rate,keypad press,5,55,1752773052542
+Heart Rate,show action buttons,,,1752773053054
+Heart Rate,keypad press,10,55,1752773053054
+countdown,countdown now 1,,,1752773053134
+Heart Rate,log,,,1752773053767
+countdown,countdown now 0,,,1752773054134
+Heart Rate,log,,,1752773054776
+Heart Rate,save,,,1752773055136
+Heart Rate,save,,,1752773055136
+countdown,countdown complete,,,1752773055134
+,Starting prompt cycle,,,1752773056071
+,Starting prompt cycle,,,1752773056102
+Heart Rate,save,,,1752773056149
+map,selected helipad,,,1752773056231
+O₂ Saturation,opened sensor tab,,,1752773056759
+O₂ Saturation,capture,,,1752773057471
+O₂ Saturation,capture,,,1752773057471
+O₂ Saturation,capture,,,1752773058485
+O₂ Saturation,keypad open,,,1752773058486
+O₂ Saturation,keypad press,1,1,1752773059024
+O₂ Saturation,keypad press,11,10,1752773059599
+O₂ Saturation,keypad press,11,100,1752773059734
+O₂ Saturation,show action buttons,,,1752773060299
+O₂ Saturation,keypad press,10,100,1752773060299
+emergency,trying to change destination to100,,,1752773060269
+Ground speaking,"N A S X G S, this is Ground Control asking for update on flight status, patient status and estimated time to destination.",,,1752773060605
+radio update,radio update asked,,,1752773060605
+radio prompt,radio update prompt 1,,,1752773060606
+O₂ Saturation,log,,,1752773062047
+O₂ Saturation,log,,,1752773062047
+O₂ Saturation,log,,,1752773063066
+O₂ Saturation,save,,,1752773063423
+O₂ Saturation,save,,,1752773063423
+O₂ Saturation,save,,,1752773064442
+speak text,Receieved text and level:Opening mapnormal,,,1752773064524
+Jarvis speaking,Message: Opening map Stress level: normal,,,1752773064524
+map,selected helipad,,,1752773065236
+Blood Pressure,opened sensor tab,,,1752773065289
+emergency,trying to change destination to19,,,1752773065277
+map,show map,,,1752773065741
+Blood Pressure,capture,,,1752773066046
+Blood Pressure,capture,,,1752773067066
+Blood Pressure,keypad open,,,1752773067066
+Blood Pressure,keypad press,1,1,1752773067622
+Blood Pressure,keypad press,2,12,1752773068263
+Blood Pressure,keypad press,11,120,1752773068929
+Blood Pressure,keypad press,8,1208,1752773069257
+Blood Pressure,keypad press,11,12080,1752773069495
+emergency,trying to change destination to19,,,1752773070283
+Blood Pressure,show action buttons,,,1752773070342
+Blood Pressure,keypad press,10,12080,1752773070343
+Blood Pressure,log,,,1752773071047
+Blood Pressure,log,,,1752773072061
+Blood Pressure,save,,,1752773072438
+Blood Pressure,save,,,1752773072438
+Blood Pressure,save,,,1752773073459
+submit,submit,,,1752773073864
+submit,submit,,,1752773073864
+emergency,trying to change destination to19,,,1752773075293
+speak text,Receieved text and level:Vitals received and stable.normal,,,1752773078922
+Jarvis speaking,Message: Vitals received and stable. Stress level: normal,,,1752773078923
+emergency,trying to change destination to19,,,1752773080254
+emergency,trying to change destination to19,,,1752773085282
+speak text,Receieved text and level:All clear. Enjoy the flightnormal,,,1752773086097
+Jarvis speaking,Message: All clear. Enjoy the flight Stress level: normal,,,1752773086097
+emergency,trying to change destination to19,,,1752773090254
+emergency,trying to change destination to19,,,1752773095277
+speak text,Receieved text and level:Welcome.  Call me if you need any help.normal,,,1752773098823
+Jarvis speaking,Message: Welcome.  Call me if you need any help. Stress level: normal,,,1752773098824
+emergency,trying to change destination to19,,,1752773100282
+emergency,trying to change destination to19,,,1752773105260
+emergency,trying to change destination to19,,,1752773110259
+emergency,trying to change destination to19,,,1752773115282
+emergency,trying to change destination to19,,,1752773120261
+emergency,trying to change destination to19,,,1752773125264
+emergency,trying to change destination to19,,,1752773130283
+inflight,displaying vitals prompt,,,1752773133770
+vitals prompt,log vitals prompted,,,1752773133772
+vitals prompt,vitals_prompt 1,,,1752773133772
+emergency,trying to change destination to19,,,1752773135259
+,user acknowledged vitals prompt,,,1752773136550
+Blood Pressure,capture,,,1752773137639
+Blood Pressure,capture,,,1752773137640
+Blood Pressure,capture,,,1752773138652
+Blood Pressure,keypad open,,,1752773138652
+emergency,trying to change destination to19,,,1752773140255
+Blood Pressure,keypad press,1,1,1752773140775
+Blood Pressure,keypad press,2,12,1752773141265
+Blood Pressure,keypad press,11,120,1752773141847
+Blood Pressure,keypad press,8,1208,1752773142183
+Blood Pressure,keypad press,11,12080,1752773142438
+Blood Pressure,keypad press,10,12080,1752773142985
+Blood Pressure,log,,,1752773144143
+Blood Pressure,log,,,1752773144143
+Blood Pressure,log,,,1752773145161
+emergency,trying to change destination to19,,,1752773145285
+Blood Pressure,save,,,1752773145671
+Blood Pressure,save,,,1752773146683
+O₂ Saturation,opened sensor tab,,,1752773148471
+vitals prompt,auto off vitals prompt,,,1752773148771
+O₂ Saturation,capture,,,1752773150040
+O₂ Saturation,capture,,,1752773150041
+emergency,trying to change destination to19,,,1752773150259
+O₂ Saturation,capture,,,1752773151051
+O₂ Saturation,keypad open,,,1752773151052
+O₂ Saturation,keypad press,5,5,1752773151697
+O₂ Saturation,keypad press,5,55,1752773151871
+O₂ Saturation,keypad press,10,55,1752773152464
+O₂ Saturation,log,,,1752773153140
+O₂ Saturation,log,,,1752773153140
+O₂ Saturation,log,,,1752773154150
+O₂ Saturation,save,,,1752773154514
+emergency,trying to change destination to19,,,1752773155264
+O₂ Saturation,save,,,1752773155531
+Blood Pressure,opened sensor tab,,,1752773157768
+Heart Rate,opened sensor tab,,,1752773159503
+emergency,trying to change destination to19,,,1752773160283
+Heart Rate,capture,,,1752773160826
+Heart Rate,capture,,,1752773161837
+Heart Rate,keypad open,,,1752773161838
+Heart Rate,keypad press,5,5,1752773162519
+Heart Rate,keypad press,5,55,1752773162655
+Heart Rate,show action buttons,,,1752773163263
+Heart Rate,log,,,1752773164026
+Heart Rate,log,,,1752773164027
+Heart Rate,log,,,1752773165037
+emergency,trying to change destination to19,,,1752773165257
+Heart Rate,save,,,1752773165880
+Heart Rate,save,,,1752773165880
+Heart Rate,save,,,1752773166893
+submit,submit,,,1752773167311
+submit,submit,,,1752773167312
+emergency,trying to change destination to19,,,1752773170275
+speak text,Receieved text and level:Vitals received and stable.normal,,,1752773174090
+Jarvis speaking,Message: Vitals received and stable. Stress level: normal,,,1752773174090
+emergency,trying to change destination to19,,,1752773175286
+emergency,trying to change destination to19,,,1752773180267
+speak text,Receieved text and level:Everything good and clear.normal,,,1752773183351
+Jarvis speaking,Message: Everything good and clear. Stress level: normal,,,1752773183351
+emergency,trying to change destination to19,,,1752773185260
+speak text,Receieved text and level:Are you enjoying the flight?normal,,,1752773188599
+Jarvis speaking,Message: Are you enjoying the flight? Stress level: normal,,,1752773188600
+emergency,trying to change destination to19,,,1752773190284
+emergency,trying to change destination to19,,,1752773195254
+Ground speaking,"N A S X G S, this is Ground Control asking for update on flight status, patient status and estimated time to destination.",,,1752773197284
+radio update,radio update asked,,,1752773197285
+radio prompt,radio update prompt 2,,,1752773197285
+speak text,Receieved text and level:I am too.normal,,,1752773198060
+Jarvis speaking,Message: I am too. Stress level: normal,,,1752773198060
+emergency,trying to change destination to19,,,1752773200259
+emergency,trying to change destination to19,,,1752773205284
+emergency,trying to change destination to19,,,1752773210257
+speak text,Receieved text and level:Sure thing. We are doing wellnormal,,,1752773214043
+Jarvis speaking,Message: Sure thing. We are doing well Stress level: normal,,,1752773214043
+emergency,trying to change destination to19,,,1752773215272
+emergency,trying to change destination to19,,,1752773220282
+emergency,trying to change destination to19,,,1752773225292
+emergency,trying to change destination to19,,,1752773230281
+map,hide map,,,1752773230281
+Inflight,showing emergency: low Sensor Miscalibrated <div> Report the reading from the secondary altitude gauge</div>,,,1752773230282
+Jarvis speaking,"Message: Primary Altitude sensor miscalibrated. Request reading from secondary altitude gauge, left panel, second dial. Stress level: normal",,,1752773230282
+emergency,trying to change destination to19,,,1752773235285
+emergency,trying to change destination to19,,,1752773240297
+,Controller Executing: set-value on valueInput with value: 4000,,,1752773244225
+speak text,Receieved text and level:settingaltitudeinputto4000normal,,,1752773244226
+Jarvis speaking,Message: settingaltitudeinputto4000 Stress level: normal,,,1752773244226
+emergency,trying to change destination to19,,,1752773245275
+,Controller Executing: click on submit-button with value: undefined,,,1752773247578
+Jarvis speaking,Message: Copy. Sensor miscalibration likely. WARNING CLEARED. System status: Normal. Continuing course. Stress level: normal,,,1752773247578
+Inflight,user entered correct value: 12000,,,1752773247579
+,Controller Executing: click on submit-button with value: undefined,,,1752773249224
+Jarvis speaking,Message: Copy. Sensor miscalibration likely. WARNING CLEARED. System status: Normal. Continuing course. Stress level: normal,,,1752773249224
+Inflight,user entered correct value: 12000,,,1752773249224
+emergency,trying to change destination to19,,,1752773250281
+emergency,trying to change destination to19,,,1752773255264
+emergency,trying to change destination to19,,,1752773260277
+emergency,trying to change destination to19,,,1752773265285
+speak text,Receieved text and level:Everything good and clear now. Enjoy the flightnormal,,,1752773267258
+Jarvis speaking,Message: Everything good and clear now. Enjoy the flight Stress level: normal,,,1752773267258
+inflight,displaying vitals prompt,,,1752773269678
+vitals prompt,log vitals prompted,,,1752773269678
+vitals prompt,vitals_prompt 2,,,1752773269678
+emergency,trying to change destination to19,,,1752773270262
+,user acknowledged vitals prompt,,,1752773272328
+Heart Rate,opened sensor tab,,,1752773274001
+speak text,Receieved text and level:Opening mapnormal,,,1752773274497
+Jarvis speaking,Message: Opening map Stress level: normal,,,1752773274497
+Heart Rate,capture,,,1752773274768
+Heart Rate,capture,,,1752773274768
+map,selected helipad,,,1752773275238
+emergency,trying to change destination to19,,,1752773275274
+Heart Rate,capture,,,1752773275786
+Heart Rate,keypad open,,,1752773275786
+map,show map,,,1752773275750
+map,selected helipad,,,1752773275750
+Heart Rate,keypad press,5,5,1752773276344
+Heart Rate,keypad press,5,55,1752773276503
+Heart Rate,show action buttons,,,1752773277065
+Heart Rate,keypad press,10,55,1752773277066
+Heart Rate,log,,,1752773277864
+Heart Rate,log,,,1752773277864
+Heart Rate,log,,,1752773278884
+emergency,trying to change destination to19,,,1752773280285
+Heart Rate,save,,,1752773281178
+Heart Rate,save,,,1752773282195
+Jarvis speaking,Message: welcome Stress level: normal,,,1752773283377
+vitals prompt,auto off vitals prompt,,,1752773284679
+O₂ Saturation,opened sensor tab,,,1752773285144
+emergency,trying to change destination to19,,,1752773285256
+O₂ Saturation,capture,,,1752773289185
+O₂ Saturation,capture,,,1752773289185
+O₂ Saturation,capture,,,1752773290200
+O₂ Saturation,keypad open,,,1752773290201
+emergency,trying to change destination to19,,,1752773290269
+O₂ Saturation,keypad press,1,1,1752773292816
+Ground speaking,"N A S X G S, this is Ground Control asking for update on flight status, patient status and estimated time to destination.",,,1752773293168
+radio update,radio update asked,,,1752773293169
+radio prompt,radio update prompt 3,,,1752773293169
+O₂ Saturation,keypad press,11,10,1752773293392
+O₂ Saturation,keypad press,11,100,1752773293552
+O₂ Saturation,show action buttons,,,1752773293913
+O₂ Saturation,keypad press,10,100,1752773293913
+O₂ Saturation,log,,,1752773294633
+O₂ Saturation,log,,,1752773294633
+emergency,trying to change destination to19,,,1752773295283
+O₂ Saturation,log,,,1752773295652
+O₂ Saturation,save,,,1752773296009
+O₂ Saturation,save,,,1752773296010
+O₂ Saturation,save,,,1752773297027
+Blood Pressure,opened sensor tab,,,1752773297425
+Blood Pressure,capture,,,1752773298321
+Blood Pressure,capture,,,1752773299338
+Blood Pressure,keypad open,,,1752773299338
+Blood Pressure,keypad press,1,1,1752773299937
+emergency,trying to change destination to19,,,1752773300261
+Blood Pressure,keypad press,2,12,1752773300313
+Blood Pressure,keypad press,11,120,1752773300824
+Blood Pressure,keypad press,8,1208,1752773301168
+Blood Pressure,keypad press,11,12080,1752773301448
+Blood Pressure,show action buttons,,,1752773301752
+Blood Pressure,keypad press,10,12080,1752773301753
+Blood Pressure,log,,,1752773303176
+Blood Pressure,log,,,1752773303177
+Blood Pressure,log,,,1752773304192
+Blood Pressure,save,,,1752773304939
+emergency,trying to change destination to19,,,1752773305271
+Blood Pressure,save,,,1752773305953
+submit,submit,,,1752773306840
+submit,submit,,,1752773306841
+emergency,trying to change destination to19,,,1752773310282
+speak text,Receieved text and level:Vitals received and stable.normal,,,1752773312016
+Jarvis speaking,Message: Vitals received and stable. Stress level: normal,,,1752773312017
+emergency,trying to change destination to19,,,1752773315259
+emergency,trying to change destination to19,,,1752773320265
+speak text,"Receieved text and level:Yes, we are close to destinationnormal",,,1752773324082
+Jarvis speaking,"Message: Yes, we are close to destination Stress level: normal",,,1752773324082
+emergency,trying to change destination to19,,,1752773325280
+emergency,trying to change destination to19,,,1752773330258
+emergency,trying to change destination to19,,,1752773335259
+inflight,displaying vitals prompt,,,1752773338300
+vitals prompt,log vitals prompted,,,1752773338300
+vitals prompt,vitals_prompt 3,,,1752773338301
+emergency,trying to change destination to19,,,1752773340278
+,user acknowledged vitals prompt,,,1752773340729
+Heart Rate,opened sensor tab,,,1752773342641
+Heart Rate,capture,,,1752773343482
+Heart Rate,capture,,,1752773343482
+Heart Rate,capture,,,1752773344493
+Heart Rate,keypad open,,,1752773344493
+Heart Rate,keypad press,5,5,1752773345032
+Heart Rate,keypad press,5,55,1752773345184
+emergency,trying to change destination to19,,,1752773345256
+Heart Rate,show action buttons,,,1752773345872
+Heart Rate,keypad press,10,55,1752773345873
+Heart Rate,log,,,1752773346457
+Heart Rate,log,,,1752773346457
+Heart Rate,log,,,1752773347472
+Heart Rate,save,,,1752773347776
+Heart Rate,save,,,1752773347776
+Heart Rate,save,,,1752773348792
+O₂ Saturation,opened sensor tab,,,1752773349440
+O₂ Saturation,capture,,,1752773350145
+emergency,trying to change destination to19,,,1752773350266
+emergency,"show Weather Emergency Alert, hide map",,,1752773350266
+Inflight,Weather emergency- emergnecy propmt displayed,,,1752773350267
+Jarvis speaking,Message: Emergency detected: Immediate landing is required. Attention Emergency detected Stress level: high,,,1752773350267
+O₂ Saturation,capture,,,1752773351159
+O₂ Saturation,keypad press,1,1,1752773351672
+O₂ Saturation,keypad press,11,10,1752773352354
+O₂ Saturation,keypad press,11,100,1752773352508
+O₂ Saturation,show action buttons,,,1752773353072
+O₂ Saturation,keypad press,10,100,1752773353074
+vitals prompt,auto off vitals prompt,,,1752773353302
+O₂ Saturation,log,,,1752773353952
+O₂ Saturation,log,,,1752773353953
+O₂ Saturation,log,,,1752773354968
+emergency,trying to change destination to19,,,1752773355281
+emergency, (High) Emergency acknowledged,,,1752773355611
+Jarvis speaking,Message:  I recommend landing at the Nearest helipad which is a commercial Helipad Hilton. Please confirm Helipa or select an alternative emergency landing site now. Stress level: high,,,1752773355612
+,,,,
+map,set destination,,,1752773356720
+map,set destination,,,1752773357203
+map,set destination,,,1752773358790
+emergency,trying to change destination to100,,,1752773360804
+map,changing helipad,,,1752773361178
+map,hide map,,,1752773362084
+,,,,
+,,,,
+map,selected helipad,,,1752773364283
+O₂ Saturation,save,,,1752773364457
+O₂ Saturation,save,,,1752773364457
+Ground speaking,"N A S X G S, this is Ground Control asking for update on flight status, patient status and estimated time to destination.",,,1752773364986
+radio update,radio update asked,,,1752773364987
+radio prompt,radio update prompt 4,,,1752773364987
+O₂ Saturation,save,,,1752773365472
+Blood Pressure,opened sensor tab,,,1752773366058
+Blood Pressure,capture,,,1752773367288
+Blood Pressure,capture,,,1752773367289
+Blood Pressure,keypad open,,,1752773368306
+emergency,trying to change destination to100,,,1752773368329
+,,,,
+Blood Pressure,keypad press,1,1,1752773369673
+map,selected helipad,,,1752773369716
+Blood Pressure,keypad press,2,12,1752773370001
+Blood Pressure,keypad press,11,120,1752773370593
+Blood Pressure,keypad press,8,1208,1752773371121
+Blood Pressure,show action buttons,,,1752773371585
+Blood Pressure,keypad press,10,1208,1752773371585
+emergency,trying to change destination to100,,,1752773373759
+Blood Pressure,opened sensor tab,,,1752773374289
+Blood Pressure,log,,,1752773374753
+Blood Pressure,log,,,1752773374753
+Blood Pressure,log,,,1752773375769
+Blood Pressure,save,,,1752773376169
+Blood Pressure,save,,,1752773376170
+Blood Pressure,save,,,1752773377189
+speak text,Receieved text and level:May I show you the map?normal,,,1752773378072
+Jarvis speaking,Message: May I show you the map? Stress level: normal,,,1752773378072
+submit,submit,,,1752773378249
+submit,submit,,,1752773378250
+emergency,trying to change destination to19,,,1752773378786
+speak text,Receieved text and level:Opening mapnormal,,,1752773380063
+Jarvis speaking,Message: Opening map Stress level: normal,,,1752773380063
+map,show map,,,1752773380733
+map,selected helipad,,,1752773381227
+emergency,trying to change destination to19,,,1752773383788
+emergency,trying to change destination to19,,,1752773388794
+emergency,trying to change destination to19,,,1752773393770
+speak text,Receieved text and level:New destination updatednormal,,,1752773394758
+Jarvis speaking,Message: New destination updated Stress level: normal,,,1752773394758
+emergency,trying to change destination to19,,,1752773398781
+speak text,Receieved text and level:Approaching destination. Prepare to landnormal,,,1752773402729
+Jarvis speaking,Message: Approaching destination. Prepare to land Stress level: normal,,,1752773402730
+inflight,displaying vitals prompt,,,1752773403147
+vitals prompt,vitals_prompt 4,,,1752773403148
+emergency,trying to change destination to19,,,1752773403793
+,user acknowledged vitals prompt,,,1752773405842
+Heart Rate,opened sensor tab,,,1752773407778
+emergency,trying to change destination to19,,,1752773408771
+Heart Rate,capture,,,1752773409034
+Heart Rate,capture,,,1752773409034
+Heart Rate,keypad open,,,1752773410047
+Heart Rate,keypad press,5,5,1752773410787
+Heart Rate,keypad press,5,55,1752773410937
+Heart Rate,show action buttons,,,1752773411714
+Heart Rate,keypad press,10,55,1752773411714
+Heart Rate,log,,,1752773412393
+Heart Rate,log,,,1752773412394
+Heart Rate,log,,,1752773413411
+Heart Rate,save,,,1752773413770
+Heart Rate,save,,,1752773413771
+emergency,trying to change destination to19,,,1752773413781
+Heart Rate,save,,,1752773414788
+O₂ Saturation,opened sensor tab,,,1752773415178
+O₂ Saturation,capture,,,1752773415689
+O₂ Saturation,capture,,,1752773415690
+O₂ Saturation,capture,,,1752773416704
+O₂ Saturation,keypad open,,,1752773416704
+O₂ Saturation,keypad press,1,1,1752773417130
+O₂ Saturation,keypad press,11,10,1752773417690
+O₂ Saturation,keypad press,11,100,1752773417833
+O₂ Saturation,show action buttons,,,1752773418115
+O₂ Saturation,keypad press,10,100,1752773418115
+vitals prompt,auto off vitals prompt,,,1752773418148
+emergency,trying to change destination to19,,,1752773418788
+O₂ Saturation,log,,,1752773419345
+O₂ Saturation,log,,,1752773419346
+O₂ Saturation,log,,,1752773420360
+O₂ Saturation,save,,,1752773420874
+O₂ Saturation,save,,,1752773420874
+O₂ Saturation,save,,,1752773421892
+Blood Pressure,opened sensor tab,,,1752773422500
+Blood Pressure,capture,,,1752773423017
+emergency,trying to change destination to19,,,1752773423771
+checklist,opened page,,,1752773423840
+Blood Pressure,capture,,,1752773424028
+Blood Pressure,keypad open,,,1752773424029
+Ground speaking,"N A S X G S, this is Ground Control asking for update on flight status, patient status and estimated time to destination.",,,1752773424299
+radio update,radio update asked,,,1752773424299
+radio prompt,radio update prompt 5,,,1752773424299
+Blood Pressure,keypad press,1,1,1752773424601
+map,selected helipad,,,1752773424823
+Blood Pressure,keypad press,2,12,1752773425049
+Blood Pressure,keypad press,11,120,1752773425634
+Blood Pressure,keypad press,8,1208,1752773425913
+Blood Pressure,keypad press,11,12080,1752773426170
+speak text,Receieved text and level:Approaching destination. Prepare to landnormal,,,1752773426198
+Blood Pressure,show action buttons,,,1752773426418
+Blood Pressure,keypad press,10,12080,1752773426418
+Blood Pressure,log,,,1752773427089
+Blood Pressure,log,,,1752773427090
+Blood Pressure,log,,,1752773428108
+Blood Pressure,save,,,1752773429362
+Blood Pressure,save,,,1752773429362
+Blood Pressure,save,,,1752773430377
+checklist,toggled checkbox,,,1752773430743
+checklist,toggled checkbox,,,1752773432400
+submit,submit,,,1752773433058
+submit,submit,,,1752773433058
+checklist,toggled checkbox,,,1752773434377
+checklist,showing confirm button,,,1752773434378
+,Controller Executing: click on confirm-button with value: undefined,,,1752773436055
+checklist,confirm button clicked,,,1752773436055
+landing-confirmation,opened page,,,1752773436127
+landing-confirmation,showing helipad confirm,,,1752773436128
+map,selected helipad,,,1752773437115
+landing-confirmation,checkbox toggle,,,1752773437845
+landing-confirmation,checkbox toggle,,,1752773438213
+landing-confirmation,confirmed safe to land,,,1752773438561
+landing-confirmation,showing helipad ready,,,1752773438562
+landing-confirmation,gave landing confirmation,,,1752773439710
+landing-countdown,opened page,,,1752773439793
+map,selected helipad,,,1752773440778
+landing-countdown,countdown changed,,,1752773440795
+landing-countdown,countdown changed,,,1752773441794
+landing-countdown,countdown changed,,,1752773442795
+landing-countdown,countdown changed,,,1752773443795
+landing-countdown,countdown changed,,,1752773444798
+landing-countdown,countdown changed,,,1752773445797
+landing-countdown,countdown complete,,,1752773446797
+landed,opened page,,,1752773446852
+map,selected helipad,,,1752773447835

@@ -1,0 +1,1 @@
+INFO:root:1723471585.840717,ID:1021,STAGE:1,SEQUENCE:1243,DATA:{'time': 1723471585.837, 'user-id': '1021', 'source': 'HAI Interface', 'destination-index': 'None', 'study-stage': 1, 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}

@@ -1,0 +1,3 @@
+INFO:root:SimConnect Error in /var
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:root:1722525910.837508,ID:1012,STAGE:1,SEQUENCE:1432,DATA:{'time': 1722525910.835, 'user-id': '1012', 'source': 'HAI Interface', 'destination-index': 'None', 'study-stage': 1, 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}

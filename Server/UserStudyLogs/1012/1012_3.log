@@ -1,0 +1,4 @@
+INFO:root:voice activity detected
+INFO:root:recording started
+INFO:root:voice deactivity detected
+INFO:root:recording stopped

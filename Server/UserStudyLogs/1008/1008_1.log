@@ -1,0 +1,720 @@
+INFO:root:SimConnect Error in /var
+INFO:root:SimConnect Error in /var
+INFO:root:SimConnect Error in /var
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:root:SimConnect Error in /var
+INFO:root:SimConnect Error in /var
+INFO:root:SimConnect Error in /var
+INFO:root:SimConnect Error in /var
+INFO:root:SimConnect Error in /var
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:root:SimConnect Error in /var
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:root:1721857703.531129,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721857703.522, 'user-id': 'none', 'source': 'HAI Interface', 'destination-index': 3, 'study-stage': -1, 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'index', 'action': 'opened page'}}
+INFO:root:1721857704.493929,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721857704.489, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': 'None', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
+INFO:root:SimConnect Error in /var
+INFO:root:SimConnect Error in /var
+INFO:root:SimConnect Error in /var
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:root:1721857734.618041,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721857734.614, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': 'None', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'index', 'action': 'confirm button pressed'}}
+INFO:root:1721857734.750082,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721857734.743, 'user-id': 'none', 'source': 'HAI Interface', 'destination-index': 3, 'study-stage': -1, 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'location', 'action': 'opened page'}}
+INFO:root:Takeoff radiocomms initiated
+INFO:comtypes.client._code_cache:Imported existing <module 'comtypes.gen' from 'C:\\Users\\ae-dagbeyibor3\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+INFO:comtypes.client._code_cache:Using writeable comtypes cache directory: 'C:\Users\ae-dagbeyibor3\AppData\Local\Programs\Python\Python312\Lib\site-packages\comtypes\gen'
+INFO:root:1721857735.733286,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721857735.705, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': 'None', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
+INFO:root:1721857741.299069,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721857741.295, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': 'None', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'location', 'action': 'confirm button pressed'}}
+INFO:root:1721857741.548061,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721857741.531, 'user-id': 'none', 'source': 'HAI Interface', 'destination-index': 3, 'study-stage': -1, 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'checklist', 'action': 'opened page', 'inflight': False}}
+INFO:root:1721857742.504687,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721857742.5, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
+INFO:root:Takeoff radiocomms clear request sent
+INFO:root:Takeoff radiocomms initiated
+INFO:root:Takeoff radiocomms clear request sent
+INFO:root:SimConnect Error in /var
+INFO:root:SimConnect Error in /var
+INFO:root:SimConnect Error in /var
+INFO:root:SimConnect Error in /var
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:root:SimConnect Error in /var
+INFO:root:SimConnect Error in /var
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:root:1721858741.631866,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858741.625, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': 'None', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'index', 'action': 'confirm button pressed'}}
+INFO:root:1721858741.821303,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858741.782, 'user-id': 'none', 'source': 'HAI Interface', 'destination-index': 3, 'study-stage': -1, 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'location', 'action': 'opened page'}}
+INFO:root:Takeoff radiocomms initiated
+INFO:comtypes.client._code_cache:Imported existing <module 'comtypes.gen' from 'C:\\Users\\ae-dagbeyibor3\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+INFO:comtypes.client._code_cache:Using writeable comtypes cache directory: 'C:\Users\ae-dagbeyibor3\AppData\Local\Programs\Python\Python312\Lib\site-packages\comtypes\gen'
+INFO:root:1721858742.750072,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858742.743, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': 'None', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
+INFO:root:1721858753.679785,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858753.674, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': 'None', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'location', 'action': 'confirm button pressed'}}
+INFO:root:1721858753.958587,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858753.936, 'user-id': 'none', 'source': 'HAI Interface', 'destination-index': 3, 'study-stage': -1, 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'checklist', 'action': 'opened page', 'inflight': False}}
+INFO:root:1721858754.915586,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858754.91, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
+INFO:root:Takeoff radiocomms clear request sent
+INFO:root:SimConnect Error in /var
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:root:1721858794.361802,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721855977.41, 'source': 'VitalsTask', 'timer': 85733.333, 'data': {'sensor': 'Heart Rate', 'action': 'capture', 'data': 'sensor action complete'}}
+INFO:root:1721858794.366983,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721855977.411, 'source': 'VitalsTask', 'timer': 85733.334, 'data': {'sensor': 'Heart Rate', 'action': 'keypad open'}}
+INFO:root:1721858794.867797,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721855989.949, 'source': 'VitalsTask', 'timer': 85745.872, 'data': {'sensor': 'Heart Rate', 'action': 'log', 'data': 'sensor action complete'}}
+INFO:root:1721858795.022532,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721855994.37, 'source': 'VitalsTask', 'timer': 85750.293, 'data': {'sensor': 'Heart Rate', 'action': 'save', 'data': 'sensor action complete'}}
+INFO:root:1721858795.315076,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721856001.869, 'source': 'VitalsTask', 'timer': 85757.792, 'data': {'sensor': 'O\u2082 Saturation', 'action': 'capture', 'data': 'sensor action complete'}}
+INFO:root:1721858795.320682,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721856001.87, 'source': 'VitalsTask', 'timer': 85757.793, 'data': {'sensor': 'O\u2082 Saturation', 'action': 'keypad open'}}
+INFO:root:1721858795.607425,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721856015.119, 'source': 'VitalsTask', 'timer': 85771.042, 'data': {'sensor': 'O\u2082 Saturation', 'action': 'log', 'data': 'sensor action complete'}}
+INFO:root:1721858795.766838,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721856017.006, 'source': 'VitalsTask', 'timer': 85772.929, 'data': {'sensor': 'O\u2082 Saturation', 'action': 'save', 'data': 'sensor action complete'}}
+INFO:root:1721858796.072017,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721856029.681, 'source': 'VitalsTask', 'timer': 85785.604, 'data': {'sensor': 'Blood Pressure', 'action': 'capture', 'data': 'sensor action complete'}}
+INFO:root:1721858796.073659,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721856029.681, 'source': 'VitalsTask', 'timer': 85785.604, 'data': {'sensor': 'Blood Pressure', 'action': 'keypad open'}}
+INFO:root:1721858796.505376,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721856043.493, 'source': 'VitalsTask', 'timer': 85799.416, 'data': {'sensor': 'Blood Pressure', 'action': 'log', 'data': 'sensor action complete'}}
+INFO:root:1721858796.510185,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721856045.313, 'source': 'VitalsTask', 'timer': 85801.236, 'data': {'sensor': 'Blood Pressure', 'action': 'save', 'data': 'sensor action complete'}}
+INFO:root:1721858803.860819,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858803.855, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'checklist', 'action': 'toggled checkbox', 'inflight': False, 'item': 0, 'value': 'OFF'}}
+INFO:root:1721858840.316279,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858840.309, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'checklist', 'action': 'toggled checkbox', 'inflight': False, 'item': 1, 'value': 'OFF'}}
+INFO:root:1721858841.747797,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858841.736, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'checklist', 'action': 'toggled checkbox', 'inflight': False, 'item': 2, 'value': 'OFF'}}
+INFO:root:1721858841.750153,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858841.736, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'checklist', 'action': 'showing confirm button', 'inflight': False}}
+INFO:root:1721858844.088766,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858844.084, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'checklist', 'action': 'confirm button clicked', 'inflight': False}}
+INFO:root:1721858844.219287,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858844.204, 'user-id': 'none', 'source': 'HAI Interface', 'destination-index': 3, 'study-stage': -1, 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'countdown', 'action': 'opened page'}}
+INFO:root:1721858845.177189,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858845.173, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
+INFO:root:1721858845.214749,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858845.211, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'countdown', 'action': 'countdown now 4'}}
+INFO:root:1721858846.215443,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858846.212, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'countdown', 'action': 'countdown now 3'}}
+INFO:root:1721858847.214965,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858847.209, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'countdown', 'action': 'countdown now 2'}}
+INFO:root:1721858848.219031,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858848.211, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'countdown', 'action': 'countdown now 1'}}
+INFO:root:1721858849.215048,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858849.211, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'countdown', 'action': 'countdown now 0'}}
+INFO:root:1721858850.213308,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858850.208, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'countdown', 'action': 'countdown complete'}}
+INFO:root:1721858852.5993,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858852.595, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
+INFO:root:1721858855.83705,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858855.816, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to100'}}
+INFO:root:SimConnect Error in /var
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:root:Inflight Radio Update asked
+INFO:root:sent request to set radio update complete
+INFO:root:1721858860.87342,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858860.855, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858865.807886,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858865.792, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858870.869203,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858870.853, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858875.968745,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858875.947, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858880.793665,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858880.782, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858885.837324,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858885.815, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858890.927558,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858890.899, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:SimConnect Error in /var
+INFO:root:SimConnect Error in /var
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:root:1721858895.899633,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858895.892, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858900.773869,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858900.766, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'action': 'radio panel opened'}}
+INFO:root:1721858900.857972,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858900.829, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858905.480642,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858905.476, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'inflight', 'action': 'displaying vitals prompt'}}
+INFO:root:1721858905.768702,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858905.75, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858910.823185,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858910.794, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858915.869193,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858915.85, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858918.250074,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858918.245, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'action': 'transmit button pressed'}}
+INFO:root:1721858918.255061,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858918.246, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'action': 'callsign set to: + NASXGS'}}
+INFO:root:1721858918.258088,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858918.246, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'action': 'radio set to:Comm1'}}
+INFO:root:1721858918.268061,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858918.246, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'show map'}}
+INFO:root:1721858918.279033,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858918.247, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
+INFO:root:1721858918.285719,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858918.257, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'action': 'NASXGStransmitting updates onComm1123.45 MHz'}}
+INFO:root:1721858920.801483,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858920.793, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858925.858188,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858925.839, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:SimConnect Error in /var
+INFO:root:SimConnect Error in /var
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:root:1721858930.876034,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858930.857, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858935.852732,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858935.82, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858940.80827,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858940.758, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858945.849009,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858945.82, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858950.87645,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858950.867, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858952.697287,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858952.691, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'hide map'}}
+INFO:root:1721858955.83969,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858955.833, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:Inflight Radio Update asked
+INFO:root:sent request to set radio update complete
+INFO:root:1721858960.82009,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858960.806, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858965.069895,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858965.061, 'source': 'VitalsTask', 'timer': 1766.748, 'data': {'sensor': 'Heart Rate', 'action': 'capture', 'data': 'action button pressed'}}
+INFO:root:1721858965.077847,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858965.062, 'source': 'VitalsTask', 'timer': 1766.749, 'data': {'sensor': 'Heart Rate', 'action': 'capture', 'data': 'starting sensor action'}}
+INFO:root:1721858965.839888,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858965.834, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858966.222645,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858966.074, 'source': 'VitalsTask', 'timer': 1767.761, 'data': {'sensor': 'Heart Rate', 'action': 'capture', 'data': 'sensor action complete'}}
+INFO:root:1721858966.223643,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858966.075, 'source': 'VitalsTask', 'timer': 1767.762, 'data': {'sensor': 'Heart Rate', 'action': 'keypad open'}}
+INFO:root:1721858967.476188,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858967.468, 'source': 'VitalsTask', 'timer': 1769.155, 'data': {'sensor': 'Heart Rate', 'action': 'keypad press', 'key': 5, 'value': 5}}
+INFO:root:1721858970.133934,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858970.129, 'source': 'VitalsTask', 'timer': 1771.816, 'data': {'sensor': 'Heart Rate', 'action': 'keypad press', 'key': 5, 'value': 55}}
+INFO:root:1721858970.831597,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858970.822, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858971.881719,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858971.875, 'source': 'VitalsTask', 'timer': 1773.562, 'data': {'sensor': 'Heart Rate', 'action': 'show action buttons'}}
+INFO:root:1721858971.886705,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858971.876, 'source': 'VitalsTask', 'timer': 1773.563, 'data': {'sensor': 'Heart Rate', 'action': 'keypad press', 'key': 10, 'value': 55}}
+INFO:root:1721858974.72993,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858974.722, 'source': 'VitalsTask', 'timer': 1776.409, 'data': {'sensor': 'Heart Rate', 'action': 'log', 'data': 'action button pressed'}}
+INFO:root:1721858974.732922,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858974.722, 'source': 'VitalsTask', 'timer': 1776.409, 'data': {'sensor': 'Heart Rate', 'action': 'log', 'data': 'starting sensor action'}}
+INFO:root:1721858975.937059,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858975.734, 'source': 'VitalsTask', 'timer': 1777.421, 'data': {'sensor': 'Heart Rate', 'action': 'log', 'data': 'sensor action complete'}}
+INFO:root:1721858975.959379,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858975.939, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858980.90819,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858980.89, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858982.988477,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858982.98, 'source': 'VitalsTask', 'timer': 1784.667, 'data': {'sensor': 'Heart Rate', 'action': 'save', 'data': 'action button pressed'}}
+INFO:root:1721858982.990472,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858982.981, 'source': 'VitalsTask', 'timer': 1784.668, 'data': {'sensor': 'Heart Rate', 'action': 'save', 'data': 'starting sensor action'}}
+INFO:root:1721858984.110932,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858983.997, 'source': 'VitalsTask', 'timer': 1785.684, 'data': {'sensor': 'Heart Rate', 'action': 'save', 'data': 'sensor action complete'}}
+INFO:root:1721858985.820328,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858985.813, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:SimConnect Error in /var
+INFO:root:SimConnect Error in /var
+INFO:root:SimConnect Error in /var
+INFO:root:SimConnect Error in /var
+INFO:root:SimConnect Error in /var
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:root:1721858991.002456,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858990.978, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858991.232977,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858991.209, 'source': 'VitalsTask', 'timer': 1792.896, 'data': {'sensor': 'O\u2082 Saturation', 'action': 'opened sensor tab'}}
+INFO:root:SimConnect Error in /var
+INFO:root:SimConnect Error in /var
+INFO:root:SimConnect Error in /var
+INFO:root:SimConnect Error in /var
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:root:1721858993.060452,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858992.976, 'source': 'VitalsTask', 'timer': 1794.663, 'data': {'sensor': 'O\u2082 Saturation', 'action': 'capture', 'data': 'action button pressed'}}
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:root:1721858993.137946,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858992.976, 'source': 'VitalsTask', 'timer': 1794.663, 'data': {'sensor': 'O\u2082 Saturation', 'action': 'capture', 'data': 'starting sensor action'}}
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:root:1721858994.211154,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858993.99, 'source': 'VitalsTask', 'timer': 1795.677, 'data': {'sensor': 'O\u2082 Saturation', 'action': 'capture', 'data': 'sensor action complete'}}
+INFO:root:1721858994.220414,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858993.991, 'source': 'VitalsTask', 'timer': 1795.678, 'data': {'sensor': 'O\u2082 Saturation', 'action': 'keypad open'}}
+INFO:root:1721858995.780514,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858995.746, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721858997.71678,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858997.71, 'source': 'VitalsTask', 'timer': 1799.397, 'data': {'sensor': 'O\u2082 Saturation', 'action': 'keypad press', 'key': 1, 'value': 1}}
+INFO:root:1721858999.987336,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721858999.961, 'source': 'VitalsTask', 'timer': 1801.648, 'data': {'sensor': 'O\u2082 Saturation', 'action': 'keypad press', 'key': 11, 'value': 10}}
+INFO:root:1721859000.798799,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859000.793, 'source': 'VitalsTask', 'timer': 1802.48, 'data': {'sensor': 'O\u2082 Saturation', 'action': 'keypad press', 'key': 11, 'value': 100}}
+INFO:root:1721859000.863194,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859000.852, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859002.387372,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859002.38, 'source': 'VitalsTask', 'timer': 1804.067, 'data': {'sensor': 'O\u2082 Saturation', 'action': 'show action buttons'}}
+INFO:root:1721859002.391361,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859002.381, 'source': 'VitalsTask', 'timer': 1804.068, 'data': {'sensor': 'O\u2082 Saturation', 'action': 'keypad press', 'key': 10, 'value': 100}}
+INFO:root:1721859004.046426,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859004.037, 'source': 'VitalsTask', 'timer': 1805.724, 'data': {'sensor': 'O\u2082 Saturation', 'action': 'log', 'data': 'action button pressed'}}
+INFO:root:1721859004.049053,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859004.037, 'source': 'VitalsTask', 'timer': 1805.724, 'data': {'sensor': 'O\u2082 Saturation', 'action': 'log', 'data': 'starting sensor action'}}
+INFO:root:1721859004.169439,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859004.163, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'inflight', 'action': 'displaying vitals prompt'}}
+INFO:root:1721859005.181104,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859005.053, 'source': 'VitalsTask', 'timer': 1806.74, 'data': {'sensor': 'O\u2082 Saturation', 'action': 'log', 'data': 'sensor action complete'}}
+INFO:root:1721859005.838099,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859005.816, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859005.843608,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859005.816, 'source': 'VitalsTask', 'timer': 1807.503, 'data': {'sensor': 'O\u2082 Saturation', 'action': 'save', 'data': 'action button pressed'}}
+INFO:root:1721859005.847547,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859005.817, 'source': 'VitalsTask', 'timer': 1807.504, 'data': {'sensor': 'O\u2082 Saturation', 'action': 'save', 'data': 'starting sensor action'}}
+INFO:root:1721859006.870276,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859006.83, 'source': 'VitalsTask', 'timer': 1808.517, 'data': {'sensor': 'O\u2082 Saturation', 'action': 'save', 'data': 'sensor action complete'}}
+INFO:root:1721859010.861715,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859010.856, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859012.740907,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859012.731, 'source': 'VitalsTask', 'timer': 1814.418, 'data': {'sensor': 'Blood Pressure', 'action': 'opened sensor tab'}}
+INFO:root:1721859014.02733,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859013.99, 'source': 'VitalsTask', 'timer': 1815.677, 'data': {'sensor': 'Blood Pressure', 'action': 'capture', 'data': 'action button pressed'}}
+INFO:root:1721859014.039298,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859013.991, 'source': 'VitalsTask', 'timer': 1815.678, 'data': {'sensor': 'Blood Pressure', 'action': 'capture', 'data': 'starting sensor action'}}
+INFO:root:1721859015.134411,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859015.009, 'source': 'VitalsTask', 'timer': 1816.696, 'data': {'sensor': 'Blood Pressure', 'action': 'capture', 'data': 'sensor action complete'}}
+INFO:root:1721859015.136406,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859015.009, 'source': 'VitalsTask', 'timer': 1816.696, 'data': {'sensor': 'Blood Pressure', 'action': 'keypad open'}}
+INFO:root:1721859015.872109,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859015.867, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859016.272117,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859016.266, 'source': 'VitalsTask', 'timer': 1817.953, 'data': {'sensor': 'Blood Pressure', 'action': 'keypad press', 'key': 1, 'value': 1}}
+INFO:root:1721859017.175026,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859017.161, 'source': 'VitalsTask', 'timer': 1818.848, 'data': {'sensor': 'Blood Pressure', 'action': 'keypad press', 'key': 2, 'value': 12}}
+INFO:root:1721859018.545502,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859018.535, 'source': 'VitalsTask', 'timer': 1820.222, 'data': {'sensor': 'Blood Pressure', 'action': 'keypad press', 'key': 11, 'value': 120}}
+INFO:root:1721859019.467165,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859019.461, 'source': 'VitalsTask', 'timer': 1821.148, 'data': {'sensor': 'Blood Pressure', 'action': 'keypad press', 'key': 8, 'value': 1208}}
+INFO:root:1721859020.821953,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859020.799, 'source': 'VitalsTask', 'timer': 1822.486, 'data': {'sensor': 'Blood Pressure', 'action': 'keypad press', 'key': 11, 'value': 12080}}
+INFO:root:1721859020.922801,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859020.917, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859022.002626,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859021.996, 'source': 'VitalsTask', 'timer': 1823.683, 'data': {'sensor': 'Blood Pressure', 'action': 'show action buttons'}}
+INFO:root:1721859022.00462,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859021.997, 'source': 'VitalsTask', 'timer': 1823.684, 'data': {'sensor': 'Blood Pressure', 'action': 'keypad press', 'key': 10, 'value': 12080}}
+INFO:root:1721859023.640578,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859023.635, 'source': 'VitalsTask', 'timer': 1825.322, 'data': {'sensor': 'Blood Pressure', 'action': 'log', 'data': 'action button pressed'}}
+INFO:root:1721859023.643571,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859023.635, 'source': 'VitalsTask', 'timer': 1825.322, 'data': {'sensor': 'Blood Pressure', 'action': 'log', 'data': 'starting sensor action'}}
+INFO:root:1721859024.685172,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859024.654, 'source': 'VitalsTask', 'timer': 1826.341, 'data': {'sensor': 'Blood Pressure', 'action': 'log', 'data': 'sensor action complete'}}
+INFO:root:1721859026.064317,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859026.059, 'source': 'VitalsTask', 'timer': 1827.746, 'data': {'sensor': 'Blood Pressure', 'action': 'save', 'data': 'action button pressed'}}
+INFO:root:1721859026.070988,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859026.059, 'source': 'VitalsTask', 'timer': 1827.746, 'data': {'sensor': 'Blood Pressure', 'action': 'save', 'data': 'starting sensor action'}}
+INFO:root:1721859026.383982,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859026.332, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859026.394147,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859026.333, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'show Altitude Miscalibrated Warning, hide map'}}
+INFO:root:1721859026.401129,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859026.333, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'hide map'}}
+INFO:root:1721859026.40811,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859026.334, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'Inflight', 'action': ' Altitude alert activated'}}
+INFO:root:1721859027.248124,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859027.075, 'source': 'VitalsTask', 'timer': 1828.762, 'data': {'sensor': 'Blood Pressure', 'action': 'save', 'data': 'sensor action complete'}}
+INFO:root:1721859030.619219,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859030.612, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'Inflight', 'action': 'Altitude alert- show more info button pressed'}}
+INFO:root:1721859030.868759,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859030.834, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859035.840018,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859035.833, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:SimConnect Error in /var
+INFO:root:SimConnect Error in /var
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:SimConnect.SimConnect:SIM OPEN
+INFO:root:1721859039.306978,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859039.301, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'Inflight', 'action': 'Altitude alert- submit button pressed with altitude value as:1000'}}
+INFO:root:1721859039.312078,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859039.305, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'Inflight', 'action': 'Altitude alert- altitude submitted'}}
+INFO:root:1721859039.313076,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859039.306, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'Inflight', 'action': 'Altitude alert close button pressed'}}
+INFO:root:1721859040.876352,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859040.865, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:Altitude Warning alert given, sent request to clear altitude_warning_alert
+INFO:root:1721859045.86931,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859045.832, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859046.56777,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859046.559, 'source': 'VitalsTask', 'timer': 1848.246, 'data': {'sensor': 'submit', 'action': 'submit'}}
+INFO:root:1721859046.571287,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859046.56, 'source': 'VitalsTask', 'timer': 1848.247, 'data': {'sensor': 'submit', 'action': 'submit', 'data': 'submit succeeded'}}
+INFO:root:1721859048.710716,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859048.706, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'inflight', 'action': 'user acknowledged vitals prompt'}}
+INFO:root:1721859050.814972,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859050.784, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859055.862096,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859055.853, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859060.846467,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859060.837, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859065.84574,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859065.84, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859066.20287,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859066.197, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'show map'}}
+INFO:root:1721859066.205862,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859066.198, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
+INFO:root:1721859070.868685,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859070.859, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859074.234075,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859074.227, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'hide map'}}
+INFO:root:1721859075.870775,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859075.858, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859080.890307,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859080.884, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859085.818731,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859085.81, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859090.85797,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859090.85, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859095.243975,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859095.235, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'show map'}}
+INFO:root:1721859095.246967,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859095.236, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
+INFO:root:1721859095.887442,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859095.862, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859100.892419,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859100.885, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859105.882358,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859105.874, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859110.815555,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859110.803, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859113.407524,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859113.404, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'action': 'receive button pressed'}}
+INFO:root:1721859113.41062,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859113.404, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'action': 'callsign set to:[object Object]'}}
+INFO:root:1721859113.416806,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859113.405, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'action': 'radio set to:Comm2'}}
+INFO:root:1721859113.418924,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859113.408, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'action': 'MEDEVACtransmitting onComm2123.45 MHz'}}
+INFO:root:1721859115.850014,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859115.84, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:Ok, continue to monitor the patients vitals and keep us updated 
+INFO:root:1721859120.821721,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859120.809, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859125.828407,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859125.82, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:altitude sensor radio comm done- command to clear event and make the receieve 0 sent
+INFO:root:1721859130.877717,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859130.87, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859135.861397,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859135.855, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:Inflight Radio Update asked
+INFO:root:sent request to set radio update complete
+INFO:root:1721859140.806471,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859140.797, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859146.114646,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859146.11, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'hide map'}}
+INFO:root:1721859146.39199,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859146.385, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859150.815282,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859150.807, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859150.827251,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859150.808, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'show Weather Emergency Alert, hide map'}}
+INFO:root:1721859150.835232,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859150.809, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'Inflight', 'action': 'Weather emergency- emergnecy propmt displayed'}}
+INFO:root:1721859150.837222,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859150.808, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'hide map'}}
+INFO:root:1721859154.383139,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859154.377, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'Inflight', 'action': 'Weather emergency- show more info button pressed'}}
+INFO:root:1721859155.854873,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859155.848, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859160.075288,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859160.07, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'Inflight', 'action': 'Weather emergency- close button pressed'}}
+INFO:root:1721859160.754309,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859160.744, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859161.638646,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859161.634, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'show map'}}
+INFO:root:1721859161.642076,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859161.635, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
+INFO:root:1721859165.803416,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859165.793, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859170.83798,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859170.822, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859175.869642,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859175.854, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859180.817999,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859180.811, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859181.956414,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859181.948, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'inflight', 'action': 'displaying vitals prompt'}}
+INFO:root:Weather emergency alert given, sent request to clear weather_emergency
+INFO:root:1721859185.95409,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859185.939, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859190.790449,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859190.78, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859193.616779,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859193.611, 'source': 'VitalsTask', 'timer': 147.051, 'data': {'sensor': 'Blood Pressure', 'action': 'capture', 'data': 'action button pressed'}}
+INFO:root:1721859193.619378,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859193.612, 'source': 'VitalsTask', 'timer': 147.052, 'data': {'sensor': 'Blood Pressure', 'action': 'capture', 'data': 'starting sensor action'}}
+INFO:root:1721859194.636031,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859194.629, 'source': 'VitalsTask', 'timer': 148.069, 'data': {'sensor': 'Blood Pressure', 'action': 'capture', 'data': 'sensor action complete'}}
+INFO:root:1721859194.638066,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859194.63, 'source': 'VitalsTask', 'timer': 148.07, 'data': {'sensor': 'Blood Pressure', 'action': 'keypad open'}}
+INFO:root:1721859195.828356,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859195.822, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859200.795518,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859200.79, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859200.822715,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859200.816, 'source': 'VitalsTask', 'timer': 154.256, 'data': {'sensor': 'Blood Pressure', 'action': 'keypad press', 'key': 5, 'value': 5}}
+INFO:root:1721859205.857116,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859205.849, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859207.094121,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859207.09, 'source': 'VitalsTask', 'timer': 160.53, 'data': {'sensor': 'Blood Pressure', 'action': 'keypad press', 'key': 12, 'value': 0}}
+INFO:root:1721859208.922414,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859208.916, 'source': 'VitalsTask', 'timer': 162.356, 'data': {'sensor': 'Blood Pressure', 'action': 'keypad press', 'key': 1, 'value': 1}}
+INFO:root:1721859210.833875,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859210.827, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859215.81057,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859215.805, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859220.820836,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859220.811, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859225.818685,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859225.81, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859226.412105,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859226.406, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'inflight', 'action': 'user acknowledged vitals prompt'}}
+INFO:root:1721859230.889729,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859230.881, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859235.767188,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859235.76, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859240.834197,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859240.82, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859241.186179,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859241.181, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'hide map'}}
+INFO:root:1721859245.889475,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859245.88, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859250.798508,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859250.789, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859250.84218,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859250.837, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'Inflight', 'action': 'emergency landing button pressed'}}
+INFO:root:1721859251.115282,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859250.99, 'user-id': 'none', 'source': 'HAI Interface', 'destination-index': 3, 'study-stage': -1, 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency-landing', 'action': 'opened page'}}
+INFO:root:1721859251.951372,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859251.946, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
+INFO:root:1721859251.95436,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859251.947, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'set destination', 'value': -1}}
+INFO:root:1721859253.708273,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859253.703, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'change-destination', 'action': 'submit button pressed'}}
+INFO:root:1721859253.881876,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859253.846, 'user-id': 'none', 'source': 'HAI Interface', 'destination-index': 3, 'study-stage': -1, 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'location', 'action': 'opened page'}}
+INFO:root:1721859254.800499,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859254.796, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
+INFO:root:1721859257.808507,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859257.802, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'location', 'action': 'cancel button pressed'}}
+INFO:root:1721859258.035867,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859258.027, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to100'}}
+INFO:root:1721859259.776979,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859259.772, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'show map'}}
+INFO:root:1721859259.786957,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859259.772, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
+INFO:root:1721859259.82344,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859259.773, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'set destination', 'value': '3'}}
+INFO:root:1721859261.220993,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859261.209, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859264.631736,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859264.627, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '5'}}
+INFO:root:1721859264.635725,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859264.627, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'set destination', 'value': '3'}}
+INFO:root:1721859266.244262,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859266.232, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859271.179261,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859271.17, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859271.934324,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859271.928, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'changing helipad', 'value': '5'}}
+INFO:root:1721859271.93782,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859271.929, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'changing helipad', 'value': '5'}}
+INFO:root:1721859271.938865,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859271.929, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '5'}}
+INFO:root:1721859271.946705,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859271.929, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'set destination', 'value': '5'}}
+INFO:root:1721859273.46562,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859273.46, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'hide map'}}
+INFO:root:1721859275.928045,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859275.922, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'change-destination', 'action': 'submit button pressed'}}
+INFO:root:1721859276.102018,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859276.074, 'user-id': 'none', 'source': 'HAI Interface', 'destination-index': 3, 'study-stage': -1, 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'location', 'action': 'opened page'}}
+INFO:root:1721859277.036683,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859277.029, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
+INFO:root:1721859277.948862,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859277.941, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '3', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'location', 'action': 'confirm button pressed'}}
+INFO:root:1721859279.252889,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859279.248, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
+INFO:root:1721859280.511613,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859280.507, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'show map'}}
+INFO:root:1721859280.514171,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859280.508, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
+INFO:root:1721859283.576868,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859283.569, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to100'}}
+INFO:root:1721859288.574475,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859288.566, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859293.560683,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859293.549, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859298.527694,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859298.524, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859303.593675,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859303.584, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859308.63229,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859308.619, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859313.576937,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859313.566, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859318.593359,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859318.586, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859323.568755,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859323.556, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859328.601447,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859328.587, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859333.605615,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859333.593, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859338.572598,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859338.56, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859343.555059,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859343.543, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859348.505308,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859348.487, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859353.475282,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859353.464, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859357.867429,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859357.862, 'source': 'VitalsTask', 'timer': 311.302, 'data': {'sensor': 'Blood Pressure', 'action': 'keypad press', 'key': 12, 'value': 0}}
+INFO:root:1721859358.484659,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859358.468, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859359.777004,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859359.771, 'source': 'VitalsTask', 'timer': 313.211, 'data': {'sensor': 'Blood Pressure', 'action': 'open', 'data': 'user tried to change the sensor, but cancelled because the keypad is showing'}}
+INFO:root:1721859361.519671,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859361.513, 'source': 'VitalsTask', 'timer': 314.953, 'data': {'sensor': 'Blood Pressure', 'action': 'open', 'data': 'user tried to change the sensor, but cancelled because the keypad is showing'}}
+INFO:root:1721859363.424778,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859363.419, 'source': 'VitalsTask', 'timer': 316.859, 'data': {'sensor': 'Blood Pressure', 'action': 'keypad press', 'key': 1, 'value': 1}}
+INFO:root:1721859363.577967,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859363.57, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859365.553478,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859365.548, 'source': 'VitalsTask', 'timer': 318.988, 'data': {'sensor': 'Blood Pressure', 'action': 'keypad press', 'key': 11, 'value': 10}}
+INFO:root:1721859366.465793,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859366.461, 'source': 'VitalsTask', 'timer': 319.901, 'data': {'sensor': 'Blood Pressure', 'action': 'keypad press', 'key': 8, 'value': 108}}
+INFO:root:1721859368.454065,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859368.448, 'source': 'VitalsTask', 'timer': 321.888, 'data': {'sensor': 'Blood Pressure', 'action': 'keypad press', 'key': 12, 'value': 10}}
+INFO:root:1721859368.511667,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859368.505, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859371.536798,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859371.533, 'source': 'VitalsTask', 'timer': 324.973, 'data': {'sensor': 'Blood Pressure', 'action': 'keypad press', 'key': 12, 'value': 1}}
+INFO:root:1721859373.552639,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859373.531, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'emergency', 'action': 'trying to change destination to19'}}
+INFO:root:1721859373.737232,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859373.715, 'user-id': 'none', 'source': 'HAI Interface', 'destination-index': 3, 'study-stage': -1, 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'checklist', 'action': 'opened page', 'inflight': True}}
+INFO:root:1721859374.668294,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859374.661, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
+INFO:root:1721859379.045098,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859379.041, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'checklist', 'action': 'toggled checkbox', 'inflight': True, 'item': 0, 'value': 'OFF'}}
+INFO:root:1721859379.497478,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859379.491, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'checklist', 'action': 'toggled checkbox', 'inflight': True, 'item': 1, 'value': 'OFF'}}
+INFO:root:1721859379.904403,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859379.9, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'checklist', 'action': 'toggled checkbox', 'inflight': True, 'item': 2, 'value': 'OFF'}}
+INFO:root:1721859379.907976,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859379.9, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'checklist', 'action': 'showing confirm button', 'inflight': True}}
+INFO:root:1721859381.104697,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859381.1, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'checklist', 'action': 'confirm button clicked', 'inflight': True}}
+INFO:root:1721859381.515542,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859381.482, 'user-id': 'none', 'source': 'HAI Interface', 'destination-index': 3, 'study-stage': -1, 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'landing-confirmation', 'action': 'opened page'}}
+INFO:root:1721859381.521078,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859381.484, 'user-id': 'none', 'source': 'HAI Interface', 'destination-index': 3, 'study-stage': -1, 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'landing-confirmation', 'action': 'showing helipad confirm', 'value': 1}}
+INFO:root:1721859382.434491,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859382.429, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
+INFO:root:1721859391.211418,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859391.206, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'landing-confirmation', 'action': 'checkbox toggle', 'item': 0, 'value': 'ON'}}
+INFO:root:1721859391.914605,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859391.909, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'landing-confirmation', 'action': 'checkbox toggle', 'item': 1, 'value': 'ON'}}
+INFO:root:1721859398.337212,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859398.332, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'landing-confirmation', 'action': 'confirmed safe to land'}}
+INFO:root:1721859398.34008,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859398.333, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'landing-confirmation', 'action': 'showing helipad ready'}}
+INFO:root:1721859413.568866,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859413.563, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'show map'}}
+INFO:root:1721859413.572952,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859413.564, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
+INFO:root:1721859417.505953,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859417.502, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'hide map'}}
+INFO:root:1721859418.765679,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859418.762, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'landing-confirmation', 'action': 'gave landing confirmation'}}
+INFO:root:1721859418.888662,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859418.876, 'user-id': 'none', 'source': 'HAI Interface', 'destination-index': 3, 'study-stage': -1, 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'landing-countdown', 'action': 'opened page'}}
+INFO:root:1721859419.851573,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859419.848, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': '1', 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
+INFO:root:1721859419.883275,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859419.879, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': '1', 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'landing-countdown', 'action': 'countdown changed', 'value': 5}}
+INFO:root:1721859420.884646,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859420.881, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': '1', 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'landing-countdown', 'action': 'countdown changed', 'value': 4}}
+INFO:root:1721859421.88615,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859421.882, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': '1', 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'landing-countdown', 'action': 'countdown changed', 'value': 3}}
+INFO:root:1721859422.885443,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859422.881, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': '1', 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'landing-countdown', 'action': 'countdown changed', 'value': 2}}
+INFO:root:1721859423.885517,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859423.882, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': '1', 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'landing-countdown', 'action': 'countdown changed', 'value': 1}}
+INFO:root:1721859424.88622,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859424.881, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': '1', 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'landing-countdown', 'action': 'countdown changed', 'value': 0}}
+INFO:root:1721859425.884285,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859425.88, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': '1', 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'landing-countdown', 'action': 'countdown complete'}}
+INFO:root:1721859426.022023,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859426.001, 'user-id': 'none', 'source': 'HAI Interface', 'destination-index': 3, 'study-stage': -1, 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'landed', 'action': 'opened page'}}
+INFO:root:1721859426.970822,ID:1008,STAGE:1,SEQUENCE:1324,DATA:{'time': 1721859426.965, 'user-id': '1008', 'source': 'HAI Interface', 'destination-index': '5', 'study-stage': '1', 'decision-state': '1', 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM Paused
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM Stop
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM START
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused
+INFO:SimConnect.SimConnect:SIM Unpaused

@@ -1,12 +1,12 @@
 .DS_Store
-*.csv
+
 *.Rmd
 *.Rhistory
 *.xlsx
 *.png
 *.nb.html
 *.numbers
-*.log
+
 R_analysis/*
 *.pyc
 speech.wav

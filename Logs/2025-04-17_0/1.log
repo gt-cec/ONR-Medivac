@@ -1,0 +1,1 @@
+1744911747.32582,ID:0,STAGE:1,SEQUENCE:0,DATA:{'page':'None','action':'None','timestamp':None},ANY:{'time': 1744911747.298, 'user-id': '0', 'source': 'HAI Interface', 'destination-index': 'None', 'study-stage': '1', 'decision-state': 0, 'vitals-state': 0, 'airspace-state': 0, 'data': {'page': 'map', 'action': 'selected helipad', 'value': '21'}}
